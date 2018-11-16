@@ -15,6 +15,8 @@
  */
 package cn.stylefeng.guns.core.shiro;
 
+import io.swagger.annotations.ApiModel;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -24,6 +26,7 @@ import java.util.List;
  * @author fengshuonan
  * @date 2016年12月5日 上午10:26:43
  */
+@ApiModel("用户")
 public class ShiroUser implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -18,8 +18,10 @@ package cn.stylefeng.guns.config.properties;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ResourceUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import static cn.stylefeng.roses.core.util.ToolUtil.getTempPath;
 
@@ -37,9 +39,9 @@ public class GunsProperties {
 
     private Boolean kaptchaOpen = false;
 
-    private Boolean swaggerOpen = false;
+    private Boolean swaggerOpen = true;
 
-    private String fileUploadPath;
+    private String fileUploadPath = ResourceUtils.getURL("classpath:").getPath() + "/static/avatar";
 
     private Boolean haveCreatePath = false;
 
@@ -54,6 +56,9 @@ public class GunsProperties {
      * session 验证失效时间（默认为15分钟 单位：秒）
      */
     private Integer sessionValidationInterval = 15 * 60;
+
+    public GunsProperties() throws FileNotFoundException {
+    }
 
     public String getFileUploadPath() {
         //如果没有写文件上传路径,保存到临时目录

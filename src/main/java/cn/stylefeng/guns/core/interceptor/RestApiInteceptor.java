@@ -17,15 +17,25 @@ package cn.stylefeng.guns.core.interceptor;
 
 import cn.stylefeng.guns.core.common.constant.JwtConstants;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
+import cn.stylefeng.guns.core.log.LogManager;
+import cn.stylefeng.guns.core.log.factory.LogTaskFactory;
+import cn.stylefeng.guns.core.shiro.ShiroKit;
+import cn.stylefeng.guns.core.shiro.ShiroUser;
+import cn.stylefeng.guns.core.util.CacheUtil;
 import cn.stylefeng.guns.core.util.JwtTokenUtil;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.util.RenderUtil;
+import cn.stylefeng.roses.core.util.ToolUtil;
 import io.jsonwebtoken.JwtException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import static cn.stylefeng.roses.core.util.HttpContext.getIp;
 
 
 /**
@@ -71,6 +81,23 @@ public class RestApiInteceptor extends HandlerInterceptorAdapter {
             RenderUtil.renderJson(response, new ErrorResponseData(BizExceptionEnum.TOKEN_ERROR.getCode(), BizExceptionEnum.TOKEN_ERROR.getMessage()));
             return false;
         }
+        UsernamePasswordToken usernamePasswordToken = CacheUtil.get("userInfo", authToken);
+        if (!ToolUtil.isEmpty(usernamePasswordToken)) {
+            Subject currentUser = ShiroKit.getSubject();
+            currentUser.login(usernamePasswordToken);
+            ShiroUser shiroUser = ShiroKit.getUser();
+            ShiroKit.getSession().setAttribute("shiroUser", shiroUser);
+            ShiroKit.getSession().setAttribute("username", shiroUser.getAccount());
+
+            LogManager.me().executeLog(LogTaskFactory.loginLog(shiroUser.getId(), getIp()));
+
+            ShiroKit.getSession().setAttribute("sessionFlag", true);
+        } else {
+            RenderUtil.renderJson(response, new ErrorResponseData(700, "token错误！请重新获取token"));
+            return false;
+        }
+
+
         return true;
     }
 

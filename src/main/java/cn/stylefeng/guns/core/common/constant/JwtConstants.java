@@ -26,9 +26,9 @@ public interface JwtConstants {
     String AUTH_HEADER = "Authorization";
 
     String SECRET = "defaultSecret";
-
+    //    7天超时
     Long EXPIRATION = 604800L;
 
-    String AUTH_PATH = "/gunsApi/auth";
+    String AUTH_PATH = "/api/login";
 
 }

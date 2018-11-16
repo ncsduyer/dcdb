@@ -39,11 +39,8 @@ CREATE TABLE `sys_dept` (
 -- ----------------------------
 -- Records of sys_dept
 -- ----------------------------
-INSERT INTO `sys_dept` VALUES ('24', '1', '0', '[0],', '总公司', '总公司', '', null);
-INSERT INTO `sys_dept` VALUES ('25', '2', '24', '[0],[24],', '开发部', '开发部', '', null);
-INSERT INTO `sys_dept` VALUES ('26', '3', '24', '[0],[24],', '运营部', '运营部', '', null);
-INSERT INTO `sys_dept` VALUES ('27', '4', '24', '[0],[24],', '战略部', '战略部', '', null);
 
+INSERT INTO `sys_dept` VALUES ('1', '1', '0', '[0],', '区委', '区委', '', null);
 -- ----------------------------
 -- Table structure for sys_dict
 -- ----------------------------
@@ -56,22 +53,21 @@ CREATE TABLE `sys_dict` (
   `tips` varchar(255) DEFAULT NULL COMMENT '提示',
   `code` varchar(255) DEFAULT NULL COMMENT '值',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='字典表';
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='字典表';
 
 -- ----------------------------
 -- Records of sys_dict
 -- ----------------------------
-INSERT INTO `sys_dict` VALUES ('50', '0', '0', '性别', null, 'sys_sex');
-INSERT INTO `sys_dict` VALUES ('51', '1', '50', '男', null, '1');
-INSERT INTO `sys_dict` VALUES ('52', '2', '50', '女', null, '2');
-INSERT INTO `sys_dict` VALUES ('53', '0', '0', '状态', null, 'sys_state');
-INSERT INTO `sys_dict` VALUES ('54', '1', '53', '启用', null, '1');
-INSERT INTO `sys_dict` VALUES ('55', '2', '53', '禁用', null, '2');
-INSERT INTO `sys_dict` VALUES ('56', '0', '0', '账号状态', null, 'account_state');
-INSERT INTO `sys_dict` VALUES ('57', '1', '56', '启用', null, '1');
-INSERT INTO `sys_dict` VALUES ('58', '2', '56', '冻结', null, '2');
-INSERT INTO `sys_dict` VALUES ('59', '3', '56', '已删除', null, '3');
-
+INSERT INTO `sys_dict` VALUES ('1', '0', '0', '性别', null, 'sys_sex');
+INSERT INTO `sys_dict` VALUES ('2', '1', '1', '男', null, '1');
+INSERT INTO `sys_dict` VALUES ('3', '2', '1', '女', null, '2');
+INSERT INTO `sys_dict` VALUES ('4', '0', '0', '状态', null, 'sys_state');
+INSERT INTO `sys_dict` VALUES ('5', '1', '4', '启用', null, '1');
+INSERT INTO `sys_dict` VALUES ('6', '2', '4', '禁用', null, '2');
+INSERT INTO `sys_dict` VALUES ('7', '0', '0', '账号状态', null, 'account_state');
+INSERT INTO `sys_dict` VALUES ('8', '1', '7', '启用', null, '1');
+INSERT INTO `sys_dict` VALUES ('9', '2', '7', '冻结', null, '2');
+INSERT INTO `sys_dict` VALUES ('10', '3', '7', '已删除', null, '3');
 -- ----------------------------
 -- Table structure for sys_expense
 -- ----------------------------
@@ -204,11 +200,7 @@ CREATE TABLE `sys_notice` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='通知表';
 
--- ----------------------------
--- Records of sys_notice
--- ----------------------------
-INSERT INTO `sys_notice` VALUES ('6', '世界', '10', '欢迎使用Guns管理系统', '2017-01-11 08:53:20', '1');
-INSERT INTO `sys_notice` VALUES ('8', '你好', null, '你好', '2017-05-10 19:28:57', '1');
+
 
 -- ----------------------------
 -- Table structure for sys_operation_log
@@ -245,81 +237,61 @@ CREATE TABLE `sys_relation` (
 -- ----------------------------
 -- Records of sys_relation
 -- ----------------------------
-INSERT INTO `sys_relation` VALUES ('3377', '105', '5');
-INSERT INTO `sys_relation` VALUES ('3378', '106', '5');
-INSERT INTO `sys_relation` VALUES ('3379', '107', '5');
-INSERT INTO `sys_relation` VALUES ('3380', '108', '5');
-INSERT INTO `sys_relation` VALUES ('3381', '109', '5');
-INSERT INTO `sys_relation` VALUES ('3382', '110', '5');
-INSERT INTO `sys_relation` VALUES ('3383', '111', '5');
-INSERT INTO `sys_relation` VALUES ('3384', '112', '5');
-INSERT INTO `sys_relation` VALUES ('3385', '113', '5');
-INSERT INTO `sys_relation` VALUES ('3386', '114', '5');
-INSERT INTO `sys_relation` VALUES ('3387', '115', '5');
-INSERT INTO `sys_relation` VALUES ('3388', '116', '5');
-INSERT INTO `sys_relation` VALUES ('3389', '117', '5');
-INSERT INTO `sys_relation` VALUES ('3390', '118', '5');
-INSERT INTO `sys_relation` VALUES ('3391', '119', '5');
-INSERT INTO `sys_relation` VALUES ('3392', '120', '5');
-INSERT INTO `sys_relation` VALUES ('3393', '121', '5');
-INSERT INTO `sys_relation` VALUES ('3394', '122', '5');
-INSERT INTO `sys_relation` VALUES ('3395', '150', '5');
-INSERT INTO `sys_relation` VALUES ('3396', '151', '5');
-INSERT INTO `sys_relation` VALUES ('3737', '105', '1');
-INSERT INTO `sys_relation` VALUES ('3738', '106', '1');
-INSERT INTO `sys_relation` VALUES ('3739', '107', '1');
-INSERT INTO `sys_relation` VALUES ('3740', '108', '1');
-INSERT INTO `sys_relation` VALUES ('3741', '109', '1');
-INSERT INTO `sys_relation` VALUES ('3742', '110', '1');
-INSERT INTO `sys_relation` VALUES ('3743', '111', '1');
-INSERT INTO `sys_relation` VALUES ('3744', '112', '1');
-INSERT INTO `sys_relation` VALUES ('3745', '113', '1');
-INSERT INTO `sys_relation` VALUES ('3746', '165', '1');
-INSERT INTO `sys_relation` VALUES ('3747', '166', '1');
-INSERT INTO `sys_relation` VALUES ('3748', '167', '1');
-INSERT INTO `sys_relation` VALUES ('3749', '114', '1');
-INSERT INTO `sys_relation` VALUES ('3750', '115', '1');
-INSERT INTO `sys_relation` VALUES ('3751', '116', '1');
-INSERT INTO `sys_relation` VALUES ('3752', '117', '1');
-INSERT INTO `sys_relation` VALUES ('3753', '118', '1');
-INSERT INTO `sys_relation` VALUES ('3754', '162', '1');
-INSERT INTO `sys_relation` VALUES ('3755', '163', '1');
-INSERT INTO `sys_relation` VALUES ('3756', '164', '1');
-INSERT INTO `sys_relation` VALUES ('3757', '119', '1');
-INSERT INTO `sys_relation` VALUES ('3758', '120', '1');
-INSERT INTO `sys_relation` VALUES ('3759', '121', '1');
-INSERT INTO `sys_relation` VALUES ('3760', '122', '1');
-INSERT INTO `sys_relation` VALUES ('3761', '150', '1');
-INSERT INTO `sys_relation` VALUES ('3762', '151', '1');
-INSERT INTO `sys_relation` VALUES ('3763', '128', '1');
-INSERT INTO `sys_relation` VALUES ('3764', '134', '1');
-INSERT INTO `sys_relation` VALUES ('3765', '158', '1');
-INSERT INTO `sys_relation` VALUES ('3766', '159', '1');
-INSERT INTO `sys_relation` VALUES ('3767', '130', '1');
-INSERT INTO `sys_relation` VALUES ('3768', '131', '1');
-INSERT INTO `sys_relation` VALUES ('3769', '135', '1');
-INSERT INTO `sys_relation` VALUES ('3770', '136', '1');
-INSERT INTO `sys_relation` VALUES ('3771', '137', '1');
-INSERT INTO `sys_relation` VALUES ('3772', '152', '1');
-INSERT INTO `sys_relation` VALUES ('3773', '153', '1');
-INSERT INTO `sys_relation` VALUES ('3774', '154', '1');
-INSERT INTO `sys_relation` VALUES ('3775', '132', '1');
-INSERT INTO `sys_relation` VALUES ('3776', '138', '1');
-INSERT INTO `sys_relation` VALUES ('3777', '139', '1');
-INSERT INTO `sys_relation` VALUES ('3778', '140', '1');
-INSERT INTO `sys_relation` VALUES ('3779', '155', '1');
-INSERT INTO `sys_relation` VALUES ('3780', '156', '1');
-INSERT INTO `sys_relation` VALUES ('3781', '157', '1');
-INSERT INTO `sys_relation` VALUES ('3782', '133', '1');
-INSERT INTO `sys_relation` VALUES ('3783', '160', '1');
-INSERT INTO `sys_relation` VALUES ('3784', '161', '1');
-INSERT INTO `sys_relation` VALUES ('3785', '141', '1');
-INSERT INTO `sys_relation` VALUES ('3786', '142', '1');
-INSERT INTO `sys_relation` VALUES ('3787', '143', '1');
-INSERT INTO `sys_relation` VALUES ('3788', '144', '1');
-INSERT INTO `sys_relation` VALUES ('3789', '145', '1');
-INSERT INTO `sys_relation` VALUES ('3790', '148', '1');
-INSERT INTO `sys_relation` VALUES ('3791', '149', '1');
+INSERT INTO `sys_relation` VALUES ('1', '105', '1');
+INSERT INTO `sys_relation` VALUES ('2', '106', '1');
+INSERT INTO `sys_relation` VALUES ('3', '107', '1');
+INSERT INTO `sys_relation` VALUES ('4', '108', '1');
+INSERT INTO `sys_relation` VALUES ('5', '109', '1');
+INSERT INTO `sys_relation` VALUES ('6', '110', '1');
+INSERT INTO `sys_relation` VALUES ('7', '111', '1');
+INSERT INTO `sys_relation` VALUES ('8', '112', '1');
+INSERT INTO `sys_relation` VALUES ('9', '113', '1');
+INSERT INTO `sys_relation` VALUES ('10', '165', '1');
+INSERT INTO `sys_relation` VALUES ('11', '166', '1');
+INSERT INTO `sys_relation` VALUES ('12', '167', '1');
+INSERT INTO `sys_relation` VALUES ('13', '114', '1');
+INSERT INTO `sys_relation` VALUES ('14', '115', '1');
+INSERT INTO `sys_relation` VALUES ('15', '116', '1');
+INSERT INTO `sys_relation` VALUES ('16', '117', '1');
+INSERT INTO `sys_relation` VALUES ('17', '118', '1');
+INSERT INTO `sys_relation` VALUES ('18', '162', '1');
+INSERT INTO `sys_relation` VALUES ('19', '163', '1');
+INSERT INTO `sys_relation` VALUES ('20', '164', '1');
+INSERT INTO `sys_relation` VALUES ('21', '119', '1');
+INSERT INTO `sys_relation` VALUES ('22', '120', '1');
+INSERT INTO `sys_relation` VALUES ('23', '121', '1');
+INSERT INTO `sys_relation` VALUES ('24', '122', '1');
+INSERT INTO `sys_relation` VALUES ('25', '150', '1');
+INSERT INTO `sys_relation` VALUES ('26', '151', '1');
+INSERT INTO `sys_relation` VALUES ('27', '128', '1');
+INSERT INTO `sys_relation` VALUES ('28', '134', '1');
+INSERT INTO `sys_relation` VALUES ('29', '158', '1');
+INSERT INTO `sys_relation` VALUES ('30', '159', '1');
+INSERT INTO `sys_relation` VALUES ('31', '130', '1');
+INSERT INTO `sys_relation` VALUES ('32', '131', '1');
+INSERT INTO `sys_relation` VALUES ('33', '135', '1');
+INSERT INTO `sys_relation` VALUES ('34', '136', '1');
+INSERT INTO `sys_relation` VALUES ('35', '137', '1');
+INSERT INTO `sys_relation` VALUES ('36', '152', '1');
+INSERT INTO `sys_relation` VALUES ('37', '153', '1');
+INSERT INTO `sys_relation` VALUES ('38', '154', '1');
+INSERT INTO `sys_relation` VALUES ('39', '132', '1');
+INSERT INTO `sys_relation` VALUES ('40', '138', '1');
+INSERT INTO `sys_relation` VALUES ('41', '139', '1');
+INSERT INTO `sys_relation` VALUES ('42', '140', '1');
+INSERT INTO `sys_relation` VALUES ('43', '155', '1');
+INSERT INTO `sys_relation` VALUES ('44', '156', '1');
+INSERT INTO `sys_relation` VALUES ('45', '157', '1');
+INSERT INTO `sys_relation` VALUES ('46', '133', '1');
+INSERT INTO `sys_relation` VALUES ('47', '160', '1');
+INSERT INTO `sys_relation` VALUES ('48', '161', '1');
+INSERT INTO `sys_relation` VALUES ('49', '141', '1');
+INSERT INTO `sys_relation` VALUES ('50', '142', '1');
+INSERT INTO `sys_relation` VALUES ('51', '143', '1');
+INSERT INTO `sys_relation` VALUES ('52', '144', '1');
+INSERT INTO `sys_relation` VALUES ('53', '145', '1');
+INSERT INTO `sys_relation` VALUES ('54', '148', '1');
+INSERT INTO `sys_relation` VALUES ('55', '149', '1');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -339,8 +311,7 @@ CREATE TABLE `sys_role` (
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
-INSERT INTO `sys_role` VALUES ('1', '1', '0', '超级管理员', '24', 'administrator', '1');
-INSERT INTO `sys_role` VALUES ('5', '2', '1', '临时', '26', 'temp', null);
+INSERT INTO `sys_role` VALUES ('1', '1', '0', '超级管理员', '1', 'administrator', '1');
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -363,7 +334,7 @@ CREATE TABLE `sys_user` (
   `createtime` datetime DEFAULT NULL COMMENT '创建时间',
   `version` int(11) DEFAULT NULL COMMENT '保留字段',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8 COMMENT='管理员表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='管理员表';
 
 -- ----------------------------
 -- Records of sys_user

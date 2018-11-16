@@ -105,4 +105,10 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     public List<MenuNode> getMenusByRoleIds(List<Integer> roleIds) {
         return this.baseMapper.getMenusByRoleIds(roleIds);
     }
+
+    @Override
+    public List<Menu> getMenuByRoleId(Integer roleId, Integer ismenu) {
+        return menuMapper.getMenuByRoleId(roleId, ismenu);
+    }
+
 }

@@ -131,6 +131,15 @@
         inner join sys_menu m on rel.menuid = m.id
         where rel.roleid = #{roleId}
     </select>
+    <select id="getMenuByRoleId" resultMap="BaseResultMap">
+        select m.id, m.code, m.name, m.icon, m.url from
+        sys_menu m
+        <if test="isapp == 1">
+            RIGHT JOIN t_tb_app_menu ap on ap.menu_id=m.id
+        </if>
+        inner join sys_relation rel on rel.menuid = m.id
+        where rel.roleid = #{roleId} AND m.status=1
+    </select>
 
     <select id="getMenusByRoleIds" resultType="cn.stylefeng.guns.core.common.node.MenuNode">
         SELECT

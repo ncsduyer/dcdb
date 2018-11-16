@@ -10,13 +10,13 @@
     </parent>
 
     <groupId>cn.stylefeng.guns</groupId>
-    <artifactId>guns</artifactId>
+    <artifactId>admin</artifactId>
     <version>1.0.0</version>
 
     <name>guns-admin</name>
     <description>guns 的spring boot版本</description>
 
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -29,6 +29,20 @@
            memoryStoreEvictionPolicy="LFU"
            transactionalMode="off">
     </cache>
+    <cache name="userInfo"
+           maxElementsInMemory="10000"
+           eternal="false"
+           timeToIdleSeconds="86400"
+           timeToLiveSeconds="86400"
+           clearOnFlush="false"
+           overflowToDisk="true"
+           diskSpoolBufferSizeMB="1024"
+           maxElementsOnDisk="100000"
+           diskPersistent="false"
+           diskExpiryThreadIntervalSeconds="120"
+           memoryStoreEvictionPolicy="FIFO"
+           transactionalMode="off">
+    </cache>
 
 </ehcache>
 

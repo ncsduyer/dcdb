@@ -99,9 +99,12 @@ public class JwtTokenUtil {
      *  true:过期   false:没过期
      * </pre>
      */
+
     public static Boolean isTokenExpired(String token) {
         try {
             final Date expiration = getExpirationDateFromToken(token);
+//            GunsProperties gunsProperties=new GunsProperties();
+//            return expiration.before(new Date(new Date().getTime()-(gunsProperties.getSessionValidationInterval() * 1000)));
             return expiration.before(new Date());
         } catch (ExpiredJwtException expiredJwtException) {
             return true;
