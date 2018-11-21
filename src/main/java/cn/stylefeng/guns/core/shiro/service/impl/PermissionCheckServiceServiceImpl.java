@@ -21,6 +21,7 @@ import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.shiro.ShiroUser;
 import cn.stylefeng.guns.core.shiro.service.PermissionCheckService;
 import cn.stylefeng.roses.core.util.HttpContext;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,7 +59,11 @@ public class PermissionCheckServiceServiceImpl implements PermissionCheckService
         String requestURI = request.getRequestURI().replaceFirst(ConfigListener.getConf().get("contextPath"), "");
         String[] str = requestURI.split("/");
         if (str.length > 3) {
-            requestURI = "/" + str[1] + "/" + str[2];
+            if (StringUtils.equals(str[1], "api")) {
+                requestURI = "/" + str[2] + "/" + str[3];
+            } else {
+                requestURI = "/" + str[1] + "/" + str[2];
+            }
         }
         if (ShiroKit.hasPermission(requestURI)) {
             return true;

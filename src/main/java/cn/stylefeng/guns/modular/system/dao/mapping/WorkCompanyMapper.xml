@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.system.dao.WorkCompanyMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.system.model.WorkCompany">
+        <id column="id" property="id"/>
+        <result column="a_w_id" property="aWId"/>
+        <result column="company_id" property="companyId"/>
+        <result column="requirement" property="requirement"/>
+        <result column="deadline" property="deadline"/>
+        <result column="situation" property="situation"/>
+        <result column="situation_type" property="situationType"/>
+        <result column="status" property="status"/>
+        <result column="is_update" property="isUpdate"/>
+        <association property="company" javaType="cn.stylefeng.guns.modular.system.model.Company" column="company_id"
+                     select="cn.stylefeng.guns.modular.system.dao.CompanyMapper.selectById">
+        </association>
+        <collection property="wcInfos" ofType="cn.stylefeng.guns.modular.system.model.WcInfos" column="id"
+                    select="selectWorkInfos">
+        </collection>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, a_w_id, company_id, requirement, deadline, situation, situation_type, status,is_update
+    </sql>
+    <select id="selectWorkInfos" resultMap="cn.stylefeng.guns.modular.system.dao.WcInfosMapper.BaseResultMap">
+        SELECT
+        <include refid="cn.stylefeng.guns.modular.system.dao.WcInfosMapper.Base_Column_List"/>
+        FROM t_tb_wc_infos WHERE pid=#{id}
+    </select>
+    <select id="selectWithManyById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_tb_work_company WHERE id=#{id}
+    </select>
+    <select id="selectManyList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_tb_work_company WHERE a_w_id=#{id}
+    </select>
+</mapper>

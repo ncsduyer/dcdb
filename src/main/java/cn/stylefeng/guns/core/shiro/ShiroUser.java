@@ -38,7 +38,7 @@ public class ShiroUser implements Serializable {
     public List<Integer> roleList; // 角色集
     public String deptName;        // 部门名称
     public List<String> roleNames; // 角色名称集
-
+    public String avatar;
 
     public Integer getId() {
         return id;

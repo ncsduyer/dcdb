@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.system.dao.AssignWorkMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.system.model.AssignWork">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="work_type" property="workType"/>
+        <result column="broker_name" property="brokerName"/>
+        <result column="broker_id" property="brokerId"/>
+        <result column="agent" property="agent"/>
+        <result column="created_id" property="createdId"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="deadline" property="deadline"/>
+        <result column="requirement" property="requirement"/>
+        <result column="remarks" property="remarks"/>
+        <result column="status" property="status"/>
+        <result column="delay_status" property="delayStatus"/>
+        <association property="agent_user" javaType="cn.stylefeng.guns.modular.system.model.User" column="agent"
+                     select="cn.stylefeng.guns.modular.system.dao.UserMapper.selectById">
+        </association>
+        <association property="eventStep" javaType="cn.stylefeng.guns.modular.system.model.EventStep" column="status"
+                     select="selectEventStepByStatus">
+        </association>
+        <collection property="workCompanies" ofType="cn.stylefeng.guns.modular.system.model.WorkCompany" column="id"
+                    select="cn.stylefeng.guns.modular.system.dao.WorkCompanyMapper.selectManyList">
+
+        </collection>
+        <collection property="workFlowLogs" ofType="cn.stylefeng.guns.modular.system.model.WorkFlowLog" column="id"
+                    select="cn.stylefeng.guns.modular.system.dao.WorkFlowLogMapper.selectByManyId">
+
+        </collection>
+
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, title, work_type, broker_name, broker_id, agent, created_id, created_time, end_time, deadline,requirement, remarks, status, delay_status
+    </sql>
+    <select id="selectEventStepByStatus" resultMap="cn.stylefeng.guns.modular.system.dao.EventStepMapper.BaseResultMap">
+        select
+        <include refid="cn.stylefeng.guns.modular.system.dao.EventStepMapper.Base_Column_List"/>
+        from t_tb_event_step where status=#{status} and event_type=1
+    </select>
+    <select id="selectWithManyById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_tb_assign_work a WHERE a.id=#{id}
+    </select>
+    <select id="selectAsPage" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_tb_assign_work a
+        <where>
+            <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.title)">
+                a.title LIKE CONCAT('%',#{dto.title},'%')
+            </if>
+            <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.workType)">
+                AND a.work_type = #{dto.workType}
+            </if>
+            <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.brokerName)">
+                AND a.broker_name like #{dto.brokerName}
+            </if>
+            <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.agent)">
+                a.agent = #{dto.agent}
+            </if>
+            <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.status) and dto.status.length gt 0">
+                AND a.status in
+                <foreach collection="dto.status" item="id" index="index" open="(" close=")" separator=",">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.delayStatus)">
+                AND a.delay_status = #{dto.delayStatus}
+            </if>
+            <if test="beforeTime!=null">
+                <![CDATA[   and a.created_time >= #{beforeTime}]]>
+            </if>
+            <if test="afterTime!=null">
+                <![CDATA[ and a.created_time <= #{afterTime}]]>
+            </if>
+
+        </where>
+        order BY a.id DESC
+    </select>
+</mapper>

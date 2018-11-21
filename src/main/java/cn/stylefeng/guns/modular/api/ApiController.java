@@ -15,6 +15,7 @@
  */
 package cn.stylefeng.guns.modular.api;
 
+import cn.stylefeng.guns.config.properties.GunsProperties;
 import cn.stylefeng.guns.core.common.constant.JwtConstants;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.log.LogManager;
@@ -23,7 +24,11 @@ import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.shiro.ShiroUser;
 import cn.stylefeng.guns.core.util.CacheUtil;
 import cn.stylefeng.guns.core.util.JwtTokenUtil;
+import cn.stylefeng.guns.core.util.KaptchaUtil;
+import cn.stylefeng.guns.modular.AppMenu.service.IAppMenuService;
+import cn.stylefeng.guns.modular.AssignWork.service.IAssignWorkService;
 import cn.stylefeng.guns.modular.VersionUpgrade.service.IVersionUpgradeService;
+import cn.stylefeng.guns.modular.api.vo.AppMenusVo;
 import cn.stylefeng.guns.modular.system.dao.UserMapper;
 import cn.stylefeng.guns.modular.system.model.Menu;
 import cn.stylefeng.guns.modular.system.model.User;
@@ -39,15 +44,19 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.util.ByteSource;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.math.BigInteger;
 import java.util.*;
 
@@ -73,7 +82,14 @@ public class ApiController extends BaseController {
     @Autowired
     private IVersionUpgradeService versionUpgradeService;
     @Autowired
+    GunsProperties gunsProperties;
+    @Autowired
+    private IAssignWorkService assignWorkService;
+    @Autowired
+    private IAppMenuService appMenuService;
+    @Autowired
     private HttpServletRequest request;
+
     /**
      * api登录接口，通过账号密码获取token
      */
@@ -81,11 +97,21 @@ public class ApiController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),
             @ApiImplicitParam(name = "password", value = "密码", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "kaptcha", value = "验证码", required = true, dataType = "String"),
     })
     @RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseData auth(@RequestParam("username") String username,
-                       @RequestParam("password") String password) {
+                             @RequestParam("password") String password, @RequestParam(value = "kaptcha", required = false) String kaptcha) {
 
+        //验证验证码是否正确
+        if (KaptchaUtil.getKaptchaOnOff()) {
+            kaptcha = kaptcha.trim();
+            String key = request.getRemoteHost();
+            String code = (String) CacheUtil.get("kaptcha", key);
+            if (ToolUtil.isEmpty(kaptcha) || !kaptcha.equalsIgnoreCase(code)) {
+                return new ErrorResponseData(BizExceptionEnum.INVALID_KAPTCHA.getCode(), BizExceptionEnum.INVALID_KAPTCHA.getMessage());
+            }
+        }
         //封装请求账号密码为shiro可验证的token
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username, password.toCharArray());
 
@@ -170,16 +196,62 @@ public class ApiController extends BaseController {
     @ResponseBody
     public ResponseData user() {
         ShiroUser user = ShiroKit.getUser();
+        String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/kaptcha/";
+        User user1 = userService.selectById(user.getId());
+        user1.setAvatar(url + user1.getAvatar());
         if (ToolUtil.isEmpty(user)) {
             throw new ServiceException(700, "用户信息异常");
         }
-        return ResponseData.success(user);
+        return ResponseData.success(user1);
     }
 
     /**
+     * 修改用户头像
+     */
+    @ApiOperation(value = "修改用户头像")
+    @RequestMapping(value = "/user/update", method = RequestMethod.POST)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "用户id", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "avatar", value = "头像图片文件名", required = true, dataType = "String"),
+    })
+    @ResponseBody
+    public ResponseData userAvatarUpdate(@RequestParam("id") Integer id, @RequestParam("avatar") String avatar) {
+
+        User user = new User();
+        user.setId(id);
+        user.setAvatar(avatar);
+
+        if (!userService.updateById(user)) {
+            return new ErrorResponseData(BizExceptionEnum.REQUEST_NULL.getCode(), BizExceptionEnum.REQUEST_NULL.getMessage());
+        }
+        return SUCCESS_TIP;
+    }
+
+    /**
+     * 上传用户头像
+     */
+    @ApiOperation(value = "上传用户头像")
+    @RequestMapping(value = "/mgr/upload", method = RequestMethod.POST)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "file", value = "文件", required = true, dataType = "String"),
+    })
+    @ResponseBody
+    public ResponseData upload(@RequestPart("file") MultipartFile picture) {
+
+        String pictureName = UUID.randomUUID().toString() + "." + ToolUtil.getFileSuffix(picture.getOriginalFilename());
+        try {
+
+            String fileSavePath = gunsProperties.getFileUploadPath();
+            picture.transferTo(new File(fileSavePath + pictureName));
+        } catch (Exception e) {
+            throw new ServiceException(BizExceptionEnum.UPLOAD_ERROR);
+        }
+        return ResponseData.success(pictureName);
+    }
+    /**
      * 获取当前登录用户权限列表
      */
-    @ApiOperation(value = "获取当前登录用户信息")
+    @ApiOperation(value = "获取当前登录用户权限列表")
     @RequestMapping(value = "/permissions", method = RequestMethod.GET)
     @ResponseBody
     public ResponseData permissions() {
@@ -188,8 +260,8 @@ public class ApiController extends BaseController {
             return ResponseData.error(700, "用户信息异常");
         }
         List<Integer> roleList = user.getRoleList();
-        Set<Menu> permissionSet = new HashSet<>();
-        String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+        Set<AppMenusVo> permissionSet = new HashSet<>();
+        String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
         for (Integer roleId : roleList) {
             List<Menu> permissions = menuService.getMenuByRoleId(roleId, null);
             if (permissions != null) {
@@ -197,7 +269,9 @@ public class ApiController extends BaseController {
                     if (ToolUtil.isNotEmpty(menu)) {
                         menu.setIcon(url + "/static/img/" + menu.getIcon());
                         menu.setUrl(url + menu.getUrl());
-                        permissionSet.add(menu);
+                        AppMenusVo appMenusVo = new AppMenusVo();
+                        BeanUtils.copyProperties(menu, appMenusVo);
+                        permissionSet.add(appMenusVo);
                     }
                 }
             }
@@ -236,24 +310,32 @@ public class ApiController extends BaseController {
      * 获取页面列表
      */
     @ApiOperation(value = "获取页面列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "type", value = "type", required = true, dataType = "Long"),
+    })
     @RequestMapping(value = "/menu", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseData menu() {
+    public ResponseData menu(@RequestParam(value = "type", defaultValue = "1") Integer type) {
         ShiroUser user = ShiroKit.getUser();
         if (ToolUtil.isEmpty(user)) {
             return ResponseData.error(700, "用户信息异常");
         }
         List<Integer> roleList = user.getRoleList();
-        Set<Menu> permissionSet = new HashSet<>();
-        String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+        Set<AppMenusVo> permissionSet = new HashSet<>();
+        String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
         for (Integer roleId : roleList) {
-            List<Menu> permissions = menuService.getMenuByRoleId(roleId, 1);
+            List<Menu> permissions = menuService.getMenuByRoleId(roleId, 1, type);
             if (permissions != null) {
                 for (Menu menu : permissions) {
                     if (ToolUtil.isNotEmpty(menu)) {
                         menu.setIcon(url + "/static/img/" + menu.getIcon());
-                        menu.setUrl(url + menu.getUrl());
-                        permissionSet.add(menu);
+                        AppMenusVo appMenusVo = new AppMenusVo();
+                        BeanUtils.copyProperties(menu, appMenusVo);
+                        appMenusVo.setUrl(url + "/static/view/" + appMenuService.selectOne(Condition.create().eq("menu_id", appMenusVo.getId())).getPcUrl());
+                        if (StringUtils.equals(appMenusVo.getCode(), "assignWork")) {
+                            appMenusVo.setNum(assignWorkService.selectCount(Condition.create().eq("agent", user.getId()).eq("status", 1)));
+                        }
+                        permissionSet.add(appMenusVo);
                     }
                 }
             }

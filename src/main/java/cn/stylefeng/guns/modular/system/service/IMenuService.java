@@ -108,4 +108,6 @@ public interface IMenuService extends IService<Menu> {
     List<MenuNode> getMenusByRoleIds(List<Integer> roleIds);
 
     List<Menu> getMenuByRoleId(Integer roleId, Integer ismenu);
+
+    List<Menu> getMenuByRoleId(Integer roleId, Integer ismenu, Integer type);
 }

@@ -77,7 +77,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new RestApiInteceptor()).addPathPatterns("/gunsApi/**");
         registry.addInterceptor(new RestApiInteceptor()).addPathPatterns("/api/**");
-        registry.addInterceptor(new RestApiInteceptor()).addPathPatterns("/api*/**");
+//        registry.addInterceptor(new RestApiInteceptor()).addPathPatterns("/api*/**");
     }
 
     /**

@@ -139,6 +139,10 @@
         </if>
         inner join sys_relation rel on rel.menuid = m.id
         where rel.roleid = #{roleId} AND m.status=1
+        <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(type)">
+            AND ap.type=#{type}
+        </if>
+        ORDER BY m.id ASC
     </select>
 
     <select id="getMenusByRoleIds" resultType="cn.stylefeng.guns.core.common.node.MenuNode">

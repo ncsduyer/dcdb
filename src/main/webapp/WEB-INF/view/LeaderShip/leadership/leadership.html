@@ -1,0 +1,51 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>领导列表管理</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <#NameCon id="name" name="名称" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#NameCon id="phone" name="电话" />
+                            </div>
+                            <!--<div class="col-sm-3">-->
+                            <!--<#NameCon id="email" name="邮箱" />-->
+                            <!--</div>-->
+                            <div class="col-sm-3">
+                                <#NameCon id="department" name="部门" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#NameCon id="title" name="职位" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#button name="搜索" icon="fa-search" clickFun="Leadership.search()"/>
+                            </div>
+                        </div>
+                        <div class="hidden-xs" id="LeadershipTableToolbar" role="group">
+                            @if(shiro.hasPermission("/apileadership/add")){
+                            <#button name="添加" icon="fa-plus" clickFun="Leadership.openAddLeadership()"/>
+                            @}
+                            @if(shiro.hasPermission("/apileadership/update")){
+                            <#button name="修改" icon="fa-edit" clickFun="Leadership.openLeadershipDetail()"
+                            space="true"/>
+                            @}
+                            @if(shiro.hasPermission("/apileadership/delete")){
+                            <#button name="删除" icon="fa-remove" clickFun="Leadership.delete()" space="true"/>
+                            @}
+                        </div>
+                        <#table id="LeadershipTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/LeaderShip/leadership/leadership.js"></script>
+@}

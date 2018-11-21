@@ -16,6 +16,7 @@
 package cn.stylefeng.guns.modular.system.controller;
 
 import cn.stylefeng.guns.config.properties.GunsProperties;
+import cn.stylefeng.guns.core.util.CacheUtil;
 import cn.stylefeng.roses.core.util.FileUtil;
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
@@ -74,7 +75,8 @@ public class KaptchaController {
 
         // store the text in the session
         session.setAttribute(Constants.KAPTCHA_SESSION_KEY, capText);
-
+        String key = request.getRemoteHost();
+        CacheUtil.put("kaptcha", key, capText);
         // create the image with the text
         BufferedImage bi = producer.createImage(capText);
         ServletOutputStream out = null;

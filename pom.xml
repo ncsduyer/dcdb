@@ -204,6 +204,7 @@
                 </includes>
             </resource>
         </resources>
+        <finalName>admin</finalName>
     </build>
 
     <profiles>
