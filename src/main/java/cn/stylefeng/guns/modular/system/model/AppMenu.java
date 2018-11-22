@@ -41,6 +41,24 @@ public class AppMenu extends Model<AppMenu> {
     @TableField("wap_url")
     private String wapUrl;
 
+    private String pcIcon;
+    private String wapIcon;
+
+    public String getPcIcon() {
+        return pcIcon;
+    }
+
+    public void setPcIcon(String pcIcon) {
+        this.pcIcon = pcIcon;
+    }
+
+    public String getWapIcon() {
+        return wapIcon;
+    }
+
+    public void setWapIcon(String wapIcon) {
+        this.wapIcon = wapIcon;
+    }
 
     public Integer getId() {
         return id;

@@ -6,7 +6,6 @@ import cn.stylefeng.guns.modular.DcWorkCompany.service.IWorkCompanyService;
 import cn.stylefeng.guns.modular.system.model.WorkCompany;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
-import cn.stylefeng.roses.core.util.ToolUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -109,27 +108,12 @@ public class ApiWorkCompanyController extends BaseController {
     @Permission
     @ResponseBody
     public ResponseData update(@RequestBody WorkCompany workCompany) {
-        WorkCompany workCompany1 = workCompanyService.selectById(workCompany.getId());
-        if (ToolUtil.isNotEmpty(workCompany1) && workCompany1.getStatus() != 1) {
-            if (workCompany1.getIsUpdate() != 1) {
-                workCompany1.setIsUpdate(1);
-                workCompany1.setDeadline(workCompany.getDeadline());
-                workCompany1.setRequirement(workCompany.getRequirement());
-                workCompanyService.updateById(workCompany1);
-                return SUCCESS_TIP;
-            } else {
-                WorkCompany workCompany2 = new WorkCompany();
-                workCompany2.setId(workCompany.getId());
-                workCompany2.setSituation(workCompany.getSituation());
-                workCompany2.setStatus(workCompany.getStatus());
-                workCompanyService.updateById(workCompany2);
-                return SUCCESS_TIP;
-            }
-        }
+        if (workCompanyService.updateByWorkCompany(workCompany)) return SUCCESS_TIP;
 
         return ResponseData.error(4002, "禁止修改数据");
 
     }
+
 
     /**
      * 督查单位关联详情

@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <title>新增事项 - 督办事项</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="css/layui.css">
+    <script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+    <script type="text/javascript" src="static/h-ui/js/H-ui.min.js"></script>
+    <script type="text/javascript" src="static/h-ui.admin/js/H-ui.admin.js"></script>
+    <script type="text/javascript" src="js/url.js"></script>
+    <script type="text/javascript">
+        var awid = request('id');
+        $(function () {
+            var Detailsdata = {};
+            $.apiAjax({
+                type: "get",
+                url: apiUrl.ApiassignWorkDetail + "/" + awid,
+                alert: false,
+                success: function (ret) {
+                    Detailsdata = ret;
+                }
+            });
+            $.apiAjax({
+                type: "get",
+                url: apiUrl.WorkFlowLogList + "/" + awid,
+                alert: false,
+                success: function (ret) {
+                    var data = ret;
+                    for (var i = 0; i < data.length; i++) {
+                        var Content = "";
+                        var row = data[i];
+                        Content += "<li class=\"layui-timeline-item\" v-for=\"item in items\">" +
+                            "<i class=\"layui-icon layui-timeline-axis\"></i>" +
+                            "<div class=\"layui-timeline-content layui-text\">" +
+                            "<h3 class=\"layui-timeline-title\">" + row.createdTime + "</h3>";
+                        if (row.status == 1 && Detailsdata) {
+                            Content += "<p>" +
+                                Detailsdata.brokerName + "领导分配" + Detailsdata.title + "<i class=\"layui-icon\"></i>" +
+                                "</p>";
+                        }
+                        if (row.status == 2 && Detailsdata) {
+                            Content += "<p>" +
+                                Detailsdata.agent_user.name + "开始督办事件" +
+                                "<i class=\"layui-icon\"></i>" +
+                                "</p>";
+                        }
+                        Content = Content + "<p>" +
+                            row.step +
+                            "</p>" +
+                            "</div>" +
+                            "</li>";
+                        $("#ullist").append(Content);
+                    }
+                }
+
+            });
+        });
+
+    </script>
+
+</head>
+<body>
+<div style="width:90%; margin:5% auto; position:relative;" id="details_of_supervision">
+    <ul class="layui-timeline" id="ullist">
+
+    </ul>
+</div>
+</body>
+
+
+</html>

@@ -28,6 +28,9 @@ public class AssignWorkServiceImpl extends ServiceImpl<AssignWorkMapper, AssignW
 
     @Override
     public Page<AssignWork> SreachPage(SreachWorkDto sreachWorkDto) {
+        if (ToolUtil.isEmpty(sreachWorkDto)) {
+            sreachWorkDto = new SreachWorkDto();
+        }
         Page<AssignWork> page = new Page<>(sreachWorkDto.getPage(), sreachWorkDto.getLimit());
         Date beforeTime = sreachWorkDto.getBeforeTime();
         Date afterTime = sreachWorkDto.getAfterTime();

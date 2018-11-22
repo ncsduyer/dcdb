@@ -20,4 +20,6 @@ public interface IWorkCompanyService extends IService<WorkCompany> {
     List<WorkCompany> selectManyList(Integer id);
 
     boolean insert1(WorkCompany workCompany);
+
+    boolean updateByWorkCompany(WorkCompany workCompany);
 }

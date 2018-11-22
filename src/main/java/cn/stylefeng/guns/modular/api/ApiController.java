@@ -30,6 +30,7 @@ import cn.stylefeng.guns.modular.AssignWork.service.IAssignWorkService;
 import cn.stylefeng.guns.modular.VersionUpgrade.service.IVersionUpgradeService;
 import cn.stylefeng.guns.modular.api.vo.AppMenusVo;
 import cn.stylefeng.guns.modular.system.dao.UserMapper;
+import cn.stylefeng.guns.modular.system.model.AppMenu;
 import cn.stylefeng.guns.modular.system.model.Menu;
 import cn.stylefeng.guns.modular.system.model.User;
 import cn.stylefeng.guns.modular.system.service.IMenuService;
@@ -263,14 +264,15 @@ public class ApiController extends BaseController {
         Set<AppMenusVo> permissionSet = new HashSet<>();
         String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
         for (Integer roleId : roleList) {
-            List<Menu> permissions = menuService.getMenuByRoleId(roleId, null);
+            List<Menu> permissions = menuService.getMenuByRoleId(roleId, null, null);
             if (permissions != null) {
                 for (Menu menu : permissions) {
                     if (ToolUtil.isNotEmpty(menu)) {
-                        menu.setIcon(url + "/static/img/" + menu.getIcon());
-                        menu.setUrl(url + menu.getUrl());
                         AppMenusVo appMenusVo = new AppMenusVo();
                         BeanUtils.copyProperties(menu, appMenusVo);
+//                        AppMenu appMenu=appMenuService.selectOne(Condition.create().eq("menu_id", appMenusVo.getId()));
+//                        appMenusVo.setUrl(appMenu.getPcUrl());
+//                        appMenusVo.setIcon(appMenu.getPcIcon());
                         permissionSet.add(appMenusVo);
                     }
                 }
@@ -321,17 +323,21 @@ public class ApiController extends BaseController {
             return ResponseData.error(700, "用户信息异常");
         }
         List<Integer> roleList = user.getRoleList();
-        Set<AppMenusVo> permissionSet = new HashSet<>();
+        List<AppMenusVo> permissionSet = new ArrayList<>();
         String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
         for (Integer roleId : roleList) {
             List<Menu> permissions = menuService.getMenuByRoleId(roleId, 1, type);
             if (permissions != null) {
-                for (Menu menu : permissions) {
+                for (int i = 0; i < permissions.size(); i++) {
+                    Menu menu = permissions.get(i);
                     if (ToolUtil.isNotEmpty(menu)) {
-                        menu.setIcon(url + "/static/img/" + menu.getIcon());
+//                        menu.setIcon(url + "/static/img/" + menu.getIcon());
                         AppMenusVo appMenusVo = new AppMenusVo();
                         BeanUtils.copyProperties(menu, appMenusVo);
-                        appMenusVo.setUrl(url + "/static/view/" + appMenuService.selectOne(Condition.create().eq("menu_id", appMenusVo.getId())).getPcUrl());
+//                        appMenusVo.setUrl(url + "/static/view/" + appMenuService.selectOne(Condition.create().eq("menu_id", appMenusVo.getId())).getPcUrl());
+                        AppMenu appMenu = appMenuService.selectOne(Condition.create().eq("menu_id", appMenusVo.getId()));
+                        appMenusVo.setUrl(appMenu.getPcUrl());
+                        appMenusVo.setIcon(appMenu.getPcIcon());
                         if (StringUtils.equals(appMenusVo.getCode(), "assignWork")) {
                             appMenusVo.setNum(assignWorkService.selectCount(Condition.create().eq("agent", user.getId()).eq("status", 1)));
                         }
@@ -357,10 +363,13 @@ public class ApiController extends BaseController {
             return ResponseData.error(BizExceptionEnum.REQUEST_NULL.getCode(), BizExceptionEnum.REQUEST_NULL.getMessage());
         }
         Menu menu = menuService.selectById(id);
-        String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
-        menu.setIcon(url + "/static/img/" + menu.getIcon());
-        menu.setUrl(url + menu.getUrl());
-        return ResponseData.success(menu);
+        AppMenusVo appMenusVo = new AppMenusVo();
+        BeanUtils.copyProperties(menu, appMenusVo);
+//        String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+        AppMenu appMenu = appMenuService.selectOne(Condition.create().eq("menu_id", appMenusVo.getId()));
+        appMenusVo.setUrl(appMenu.getPcUrl());
+        appMenusVo.setIcon(appMenu.getPcIcon());
+        return ResponseData.success(appMenusVo);
     }
 
     /**

@@ -1,6 +1,6 @@
 package cn.stylefeng.guns.modular.api.vo;
 
-public class AppMenusVo {
+public class AppMenusVo implements Comparable<AppMenusVo> {
     /**
      * 主键id
      */
@@ -77,4 +77,12 @@ public class AppMenusVo {
     }
 
 
+    @Override
+    public int compareTo(AppMenusVo o) {
+        //自定义比较方法，如果认为此实体本身大则返回1，否则返回-1
+        if (this.id >= o.getId()) {
+            return 1;
+        }
+        return -1;
+    }
 }

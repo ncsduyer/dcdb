@@ -14,6 +14,7 @@ import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
+import com.baomidou.mybatisplus.mapper.Condition;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -25,6 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 督查督办管理控制器
@@ -47,10 +50,15 @@ public class ApiAssignWorkController extends BaseController {
     /**
      * 跳转到督查督办管理首页
      */
-    @RequestMapping("")
-    @Permission
-    public String index() {
-        return PREFIX + "assignWork.html";
+    @RequestMapping("/index")
+    @ResponseBody
+    public ResponseData index(@RequestBody Map<String, Integer[]> map) {
+        Map<String, Integer> ret = new HashMap<>();
+        for (Map.Entry<String, Integer[]> entry : map.entrySet()) {
+            ret.put(entry.getKey(), assignWorkService.selectCount(Condition.create().in("status", entry.getValue())));
+        }
+
+        return ResponseData.success(ret);
     }
 
     /**
@@ -93,9 +101,6 @@ public class ApiAssignWorkController extends BaseController {
     @Permission
     @ResponseBody
     public ResponseData list(@RequestBody(required = false) SreachWorkDto sreachWorkDto) {
-        if (ToolUtil.isEmpty(sreachWorkDto)) {
-            sreachWorkDto = new SreachWorkDto();
-        }
         return ResponseData.success(assignWorkService.SreachPage(sreachWorkDto));
     }
 
