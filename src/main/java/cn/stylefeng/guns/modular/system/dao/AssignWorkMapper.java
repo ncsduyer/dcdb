@@ -21,4 +21,5 @@ public interface AssignWorkMapper extends BaseMapper<AssignWork> {
     AssignWork selectWithManyById(Integer id);
 
     List<AssignWork> selectAsPage(Pagination page, @Param("dto") SreachWorkDto sreachWorkDto, @Param("beforeTime") Date beforeTime, @Param("afterTime") Date afterTime);
+
 }

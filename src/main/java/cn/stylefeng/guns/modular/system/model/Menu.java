@@ -76,6 +76,10 @@ public class Menu extends Model<Menu> {
      * 是否打开:    1:打开   0:不打开
      */
     private Integer isopen;
+    /**
+     * 菜单所属端 1:通用 2:pc 3:app
+     */
+    private Integer menutype;
 
 
     public Long getId() {
@@ -204,5 +208,13 @@ public class Menu extends Model<Menu> {
                 ", status=" + status +
                 ", isopen=" + isopen +
                 "}";
+    }
+
+    public Integer getMenutype() {
+        return menutype;
+    }
+
+    public void setMenutype(Integer menutype) {
+        this.menutype = menutype;
     }
 }

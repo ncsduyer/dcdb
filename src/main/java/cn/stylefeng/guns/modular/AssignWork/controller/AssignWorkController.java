@@ -23,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.Date;
 
 /**
@@ -91,7 +92,7 @@ public class AssignWorkController extends BaseController {
     @RequestMapping(value = "/list", method = RequestMethod.POST)
 
     @ResponseBody
-    public ResponseData list(@RequestBody(required = false) SreachWorkDto sreachWorkDto) {
+    public ResponseData list(@RequestBody(required = false) SreachWorkDto sreachWorkDto) throws ParseException {
         if (ToolUtil.isEmpty(sreachWorkDto)) {
             sreachWorkDto = new SreachWorkDto();
         }

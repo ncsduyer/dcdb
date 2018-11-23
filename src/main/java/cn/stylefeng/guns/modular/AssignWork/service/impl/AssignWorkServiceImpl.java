@@ -11,6 +11,8 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -27,7 +29,7 @@ public class AssignWorkServiceImpl extends ServiceImpl<AssignWorkMapper, AssignW
     private AssignWorkMapper assignWorkMapper;
 
     @Override
-    public Page<AssignWork> SreachPage(SreachWorkDto sreachWorkDto) {
+    public Page<AssignWork> SreachPage(SreachWorkDto sreachWorkDto) throws ParseException {
         if (ToolUtil.isEmpty(sreachWorkDto)) {
             sreachWorkDto = new SreachWorkDto();
         }
@@ -40,6 +42,10 @@ public class AssignWorkServiceImpl extends ServiceImpl<AssignWorkMapper, AssignW
             afterTime = tmp;
         }
         if (ToolUtil.isNotEmpty(afterTime)) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+            afterTime = sdf.parse(sdf.format(afterTime));
+
             afterTime = DateUtils.addSeconds(afterTime, 24 * 60 * 60 - 1);
         }
         return page.setRecords(assignWorkMapper.selectAsPage(page, sreachWorkDto, beforeTime, afterTime));

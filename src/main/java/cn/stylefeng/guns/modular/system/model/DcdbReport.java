@@ -1,10 +1,14 @@
 package cn.stylefeng.guns.modular.system.model;
 
+import cn.stylefeng.roses.core.util.ToolUtil;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;
+import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -73,6 +77,27 @@ public class DcdbReport extends Model<DcdbReport> {
      * 状态
      */
     private String status;
+
+    public DcdbReport() {
+        super();
+    }
+
+    public DcdbReport(AssignWork assignWork) {
+        BeanUtils.copyProperties(assignWork, this);
+        DateFormat format = new SimpleDateFormat("yyyy年MM月");
+        this.dateGroup = format.format(assignWork.getCreatedTime());
+        String company = "";
+        for (WorkCompany company1 : assignWork.getWorkCompanies()) {
+            if (ToolUtil.isNotEmpty(company1.getCompany().getTitle())) {
+                company += company1.getCompany().getTitle() + ",";
+            }
+        }
+        this.company = company;
+        this.agent = assignWork.getAgent_user().getName();
+        this.workType = assignWork.getWorkTypeName().getTitle();
+        this.delayStatus = assignWork.getDelayStatus() == 1 ? "同意延期" : "禁止延期";
+        this.status = assignWork.getEventStep().getStep();
+    }
 
 
     public Integer getId() {

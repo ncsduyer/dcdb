@@ -21,7 +21,7 @@
 
     <sql id="Base_Column_List">
         id, code, pcode, name, icon, url, num, levels,pcodes,
-        tips, status,isopen,ismenu
+        tips, status,isopen,ismenu,menutype
     </sql>
 
     <select id="selectMenus" resultType="map">
@@ -138,9 +138,12 @@
             RIGHT JOIN t_tb_app_menu ap on ap.menu_id=m.id
         </if>
         inner join sys_relation rel on rel.menuid = m.id
-        where rel.roleid = #{roleId} AND m.status=1
+        where rel.roleid = #{roleId} AND m.status=1 AND m.id>168
         <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(type)">
             AND ap.type=#{type}
+        </if>
+        <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(menutype)">
+            AND m.menutype=#{menutype}
         </if>
         ORDER BY m.id ASC
     </select>

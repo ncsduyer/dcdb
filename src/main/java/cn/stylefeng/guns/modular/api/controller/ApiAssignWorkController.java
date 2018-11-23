@@ -25,6 +25,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -100,7 +101,7 @@ public class ApiAssignWorkController extends BaseController {
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @Permission
     @ResponseBody
-    public ResponseData list(@RequestBody(required = false) SreachWorkDto sreachWorkDto) {
+    public ResponseData list(@RequestBody(required = false) SreachWorkDto sreachWorkDto) throws ParseException {
         return ResponseData.success(assignWorkService.SreachPage(sreachWorkDto));
     }
 

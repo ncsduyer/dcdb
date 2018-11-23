@@ -86,7 +86,7 @@ public interface MenuMapper extends BaseMapper<Menu> {
 
     List<Menu> getMenuByRoleId(@Param("roleId") Integer roleId, @Param("isapp") Integer ismenu);
 
-    List<Menu> getMenuByRoleId(@Param("roleId") Integer roleId, @Param("isapp") Integer ismenu, @Param("type") Integer type);
+    List<Menu> getMenuByRoleId(@Param("roleId") Integer roleId, @Param("isapp") Integer ismenu, @Param("type") Integer type, @Param("menutype") Integer menutype);
     /**
      * 根据角色获取菜单
      *

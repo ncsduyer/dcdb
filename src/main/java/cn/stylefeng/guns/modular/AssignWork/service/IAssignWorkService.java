@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+
 /**
  * <p>
  * 交办事项 服务类
@@ -16,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public interface IAssignWorkService extends IService<AssignWork> {
     @Transactional
-    Page<AssignWork> SreachPage(SreachWorkDto sreachWorkDto);
+    Page<AssignWork> SreachPage(SreachWorkDto sreachWorkDto) throws ParseException;
 
     Object selectWithManyById(Integer id);
 }

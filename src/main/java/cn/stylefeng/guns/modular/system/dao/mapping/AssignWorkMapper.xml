@@ -21,6 +21,10 @@
         <association property="agent_user" javaType="cn.stylefeng.guns.modular.system.model.User" column="agent"
                      select="cn.stylefeng.guns.modular.system.dao.UserMapper.selectById">
         </association>
+        <association property="workTypeName" javaType="cn.stylefeng.guns.modular.system.model.WorkType"
+                     column="work_type"
+                     select="cn.stylefeng.guns.modular.system.dao.WorkTypeMapper.selectById">
+        </association>
         <association property="eventStep" javaType="cn.stylefeng.guns.modular.system.model.EventStep" column="status"
                      select="selectEventStepByStatus">
         </association>

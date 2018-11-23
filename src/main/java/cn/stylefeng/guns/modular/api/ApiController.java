@@ -253,9 +253,13 @@ public class ApiController extends BaseController {
      * 获取当前登录用户权限列表
      */
     @ApiOperation(value = "获取当前登录用户权限列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "menutype", value = "菜单所属端 1:通用 2:pc 3:app", required = true, dataType = "Long"),
+    })
+
     @RequestMapping(value = "/permissions", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseData permissions() {
+    public ResponseData permissions(@RequestParam(value = "menutype", defaultValue = "1") Integer menutype) {
         ShiroUser user = ShiroKit.getUser();
         if (ToolUtil.isEmpty(user)) {
             return ResponseData.error(700, "用户信息异常");
@@ -264,7 +268,7 @@ public class ApiController extends BaseController {
         Set<AppMenusVo> permissionSet = new HashSet<>();
         String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
         for (Integer roleId : roleList) {
-            List<Menu> permissions = menuService.getMenuByRoleId(roleId, null, null);
+            List<Menu> permissions = menuService.getMenuByRoleId(roleId, null, null, menutype);
             if (permissions != null) {
                 for (Menu menu : permissions) {
                     if (ToolUtil.isNotEmpty(menu)) {
@@ -326,7 +330,7 @@ public class ApiController extends BaseController {
         List<AppMenusVo> permissionSet = new ArrayList<>();
         String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
         for (Integer roleId : roleList) {
-            List<Menu> permissions = menuService.getMenuByRoleId(roleId, 1, type);
+            List<Menu> permissions = menuService.getMenuByRoleId(roleId, 1, type, null);
             if (permissions != null) {
                 for (int i = 0; i < permissions.size(); i++) {
                     Menu menu = permissions.get(i);

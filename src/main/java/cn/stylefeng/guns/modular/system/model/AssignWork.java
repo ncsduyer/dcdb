@@ -106,6 +106,17 @@ public class AssignWork extends Model<AssignWork> {
     @ApiModelProperty("督办单位列表")
     @TableField(exist = false)
     private List<WorkCompany> workCompanies;
+
+    @TableField(exist = false)
+    private WorkType workTypeName;
+
+    public WorkType getWorkTypeName() {
+        return workTypeName;
+    }
+
+    public void setWorkTypeName(WorkType workTypeName) {
+        this.workTypeName = workTypeName;
+    }
     /**
      * 步骤状态
      */
