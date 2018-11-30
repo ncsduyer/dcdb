@@ -22,7 +22,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 督查单位进度控制器
@@ -90,24 +93,33 @@ public class ApiWcInfosController extends BaseController {
      * 新增督查单位进度
      */
     @ApiOperation(value = "新增督查单位进度")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "list", value = "责任单位进度数组", required = true, dataType = "Long"),
+    })
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @Permission
     @ResponseBody
-    public ResponseData add(@RequestBody WcInfoDto wcInfoDto) {
-        if (ToolUtil.isEmpty(wcInfoDto.getaWId()) || ToolUtil.isEmpty(wcInfoDto.getCompanyId())) {
-            return ResponseData.error(5002, "错误的数据");
+    public ResponseData add(@RequestBody Map<String,List<WcInfoDto>> wcInfoDtos) {
+        List<WcInfos> wcInfosList=new ArrayList<>();
+        for (WcInfoDto wcInfoDto : wcInfoDtos.get("list")) {
+            if (ToolUtil.isEmpty(wcInfoDto.getaWId()) || ToolUtil.isEmpty(wcInfoDto.getCompanyId())) {
+                return ResponseData.error(5002, "错误的数据");
+            }
+            WorkCompany workCompany = workCompanyService.selectOne(Condition.create().eq("a_w_id", wcInfoDto.getaWId()).eq("company_id", wcInfoDto.getCompanyId()));
+            WcInfos wcInfos = new WcInfos();
+            BeanUtils.copyProperties(wcInfoDto, wcInfos);
+            wcInfos.setPid(workCompany.getId());
+            if (wcInfos.getCreatedTime() == null) {
+                wcInfos.setCreatedTime(new Date());
+            }
+            if (wcInfos.getSubmitter() == null) {
+                wcInfos.setSubmitter(ShiroKit.getUser().getName());
+            }
+
+            wcInfosList.add(wcInfos);
         }
-        WorkCompany workCompany = workCompanyService.selectOne(Condition.create().eq("a_w_id", wcInfoDto.getaWId()).eq("company_id", wcInfoDto.getCompanyId()));
-        WcInfos wcInfos = new WcInfos();
-        BeanUtils.copyProperties(wcInfoDto, wcInfos);
-        wcInfos.setPid(workCompany.getId());
-        if (wcInfos.getCreatedTime() == null) {
-            wcInfos.setCreatedTime(new Date());
-        }
-        if (wcInfos.getSubmitter() == null) {
-            wcInfos.setSubmitter(ShiroKit.getUser().getName());
-        }
-        wcInfosService.insert(wcInfos);
+
+        wcInfosService.insertBatch(wcInfosList);
         return SUCCESS_TIP;
     }
 

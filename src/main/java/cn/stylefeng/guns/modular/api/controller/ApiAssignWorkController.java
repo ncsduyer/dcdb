@@ -97,16 +97,11 @@ public class ApiAssignWorkController extends BaseController {
     @ResponseBody
     public ResponseData list(@RequestBody(required = false) SreachWorkDto sreachWorkDto) throws ParseException {
         if (ToolUtil.isNotEmpty(sreachWorkDto) && sreachWorkDto.getIsmore() == 0) {
-//            long startTime=System.currentTimeMillis();
             ResponseData responseData = ResponseData.success(assignWorkService.selectAsPage1(sreachWorkDto));
-//            long endTime=System.currentTimeMillis(); //获取结束时间
-//            System.out.println("程序运行时间： "+(endTime-startTime)+"ms");
+
             return responseData;
         }
-//        long startTime=System.currentTimeMillis();
         ResponseData responseData = ResponseData.success(assignWorkService.SreachPage(sreachWorkDto));
-//        long endTime=System.currentTimeMillis(); //获取结束时间
-//        System.out.println("程序运行时间： "+(endTime-startTime)+"ms");
         return responseData;
 
     }

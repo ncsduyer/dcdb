@@ -9,7 +9,6 @@ import cn.stylefeng.guns.modular.system.service.IUserService;
 import cn.stylefeng.guns.modular.workFlowLog.service.IWorkFlowLogService;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
-import com.aliyuncs.exceptions.ClientException;
 import com.baomidou.mybatisplus.mapper.Condition;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -37,12 +36,12 @@ public class AssignWorkAop {
 
     }
 
-    @Pointcut("execution(* cn.stylefeng.guns.modular.AssignWork.service.IAssignWorkService.updateById(..))")
+    @Pointcut("execution(* cn.stylefeng.guns.modular.AssignWork.service.IAssignWorkService.update*(..))")
     private void editAssignWorkService() {
 
     }
 
-    @Pointcut("execution(* cn.stylefeng.guns.modular.AppNotice.service.IAppNoticeService.insert(..))")
+    @Pointcut("execution(* cn.stylefeng.guns.modular.AppNotice.service.IAppNoticeService.insert*(..))")
     private void sendSms() {
 
     }
@@ -97,7 +96,7 @@ public class AssignWorkAop {
     }
 
     @AfterReturning("sendSms()")
-    public void sendSms(JoinPoint joinPoint) throws ClientException {
+    public void sendSms(JoinPoint joinPoint) {
 //        AppNotice appNotice=(AppNotice) joinPoint.getArgs()[0];
         //发送短信
 //            SmsUtil.sendSms(appNotice);
