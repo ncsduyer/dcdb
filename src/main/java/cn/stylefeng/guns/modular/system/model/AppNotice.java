@@ -14,7 +14,7 @@ import java.util.Date;
  * </p>
  *
  * @author 三千霜
- * @since 2018-11-22
+ * @since 2018-11-24
  */
 @TableName("t_tb_app_notice")
 public class AppNotice extends Model<AppNotice> {
@@ -43,11 +43,15 @@ public class AppNotice extends Model<AppNotice> {
      */
     private Date createtime;
     /**
-     * 创建人
+     * 电话
      */
-    private Integer creater;
-
-
+    private String tel;
+    /**
+     * 接收人
+     */
+    private String sendee;
+    //    接收人id
+    private Integer sender_id;
     public Integer getId() {
         return id;
     }
@@ -88,12 +92,20 @@ public class AppNotice extends Model<AppNotice> {
         this.createtime = createtime;
     }
 
-    public Integer getCreater() {
-        return creater;
+    public String getTel() {
+        return tel;
     }
 
-    public void setCreater(Integer creater) {
-        this.creater = creater;
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
+    public String getSendee() {
+        return sendee;
+    }
+
+    public void setSendee(String sendee) {
+        this.sendee = sendee;
     }
 
     @Override
@@ -109,7 +121,16 @@ public class AppNotice extends Model<AppNotice> {
                 ", type=" + type +
                 ", content=" + content +
                 ", createtime=" + createtime +
-                ", creater=" + creater +
+                ", tel=" + tel +
+                ", sendee=" + sendee +
                 "}";
+    }
+
+    public Integer getSender_id() {
+        return sender_id;
+    }
+
+    public void setSender_id(Integer sender_id) {
+        this.sender_id = sender_id;
     }
 }

@@ -49,8 +49,7 @@ AppNoticeInfoDlg.collectData = function () {
         .set('title')
         .set('type')
         .set('content')
-        .set('createtime')
-        .set('creater');
+        .set('createtime');
 }
 
 /**

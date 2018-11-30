@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.stylefeng.guns.modular.system.dao.AssignWorkMapper">
-
+    <!--<cache type="org.mybatis.caches.ehcache.EhcacheCache">-->
+    <!--<property name="timeToIdleSeconds" value="300"/>-->
+    <!--<property name="timeToLiveSeconds" value="300"/>-->
+    <!--<property name="maxEntriesLocalHeap" value="1000"/>-->
+    <!--<property name="maxEntriesLocalDisk" value="10000000"/>-->
+    <!--<property name="memoryStoreEvictionPolicy" value="LRU"/>-->
+    <!--</cache>-->
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.system.model.AssignWork">
         <id column="id" property="id"/>
@@ -18,6 +24,9 @@
         <result column="remarks" property="remarks"/>
         <result column="status" property="status"/>
         <result column="delay_status" property="delayStatus"/>
+        <result column="is_exceed" property="is_exceed"/>
+    </resultMap>
+    <resultMap id="ResultMoreMap" type="cn.stylefeng.guns.modular.system.model.AssignWork" extends="BaseResultMap">
         <association property="agent_user" javaType="cn.stylefeng.guns.modular.system.model.User" column="agent"
                      select="cn.stylefeng.guns.modular.system.dao.UserMapper.selectById">
         </association>
@@ -36,27 +45,84 @@
                     select="cn.stylefeng.guns.modular.system.dao.WorkFlowLogMapper.selectByManyId">
 
         </collection>
+    </resultMap>
+    <resultMap id="ResultListMap" type="cn.stylefeng.guns.modular.system.model.AssignWork" extends="BaseResultMap">
+        <association property="agent_user" javaType="cn.stylefeng.guns.modular.system.model.User">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+        </association>
+        <association property="workTypeName" javaType="cn.stylefeng.guns.modular.system.model.WorkType">
+            <id column="id" property="id"/>
+            <result column="title" property="title"/>
+        </association>
+        <association property="eventStep" javaType="cn.stylefeng.guns.modular.system.model.EventStep">
+            <id column="id" property="id"/>
+            <result column="pid" property="pid"/>
+            <result column="status" property="status"/>
+            <result column="event_type" property="eventType"/>
+            <result column="step" property="step"/>
+        </association>
+        <collection property="workCompanies" ofType="cn.stylefeng.guns.modular.system.model.WorkCompany">
+            <id column="id" property="id"/>
+            <result column="a_w_id" property="aWId"/>
+            <result column="company_id" property="companyId"/>
+            <result column="requirement" property="requirement"/>
+            <result column="deadline" property="deadline"/>
+            <result column="situation" property="situation"/>
+            <result column="situation_type" property="situationType"/>
+            <result column="status" property="status"/>
+            <result column="is_update" property="isUpdate"/>
+            <association property="company" javaType="cn.stylefeng.guns.modular.system.model.Company">
+                <id column="cid" property="id"/>
+                <result column="ctitle" property="title"/>
+                <result column="abb_title" property="abbTitle"/>
+                <result column="adress" property="adress"/>
+                <result column="tel" property="tel"/>
+                <result column="contact" property="contact"/>
+                <result column="contact_phone" property="contactPhone"/>
+                <result column="remarks" property="remarks"/>
+            </association>
+        </collection>
 
     </resultMap>
-
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, title, work_type, broker_name, broker_id, agent, created_id, created_time, end_time, deadline,requirement, remarks, status, delay_status
-    </sql>
+   </sql>
     <select id="selectEventStepByStatus" resultMap="cn.stylefeng.guns.modular.system.dao.EventStepMapper.BaseResultMap">
         select
         <include refid="cn.stylefeng.guns.modular.system.dao.EventStepMapper.Base_Column_List"/>
         from t_tb_event_step where status=#{status} and event_type=1
     </select>
-    <select id="selectWithManyById" resultMap="BaseResultMap">
+    <select id="selectWithManyById" resultMap="ResultMoreMap">
         SELECT
-        <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List"/>, CASE when sysdate()>a.deadline then '已超期' else '未超期' end as is_exceed
         FROM t_tb_assign_work a WHERE a.id=#{id}
     </select>
-    <select id="selectAsPage" resultMap="BaseResultMap">
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_tb_assign_work a
+    <select id="selectAsPage1" resultType="java.util.HashMap">
+        select a.id,
+        a.title,
+        a.work_type,
+        a.broker_name,
+        a.broker_id,
+        a.agent,
+        a.created_id,
+        a.created_time,
+        a.end_time,
+        a.deadline,
+        a.requirement,
+        a.remarks as remarks,
+        a.`status`,
+        a.delay_status,
+        CASE when sysdate()>a.deadline then '已超期' else '未超期' end as is_exceed,
+        (select GROUP_CONCAT(com.title) from t_tb_work_company wcom inner join t_tb_company com on
+        com.id=wcom.company_id where wcom.a_w_id=a.id) workCompanies
+        ,estep.step as statusname,users.`name` as agentname,
+        wt.title as workname
+        from t_tb_assign_work a
+        inner join t_tb_event_step estep on a.`status`=estep.`id`
+        inner join sys_user users on users.id=a.agent
+        left join t_tb_work_type wt on a.work_type = wt.id
         <where>
             <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.title)">
                 a.title LIKE CONCAT('%',#{dto.title},'%')
@@ -68,7 +134,10 @@
                 AND a.broker_name like #{dto.brokerName}
             </if>
             <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.agent)">
-                a.agent = #{dto.agent}
+                AND a.agent = #{dto.agent}
+            </if>
+            <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.created_id)">
+                AND a.created_id = #{dto.created_id}
             </if>
             <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.status) and dto.status.length gt 0">
                 AND a.status in
@@ -80,10 +149,102 @@
                 AND a.delay_status = #{dto.delayStatus}
             </if>
             <if test="beforeTime!=null">
-                <![CDATA[   and a.created_time >= #{beforeTime}]]>
+                <![CDATA[   and a.created_time >= #{beforeTime,jdbcType=TIMESTAMP}]]>
             </if>
             <if test="afterTime!=null">
-                <![CDATA[ and a.created_time <= #{afterTime}]]>
+                <![CDATA[ and a.created_time <= #{afterTime,jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.isExceed)">
+                <![CDATA[ and a.deadline <= sysdate() ]]>
+            </if>
+        </where>
+        order BY a.id DESC
+    </select>
+    <!--<select id="selectAsPage" resultMap="ResultMoreMap">-->
+    <!--SELECT-->
+    <!--a.id, a.title, a.work_type, a.broker_name, a.broker_id, a.agent, a.created_id, a.created_time, a.end_time, a.deadline,a.requirement, a.remarks, a.status, a.delay_status, CASE  when  sysdate()>a.deadline then '已超期' else '未超期' end as is_exceed-->
+    <!--FROM t_tb_assign_work a-->
+    <!--<where>-->
+    <!--<if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.title)">-->
+    <!--a.title LIKE CONCAT('%',#{dto.title},'%')-->
+    <!--</if>-->
+    <!--<if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.workType)">-->
+    <!--AND a.work_type = #{dto.workType}-->
+    <!--</if>-->
+    <!--<if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.brokerName)">-->
+    <!--AND a.broker_name like #{dto.brokerName}-->
+    <!--</if>-->
+    <!--<if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.agent)">-->
+    <!--AND   a.agent = #{dto.agent}-->
+    <!--</if>-->
+    <!--<if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.created_id)">-->
+    <!--AND  a.created_id = #{dto.created_id}-->
+    <!--</if>-->
+    <!--<if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.status) and dto.status.length gt 0">-->
+    <!--AND a.status in-->
+    <!--<foreach collection="dto.status" item="id" index="index" open="(" close=")" separator=",">-->
+    <!--#{id}-->
+    <!--</foreach>-->
+    <!--</if>-->
+    <!--<if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.delayStatus)">-->
+    <!--AND a.delay_status = #{dto.delayStatus}-->
+    <!--</if>-->
+    <!--<if test="beforeTime!=null">-->
+    <!--<![CDATA[   and a.created_time >= #{beforeTime,jdbcType=TIMESTAMP}]]>-->
+    <!--</if>-->
+    <!--<if test="afterTime!=null">-->
+    <!--<![CDATA[ and a.created_time <= #{afterTime,jdbcType=TIMESTAMP}]]>-->
+    <!--</if>-->
+    <!--<if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.isExceed)">-->
+    <!--<![CDATA[ and a.deadline <= sysdate() ]]>-->
+    <!--</if>-->
+
+    <!--</where>-->
+    <!--order BY a.id DESC-->
+    <!--</select>-->
+    <select id="selectAsPage" resultMap="ResultListMap">
+        SELECT
+        a.id, a.title, a.work_type, a.broker_name, a.broker_id, a.agent, a.created_id, a.created_time, a.end_time,
+        a.deadline,a.requirement, a.remarks, a.status, a.delay_status, CASE when sysdate()>a.deadline then '已超期' else
+        '未超期' end as is_exceed,u.name,wt.title,wc.*,e.step
+        ,c.id cid, c.title ctitle, c.abb_title, c.adress, c.tel, c.contact, c.contact_phone, c.remarks FROM
+        t_tb_assign_work a LEFT JOIN t_tb_work_company wc ON wc.a_w_id = a.id LEFT JOIN t_tb_work_type wt ON wt.id =
+        a.work_type
+        LEFT JOIN t_tb_event_step e ON e.id = a.status LEFT JOIN sys_user u ON u.id = a.agent LEFT JOIN t_tb_company c
+        ON c.id=wc.company_id
+        <where>
+            <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.title)">
+                a.title LIKE CONCAT('%',#{dto.title},'%')
+            </if>
+            <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.workType)">
+                AND a.work_type = #{dto.workType}
+            </if>
+            <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.brokerName)">
+                AND a.broker_name like #{dto.brokerName}
+            </if>
+            <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.agent)">
+                AND a.agent = #{dto.agent}
+            </if>
+            <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.created_id)">
+                AND a.created_id = #{dto.created_id}
+            </if>
+            <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.status) and dto.status.length gt 0">
+                AND a.status in
+                <foreach collection="dto.status" item="id" index="index" open="(" close=")" separator=",">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.delayStatus)">
+                AND a.delay_status = #{dto.delayStatus}
+            </if>
+            <if test="beforeTime!=null">
+                <![CDATA[   and a.created_time >= #{beforeTime,jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="afterTime!=null">
+                <![CDATA[ and a.created_time <= #{afterTime,jdbcType=TIMESTAMP}]]>
+            </if>
+            <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.isExceed)">
+                <![CDATA[ and a.deadline <= sysdate() ]]>
             </if>
 
         </where>

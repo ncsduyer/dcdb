@@ -26,6 +26,7 @@ import cn.stylefeng.guns.core.util.CacheUtil;
 import cn.stylefeng.guns.core.util.JwtTokenUtil;
 import cn.stylefeng.guns.core.util.KaptchaUtil;
 import cn.stylefeng.guns.modular.AppMenu.service.IAppMenuService;
+import cn.stylefeng.guns.modular.AppNotice.service.IAppNoticeService;
 import cn.stylefeng.guns.modular.AssignWork.service.IAssignWorkService;
 import cn.stylefeng.guns.modular.VersionUpgrade.service.IVersionUpgradeService;
 import cn.stylefeng.guns.modular.api.vo.AppMenusVo;
@@ -45,7 +46,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -90,7 +90,8 @@ public class ApiController extends BaseController {
     private IAppMenuService appMenuService;
     @Autowired
     private HttpServletRequest request;
-
+    @Autowired
+    private IAppNoticeService appNoticeService;
     /**
      * api登录接口，通过账号密码获取token
      */
@@ -103,47 +104,51 @@ public class ApiController extends BaseController {
     @RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseData auth(@RequestParam("username") String username,
                              @RequestParam("password") String password, @RequestParam(value = "kaptcha", required = false) String kaptcha) {
-
-        //验证验证码是否正确
-        if (KaptchaUtil.getKaptchaOnOff()) {
-            kaptcha = kaptcha.trim();
-            String key = request.getRemoteHost();
-            String code = (String) CacheUtil.get("kaptcha", key);
-            if (ToolUtil.isEmpty(kaptcha) || !kaptcha.equalsIgnoreCase(code)) {
-                return new ErrorResponseData(BizExceptionEnum.INVALID_KAPTCHA.getCode(), BizExceptionEnum.INVALID_KAPTCHA.getMessage());
+        try {
+            //验证验证码是否正确
+            if (KaptchaUtil.getKaptchaOnOff()) {
+                kaptcha = kaptcha.trim();
+                String key = request.getRemoteHost();
+                String code = (String) CacheUtil.get("kaptcha", key);
+                if (ToolUtil.isEmpty(kaptcha) || !kaptcha.equalsIgnoreCase(code)) {
+                    return new ErrorResponseData(BizExceptionEnum.INVALID_KAPTCHA.getCode(), BizExceptionEnum.INVALID_KAPTCHA.getMessage());
+                }
             }
-        }
-        //封装请求账号密码为shiro可验证的token
-        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username, password.toCharArray());
+            //封装请求账号密码为shiro可验证的token
+            UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username, password.toCharArray());
 
-        //获取数据库中的账号密码，准备比对
-        User user = userMapper.getByAccount(username);
-        if (ToolUtil.isEmpty(user)) {
-            return new ErrorResponseData(5001, "账号密码错误！");
-        }
-        String credentials = user.getPassword();
-        String salt = user.getSalt();
-        ByteSource credentialsSalt = new Md5Hash(salt);
-        ShiroUser shiroUser = new ShiroUser();
-        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(
-                shiroUser, credentials, credentialsSalt, "");
+            //获取数据库中的账号密码，准备比对
+            User user = userMapper.getByAccount(username);
+            if (ToolUtil.isEmpty(user)) {
+                return new ErrorResponseData(5001, "账号密码错误！");
+            }
+            String credentials = user.getPassword();
+            String salt = user.getSalt();
+            ByteSource credentialsSalt = new Md5Hash(salt);
+            ShiroUser shiroUser = new ShiroUser();
+            SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(
+                    shiroUser, credentials, credentialsSalt, "");
 
-        //校验用户账号密码
-        HashedCredentialsMatcher md5CredentialsMatcher = new HashedCredentialsMatcher();
-        md5CredentialsMatcher.setHashAlgorithmName(ShiroKit.hashAlgorithmName);
-        md5CredentialsMatcher.setHashIterations(ShiroKit.hashIterations);
-        boolean passwordTrueFlag = md5CredentialsMatcher.doCredentialsMatch(
-                usernamePasswordToken, simpleAuthenticationInfo);
+            //校验用户账号密码
+            HashedCredentialsMatcher md5CredentialsMatcher = new HashedCredentialsMatcher();
+            md5CredentialsMatcher.setHashAlgorithmName(ShiroKit.hashAlgorithmName);
+            md5CredentialsMatcher.setHashIterations(ShiroKit.hashIterations);
+            boolean passwordTrueFlag = md5CredentialsMatcher.doCredentialsMatch(
+                    usernamePasswordToken, simpleAuthenticationInfo);
 
-        if (passwordTrueFlag) {
-            String token = JwtTokenUtil.generateToken(String.valueOf(user.getId()));
-            CacheUtil.put("userInfo", token, usernamePasswordToken);
-            Map<String, Object> result = new HashMap<>();
-            result.put("token", token);
-            return ResponseData.success(result);
-        } else {
-            return new ErrorResponseData(5001, "账号密码错误！");
+            if (passwordTrueFlag) {
+                String token = JwtTokenUtil.generateToken(String.valueOf(user.getId()));
+                CacheUtil.put("userInfo", token, usernamePasswordToken);
+                Map<String, Object> result = new HashMap<>();
+                result.put("token", token);
+                return ResponseData.success(result);
+            } else {
+                return new ErrorResponseData(5001, "账号密码错误！", new HashMap<String, Object>());
+            }
+        } catch (Exception e) {
+            return new ErrorResponseData(5001, "账号密码错误！", new HashMap<String, Object>());
         }
+
     }
 
     /**
@@ -342,9 +347,10 @@ public class ApiController extends BaseController {
                         AppMenu appMenu = appMenuService.selectOne(Condition.create().eq("menu_id", appMenusVo.getId()));
                         appMenusVo.setUrl(appMenu.getPcUrl());
                         appMenusVo.setIcon(appMenu.getPcIcon());
-                        if (StringUtils.equals(appMenusVo.getCode(), "assignWork")) {
-                            appMenusVo.setNum(assignWorkService.selectCount(Condition.create().eq("agent", user.getId()).eq("status", 1)));
-                        }
+//                        if (StringUtils.equals(appMenusVo.getCode(), "assignWork")) {
+//                            appMenusVo.setNum(assignWorkService.selectCount(Condition.create().eq("agent", user.getId()).eq("status", 1)));
+//                        }
+                        appMenusVo.setNum(0);
                         permissionSet.add(appMenusVo);
                     }
                 }
@@ -384,7 +390,9 @@ public class ApiController extends BaseController {
     @ResponseBody
     public ResponseData notice() {
 //        消息列表
-        return ResponseData.success();
+        int user_id = ShiroKit.getUser().getId();
+
+        return ResponseData.success(appNoticeService.selectList(Condition.create().eq("sender_id", user_id).orderBy("createtime", false)));
     }
 
     /**
@@ -398,7 +406,9 @@ public class ApiController extends BaseController {
     @ResponseBody
     public ResponseData notice(@PathVariable("id") Integer id) {
 //        消息列表
-        return ResponseData.success();
+        int user_id = ShiroKit.getUser().getId();
+
+        return ResponseData.success(appNoticeService.selectOne(Condition.create().eq("sender_id", user_id).eq("id", id)));
     }
 }
 

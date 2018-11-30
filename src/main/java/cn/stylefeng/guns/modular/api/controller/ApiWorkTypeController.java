@@ -45,7 +45,7 @@ public class ApiWorkTypeController extends BaseController {
      * 跳转到督查类型管理首页
      */
     @RequestMapping("")
-    @Permission
+
     public String index() {
         return PREFIX + "workType.html";
     }
@@ -54,7 +54,7 @@ public class ApiWorkTypeController extends BaseController {
      * 跳转到添加督查类型管理
      */
     @RequestMapping("/workType_add")
-    @Permission
+
     public String workTypeAdd() {
         return PREFIX + "workType_add.html";
     }
@@ -63,7 +63,7 @@ public class ApiWorkTypeController extends BaseController {
      * 跳转到修改督查类型管理
      */
     @RequestMapping("/workType_update/{workTypeId}")
-    @Permission
+
     @ResponseBody
     public String workTypeUpdate(@PathVariable Integer workTypeId, Model model) {
         WorkType workType = workTypeService.selectById(workTypeId);
@@ -152,7 +152,6 @@ public class ApiWorkTypeController extends BaseController {
      * 督查类型管理详情
      */
     @RequestMapping(value = "/detail/{id}")
-    @Permission
     @ResponseBody
     public ResponseData detail(@PathVariable("id") Integer workTypeId) {
         return ResponseData.success(workTypeService.selectById(workTypeId));

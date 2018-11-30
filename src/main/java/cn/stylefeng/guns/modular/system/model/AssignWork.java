@@ -57,6 +57,17 @@ public class AssignWork extends Model<AssignWork> {
     private Integer agent;
     @TableField(exist = false)
     private User agent_user;
+
+    @ApiModelProperty("是否超期")
+    @TableField(exist = false)
+    private String is_exceed;
+    @ApiModelProperty("已用时间")
+    @TableField(exist = false)
+    private String useTime;
+
+    public String getIs_exceed() {
+        return is_exceed;
+    }
     /**
      * 创建人
      */
@@ -110,6 +121,9 @@ public class AssignWork extends Model<AssignWork> {
     @TableField(exist = false)
     private WorkType workTypeName;
 
+    public void setIs_exceed(String is_exceed) {
+        this.is_exceed = is_exceed;
+    }
     public WorkType getWorkTypeName() {
         return workTypeName;
     }
@@ -165,6 +179,13 @@ public class AssignWork extends Model<AssignWork> {
         this.brokerId = brokerId;
     }
 
+    public String getUseTime() {
+        return useTime;
+    }
+
+    public void setUseTime(String useTime) {
+        this.useTime = useTime;
+    }
     public Integer getAgent() {
         return agent;
     }

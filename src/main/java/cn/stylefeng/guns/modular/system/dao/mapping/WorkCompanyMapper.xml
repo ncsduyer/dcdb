@@ -16,8 +16,14 @@
         <association property="company" javaType="cn.stylefeng.guns.modular.system.model.Company" column="company_id"
                      select="cn.stylefeng.guns.modular.system.dao.CompanyMapper.selectById">
         </association>
-        <collection property="wcInfos" ofType="cn.stylefeng.guns.modular.system.model.WcInfos" column="id"
-                    select="selectWorkInfos">
+        <collection property="wcInfos" ofType="cn.stylefeng.guns.modular.system.model.WcInfos">
+            <id column="id" property="id"/>
+            <result column="pid" property="pid"/>
+            <result column="situation" property="situation"/>
+            <result column="submitter" property="submitter"/>
+            <result column="created_time" property="createdTime"/>
+            <result column="situation_type" property="situationType"/>
+            <result column="delay_status" property="delayStatus"/>
         </collection>
     </resultMap>
 
@@ -25,19 +31,17 @@
     <sql id="Base_Column_List">
         id, a_w_id, company_id, requirement, deadline, situation, situation_type, status,is_update
     </sql>
-    <select id="selectWorkInfos" resultMap="cn.stylefeng.guns.modular.system.dao.WcInfosMapper.BaseResultMap">
-        SELECT
-        <include refid="cn.stylefeng.guns.modular.system.dao.WcInfosMapper.Base_Column_List"/>
-        FROM t_tb_wc_infos WHERE pid=#{id}
-    </select>
+    <sql id="Base_Column_List1">
+        wc.id, wc.a_w_id, wc.company_id, wc.requirement, wc.deadline, wc.situation, wc.situation_type, wc.status,wc.is_update
+    </sql>
     <select id="selectWithManyById" resultMap="BaseResultMap">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_tb_work_company WHERE id=#{id}
+        <include refid="Base_Column_List1"/>
+        FROM t_tb_work_company wc LEFT JOIN t_tb_wc_infos w ON w.pid=wc.id WHERE id=#{id}
     </select>
     <select id="selectManyList" resultMap="BaseResultMap">
         SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_tb_work_company WHERE a_w_id=#{id}
+        <include refid="Base_Column_List1"/>
+        FROM t_tb_work_company wc LEFT JOIN t_tb_wc_infos w ON w.pid=wc.id WHERE a_w_id=#{id}
     </select>
 </mapper>

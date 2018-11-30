@@ -30,6 +30,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -134,5 +138,37 @@ public class GlobalExceptionHandler {
         getRequest().setAttribute("tip", "服务器未知运行时异常");
         log.error("运行时异常:", e);
         return new ErrorResponseData(BizExceptionEnum.SERVER_ERROR.getCode(), BizExceptionEnum.SERVER_ERROR.getMessage());
+    }
+
+    /**
+     * 拦截验证异常
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    public ErrorResponseData notValidated(MethodArgumentNotValidException e) {
+        LogManager.me().executeLog(LogTaskFactory.exceptionLog(ShiroKit.getUser().getId(), e));
+        getRequest().setAttribute("tip", "参数错误");
+        //捕获的所有错误对象
+        BindingResult result = e.getBindingResult();
+        FieldError error = result.getFieldError();
+        String field = error.getField();
+        String code = error.getDefaultMessage();
+        return new ErrorResponseData(2001, code);
+    }
+
+    /**
+     * 400 - Bad Request
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BindException.class)
+    public ErrorResponseData handleBindException(BindException e) {
+        log.error("参数绑定失败", e);
+        BindingResult result = e.getBindingResult();
+        FieldError error = result.getFieldError();
+        String field = error.getField();
+        String code = error.getDefaultMessage();
+        String message = String.format("%s:%s", field, code);
+        return new ErrorResponseData(BizExceptionEnum.SERVER_ERROR.getCode(), message);
     }
 }

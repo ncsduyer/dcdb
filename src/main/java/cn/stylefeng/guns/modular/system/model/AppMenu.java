@@ -29,6 +29,7 @@ public class AppMenu extends Model<AppMenu> {
      * appmenu类型
      */
     private Integer type;
+    private Integer order;
     private Integer statue;
     /**
      * pc端html路径
@@ -123,5 +124,13 @@ public class AppMenu extends Model<AppMenu> {
                 ", pcUrl=" + pcUrl +
                 ", wapUrl=" + wapUrl +
                 "}";
+    }
+
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
     }
 }

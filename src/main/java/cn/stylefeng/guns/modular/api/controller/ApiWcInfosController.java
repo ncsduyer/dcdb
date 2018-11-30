@@ -46,7 +46,7 @@ public class ApiWcInfosController extends BaseController {
      * 跳转到督查单位进度首页
      */
     @RequestMapping("")
-    @Permission
+
     public String index() {
         return PREFIX + "wcInfos.html";
     }
@@ -80,7 +80,6 @@ public class ApiWcInfosController extends BaseController {
             @ApiImplicitParam(name = "id", value = "责任单位id", required = true, dataType = "Long"),
     })
     @RequestMapping(value = "/list/{id}", method = RequestMethod.GET)
-    @Permission
     @ResponseBody
     public ResponseData list(@PathVariable("id") Integer id) {
         return ResponseData.success(wcInfosService.selectList(Condition.create()
@@ -142,7 +141,6 @@ public class ApiWcInfosController extends BaseController {
             @ApiImplicitParam(name = "id", value = "id", required = true, dataType = "Long"),
     })
     @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
-    @Permission
     @ResponseBody
     public ResponseData detail(@PathVariable("id") Integer wcInfosId) {
         return ResponseData.success(wcInfosService.selectById(wcInfosId));

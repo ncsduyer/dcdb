@@ -1,24 +1,22 @@
 package cn.stylefeng.guns.modular.DcCompany.controller;
 
-import cn.stylefeng.guns.core.common.annotion.Permission;
 import cn.stylefeng.guns.core.log.LogObjectHolder;
 import cn.stylefeng.guns.modular.DcCompany.service.ICompanyService;
 import cn.stylefeng.guns.modular.system.model.Company;
 import cn.stylefeng.roses.core.base.controller.BaseController;
-import cn.stylefeng.roses.core.reqres.response.ResponseData;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * 督查责任单位管理控制器
+ * apileadership控制器
  *
  * @author fengshuonan
- * @Date 2018-10-15 16:29:44
+ * @Date 2018-11-29 11:54:14
  */
 @Controller
 @RequestMapping("/apicompany")
@@ -30,28 +28,25 @@ public class CompanyController extends BaseController {
     private ICompanyService companyService;
 
     /**
-     * 跳转到督查责任单位管理首页
+     * 跳转到apileadership首页
      */
     @RequestMapping("")
-    @Permission
     public String index() {
         return PREFIX + "company.html";
     }
 
     /**
-     * 跳转到添加督查责任单位管理
+     * 跳转到添加apileadership
      */
     @RequestMapping("/company_add")
-    @Permission
     public String companyAdd() {
         return PREFIX + "company_add.html";
     }
 
     /**
-     * 跳转到修改督查责任单位管理
+     * 跳转到修改apileadership
      */
     @RequestMapping("/company_update/{companyId}")
-    @Permission
     public String companyUpdate(@PathVariable Integer companyId, Model model) {
         Company company = companyService.selectById(companyId);
         model.addAttribute("item", company);
@@ -60,58 +55,50 @@ public class CompanyController extends BaseController {
     }
 
     /**
-     * 获取督查责任单位管理列表
+     * 获取apileadership列表
      */
-    @ApiOperation(value = "获取督查责任单位列表")
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/list")
     @ResponseBody
-    public ResponseData list(String condition) {
-        return ResponseData.success(companyService.selectList(null));
+    public Object list(String condition) {
+        return companyService.selectList(null);
     }
 
     /**
-     * 新增督查责任单位管理
+     * 新增apileadership
      */
     @RequestMapping(value = "/add")
-    @Permission
     @ResponseBody
-    public ResponseData add(@RequestBody Company company) {
+    public Object add(Company company) {
         companyService.insert(company);
         return SUCCESS_TIP;
     }
 
     /**
-     * 删除督查责任单位管理
+     * 删除apileadership
      */
     @RequestMapping(value = "/delete")
-    @Permission
     @ResponseBody
-    public ResponseData delete(@RequestParam Integer companyId) {
+    public Object delete(@RequestParam Integer companyId) {
         companyService.deleteById(companyId);
         return SUCCESS_TIP;
     }
 
     /**
-     * 修改督查责任单位管理
+     * 修改apileadership
      */
     @RequestMapping(value = "/update")
-    @Permission
     @ResponseBody
-    public ResponseData update(@RequestBody Company company) {
+    public Object update(Company company) {
         companyService.updateById(company);
         return SUCCESS_TIP;
     }
 
     /**
-     * 督查责任单位管理详情
+     * apileadership详情
      */
-    @ApiOperation(value = "督查责任单位管理详情")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "id", required = true, dataType = "Long"),
-    })
-    @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/detail/{companyId}")
     @ResponseBody
-    public ResponseData detail(@PathVariable("id") Integer companyId) {
-        return ResponseData.success(companyService.selectById(companyId));
+    public Object detail(@PathVariable("companyId") Integer companyId) {
+        return companyService.selectById(companyId);
     }
 }

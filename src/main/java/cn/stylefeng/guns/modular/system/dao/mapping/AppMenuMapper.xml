@@ -8,6 +8,7 @@
         <result column="menu_id" property="menuId"/>
         <result column="type" property="type"/>
         <result column="statue" property="statue"/>
+        <result column="order" property="order"/>
         <result column="pc_url" property="pcUrl"/>
         <result column="wap_url" property="wapUrl"/>
         <result column="pc_icon" property="pcIcon"/>
@@ -16,7 +17,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, menu_id, type, statue, pc_url, wap_url,pc_icon,wap_icon
+        id, menu_id, type, statue, pc_url, wap_url,pc_icon,wap_icon,order
     </sql>
 
 </mapper>

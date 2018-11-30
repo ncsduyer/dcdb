@@ -50,6 +50,7 @@ AppMenuInfoDlg.collectData = function () {
         .set('type')
         .set('statue')
         .set('pcUrl')
+        .set('order')
         .set('wapUrl');
 }
 

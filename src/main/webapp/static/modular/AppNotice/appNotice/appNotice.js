@@ -19,7 +19,6 @@ AppNotice.initColumn = function () {
         {title: '类型', field: 'type', visible: true, align: 'center', valign: 'middle'},
         {title: '内容', field: 'content', visible: true, align: 'center', valign: 'middle'},
         {title: '创建时间', field: 'createtime', visible: true, align: 'center', valign: 'middle'},
-        {title: '创建人', field: 'creater', visible: true, align: 'center', valign: 'middle'}
     ];
 };
 

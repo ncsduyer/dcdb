@@ -28,11 +28,14 @@ spring:
     multipart:
       max-request-size: 100MB
       max-file-size: 100MB
-
 mybatis-plus:
   typeAliasesPackage: cn.stylefeng.guns.modular.system.model
   configuration:
     map-underscore-to-camel-case: true
+    call-setters-on-nulls: true
+    lazy-loading-enabled: true
+    lazy-load-trigger-methods:
+    aggressive-lazy-loading: false
 
 log:
   path: guns-logs
@@ -44,7 +47,7 @@ spring:
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/guns?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
     username: root
-    password: root
+    password: lidongbo@666
     filters: wall,mergeStat
 
 #多数据源情况的配置
@@ -53,7 +56,7 @@ guns:
     open: false
     url: jdbc:mysql://127.0.0.1:3306/guns_test?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
     username: root
-    password: root
+    password: lidongbo@666
     dataSourceNames:
     - dataSourceGuns
     - dataSourceBiz
@@ -65,7 +68,7 @@ spring:
   datasource:
     url: jdbc:mysql://110.185.102.194:3306/guns?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
     username: root
-    password: root
+    password: lidongbo@666
     filters: wall,mergeStat
 
 ---
@@ -75,7 +78,7 @@ spring:
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/guns?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
     username: root
-    password: root
+    password: lidongbo@666
     filters: wall,mergeStat
 
 ---
@@ -85,6 +88,6 @@ spring:
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/guns?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
     username: root
-    password: root
+    password: lidongbo@666
     filters: wall,mergeStat
 

@@ -3,12 +3,12 @@ package cn.stylefeng.guns.modular.system.model;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
-import org.springframework.beans.BeanUtils;
+import com.baomidou.mybatisplus.enums.IdType;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -27,6 +27,7 @@ public class DcdbReport extends Model<DcdbReport> {
     /**
      * id
      */
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
     /**
      * 报表统计时间
@@ -77,26 +78,42 @@ public class DcdbReport extends Model<DcdbReport> {
      * 状态
      */
     private String status;
+    @ApiModelProperty("已用时间")
+    @TableField(exist = false)
+    private String useTime;
 
-    public DcdbReport() {
-        super();
-    }
-
-    public DcdbReport(AssignWork assignWork) {
-        BeanUtils.copyProperties(assignWork, this);
-        DateFormat format = new SimpleDateFormat("yyyy年MM月");
-        this.dateGroup = format.format(assignWork.getCreatedTime());
-        String company = "";
+    public DcdbReport(AssignWork assignWork, String dateGroup) {
+        this.title = assignWork.getTitle();
+        this.dateGroup = dateGroup.trim();
+        this.company = "";
         for (WorkCompany company1 : assignWork.getWorkCompanies()) {
             if (ToolUtil.isNotEmpty(company1.getCompany().getTitle())) {
                 company += company1.getCompany().getTitle() + ",";
             }
         }
-        this.company = company;
+        if (ToolUtil.isNotEmpty(company)) {
+            this.company = company.substring(0, company.length() - 1);
+        }
+        this.createdTime = assignWork.getCreatedTime();
+        this.endTime = assignWork.getEndTime();
         this.agent = assignWork.getAgent_user().getName();
+        this.requirement = assignWork.getRequirement();
+        this.remarks = assignWork.getRemarks();
         this.workType = assignWork.getWorkTypeName().getTitle();
         this.delayStatus = assignWork.getDelayStatus() == 1 ? "同意延期" : "禁止延期";
         this.status = assignWork.getEventStep().getStep();
+    }
+
+    public String getUseTime() {
+        return useTime;
+    }
+
+    public DcdbReport() {
+        super();
+    }
+
+    public void setUseTime(String useTime) {
+        this.useTime = useTime;
     }
 
 

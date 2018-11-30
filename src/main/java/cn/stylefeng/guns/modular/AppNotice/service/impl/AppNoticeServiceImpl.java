@@ -16,5 +16,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class AppNoticeServiceImpl extends ServiceImpl<AppNoticeMapper, AppNotice> implements IAppNoticeService {
-
+    @Override
+    public boolean insert(AppNotice entity) {
+        return super.insert(entity);
+    }
 }

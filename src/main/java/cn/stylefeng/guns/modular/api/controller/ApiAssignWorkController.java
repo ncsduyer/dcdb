@@ -1,17 +1,13 @@
 package cn.stylefeng.guns.modular.api.controller;
 
 import cn.stylefeng.guns.core.common.annotion.Permission;
-import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.log.LogObjectHolder;
-import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.modular.AssignWork.dto.AddWorkDto;
 import cn.stylefeng.guns.modular.AssignWork.dto.SreachWorkDto;
 import cn.stylefeng.guns.modular.AssignWork.service.IAssignWorkService;
 import cn.stylefeng.guns.modular.DcWorkCompany.service.IWorkCompanyService;
 import cn.stylefeng.guns.modular.system.model.AssignWork;
-import cn.stylefeng.guns.modular.system.model.WorkCompany;
 import cn.stylefeng.roses.core.base.controller.BaseController;
-import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import com.baomidou.mybatisplus.mapper.Condition;
@@ -19,14 +15,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -102,8 +96,21 @@ public class ApiAssignWorkController extends BaseController {
     @Permission
     @ResponseBody
     public ResponseData list(@RequestBody(required = false) SreachWorkDto sreachWorkDto) throws ParseException {
-        return ResponseData.success(assignWorkService.SreachPage(sreachWorkDto));
+        if (ToolUtil.isNotEmpty(sreachWorkDto) && sreachWorkDto.getIsmore() == 0) {
+//            long startTime=System.currentTimeMillis();
+            ResponseData responseData = ResponseData.success(assignWorkService.selectAsPage1(sreachWorkDto));
+//            long endTime=System.currentTimeMillis(); //获取结束时间
+//            System.out.println("程序运行时间： "+(endTime-startTime)+"ms");
+            return responseData;
+        }
+//        long startTime=System.currentTimeMillis();
+        ResponseData responseData = ResponseData.success(assignWorkService.SreachPage(sreachWorkDto));
+//        long endTime=System.currentTimeMillis(); //获取结束时间
+//        System.out.println("程序运行时间： "+(endTime-startTime)+"ms");
+        return responseData;
+
     }
+
 
     /**
      * 新增督查督办管理
@@ -112,28 +119,9 @@ public class ApiAssignWorkController extends BaseController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @Permission
     @ResponseBody
-    @Transactional
-    public ResponseData add(@RequestBody AddWorkDto addWorkDto) {
-        if (ToolUtil.isNotEmpty(addWorkDto.getCompanyIds())) {
-            AssignWork assignWork = new AssignWork();
-            BeanUtils.copyProperties(addWorkDto, assignWork);
-            assignWork.setCreatedId(ShiroKit.getUser().getId());
-            assignWork.setCreatedTime(new Date());
-            assignWork.setStatus(1);
-            assignWorkService.insert(assignWork);
-            WorkCompany workCompany = new WorkCompany();
-            workCompany.setaWId(assignWork.getId());
+    public ResponseData add(@Validated @RequestBody AddWorkDto addWorkDto) {
 
-            for (Integer id : addWorkDto.getCompanyIds()
-                    ) {
-                workCompany.setCompanyId(id);
-                workCompanyService.insert1(workCompany);
-            }
-
-            return ResponseData.success(assignWork);
-        } else {
-            return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
-        }
+        return assignWorkService.add(addWorkDto);
     }
 
     /**
@@ -159,20 +147,10 @@ public class ApiAssignWorkController extends BaseController {
     @Permission
     @ResponseBody
     public ResponseData update(@RequestBody AssignWork assignWork) {
-
-        if (assignWork.getStatus() == 9 || assignWork.getStatus() == 6) {
-            AssignWork assignWork1 = new AssignWork();
-            assignWork1.setId(assignWork.getId());
-            assignWork1.setStatus(assignWork.getStatus());
-            assignWork1.setRemarks(assignWork.getRemarks());
-            assignWork.setEndTime(new Date());
-            assignWorkService.updateById(assignWork1);
-        } else {
-            assignWorkService.updateById(assignWork);
-        }
-
-        return SUCCESS_TIP;
+        return assignWorkService.update1(assignWork);
     }
+
+
 
     /**
      * 督查督办管理详情

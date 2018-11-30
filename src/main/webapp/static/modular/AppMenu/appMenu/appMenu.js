@@ -16,7 +16,8 @@ AppMenu.initColumn = function () {
         {field: 'selectItem', radio: true},
         {title: 'id', field: 'id', visible: true, align: 'center', valign: 'middle'},
         {title: '菜单id', field: 'menuId', visible: true, align: 'center', valign: 'middle'},
-        {title: 'appmenu类型', field: 'type', visible: true, align: 'center', valign: 'middle'},
+        {title: '排序', field: 'order', visible: true, align: 'center', valign: 'middle'},
+        {title: '菜单类型类型', field: 'type', visible: true, align: 'center', valign: 'middle'},
         {title: '状态', field: 'statue', visible: true, align: 'center', valign: 'middle'},
         {title: 'pc端html路径', field: 'pcUrl', visible: true, align: 'center', valign: 'middle'},
         {title: '移动端html路径', field: 'wapUrl', visible: true, align: 'center', valign: 'middle'}

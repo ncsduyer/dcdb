@@ -69,7 +69,6 @@ public class ApiWorkCompanyController extends BaseController {
             @ApiImplicitParam(name = "id", value = "督办事项id", required = true, dataType = "Long"),
     })
     @RequestMapping(value = "/list/{id}", method = RequestMethod.GET)
-    @Permission
     @ResponseBody
     public ResponseData list(@PathVariable("id") Integer id) {
         return ResponseData.success(workCompanyService.selectManyList(id));
@@ -123,7 +122,6 @@ public class ApiWorkCompanyController extends BaseController {
             @ApiImplicitParam(name = "id", value = "id", required = true, dataType = "Long"),
     })
     @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
-    @Permission
     @ResponseBody
     public ResponseData detail(@PathVariable("id") Integer id) {
         return ResponseData.success(workCompanyService.selectWithManyById(id));

@@ -1,16 +1,16 @@
 package cn.stylefeng.guns.modular.system.dao;
 
-import cn.stylefeng.guns.modular.system.model.AppNotice;
+import cn.stylefeng.guns.modular.system.model.DateGroup;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 
 /**
  * <p>
- * 消息通知表 Mapper 接口
+ * 报表时间 Mapper 接口
  * </p>
  *
  * @author 三千霜
  * @since 2018-11-24
  */
-public interface AppNoticeMapper extends BaseMapper<AppNotice> {
+public interface DateGroupMapper extends BaseMapper<DateGroup> {
 
 }

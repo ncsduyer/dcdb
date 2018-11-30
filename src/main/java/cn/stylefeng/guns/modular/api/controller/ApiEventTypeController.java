@@ -30,7 +30,7 @@ public class ApiEventTypeController extends BaseController {
      * 跳转到功能模块类型管理首页
      */
     @RequestMapping("")
-    @Permission
+
     public String index() {
         return PREFIX + "eventType.html";
     }
@@ -38,7 +38,7 @@ public class ApiEventTypeController extends BaseController {
     /**
      * 跳转到添加功能模块类型管理
      */
-    @Permission
+
     @RequestMapping("/eventType_add")
     public String eventTypeAdd() {
         return PREFIX + "eventType_add.html";
@@ -48,7 +48,6 @@ public class ApiEventTypeController extends BaseController {
      * 跳转到修改功能模块类型管理
      */
     @RequestMapping("/eventType_update/{eventTypeId}")
-    @Permission
     public EventType eventTypeUpdate(@PathVariable Integer eventTypeId, Model model) {
         EventType eventType = eventTypeService.selectById(eventTypeId);
         model.addAttribute("item", eventType);
@@ -60,7 +59,6 @@ public class ApiEventTypeController extends BaseController {
      * 获取功能模块类型管理列表
      */
     @RequestMapping(value = "/list")
-    @Permission
     public ResponseData list(String condition) {
         return ResponseData.success(eventTypeService.selectList(null));
     }
@@ -103,7 +101,6 @@ public class ApiEventTypeController extends BaseController {
      */
     @RequestMapping(value = "/detail/{eventTypeId}")
     @ResponseBody
-    @Permission
     public ResponseData detail(@PathVariable("eventTypeId") Integer eventTypeId) {
         return ResponseData.success(eventTypeService.selectById(eventTypeId));
     }

@@ -30,7 +30,7 @@ public class ApiMeetingSituationController extends BaseController {
      * 跳转到会议督查管理首页
      */
     @RequestMapping("")
-    @Permission
+
     public String index() {
         return PREFIX + "meetingSituation.html";
     }
@@ -39,7 +39,7 @@ public class ApiMeetingSituationController extends BaseController {
      * 跳转到添加会议督查管理
      */
     @RequestMapping("/meetingSituation_add")
-    @Permission
+
     public String meetingSituationAdd() {
         return PREFIX + "meetingSituation_add.html";
     }
@@ -48,7 +48,7 @@ public class ApiMeetingSituationController extends BaseController {
      * 跳转到修改会议督查管理
      */
     @RequestMapping("/meetingSituation_update/{meetingSituationId}")
-    @Permission
+
     public String meetingSituationUpdate(@PathVariable Integer meetingSituationId, Model model) {
         MeetingSituation meetingSituation = meetingSituationService.selectById(meetingSituationId);
         model.addAttribute("item", meetingSituation);
@@ -60,7 +60,6 @@ public class ApiMeetingSituationController extends BaseController {
      * 获取会议督查管理列表
      */
     @RequestMapping(value = "/list")
-    @Permission
     @ResponseBody
     public ResponseData list(String condition) {
         return ResponseData.success(meetingSituationService.selectList(null));
@@ -103,7 +102,7 @@ public class ApiMeetingSituationController extends BaseController {
      * 会议督查管理详情
      */
     @RequestMapping(value = "/detail/{meetingSituationId}")
-    @Permission
+
     @ResponseBody
     public ResponseData detail(@PathVariable("meetingSituationId") Integer meetingSituationId) {
         return ResponseData.success(meetingSituationService.selectById(meetingSituationId));

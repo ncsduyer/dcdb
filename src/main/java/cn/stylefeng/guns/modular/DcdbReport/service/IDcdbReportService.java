@@ -1,10 +1,10 @@
 package cn.stylefeng.guns.modular.DcdbReport.service;
 
 import cn.stylefeng.guns.modular.system.model.DcdbReport;
+import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import com.baomidou.mybatisplus.service.IService;
 
 import java.text.ParseException;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -17,5 +17,7 @@ import java.util.Map;
  */
 public interface IDcdbReportService extends IService<DcdbReport> {
 
-    boolean addReport(Map<String, Date> map) throws ParseException;
+    boolean addReport(Map<String, String> map) throws ParseException;
+
+    ResponseData getDcdbReports(Map<String, String> map) throws ParseException;
 }

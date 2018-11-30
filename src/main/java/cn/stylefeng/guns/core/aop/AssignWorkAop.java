@@ -1,10 +1,15 @@
 package cn.stylefeng.guns.core.aop;
 
+import cn.stylefeng.guns.modular.AppNotice.service.IAppNoticeService;
+import cn.stylefeng.guns.modular.system.model.AppNotice;
 import cn.stylefeng.guns.modular.system.model.AssignWork;
+import cn.stylefeng.guns.modular.system.model.User;
 import cn.stylefeng.guns.modular.system.model.WorkFlowLog;
+import cn.stylefeng.guns.modular.system.service.IUserService;
 import cn.stylefeng.guns.modular.workFlowLog.service.IWorkFlowLogService;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
+import com.aliyuncs.exceptions.ClientException;
 import com.baomidou.mybatisplus.mapper.Condition;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -12,6 +17,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -20,29 +26,29 @@ import java.util.Date;
 public class AssignWorkAop {
     @Autowired
     private IWorkFlowLogService workFlowLogService;
+    @Autowired
+    private IAppNoticeService appNoticeService;
+    @Autowired
+    private IUserService userService;
 
-    @Pointcut("execution(* cn.stylefeng.guns.modular.AssignWork.controller.AssignWorkController.add(..))")
-    private void addAssignWork() {
 
-    }
-
-    @Pointcut("execution(* cn.stylefeng.guns.modular.AssignWork.controller.AssignWorkController.update(..))")
-    private void editAssignWork() {
-
-    }
-
-    @Pointcut("execution(* cn.stylefeng.guns.modular.api.controller.ApiAssignWorkController.add(..))")
-    private void addApiAssignWork() {
+    @Pointcut("execution(* cn.stylefeng.guns.modular.AssignWork.service.IAssignWorkService.add(..))")
+    private void addAssignWorkService() {
 
     }
 
-    @Pointcut("execution(* cn.stylefeng.guns.modular.api.controller.ApiAssignWorkController.update(..))")
-    private void editApiAssignWork() {
+    @Pointcut("execution(* cn.stylefeng.guns.modular.AssignWork.service.IAssignWorkService.updateById(..))")
+    private void editAssignWorkService() {
 
     }
 
+    @Pointcut("execution(* cn.stylefeng.guns.modular.AppNotice.service.IAppNoticeService.insert(..))")
+    private void sendSms() {
+
+    }
     //插入时记录
-    @AfterReturning(value = "addAssignWork()||addApiAssignWork()", returning = "responseData")
+    @AfterReturning(value = "addAssignWorkService()", returning = "responseData")
+    @Transactional
     public void addWorkFlowLog(JoinPoint joinPoint, Object responseData) {
         AssignWork assignWork = (AssignWork) ((ResponseData) responseData).getData();
         if (ToolUtil.isEmpty(assignWork)) {
@@ -58,12 +64,24 @@ public class AssignWorkAop {
             workFlowLog.setCreatedTime(new Date());
             workFlowLog.setStep(1);
             workFlowLogService.insert(workFlowLog);
+            //获取手机号
+            User user = userService.selectById(assignWork.getAgent());
+            AppNotice appNotice = new AppNotice();
+            appNotice.setTitle(assignWork.getTitle());
+            appNotice.setContent(assignWork.getRequirement());
+            appNotice.setCreatetime(new Date());
+            appNotice.setType(1);
+            appNotice.setSendee(user.getName());
+            appNotice.setTel(user.getPhone());
+            appNotice.setSender_id(user.getId());
+            appNoticeService.insert(appNotice);
+
 
         }
     }
 
     //修改时记录
-    @AfterReturning("editAssignWork()||editApiAssignWork()")
+    @AfterReturning("editAssignWorkService()")
     public void editWorkFlowLog(JoinPoint joinPoint) {
         AssignWork assignWork = (AssignWork) joinPoint.getArgs()[0];
         if (workFlowLogService.selectOne(Condition.create()
@@ -76,5 +94,12 @@ public class AssignWorkAop {
         workFlowLog.setCreatedTime(new Date());
         workFlowLog.setStep(assignWork.getStatus());
         workFlowLogService.insert(workFlowLog);
+    }
+
+    @AfterReturning("sendSms()")
+    public void sendSms(JoinPoint joinPoint) throws ClientException {
+//        AppNotice appNotice=(AppNotice) joinPoint.getArgs()[0];
+        //发送短信
+//            SmsUtil.sendSms(appNotice);
     }
 }

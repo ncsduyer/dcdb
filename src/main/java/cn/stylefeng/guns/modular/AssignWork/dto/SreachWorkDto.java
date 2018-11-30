@@ -26,6 +26,8 @@ public class SreachWorkDto {
      */
     @ApiModelProperty("督办负责人id")
     private Integer agent;
+    @ApiModelProperty("创建人id")
+    private Integer created_id;
 
     /**
      * 当前状态
@@ -44,11 +46,13 @@ public class SreachWorkDto {
     @JSONField(format = "yyyy-MM-dd")
     @ApiModelProperty("结束时间")
     private Date afterTime;
+    @ApiModelProperty("查询延期")
+    private Integer isExceed;
     @ApiModelProperty("页码")
     private int page = 1;
     @ApiModelProperty("每页条数")
     private int limit = 12;
-
+    private int ismore = 0;
     public int getPage() {
         return page;
     }
@@ -128,5 +132,29 @@ public class SreachWorkDto {
 
     public void setDelayStatus(Integer delayStatus) {
         this.delayStatus = delayStatus;
+    }
+
+    public Integer getCreated_id() {
+        return created_id;
+    }
+
+    public void setCreated_id(Integer created_id) {
+        this.created_id = created_id;
+    }
+
+    public int getIsmore() {
+        return ismore;
+    }
+
+    public void setIsmore(int ismore) {
+        this.ismore = ismore;
+    }
+
+    public Integer getIsExceed() {
+        return isExceed;
+    }
+
+    public void setIsExceed(Integer isExceed) {
+        this.isExceed = isExceed;
     }
 }

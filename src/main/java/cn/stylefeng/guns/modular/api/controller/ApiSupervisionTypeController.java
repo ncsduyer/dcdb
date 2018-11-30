@@ -33,7 +33,7 @@ public class ApiSupervisionTypeController extends BaseController {
      * 跳转到督查类型管理首页
      */
     @RequestMapping("")
-    @Permission
+
     public String index() {
         return PREFIX + "supervisionType.html";
     }
@@ -42,7 +42,7 @@ public class ApiSupervisionTypeController extends BaseController {
      * 跳转到添加督查类型管理
      */
     @RequestMapping("/supervisionType_add")
-    @Permission
+
     public String supervisionTypeAdd() {
         return PREFIX + "supervisionType_add.html";
     }
@@ -51,7 +51,7 @@ public class ApiSupervisionTypeController extends BaseController {
      * 跳转到修改督查类型管理
      */
     @RequestMapping("/supervisionType_update/{supervisionTypeId}")
-    @Permission
+
     public String supervisionTypeUpdate(@PathVariable Integer supervisionTypeId, Model model) {
         SupervisionType supervisionType = supervisionTypeService.selectById(supervisionTypeId);
         model.addAttribute("item", supervisionType);
@@ -64,7 +64,7 @@ public class ApiSupervisionTypeController extends BaseController {
      */
     @ApiOperation(value = "获取督查类型列表")
     @RequestMapping(value = "/list")
-    @Permission
+
     @ResponseBody
     public ResponseData list() {
         return ResponseData.success(supervisionTypeService.selectList(null));
@@ -107,7 +107,6 @@ public class ApiSupervisionTypeController extends BaseController {
      * 督查类型管理详情
      */
     @RequestMapping(value = "/detail/{supervisionTypeId}")
-    @Permission
     @ResponseBody
     public ResponseData detail(@PathVariable("supervisionTypeId") Integer supervisionTypeId) {
         return ResponseData.success(supervisionTypeService.selectById(supervisionTypeId));

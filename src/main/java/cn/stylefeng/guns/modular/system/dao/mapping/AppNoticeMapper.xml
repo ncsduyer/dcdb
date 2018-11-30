@@ -9,12 +9,14 @@
         <result column="type" property="type"/>
         <result column="content" property="content"/>
         <result column="createtime" property="createtime"/>
-        <result column="creater" property="creater"/>
+        <result column="tel" property="tel"/>
+        <result column="sendee" property="sendee"/>
+        <result column="sender_id" property="sender_id"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, title, type, content, createtime, creater
+        id, title, type, content, createtime, tel, sendee,sender_id
     </sql>
 
 </mapper>

@@ -72,7 +72,6 @@ public class ApiWorkFlowLogController extends BaseController {
     })
     @RequestMapping(value = "/list/{id}")
     @ResponseBody
-    @Permission
     public ResponseData list(@PathVariable("id") Integer id) {
         List<WorkFlowLog> workFlowLogs = workFlowLogService.selectByManyId(id);
         return ResponseData.success(workFlowLogs);

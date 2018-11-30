@@ -35,7 +35,7 @@ public class ApiMeetingController extends BaseController {
      * 跳转到会议管理首页
      */
     @RequestMapping("")
-    @Permission
+
     public String index() {
         return PREFIX + "meeting.html";
     }
@@ -44,7 +44,7 @@ public class ApiMeetingController extends BaseController {
      * 跳转到添加会议管理
      */
     @RequestMapping("/meeting_add")
-    @Permission
+
     public String meetingAdd() {
         return PREFIX + "meeting_add.html";
     }
@@ -53,7 +53,7 @@ public class ApiMeetingController extends BaseController {
      * 跳转到修改会议管理
      */
     @RequestMapping("/meeting_update/{meetingId}")
-    @Permission
+
     public String meetingUpdate(@PathVariable Integer meetingId, Model model) {
         Meeting meeting = meetingService.selectById(meetingId);
         model.addAttribute("item", meeting);
@@ -66,7 +66,6 @@ public class ApiMeetingController extends BaseController {
      */
     @ApiOperation(value = "获取会议管理列表")
     @RequestMapping(value = "/list")
-    @Permission
     @ResponseBody
     public ResponseData list(String condition) {
         return ResponseData.success(meetingService.selectList(null));
@@ -115,7 +114,6 @@ public class ApiMeetingController extends BaseController {
             @ApiImplicitParam(name = "id", value = "id", required = true, dataType = "Long"),
     })
     @RequestMapping(value = "/detail/{id}")
-    @Permission
     @ResponseBody
     public ResponseData detail(@PathVariable("id") Integer meetingId) {
         return ResponseData.success(meetingService.selectById(meetingId));

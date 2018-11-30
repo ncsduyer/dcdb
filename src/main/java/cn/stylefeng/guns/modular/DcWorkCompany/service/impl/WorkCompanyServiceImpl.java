@@ -1,7 +1,9 @@
 package cn.stylefeng.guns.modular.DcWorkCompany.service.impl;
 
+import cn.stylefeng.guns.modular.AssignWork.service.IAssignWorkService;
 import cn.stylefeng.guns.modular.DcWorkCompany.service.IWorkCompanyService;
 import cn.stylefeng.guns.modular.system.dao.WorkCompanyMapper;
+import cn.stylefeng.guns.modular.system.model.AssignWork;
 import cn.stylefeng.guns.modular.system.model.WorkCompany;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import com.baomidou.mybatisplus.mapper.Condition;
@@ -24,6 +26,8 @@ public class WorkCompanyServiceImpl extends ServiceImpl<WorkCompanyMapper, WorkC
 
     @Autowired
     private WorkCompanyMapper workCompanyMapper;
+    @Autowired
+    private IAssignWorkService assignWorkService;
 
     @Override
     public WorkCompany selectWithManyById(Integer id) {
@@ -47,19 +51,31 @@ public class WorkCompanyServiceImpl extends ServiceImpl<WorkCompanyMapper, WorkC
     @Override
     public boolean updateByWorkCompany(WorkCompany workCompany) {
         WorkCompany workCompany1 = selectById(workCompany.getId());
+//        if (!(ShiroKit.getUser().getId().equals(assignWorkService.selectById(workCompany1.getaWId()).getAgent()))){
+//            return false;
+//        }
         if (ToolUtil.isNotEmpty(workCompany1) && workCompany1.getStatus() != 1) {
             if (workCompany1.getIsUpdate() != 1) {
                 workCompany1.setIsUpdate(1);
                 workCompany1.setDeadline(workCompany.getDeadline());
                 workCompany1.setRequirement(workCompany.getRequirement());
                 updateById(workCompany1);
+                AssignWork assignWork = new AssignWork();
+                assignWork.setId(workCompany1.getaWId());
+                assignWork.setStatus(2);
+                assignWorkService.updateById(assignWork);
                 return true;
             } else {
                 WorkCompany workCompany2 = new WorkCompany();
                 workCompany2.setId(workCompany.getId());
                 workCompany2.setSituation(workCompany.getSituation());
+                workCompany2.setRequirement(workCompany.getRequirement());
                 workCompany2.setStatus(workCompany.getStatus());
                 updateById(workCompany2);
+                AssignWork assignWork = new AssignWork();
+                assignWork.setId(workCompany1.getaWId());
+                assignWork.setStatus(3);
+                assignWorkService.updateById(assignWork);
                 return true;
             }
         }

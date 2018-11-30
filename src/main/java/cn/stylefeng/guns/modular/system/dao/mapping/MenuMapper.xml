@@ -145,7 +145,15 @@
         <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(menutype)">
             AND m.menutype=#{menutype}
         </if>
-        ORDER BY m.id ASC
+
+        <choose>
+            <when test="isapp == 1">
+                ORDER BY ap.order DESC
+            </when>
+            <otherwise>
+                ORDER BY m.id ASC
+            </otherwise>
+        </choose>
     </select>
 
     <select id="getMenusByRoleIds" resultType="cn.stylefeng.guns.core.common.node.MenuNode">
