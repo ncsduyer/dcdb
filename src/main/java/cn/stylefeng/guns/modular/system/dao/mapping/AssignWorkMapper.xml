@@ -158,50 +158,15 @@
                 <![CDATA[ and a.deadline <= sysdate() ]]>
             </if>
         </where>
-        order BY a.id DESC
+        <choose>
+            <when test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.order)">
+                order BY ${dto.order}
+            </when>
+            <otherwise>
+                order BY a.id DESC
+            </otherwise>
+        </choose>
     </select>
-    <!--<select id="selectAsPage" resultMap="ResultMoreMap">-->
-    <!--SELECT-->
-    <!--a.id, a.title, a.work_type, a.broker_name, a.broker_id, a.agent, a.created_id, a.created_time, a.end_time, a.deadline,a.requirement, a.remarks, a.status, a.delay_status, CASE  when  sysdate()>a.deadline then '已超期' else '未超期' end as is_exceed-->
-    <!--FROM t_tb_assign_work a-->
-    <!--<where>-->
-    <!--<if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.title)">-->
-    <!--a.title LIKE CONCAT('%',#{dto.title},'%')-->
-    <!--</if>-->
-    <!--<if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.workType)">-->
-    <!--AND a.work_type = #{dto.workType}-->
-    <!--</if>-->
-    <!--<if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.brokerName)">-->
-    <!--AND a.broker_name like #{dto.brokerName}-->
-    <!--</if>-->
-    <!--<if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.agent)">-->
-    <!--AND   a.agent = #{dto.agent}-->
-    <!--</if>-->
-    <!--<if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.created_id)">-->
-    <!--AND  a.created_id = #{dto.created_id}-->
-    <!--</if>-->
-    <!--<if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.status) and dto.status.length gt 0">-->
-    <!--AND a.status in-->
-    <!--<foreach collection="dto.status" item="id" index="index" open="(" close=")" separator=",">-->
-    <!--#{id}-->
-    <!--</foreach>-->
-    <!--</if>-->
-    <!--<if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.delayStatus)">-->
-    <!--AND a.delay_status = #{dto.delayStatus}-->
-    <!--</if>-->
-    <!--<if test="beforeTime!=null">-->
-    <!--<![CDATA[   and a.created_time >= #{beforeTime,jdbcType=TIMESTAMP}]]>-->
-    <!--</if>-->
-    <!--<if test="afterTime!=null">-->
-    <!--<![CDATA[ and a.created_time <= #{afterTime,jdbcType=TIMESTAMP}]]>-->
-    <!--</if>-->
-    <!--<if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.isExceed)">-->
-    <!--<![CDATA[ and a.deadline <= sysdate() ]]>-->
-    <!--</if>-->
-
-    <!--</where>-->
-    <!--order BY a.id DESC-->
-    <!--</select>-->
     <select id="selectAsPage" resultMap="ResultListMap">
         SELECT
         a.id, a.title, a.work_type, a.broker_name, a.broker_id, a.agent, a.created_id, a.created_time, a.end_time,
@@ -248,6 +213,13 @@
             </if>
 
         </where>
-        order BY a.id DESC
+        <choose>
+            <when test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.order)">
+                order BY ${dto.order}
+            </when>
+            <otherwise>
+                order BY a.id DESC
+            </otherwise>
+        </choose>
     </select>
 </mapper>

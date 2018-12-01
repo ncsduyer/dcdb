@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.Future;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -46,7 +45,7 @@ public class AddWorkDto {
      * 办理要求
      */
     @ApiModelProperty("交办事件要求")
-    @NotBlank(message = "交办事件要求不能为空")
+//    @NotBlank(message = "交办事件要求不能为空")
     private String requirement;
     private Integer status;
     /**

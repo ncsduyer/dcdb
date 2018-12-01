@@ -41,7 +41,7 @@
     </select>
     <select id="selectManyList" resultMap="BaseResultMap">
         SELECT
-        <include refid="Base_Column_List1"/>
+        <include refid="Base_Column_List1"/>,w.*
         FROM t_tb_work_company wc LEFT JOIN t_tb_wc_infos w ON w.pid=wc.id WHERE a_w_id=#{id}
     </select>
 </mapper>

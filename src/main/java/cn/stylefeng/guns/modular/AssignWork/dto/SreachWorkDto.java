@@ -20,6 +20,8 @@ public class SreachWorkDto {
     private Integer workType;
     @ApiModelProperty("交办人")
     private String brokerName;
+    @ApiModelProperty("order")
+    private String order;
 
     /**
      * 督办人
@@ -156,5 +158,13 @@ public class SreachWorkDto {
 
     public void setIsExceed(Integer isExceed) {
         this.isExceed = isExceed;
+    }
+
+    public String getOrder() {
+        return order;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
     }
 }
