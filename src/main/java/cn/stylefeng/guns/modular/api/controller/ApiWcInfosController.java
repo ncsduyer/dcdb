@@ -90,6 +90,9 @@ public class ApiWcInfosController extends BaseController {
      * 新增督查单位进度
      */
     @ApiOperation(value = "新增督查单位进度")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "list", value = "责任单位进度数组", required = true, dataType = "Long"),
+    })
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @Permission
     @ResponseBody
@@ -107,6 +110,8 @@ public class ApiWcInfosController extends BaseController {
         if (wcInfos.getSubmitter() == null) {
             wcInfos.setSubmitter(ShiroKit.getUser().getName());
         }
+
+
         wcInfosService.insert(wcInfos);
         return SUCCESS_TIP;
     }
