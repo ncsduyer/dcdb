@@ -46,6 +46,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -59,6 +60,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.math.BigInteger;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static cn.stylefeng.roses.core.util.HttpContext.getIp;
@@ -388,11 +391,26 @@ public class ApiController extends BaseController {
     @ApiOperation(value = "获取消息列表")
     @RequestMapping(value = "/notice", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseData notice() {
+    public ResponseData notice(@RequestParam("beforeTime") Date beforeTime, @RequestParam("afterTime") Date afterTime) {
 //        消息列表
         int user_id = ShiroKit.getUser().getId();
+        if (ToolUtil.isNotEmpty(beforeTime) && ToolUtil.isNotEmpty(afterTime) && afterTime.before(beforeTime)) {
+            Date tmp = beforeTime;
+            beforeTime = afterTime;
+            afterTime = tmp;
+        }
+        if (ToolUtil.isNotEmpty(afterTime)) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        return ResponseData.success(appNoticeService.selectList(Condition.create().eq("sender_id", user_id).orderBy("createtime", false)));
+            try {
+                afterTime = sdf.parse(sdf.format(afterTime));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            afterTime = DateUtils.addSeconds(afterTime, 24 * 60 * 60 - 1);
+        }
+        return ResponseData.success(appNoticeService.selectList(Condition.create().eq("sender_id", user_id).between("createtime", beforeTime, afterTime).orderBy("createtime", false)));
     }
 
     /**

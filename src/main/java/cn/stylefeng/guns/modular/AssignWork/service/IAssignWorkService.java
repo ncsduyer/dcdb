@@ -25,9 +25,6 @@ public interface IAssignWorkService extends IService<AssignWork> {
 
     ResponseData add(AddWorkDto addWorkDto);
 
-    @Override
-    boolean updateById(AssignWork entity);
-
     Object selectAsPage1(SreachWorkDto sreachWorkDto) throws ParseException;
 
     ResponseData update1(AssignWork assignWork);

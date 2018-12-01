@@ -38,7 +38,7 @@ public class AddWorkDto {
      */
 
     @ApiModelProperty("最后期限")
-    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm")
     @NotNull(message = "最后期限不能为空")
     @Future
     private Date deadline;

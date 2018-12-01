@@ -11,7 +11,9 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -48,36 +50,46 @@ public class WorkCompanyServiceImpl extends ServiceImpl<WorkCompanyMapper, WorkC
         }
     }
 
+
     @Override
-    public boolean updateByWorkCompany(WorkCompany workCompany) {
-        WorkCompany workCompany1 = selectById(workCompany.getId());
+    public boolean updateByWorkCompany(Map<String, List<WorkCompany>> workCompanyList) {
+        if (ToolUtil.isNotEmpty(workCompanyList) && ToolUtil.isNotEmpty(workCompanyList.get("list"))) {
+            List<WorkCompany> workCompanys = new ArrayList<>();
+            List<AssignWork> assignWorks = new ArrayList<>();
+
+            for (WorkCompany workCompany : workCompanyList.get("list")) {
+                WorkCompany workCompany1 = selectById(workCompany.getId());
 //        if (!(ShiroKit.getUser().getId().equals(assignWorkService.selectById(workCompany1.getaWId()).getAgent()))){
 //            return false;
 //        }
-        if (ToolUtil.isNotEmpty(workCompany1) && workCompany1.getStatus() != 1) {
-            if (workCompany1.getIsUpdate() != 1) {
-                workCompany1.setIsUpdate(1);
-                workCompany1.setDeadline(workCompany.getDeadline());
-                workCompany1.setRequirement(workCompany.getRequirement());
-                updateById(workCompany1);
-                AssignWork assignWork = new AssignWork();
-                assignWork.setId(workCompany1.getaWId());
-                assignWork.setStatus(2);
-                assignWorkService.updateById(assignWork);
-                return true;
-            } else {
-                WorkCompany workCompany2 = new WorkCompany();
-                workCompany2.setId(workCompany.getId());
-                workCompany2.setSituation(workCompany.getSituation());
-                workCompany2.setRequirement(workCompany.getRequirement());
-                workCompany2.setStatus(workCompany.getStatus());
-                updateById(workCompany2);
-                AssignWork assignWork = new AssignWork();
-                assignWork.setId(workCompany1.getaWId());
-                assignWork.setStatus(3);
-                assignWorkService.updateById(assignWork);
-                return true;
+                if (ToolUtil.isNotEmpty(workCompany1) && workCompany1.getStatus() != 1) {
+                    if (workCompany1.getIsUpdate() != 1) {
+                        workCompany1.setIsUpdate(1);
+                        workCompany1.setDeadline(workCompany.getDeadline());
+                        workCompany1.setRequirement(workCompany.getRequirement());
+                        workCompanys.add(workCompany1);
+                        AssignWork assignWork = new AssignWork();
+                        assignWork.setId(workCompany1.getaWId());
+                        assignWork.setStatus(2);
+                        assignWorks.add(assignWork);
+                    } else {
+                        WorkCompany workCompany2 = new WorkCompany();
+                        workCompany2.setId(workCompany.getId());
+                        workCompany2.setSituation(workCompany.getSituation());
+                        workCompany2.setRequirement(workCompany.getRequirement());
+                        workCompany2.setStatus(workCompany.getStatus());
+                        workCompanys.add(workCompany2);
+                        AssignWork assignWork = new AssignWork();
+                        assignWork.setId(workCompany1.getaWId());
+                        assignWork.setStatus(2);
+                        assignWorks.add(assignWork);
+                    }
+                }
             }
+            updateBatchById(workCompanys);
+            assignWorkService.updateBatchById(assignWorks);
+            return true;
+
         }
         return false;
     }

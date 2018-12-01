@@ -17,7 +17,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -37,7 +36,7 @@ public class AssignWorkAop {
 
     }
 
-    @Pointcut("execution(* cn.stylefeng.guns.modular.AssignWork.service.IAssignWorkService.updateById(..))")
+    @Pointcut("execution(* cn.stylefeng.guns.modular.AssignWork.service.IAssignWorkService.update1(..))")
     private void editAssignWorkService() {
 
     }
@@ -48,7 +47,7 @@ public class AssignWorkAop {
     }
     //插入时记录
     @AfterReturning(value = "addAssignWorkService()", returning = "responseData")
-    @Transactional
+
     public void addWorkFlowLog(JoinPoint joinPoint, Object responseData) {
         AssignWork assignWork = (AssignWork) ((ResponseData) responseData).getData();
         if (ToolUtil.isEmpty(assignWork)) {

@@ -4,6 +4,7 @@ import cn.stylefeng.guns.modular.system.model.WorkCompany;
 import com.baomidou.mybatisplus.service.IService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -21,5 +22,5 @@ public interface IWorkCompanyService extends IService<WorkCompany> {
 
     boolean insert1(WorkCompany workCompany);
 
-    boolean updateByWorkCompany(WorkCompany workCompany);
+    boolean updateByWorkCompany(Map<String, List<WorkCompany>> workCompany);
 }

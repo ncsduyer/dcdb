@@ -15,6 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 督查单位关联控制器
  *
@@ -103,11 +106,14 @@ public class ApiWorkCompanyController extends BaseController {
      * 修改督查单位关联
      */
     @ApiOperation(value = "修改督查单位关联")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "list", value = "督办事项列表", required = true, dataType = "Long"),
+    })
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @Permission
     @ResponseBody
-    public ResponseData update(@RequestBody WorkCompany workCompany) {
-        if (workCompanyService.updateByWorkCompany(workCompany)) return SUCCESS_TIP;
+    public ResponseData update(@RequestBody Map<String, List<WorkCompany>> workCompanyList) {
+        if (workCompanyService.updateByWorkCompany(workCompanyList)) return SUCCESS_TIP;
 
         return ResponseData.error(4002, "禁止修改数据");
 
