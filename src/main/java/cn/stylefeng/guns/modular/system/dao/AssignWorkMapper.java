@@ -3,10 +3,13 @@ package cn.stylefeng.guns.modular.system.dao;
 import cn.stylefeng.guns.modular.AssignWork.dto.SreachWorkDto;
 import cn.stylefeng.guns.modular.system.model.AssignWork;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import org.apache.ibatis.annotations.Param;
+import org.apache.poi.ss.formula.functions.T;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,4 +27,7 @@ public interface AssignWorkMapper extends BaseMapper<AssignWork> {
     List<AssignWork> selectAsPage(Pagination page, @Param("dto") SreachWorkDto sreachWorkDto, @Param("beforeTime") Date beforeTime, @Param("afterTime") Date afterTime);
 
     List<Map<String, Object>> selectAsPage1(Pagination page, @Param("dto") SreachWorkDto sreachWorkDto, @Param("beforeTime") Date beforeTime, @Param("afterTime") Date afterTime);
+
+    Integer selectCountByCompany(@Param("ew") Wrapper<T> wrapper);
+    List<HashMap<Integer,String>> selectCountByCompanyids(@Param("ew") Wrapper<T> wrapper);
 }

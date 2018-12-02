@@ -166,18 +166,20 @@ public class AssignWorkServiceImpl extends ServiceImpl<AssignWorkMapper, AssignW
     public ResponseData update1(AssignWork assignWork) {
 
         try {
-            if(assignWork.getEndTime().before(assignWork.getCreatedTime())){
-                return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(),"办结时间错误");
-            }
-            if (assignWork.getStatus() == 9 || assignWork.getStatus() == 6) {
+            if (assignWork.getStatus() != 9 || assignWork.getStatus() != 6) {
+                AssignWork assignWork2 = new AssignWork();
+                BeanUtils.copyProperties(assignWork,assignWork2,"createdId,createdTime,endTime,deadline,remarks");
+                updateById(assignWork2);
+            } else {
+                if(assignWork.getEndTime().before(assignWork.getCreatedTime())){
+                    return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(),"办结时间错误");
+                }
                 AssignWork assignWork1 = new AssignWork();
                 assignWork1.setId(assignWork.getId());
                 assignWork1.setStatus(assignWork.getStatus());
                 assignWork1.setRemarks(assignWork.getRemarks());
                 assignWork1.setEndTime(assignWork.getEndTime());
                 updateById(assignWork1);
-            } else {
-                updateById(assignWork);
             }
             return ResponseData.success();
         } catch (Exception e) {

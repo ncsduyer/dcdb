@@ -7,15 +7,23 @@
         <id column="id" property="id" />
         <result column="group_id" property="groupId" />
         <result column="event_type" property="eventType" />
-        <result column="company" property="company" />
+        <result column="company_id" property="company_id" />
         <result column="row_name" property="rowName" />
         <result column="val" property="val" />
         <result column="created_time" property="createdTime" />
+        <association property="company" javaType="cn.stylefeng.guns.modular.system.model.Company"
+                     column="company_id"
+                     select="cn.stylefeng.guns.modular.system.dao.CompanyMapper.selectById">
+        </association>
+        <association property="eventTypeObj" javaType="cn.stylefeng.guns.modular.system.model.EventType"
+                     column="event_type"
+                     select="cn.stylefeng.guns.modular.system.dao.EventTypeMapper.selectById">
+        </association>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, group_id, event_type, company, row_name, val, created_time
+        id, group_id, event_type, company_id, row_name, val, created_time
     </sql>
 
 </mapper>

@@ -84,7 +84,6 @@ public class ApiDcdbReportController extends BaseController {
     @ResponseBody
     public ResponseData list(@RequestBody(required = false) Map<String, String> map) throws ParseException {
         return dcdbReportService.getDcdbReports(map);
-
     }
 
 
@@ -98,7 +97,6 @@ public class ApiDcdbReportController extends BaseController {
             @ApiImplicitParam(name = "beforeTime", value = "开始时间", required = false, dataType = "String"),
             @ApiImplicitParam(name = "afterTime", value = "结束时间", required = false, dataType = "Long"),
             @ApiImplicitParam(name = "reportName", value = "报表名称", required = false, dataType = "Long"),
-
     })
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody

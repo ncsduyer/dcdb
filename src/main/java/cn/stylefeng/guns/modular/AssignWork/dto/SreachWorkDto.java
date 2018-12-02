@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
-@ApiModel("SreachWorkDto")
+@ApiModel("SreachReportDto")
 public class SreachWorkDto {
     /**
      * 督办事项
@@ -36,6 +36,8 @@ public class SreachWorkDto {
      */
     @ApiModelProperty("当前状态数组")
     private Integer[] status;
+    @ApiModelProperty("责任单位数组")
+    private Integer[] companyIds;
     /**
      * 延期状态
      */
@@ -166,5 +168,13 @@ public class SreachWorkDto {
 
     public void setOrder(String order) {
         this.order = order;
+    }
+
+    public Integer[] getCompanyIds() {
+        return companyIds;
+    }
+
+    public void setCompanyIds(Integer[] companyIds) {
+        this.companyIds = companyIds;
     }
 }

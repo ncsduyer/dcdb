@@ -88,6 +88,7 @@ public class ApiAssignWorkController extends BaseController {
             @ApiImplicitParam(name = "beforeTime", value = "开始时间", required = false, dataType = "String"),
             @ApiImplicitParam(name = "afterTime", value = "结束时间", required = false, dataType = "String"),
             @ApiImplicitParam(name = "status", value = "事项状态 1已下发未反馈,2已反馈,3欠进度,4达进度,5超进度,6已完成,7现场办结,8允许延期,9手动关闭", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "companyIds", value = "责任单位数组", required = false, dataType = "Long"),
             @ApiImplicitParam(name = "delayStatus", value = "事项延期状态 1:延期 ", required = false, dataType = "Long"),
             @ApiImplicitParam(name = "isExceed", value = "查询延期 1:延期 ", required = false, dataType = "Long"),
             @ApiImplicitParam(name = "page", value = "页码", required = false, dataType = "Long"),

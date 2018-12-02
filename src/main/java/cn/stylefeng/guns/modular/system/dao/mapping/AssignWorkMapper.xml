@@ -123,6 +123,7 @@
         inner join t_tb_event_step estep on a.`status`=estep.`id`
         inner join sys_user users on users.id=a.agent
         left join t_tb_work_type wt on a.work_type = wt.id
+        LEFT JOIN t_tb_work_company wcom ON wcom.a_w_id =  a.id
         <where>
             <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.title)">
                 a.title LIKE CONCAT('%',#{dto.title},'%')
@@ -145,6 +146,12 @@
                     #{id}
                 </foreach>
             </if>
+            <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.companyIds) and dto.companyIds.length gt 0">
+                AND wcom.company_id in
+                <foreach collection="dto.companyIds" item="id" index="index" open="(" close=")" separator=",">
+                    #{id}
+                </foreach>
+            </if>
             <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.delayStatus)">
                 AND a.delay_status = #{dto.delayStatus}
             </if>
@@ -157,6 +164,7 @@
             <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.isExceed)">
                 <![CDATA[ and a.deadline <= sysdate() ]]>
             </if>
+
         </where>
         <choose>
             <when test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.order)">
@@ -199,6 +207,12 @@
                     #{id}
                 </foreach>
             </if>
+            <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.companyIds) and dto.companyIds.length gt 0">
+                AND wc.company_id in
+                <foreach collection="dto.companyIds" item="id" index="index" open="(" close=")" separator=",">
+                    #{id}
+                </foreach>
+            </if>
             <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.delayStatus)">
                 AND a.delay_status = #{dto.delayStatus}
             </if>
@@ -222,4 +236,18 @@
             </otherwise>
         </choose>
     </select>
+<select id="selectCountByCompany" resultType="java.lang.Integer">
+      SELECT COUNT(id) FROM t_tb_assign_work
+    <where>
+    ${ew.sqlSegment}
+    </where>
+</select><select id="selectCountByCompanyids" resultType="java.util.HashMap">
+    SELECT  com.id companyId,GROUP_CONCAT(a.id) assingids FROM t_tb_assign_work a LEFT JOIN t_tb_work_company wcom ON wcom.a_w_id =  a.id LEFT join t_tb_company com on
+    com.id=wcom.company_id
+    <where>
+      ${ew.sqlSegment}
+    </where>
+    group by com.id
+</select>
+
 </mapper>

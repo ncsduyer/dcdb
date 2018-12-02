@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -23,18 +24,24 @@ public class Report extends Model<Report> {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
+    @NotNull(message = "id不能为空")
     private Integer id;
     @TableField("group_id")
     private Integer groupId;
     @TableField("event_type")
     private Integer eventType;
-    private String company;
+    @TableField(exist = false)
+    private EventType eventTypeObj;
+    @TableField("company_id")
+    private Integer company_id;
+    @TableField(exist = false)
+    private Company company;
     @TableField("row_name")
+    @NotNull(message = "列名不能为空")
     private String rowName;
     private String val;
     @TableField("created_time")
     private Date createdTime;
-
 
     public Integer getId() {
         return id;
@@ -60,11 +67,19 @@ public class Report extends Model<Report> {
         this.eventType = eventType;
     }
 
-    public String getCompany() {
+    public Integer getCompany_id() {
+        return company_id;
+    }
+
+    public void setCompany_id(Integer company_id) {
+        this.company_id = company_id;
+    }
+
+    public Company getCompany() {
         return company;
     }
 
-    public void setCompany(String company) {
+    public void setCompany(Company company) {
         this.company = company;
     }
 
@@ -108,5 +123,13 @@ public class Report extends Model<Report> {
         ", val=" + val +
         ", createdTime=" + createdTime +
         "}";
+    }
+
+    public EventType getEventTypeObj() {
+        return eventTypeObj;
+    }
+
+    public void setEventTypeObj(EventType eventTypeObj) {
+        this.eventTypeObj = eventTypeObj;
     }
 }
