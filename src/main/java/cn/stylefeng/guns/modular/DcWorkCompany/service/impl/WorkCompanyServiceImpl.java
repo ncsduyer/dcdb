@@ -87,7 +87,9 @@ public class WorkCompanyServiceImpl extends ServiceImpl<WorkCompanyMapper, WorkC
                 }
             }
             updateBatchById(workCompanys);
-            assignWorkService.updateBatchById(assignWorks);
+            for (AssignWork assign:assignWorks) {
+                assignWorkService.update1(assign);
+            }
             return true;
 
         }

@@ -164,7 +164,11 @@ public class AssignWorkServiceImpl extends ServiceImpl<AssignWorkMapper, AssignW
 
     @Override
     public ResponseData update1(AssignWork assignWork) {
+
         try {
+            if(assignWork.getEndTime().before(assignWork.getCreatedTime())){
+                return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(),"办结时间错误");
+            }
             if (assignWork.getStatus() == 9 || assignWork.getStatus() == 6) {
                 AssignWork assignWork1 = new AssignWork();
                 assignWork1.setId(assignWork.getId());

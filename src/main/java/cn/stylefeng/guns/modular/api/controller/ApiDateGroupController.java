@@ -6,6 +6,7 @@ import cn.stylefeng.guns.modular.system.model.DateGroup;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import com.baomidou.mybatisplus.mapper.Condition;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -59,6 +60,7 @@ public class ApiDateGroupController extends BaseController {
     /**
      * 获取报表时间分组列表
      */
+    @ApiOperation(value = "获取报表时间分组列表")
     @RequestMapping(value = "/list")
     @ResponseBody
     public ResponseData list() {
