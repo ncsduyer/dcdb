@@ -166,6 +166,7 @@
             </if>
 
         </where>
+        GROUP BY a.id
         <choose>
             <when test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(dto.order)">
                 order BY ${dto.order}
@@ -242,8 +243,9 @@
     ${ew.sqlSegment}
     </where>
 </select><select id="selectCountByCompanyids" resultType="java.util.HashMap">
-    SELECT  com.id companyId,GROUP_CONCAT(a.id) assingids FROM t_tb_assign_work a LEFT JOIN t_tb_work_company wcom ON wcom.a_w_id =  a.id LEFT join t_tb_company com on
+    SELECT  com.id companyId,com.title companyName,GROUP_CONCAT(a.id) assingids ,et.report_alias eventType FROM t_tb_assign_work a LEFT JOIN t_tb_work_company wcom ON wcom.a_w_id =  a.id LEFT join t_tb_company com on
     com.id=wcom.company_id
+    LEFT join t_tb_event_step es on es.id=a.status LEFT JOIN t_tb_event_type et ON et.id=es.event_type
     <where>
       ${ew.sqlSegment}
     </where>

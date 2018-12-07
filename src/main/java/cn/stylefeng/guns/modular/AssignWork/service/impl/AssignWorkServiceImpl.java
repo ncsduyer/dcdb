@@ -99,7 +99,7 @@ public class AssignWorkServiceImpl extends ServiceImpl<AssignWorkMapper, AssignW
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public ResponseData add(AddWorkDto addWorkDto) {
         if (ToolUtil.isNotEmpty(addWorkDto.getCompanyIds())) {
             AssignWork assignWork = new AssignWork();

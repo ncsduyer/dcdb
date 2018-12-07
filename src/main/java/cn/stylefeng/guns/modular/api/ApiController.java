@@ -123,7 +123,7 @@ public class ApiController extends BaseController {
             //获取数据库中的账号密码，准备比对
             User user = userMapper.getByAccount(username);
             if (ToolUtil.isEmpty(user)) {
-                return new ErrorResponseData(5001, "账号密码错误！");
+                return new ErrorResponseData(5001, "账号密码错误！", new HashMap<String, Object>());
             }
             String credentials = user.getPassword();
             String salt = user.getSalt();

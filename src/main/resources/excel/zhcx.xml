@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<excel id="dcdbzhcx" code="dcdbzhcx" name="综合查询数据分析表">
+    <colgroup>
+        <col index="A" width='10em'></col>
+        <col index="B" width='17em'></col>
+        <col index="C" width='17em'></col>
+        <col index="D" width='17em'></col>
+        <col index="E" width='22em'></col>
+        <col index="F" width='17em'></col>
+        <col index="G" width='25em'></col>
+        <col index="H" width='17em'></col>
+        <col index="I" width='25em'></col>
+        <col index="J" width='17em'></col>
+        <col index="K" width='22em'></col>
+        <col index="L" width='22em'></col>
+        <col index="M" width='17em'></col>
+        <col index="N" width='17em'></col>
+        <col index="O" width='22em'></col>
+    </colgroup>
+    <title>
+        <tr height="16px">
+            <!--rowspan表示跨几行 colspan表示跨几列-->
+            <td rowspan="1" colspan="1" value="" />
+            <td rowspan="1" colspan="4" value="区委会议议定事项及区委主要领导批交办事项落实情况" />
+            <td rowspan="1" colspan="3" value="区委会议召开情况" />
+            <td rowspan="1" colspan="4" value="区委公文运转情况" />
+            <td rowspan="1" colspan="3" value="区委信息工作情况" />
+        </tr>
+    </title>
+    <thead>
+        <tr height="16px">
+            <th value="单位 类别" />
+            <th value="交办事项总数" />
+            <th value="交办事项办结率" />
+            <th value="未办结数" />
+            <th value="办结平均时长（天数）" />
+            <th value="缺席及迟到次数" />
+            <th value="会场玩手机，打瞌睡，未按要求着装等问题的人次" />
+            <th value="会议发言超时次数" />
+            <th value="公文运转总数（请示，报告，代拟稿类）" />
+            <th value="公文办结数" />
+            <th value="运转平均时长（天数）" />
+            <th value="公文差错，体外循环次数" />
+            <th value="上报信息得分" />
+            <th value="未及时报送信息次数" />
+            <th value="上级文件被通报批评次数" />
+        </tr>
+    </thead>
+    <tbody>
+        <tr height="16px" firstrow="2" firstcol="0" repeat="5">
+            <td type="string" isnullable="false" maxlength="30" /><!--单位 类别 -->
+            <td type="string" isnullable="false" maxlength="50" /><!--交办事项总数 -->
+            <td type="string" isnullable="false" /><!--交办事项办结率 -->
+            <td type="string" isnullable="true" /><!--未办结数 -->
+            <td type="string" isnullable="false" maxlength="30" /><!--办结平均时长（天数） -->
+            <td type="string" isnullable="true" /><!--缺席及迟到次数 -->
+            <td type="string" isnullable="true" /><!--会场玩手机，打瞌睡，未按要求着装等问题的人次 -->
+            <td type="string" isnullable="false" maxlength="30" /><!--会议发言超时次数 -->
+            <td type="string" isnullable="true" /><!--公文运转总数（请示，报告，代拟稿类） -->
+            <td type="string" isnullable="true" /><!--公文办结数 -->
+            <td type="string" isnullable="false" maxlength="30" /><!--运转平均时长（天数） -->
+            <td type="string" isnullable="true" /><!--公文差错，体外循环次数 -->
+            <td type="string" isnullable="true" /><!--上报信息得分 -->
+            <td type="string" isnullable="false" maxlength="30" /><!--未及时报送信息次数 -->
+            <td type="string" isnullable="true" /><!--上级文件被通报批评次数 -->
+        </tr>
+    </tbody>
+</excel>

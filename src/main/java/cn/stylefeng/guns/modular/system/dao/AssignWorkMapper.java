@@ -29,5 +29,5 @@ public interface AssignWorkMapper extends BaseMapper<AssignWork> {
     List<Map<String, Object>> selectAsPage1(Pagination page, @Param("dto") SreachWorkDto sreachWorkDto, @Param("beforeTime") Date beforeTime, @Param("afterTime") Date afterTime);
 
     Integer selectCountByCompany(@Param("ew") Wrapper<T> wrapper);
-    List<HashMap<Integer,String>> selectCountByCompanyids(@Param("ew") Wrapper<T> wrapper);
+    List<HashMap<Integer,Object>> selectCountByCompanyids(@Param("ew") Wrapper<T> wrapper);
 }

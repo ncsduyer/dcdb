@@ -22,9 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -157,41 +154,36 @@ public class ApiDcdbReportController extends BaseController {
     @RequestMapping(value = "/export", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public void export(@RequestParam(value = "dateGroup") String dateGroup, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("dateGroup", dateGroup);
-//        if (ToolUtil.isNotEmpty(beforeTime)){
-//            map.put("beforeTime",beforeTime);
-//        }
-//        if (ToolUtil.isNotEmpty(afterTime)){
-//            map.put("afterTime",afterTime);
-//        }
-        //获取数据
-        List<Object> list = (List<Object>) dcdbReportService.getDcdbReports(map).getData();
 
-        //excel标题
-        String[] title = {"交办事项", "督办责任人", "责任单位", "办理要求", "交办时间", "办理用时", "事项进度"};
-
+        //excle模板文件名
+        String template="dcdbzhcx.xml";
         //excel文件名
-        String fileName = "督查督办信息表" + System.currentTimeMillis() + ".xls";
+        String fileName = "督查督办数据分析表" + ".xls";
 
         //sheet名
-        String sheetName = "督查督办信息表";
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String[][] content = new String[list.size()][];
-        for (int i = 0; i < list.size(); i++) {
-            content[i] = new String[title.length];
-            DcdbReport obj = (DcdbReport) list.get(i);
-            content[i][0] = obj.getTitle();
-            content[i][1] = obj.getAgent();
-            content[i][2] = obj.getCompany();
-            content[i][3] = obj.getRequirement();
-            content[i][4] = formatter.format(obj.getCreatedTime());
-            content[i][5] = obj.getUseTime();
-            content[i][6] = obj.getStatus();
-        }
+        String sheetName = "督查督办数据分析表";
+//
+//        HashMap<String, String> map = new HashMap<>();
+//        map.put("dateGroup", dateGroup);
+//        //获取数据
+//        List<Object> list = (List<Object>) dcdbReportService.getDcdbReports(map).getData();
+//
+//        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String[][] content = new String[5][5];
+//        for (int i = 0; i < list.size(); i++) {
+//            content[i] = new String[title.length];
+//            DcdbReport obj = (DcdbReport) list.get(i);
+//            content[i][0] = obj.getTitle();
+//            content[i][1] = obj.getAgent();
+//            content[i][2] = obj.getCompany();
+//            content[i][3] = obj.getRequirement();
+//            content[i][4] = formatter.format(obj.getCreatedTime());
+//            content[i][5] = obj.getUseTime();
+//            content[i][6] = obj.getStatus();
+//        }
 
         //创建HSSFWorkbook
-        HSSFWorkbook wb = ExcelUtil.getHSSFWorkbook(sheetName, title, content, null);
+        HSSFWorkbook wb = ExcelUtil.getHSSFWorkbook(template,sheetName,content);
 
         //响应到客户端
         try {

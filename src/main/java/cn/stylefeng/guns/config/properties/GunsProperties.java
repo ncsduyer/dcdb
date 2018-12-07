@@ -39,7 +39,7 @@ public class GunsProperties {
 
     private Boolean kaptchaOpen = false;
 
-    private Boolean swaggerOpen = true;
+    private Boolean swaggerOpen = false;
 
     private String fileUploadPath = ResourceUtils.getURL("classpath:").getPath() + "/static/avatar";
 

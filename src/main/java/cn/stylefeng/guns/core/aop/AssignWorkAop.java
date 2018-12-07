@@ -1,5 +1,8 @@
 package cn.stylefeng.guns.core.aop;
 
+import cn.stylefeng.guns.core.util.JsonUtils;
+import cn.stylefeng.guns.core.util.SmsUtil;
+import cn.stylefeng.guns.core.util.ValidateUtils;
 import cn.stylefeng.guns.modular.AppNotice.service.IAppNoticeService;
 import cn.stylefeng.guns.modular.system.model.AppNotice;
 import cn.stylefeng.guns.modular.system.model.AssignWork;
@@ -11,6 +14,7 @@ import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import com.aliyuncs.exceptions.ClientException;
 import com.baomidou.mybatisplus.mapper.Condition;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -79,7 +83,9 @@ public class AssignWorkAop {
         }
     }
 
-    //修改时记录
+    /**
+     *修改时记录
+     */
     @AfterReturning("editAssignWorkService()")
     public void editWorkFlowLog(JoinPoint joinPoint) {
         AssignWork assignWork = (AssignWork) joinPoint.getArgs()[0];
@@ -97,8 +103,13 @@ public class AssignWorkAop {
 
     @AfterReturning("sendSms()")
     public void sendSms(JoinPoint joinPoint) throws ClientException {
-//        AppNotice appNotice=(AppNotice) joinPoint.getArgs()[0];
+        AppNotice appNotice=(AppNotice) joinPoint.getArgs()[0];
+        if(!ValidateUtils.isMobile(appNotice.getTel())) {
+            return ;
+        }
         //发送短信
-//            SmsUtil.sendSms(appNotice);
+        ObjectNode json = JsonUtils.getMapperInstance().createObjectNode();
+        json.put("code", appNotice.getTitle());
+        SmsUtil.sendSms(null,appNotice,"SMS_146809603", JsonUtils.beanToJson(json), null);
     }
 }

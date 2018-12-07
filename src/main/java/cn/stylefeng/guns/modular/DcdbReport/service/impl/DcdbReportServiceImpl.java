@@ -31,6 +31,7 @@ import java.util.*;
  * @since 2018-11-21
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class DcdbReportServiceImpl extends ServiceImpl<DcdbReportMapper, DcdbReport> implements IDcdbReportService {
     @Autowired
     private AssignWorkMapper assignWorkMapper;
@@ -38,7 +39,6 @@ public class DcdbReportServiceImpl extends ServiceImpl<DcdbReportMapper, DcdbRep
     private IDateGroupService dateGroupService;
 
     @Override
-    @Transactional
     public boolean addReport(Map<String, String> map) throws ParseException {
         if (ToolUtil.isEmpty(map) && ToolUtil.isEmpty(map.get("reportName"))) {
             return false;

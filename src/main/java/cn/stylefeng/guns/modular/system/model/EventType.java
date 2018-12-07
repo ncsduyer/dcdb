@@ -32,6 +32,17 @@ public class EventType extends Model<EventType> {
     @TableField("event_type")
     private String eventType;
 
+    public String getReportAlias() {
+        return reportAlias;
+    }
+
+    public void setReportAlias(String reportAlias) {
+        this.reportAlias = reportAlias;
+    }
+
+    @TableField("report_alias")
+    private String reportAlias;
+
 
     public Integer getId() {
         return id;

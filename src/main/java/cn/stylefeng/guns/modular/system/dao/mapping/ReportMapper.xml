@@ -11,6 +11,10 @@
         <result column="row_name" property="rowName" />
         <result column="val" property="val" />
         <result column="created_time" property="createdTime" />
+        <association property="group" javaType="cn.stylefeng.guns.modular.system.model.ReportGroup"
+                     column="group_id"
+                     select="cn.stylefeng.guns.modular.system.dao.ReportGroupMapper.selectById">
+        </association>
         <association property="company" javaType="cn.stylefeng.guns.modular.system.model.Company"
                      column="company_id"
                      select="cn.stylefeng.guns.modular.system.dao.CompanyMapper.selectById">
@@ -25,5 +29,11 @@
     <sql id="Base_Column_List">
         id, group_id, event_type, company_id, row_name, val, created_time
     </sql>
-
+    <select id="selectMoreList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_tb_report
+        <where>
+            ${ew.sqlSegment}
+        </where>
+    </select>
 </mapper>

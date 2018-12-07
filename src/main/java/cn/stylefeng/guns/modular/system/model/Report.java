@@ -36,12 +36,28 @@ public class Report extends Model<Report> {
     private Integer company_id;
     @TableField(exist = false)
     private Company company;
+
+
+
+    @TableField(exist = false)
+    private ReportGroup group;
     @TableField("row_name")
     @NotNull(message = "列名不能为空")
     private String rowName;
     private String val;
     @TableField("created_time")
     private Date createdTime;
+
+    public Report() {
+
+    }
+
+    public Report(Integer eventType, int company_id, @NotNull(message = "列名不能为空") String rowName, String val) {
+        this.eventType = eventType;
+        this.company_id = company_id;
+        this.rowName = rowName;
+        this.val = val;
+    }
 
     public Integer getId() {
         return id;
@@ -106,7 +122,13 @@ public class Report extends Model<Report> {
     public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
     }
+    public ReportGroup getGroup() {
+        return group;
+    }
 
+    public void setGroup(ReportGroup group) {
+        this.group = group;
+    }
     @Override
     protected Serializable pkVal() {
         return this.id;

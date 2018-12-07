@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<excel id="dcdbzhcx" code="dcdbzhcx" name="督查督办数据分析表">
+    <colgroup>
+        <col index="A" width='10em'></col>
+        <col index="B" width='20em'></col>
+        <col index="C" width='17em'></col>
+        <col index="D" width='17em'></col>
+        <col index="E" width='17em'></col>
+        <col index="F" width='22em'></col>
+        <col index="G" width='17em'></col>
+        <col index="H" width='17em'></col>
+        <col index="I" width='17em'></col>
+    </colgroup>
+    <title>
+        <tr height="16px">
+            <td rowspan="1" colspan="9" value="督查督办数据分析表" />
+        </tr>
+    </title>
+    <thead>
+        <tr height="16px">
+            <th value="编号" />
+            <th value="交办事项" />
+            <th value="交办时间" />
+            <th value="责任单位" />
+            <th value="督办责任人" />
+            <th value="办理要求及时限" />
+            <th value="办理情况" />
+            <th value="延期办结情况" />
+            <th value="办结总时间" />
+        </tr>
+    </thead>
+    <tbody>
+        <tr height="16px" firstrow="2" firstcol="0" repeat="5">
+            <td type="string" isnullable="false" maxlength="30" /><!--编号 -->
+            <td type="string" isnullable="false" maxlength="50" /><!--交办事项 -->
+            <td type="string" isnullable="false" /><!--交办时间 -->
+            <td type="string" isnullable="true" /><!--责任单位 -->
+            <td type="string" isnullable="false" maxlength="30" /><!--督办责任人 -->
+            <td type="string" isnullable="true" /><!--办理要求及时限 -->
+            <td type="string" isnullable="true" /><!--办理情况 -->
+            <td type="string" isnullable="false" maxlength="30" /><!--延期办结情况 -->
+            <td type="string" isnullable="true" /><!--办结总时间 -->
+        </tr>
+    </tbody>
+</excel>

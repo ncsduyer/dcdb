@@ -1,6 +1,8 @@
 package cn.stylefeng.guns.core.util;
 
+import cn.stylefeng.guns.config.properties.SmsProperties;
 import cn.stylefeng.guns.modular.system.model.AppNotice;
+import cn.stylefeng.roses.core.util.ToolUtil;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.dysmsapi.model.v20170525.QuerySendDetailsRequest;
@@ -10,50 +12,69 @@ import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class SmsUtil {
-    //产品名称:云通信短信API产品,开发者无需替换
+    static Logger log = LoggerFactory.getLogger(SmsUtil.class);
+    /**
+     *产品名称:云通信短信API产品,开发者无需替换
+     */
     static final String product = "Dysmsapi";
-    //产品域名,开发者无需替换
+    /**
+     *产品域名,开发者无需替换
+     */
     static final String domain = "dysmsapi.aliyuncs.com";
 
-    // TODO 此处需要替换成开发者自己的AK(在阿里云访问控制台寻找)
-    static final String accessKeyId = "yourAccessKeyId";
-    static final String accessKeySecret = "yourAccessKeySecret";
+    /**
+    *   业务短信发送间隔有效期为1分钟
+     */
+    public static final Long SMS_SEND_EXPIRE = 60*1000L;
+    /**
+     *  引入短信配置文件
+     */
 
-    public static SendSmsResponse sendSms(AppNotice appNotice) throws ClientException {
+
+
+    public static SendSmsResponse sendSms(String signName,AppNotice appNotice,String templateCode,String templateParam,String outId) throws ClientException {
 
         //可自助调整超时时间
         System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
         System.setProperty("sun.net.client.defaultReadTimeout", "10000");
 
         //初始化acsClient,暂不支持region化
-        IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId, accessKeySecret);
-        DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", product, domain);
+        IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", SmsProperties.getAccessKeyId(), SmsProperties.getAccessKeySecret());
+        DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", product);
         IAcsClient acsClient = new DefaultAcsClient(profile);
 
         //组装请求对象-具体描述见控制台-文档部分内容
         SendSmsRequest request = new SendSmsRequest();
         //必填:待发送手机号
-        request.setPhoneNumbers("15000000000");
+        request.setPhoneNumbers(appNotice.getTel());
         //必填:短信签名-可在短信控制台中找到
-        request.setSignName("云通信");
+        if (ToolUtil.isNotEmpty(signName)){
+            request.setSignName(signName);
+        }else{
+            request.setSignName(SmsProperties.getSignName());
+        }
         //必填:短信模板-可在短信控制台中找到
-        request.setTemplateCode("SMS_1000000");
+        request.setTemplateCode(templateCode);
         //可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
-        request.setTemplateParam("{\"name\":\"Tom\", \"code\":\"123\"}");
+        request.setTemplateParam(templateParam);
 
-        //选填-上行短信扩展码(无特殊需求用户请忽略此字段)
-        //request.setSmsUpExtendCode("90997");
-
-        //可选:outId为提供给业务方扩展字段,最终在短信回执消息中将此值带回给调用者
-        request.setOutId("yourOutId");
+        if(null != outId && outId.length() > 0){
+            //可选:outId为提供给业务方扩展字段,最终在短信回执消息中将此值带回给调用者
+            request.setOutId(outId);
+        }
 
         //hint 此处可能会抛出异常，注意catch
         SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
+        System.out.println("\n " + request.getPhoneNumbers() + ":" + request.getTemplateParam());
+        System.out.println(JsonUtils.beanToJson(sendSmsResponse) + "\n" );
 
         return sendSmsResponse;
     }
@@ -66,7 +87,7 @@ public class SmsUtil {
         System.setProperty("sun.net.client.defaultReadTimeout", "10000");
 
         //初始化acsClient,暂不支持region化
-        IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", accessKeyId, accessKeySecret);
+        IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", SmsProperties.getAccessKeyId(), SmsProperties.getAccessKeyId());
         DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", product, domain);
         IAcsClient acsClient = new DefaultAcsClient(profile);
 
@@ -89,4 +110,17 @@ public class SmsUtil {
 
         return querySendDetailsResponse;
     }
+
+        public static void main(String[] args) {
+            AppNotice appNotice=new AppNotice();
+            appNotice.setTel("18048955061");
+            appNotice.setTitle("abc2");
+            ObjectNode json = JsonUtils.getMapperInstance().createObjectNode();
+            json.put("code", appNotice.getTitle());
+            try {
+                SmsUtil.sendSms(null,appNotice,"SMS_146809603", JsonUtils.beanToJson(json), null);
+            } catch (ClientException e) {
+                e.printStackTrace();
+            }
+        }
 }
