@@ -209,6 +209,14 @@
             <artifactId>poi</artifactId>
             <version>3.16</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.deepoove/poi-tl -->
+        <dependency>
+            <groupId>com.deepoove</groupId>
+            <artifactId>poi-tl</artifactId>
+            <version>1.4.2</version>
+        </dependency>
+
+
 
         <!--需要分布式session的话需要放开注释-->
         <!--<dependency>-->

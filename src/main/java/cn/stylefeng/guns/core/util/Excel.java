@@ -6,10 +6,7 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellRangeAddressList;
-import org.jdom2.Attribute;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
+import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;
 
 import java.io.IOException;
@@ -44,63 +41,10 @@ public class Excel {
             //设置列宽
             setColumnWidth(sheet,colgroup);
             //设置标题
-            Element title=root.getChild("title");
-            List<Element> trs=title.getChildren("tr");
-            for (int i=0;i<trs.size();i++){
-                Element tr=trs.get(i);
-                List<Element> tds=tr.getChildren("td");
-                HSSFRow row=sheet.createRow(rownum);
-                HSSFCellStyle cellStyle=hssfWorkbook.createCellStyle();
-                cellStyle.setAlignment(HorizontalAlignment.CENTER);
-                int firstCol=0;
-                for (colnum=0;colnum<tds.size();colnum++){
-                    Element td=tds.get(colnum);
-                    HSSFCell cell = row.createCell(colnum);
-                    Attribute rowSpan=td.getAttribute("rowspan");
-                    Attribute colSpan=td.getAttribute("colspan");
-                    Attribute value=td.getAttribute("value");
-                    if (value!=null){
-                        int rspan = rowSpan.getIntValue()-1;
-                        int cspan = colSpan.getIntValue();
-                        //设置字体
-                        cell = row.createCell(firstCol);
-                        String val=value.getValue();
-                        cell.setCellValue(val);
-                        HSSFFont font= hssfWorkbook.createFont();
-                        font.setFontName("仿宋_GB2312");
-                        font.setBold(true);
-                        font.setFontHeightInPoints((short) 12);
-                        cellStyle.setFont(font);
-                        cell.setCellStyle(cellStyle);
-                        if (firstCol+cspan-1<=0){
-                            firstCol++;
-                            continue;
-                        }
-                        
-                        sheet.addMergedRegion(new CellRangeAddress(rspan,rspan,firstCol,firstCol+cspan-1));
-                        firstCol+=cspan;
-                    }
-                }
-               
-                rownum++;
-            }
-            //设置表头
-            Element thead=root.getChild("thead");
-            trs=thead.getChildren("tr");
-            for (int i=0;i<trs.size();i++) {
-                Element tr = trs.get(i);
-                HSSFRow row=sheet.createRow(rownum);
-                List<Element> ths = tr.getChildren("th");
-                for (colnum=0;colnum<ths.size();colnum++){
-                    Element th=ths.get(colnum);
-                    Attribute value=th.getAttribute("value");
-                    HSSFCell cell=row.createCell(colnum);
-                    if (value!=null){
-                        cell.setCellValue(value.getValue());
-                    }
-                }
-                rownum++;
-            }
+            rownum = setTitle(sheet, rownum);
+            rownum = setThead(sheet, rownum);
+
+
             Element tbody=root.getChild("tbody");
             Element tr=tbody.getChild("tr");
             int repeat=tr.getAttribute("repeat").getIntValue();
@@ -122,6 +66,71 @@ public class Excel {
             e.printStackTrace();
         }
 
+    }
+
+    private int setThead(HSSFSheet sheet, int rownum) {
+        int colnum;//设置表头
+        Element thead=root.getChild("thead");
+        List<Element> trs=thead.getChildren("tr");
+        for (int i=0;i<trs.size();i++) {
+            Element tr = trs.get(i);
+            HSSFRow row=sheet.createRow(rownum);
+            List<Element> ths = tr.getChildren("th");
+            for (colnum=0;colnum<ths.size();colnum++){
+                Element th=ths.get(colnum);
+                Attribute value=th.getAttribute("value");
+                HSSFCell cell=row.createCell(colnum);
+                if (value!=null){
+                    cell.setCellValue(value.getValue());
+                }
+            }
+            rownum++;
+        }
+        return rownum;
+    }
+
+    private int setTitle(HSSFSheet sheet, int rownum) throws DataConversionException {
+        int colnum;Element title=root.getChild("title");
+        List<Element> trs=title.getChildren("tr");
+        for (int i=0;i<trs.size();i++){
+            Element tr=trs.get(i);
+            List<Element> tds=tr.getChildren("td");
+            HSSFRow row=sheet.createRow(rownum);
+            HSSFCellStyle cellStyle=hssfWorkbook.createCellStyle();
+            cellStyle.setAlignment(HorizontalAlignment.CENTER);
+            int firstCol=0;
+            for (colnum=0;colnum<tds.size();colnum++){
+                Element td=tds.get(colnum);
+                HSSFCell cell = row.createCell(colnum);
+                Attribute rowSpan=td.getAttribute("rowspan");
+                Attribute colSpan=td.getAttribute("colspan");
+                Attribute value=td.getAttribute("value");
+                if (value!=null){
+                    int rspan = rowSpan.getIntValue()-1;
+                    int cspan = colSpan.getIntValue();
+                    //设置字体
+                    cell = row.createCell(firstCol);
+                    String val=value.getValue();
+                    cell.setCellValue(val);
+                    HSSFFont font= hssfWorkbook.createFont();
+                    font.setFontName("仿宋_GB2312");
+                    font.setBold(true);
+                    font.setFontHeightInPoints((short) 12);
+                    cellStyle.setFont(font);
+                    cell.setCellStyle(cellStyle);
+                    if (firstCol+cspan-1<=0){
+                        firstCol++;
+                        continue;
+                    }
+
+                    sheet.addMergedRegion(new CellRangeAddress(rspan,rspan,firstCol,firstCol+cspan-1));
+                    firstCol+=cspan;
+                }
+            }
+
+            rownum++;
+        }
+        return rownum;
     }
 
     public Excel(String template,String sheet) {
@@ -193,4 +202,5 @@ public class Excel {
     public HSSFWorkbook getHssfWorkbook() {
         return hssfWorkbook;
     }
+
 }

@@ -2,7 +2,7 @@ package cn.stylefeng.guns.modular.api.controller;
 
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.log.LogObjectHolder;
-import cn.stylefeng.guns.core.util.ExcelUtil;
+import cn.stylefeng.guns.core.util.ExportUtil;
 import cn.stylefeng.guns.modular.DcdbReport.service.IDcdbReportService;
 import cn.stylefeng.guns.modular.system.model.DcdbReport;
 import cn.stylefeng.roses.core.base.controller.BaseController;
@@ -183,11 +183,11 @@ public class ApiDcdbReportController extends BaseController {
 //        }
 
         //创建HSSFWorkbook
-        HSSFWorkbook wb = ExcelUtil.getHSSFWorkbook(template,sheetName,content);
+        HSSFWorkbook wb = ExportUtil.getHSSFWorkbook(template,sheetName,content);
 
         //响应到客户端
         try {
-            ExcelUtil.setResponseHeader(response, fileName);
+            ExportUtil.setResponseHeader(response, fileName);
             OutputStream os = response.getOutputStream();
             wb.write(os);
             os.flush();
