@@ -39,7 +39,7 @@ import java.util.List;
 
 @Service
 @DependsOn("springContextHolder")
-@Transactional(readOnly = true)
+@Transactional(readOnly = true,rollbackFor = Exception.class)
 public class UserAuthServiceServiceImpl implements UserAuthService {
 
     @Autowired

@@ -45,7 +45,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements ID
     private DictMapper dictMapper;
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void addDict(String dictCode, String dictName, String dictTips, String dictValues) {
         //判断有没有该字典
         List<Dict> dicts = dictMapper.selectList(new EntityWrapper<Dict>().eq("code", dictCode).and().eq("pid", 0));
@@ -85,7 +85,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements ID
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void editDict(Integer dictId, String dictCode, String dictName, String dictTips, String dicts) {
         //删除之前的字典
         this.delteDict(dictId);
@@ -95,7 +95,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements ID
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void delteDict(Integer dictId) {
         //删除这个字典的子词典
         Wrapper<Dict> dictEntityWrapper = new EntityWrapper<>();

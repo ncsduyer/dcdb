@@ -39,6 +39,7 @@ import java.util.stream.Collectors;
  * @since 2018-12-02
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> implements IReportService {
     @Autowired
     private AssignWorkMapper assignWorkMapper;
@@ -82,7 +83,7 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+
     public ResponseData add(ReportDto addReportDto){
         if (ToolUtil.isEmpty(addReportDto.getGroupName())){
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), "报表名称必须填写");

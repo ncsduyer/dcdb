@@ -35,6 +35,7 @@ import java.util.Map;
  * @since 2018-10-15
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class AssignWorkServiceImpl extends ServiceImpl<AssignWorkMapper, AssignWork> implements IAssignWorkService {
     @Autowired
     private AssignWorkMapper assignWorkMapper;
@@ -99,7 +100,7 @@ public class AssignWorkServiceImpl extends ServiceImpl<AssignWorkMapper, AssignW
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+
     public ResponseData add(AddWorkDto addWorkDto) {
         if (ToolUtil.isNotEmpty(addWorkDto.getCompanyIds())) {
             AssignWork assignWork = new AssignWork();

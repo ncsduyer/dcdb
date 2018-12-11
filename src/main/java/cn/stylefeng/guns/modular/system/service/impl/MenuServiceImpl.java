@@ -43,7 +43,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     private MenuMapper menuMapper;
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void delMenu(Long menuId) {
 
         //删除菜单
@@ -54,7 +54,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void delMenuContainSubMenus(Long menuId) {
 
         Menu menu = menuMapper.selectById(menuId);

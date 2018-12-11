@@ -42,7 +42,7 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements ID
     private DeptMapper deptMapper;
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void deleteDept(Integer deptId) {
         Dept dept = deptMapper.selectById(deptId);
 

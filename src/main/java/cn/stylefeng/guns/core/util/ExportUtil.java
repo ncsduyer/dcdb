@@ -37,7 +37,6 @@ public class ExportUtil {
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-
             response.setContentType("application/octet-stream;charset=UTF-8");
 //            response.setContentType("application/vnd.ms-excel;charset=UTF-8");
             response.setHeader("Content-Disposition", "attachment; filename=" + fileName);

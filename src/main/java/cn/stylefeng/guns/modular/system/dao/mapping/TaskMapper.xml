@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.system.dao.TaskMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.system.model.Task">
+        <id column="id" property="id" />
+        <result column="title" property="title" />
+        <result column="endstatus" property="endstatus" />
+    </resultMap>
+    <resultMap id="ResultMoreMap" type="cn.stylefeng.guns.modular.system.model.Task" extends="BaseResultMap">
+        <collection property="taskassigns" ofType="cn.stylefeng.guns.modular.system.model.Taskassign">
+            <id column="tuid" property="id" />
+            <result column="taskid" property="taskid" />
+            <result column="worktype" property="worktype" />
+            <result column="assigntime" property="assigntime" />
+            <result column="assignmemo" property="assignmemo" />
+            <result column="status" property="status" />
+            <result column="creatorid" property="creatorid" />
+            <result column="createtime" property="createtime" />
+            <result column="closememo" property="closememo" />
+            <result column="endtime" property="endtime" />
+            <result column="is_exceed" property="is_exceed"/>
+            <association property="createuser" javaType="cn.stylefeng.guns.modular.system.model.User">
+                <id column="uid" property="id"/>
+                <result column="name" property="name"/>
+            </association>
+            <association property="workType" javaType="cn.stylefeng.guns.modular.system.model.WorkType">
+                <id column="wtid" property="id"/>
+                <result column="title" property="title"/>
+            </association>
+            <association property="eventStep" javaType="cn.stylefeng.guns.modular.system.model.EventStep">
+                <id column="esid" property="id"/>
+                <result column="pid" property="pid"/>
+                <result column="status" property="status"/>
+                <result column="event_type" property="eventType"/>
+                <result column="step" property="step"/>
+            </association>
+            <collection property="taskassignUnits" ofType="cn.stylefeng.guns.modular.system.model.TaskassignUnit">
+                <id column="unitid" property="id" />
+                <result column="tassignid" property="tassignid" />
+                <result column="unitid" property="unitId" />
+                <result column="personid" property="personid" />
+                <result column="endtime" property="endtime" />
+                <result column="requirements" property="requirements" />
+                <result column="status" property="status" />
+                <result column="updatetime" property="updatetime" />
+                <result column="create_time" property="createTime" />
+            </collection>
+        </collection>
+
+    </resultMap>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, title, endstatus
+    </sql>
+    <!-- 通用关联查询结果列 -->
+    <sql id="AS_Column_List">
+        t.id, t.title, t.endstatus
+    </sql>
+    <select id="selectWithManyById" resultMap="ResultMoreMap">
+        SELECT
+        <include refid="AS_Column_List"/>, CASE when sysdate()>ta.assigntime then '已超期' else '未超期' end as ta.is_exceed
+        FROM td_task t LEFT JOIN td_taskassign ta ON ta.taskid=t.id WHERE a.id=#{id}
+    </select>
+    <select id="selectCountByUnit" resultType="java.lang.Integer">
+        SELECT COUNT(id) FROM td_task t
+        <where>
+            ${ew.sqlSegment}
+        </where>
+    </select><select id="selectCountByUnitIds" resultType="java.util.HashMap">
+    SELECT  com.id companyId,com.title companyName,GROUP_CONCAT(a.id) assingids ,et.report_alias eventType FROM td_taskassign t LEFT JOIN td_taskassign_unit tu ON tu.tassignid =  t.id LEFT join t_tb_company com on
+    com.id=tu.unitid
+    LEFT join t_tb_event_step es on es.status=t.status and es.event_type=1 LEFT JOIN t_tb_event_type et ON et.id=es.event_type
+    <where>
+        ${ew.sqlSegment}
+    </where>
+    group by com.id
+</select>
+    <select id="selectAsPage" resultMap="ResultMoreMap">
+        SELECT
+        t.id, t.title,ta.id taid, ta.taskid, ta.worktype, ta.assigntime, ta.assignmemo, ta.status, ta.creatorid, ta.createtime, ta.closememo,ta.endtime, CASE when sysdate()>ta.assigntime then '已超期' else
+        '未超期' end as is_exceed ,u.name,wt.title,e.step
+        ,tu.id unitid, tu.tassignid, tu.unitid,tu.personid, tu.endtime, tu.requirements, tu.status, tu.updatetime, tu.createtime FROM
+        td_task t LEFT JOIN td_taskassign ta ON ta.taskid = t.id LEFT JOIN t_tb_work_type wt ON wt.id =
+        ta.worktype
+        LEFT JOIN t_tb_event_step e ON e.status=ta.status and e.event_type=1 LEFT JOIN sys_user u ON u.id = ta.creatorid LEFT JOIN td_taskassign_unit tu ON tu.tassignid =  ta.id  LEFT JOIN t_tb_company c
+        ON c.id=tu.unitid
+        <where>
+            ${ew.sqlSegment}
+        </where>
+    </select>
+
+
+
+</mapper>
