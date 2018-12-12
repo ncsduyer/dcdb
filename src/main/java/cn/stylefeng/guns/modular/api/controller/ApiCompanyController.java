@@ -6,6 +6,7 @@ import cn.stylefeng.guns.modular.DcCompany.service.ICompanyService;
 import cn.stylefeng.guns.modular.system.model.Company;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
+import com.baomidou.mybatisplus.mapper.Condition;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -65,8 +66,8 @@ public class ApiCompanyController extends BaseController {
     @ApiOperation(value = "获取督查责任单位列表")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseData list(String condition) {
-        return ResponseData.success(companyService.selectList(null));
+    public ResponseData list() {
+        return ResponseData.success(companyService.selectList(Condition.create().eq("status", 1)));
     }
 
     /**

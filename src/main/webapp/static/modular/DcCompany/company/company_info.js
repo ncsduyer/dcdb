@@ -52,7 +52,8 @@ CompanyInfoDlg.collectData = function () {
         .set('tel')
         .set('contact')
         .set('contactPhone')
-        .set('remarks');
+        .set('remarks')
+        .set('status');
 }
 
 /**

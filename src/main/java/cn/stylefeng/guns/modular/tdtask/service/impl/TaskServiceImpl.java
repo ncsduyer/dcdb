@@ -110,7 +110,6 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
                 Task task = new Task();
                 BeanUtils.copyProperties(addTaskDto, task);
                 insert(task);
-
                 Taskassign taskassign = new Taskassign();
                 taskassign.setTaskid(task.getId());
                 taskassign.setWorktype(addTaskDto.getWorktype());
@@ -133,7 +132,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
                     taskassignUnitService.insert(taskassignUnit);
                 }
 
-                return ResponseData.success();
+                return ResponseData.success(taskassign);
             } else {
                 return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
             }

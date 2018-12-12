@@ -24,6 +24,7 @@ public class Task extends Model<Task> {
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
+    private Integer pid;
     /**
      * 交办事项名称
      */
@@ -111,5 +112,13 @@ public class Task extends Model<Task> {
 
     public void setEndstatus(Integer endstatus) {
         this.endstatus = endstatus;
+    }
+
+    public Integer getPid() {
+        return pid;
+    }
+
+    public void setPid(Integer pid) {
+        this.pid = pid;
     }
 }

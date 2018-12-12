@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
@@ -20,6 +21,7 @@ import java.util.List;
  * @since 2018-12-10
  */
 @TableName("td_taskassign")
+@ApiModel
 public class Taskassign extends Model<Taskassign> {
 
     private static final long serialVersionUID = 1L;
@@ -29,7 +31,9 @@ public class Taskassign extends Model<Taskassign> {
     /**
      * 交办事项表ID
      */
+    @ApiModelProperty("交办事项表ID")
     private Integer taskid;
+    @ApiModelProperty("事项类型id")
     private Integer worktype;
 
     public Date getAssigntime() {
@@ -43,27 +47,34 @@ public class Taskassign extends Model<Taskassign> {
     /**
      * 交办时间
      */
+    @ApiModelProperty("交办截止时间")
     private Date assigntime;
     /**
      * 分派说明
      */
+    @ApiModelProperty("分派说明")
     private String assignmemo;
     /**
      * 状态（1-未反馈；2-已反馈办理中；3-部分完成；4-全部完成;5-事项归档；6-人为关闭；）
      */
+    @ApiModelProperty("状态")
     private Integer status;
     /**
      * 创建人id
      */
+    @ApiModelProperty("创建人id")
     private Integer creatorid;
     /**
      * 创建时间
      */
+    @ApiModelProperty("创建时间")
     private Date createtime;
     /**
      * 归档说明
      */
+    @ApiModelProperty("归档说明")
     private String closememo;
+    @ApiModelProperty("归档时间")
     private Date endtime;
 
     public List<TaskassignUnit> getTaskassignUnits() {
@@ -73,7 +84,7 @@ public class Taskassign extends Model<Taskassign> {
     public void setTaskassignUnits(List<TaskassignUnit> taskassignUnits) {
         this.taskassignUnits = taskassignUnits;
     }
-
+    @ApiModelProperty("督办单位列表")
     @TableField(exist = false)
     private List<TaskassignUnit> taskassignUnits;
     @ApiModelProperty("是否超期")

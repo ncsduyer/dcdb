@@ -54,6 +54,7 @@ public class Company extends Model<Company> {
      */
     private String remarks;
 
+    private Integer status;
 
     public Integer getId() {
         return id;
@@ -136,5 +137,13 @@ public class Company extends Model<Company> {
                 ", contactPhone=" + contactPhone +
                 ", remarks=" + remarks +
                 "}";
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

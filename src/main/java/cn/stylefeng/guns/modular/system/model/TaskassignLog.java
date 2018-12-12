@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,6 +20,7 @@ import java.util.Date;
  * @since 2018-12-10
  */
 @TableName("td_taskassign_log")
+@ApiModel
 public class TaskassignLog extends Model<TaskassignLog> {
 
     private static final long serialVersionUID = 1L;
@@ -30,21 +33,43 @@ public class TaskassignLog extends Model<TaskassignLog> {
     /**
      * 事务id
      */
-    @TableField("task_id")
-    private Integer taskId;
+    @ApiModelProperty("事务id")
+    private Integer taskid;
+    @ApiModelProperty("交办事项时间表ID")
+    private Integer tassignid;
+
+    public String getLogcontent() {
+        return logcontent;
+    }
+
+    public void setLogcontent(String logcontent) {
+        this.logcontent = logcontent;
+    }
+
+    public Date getCreatetime() {
+        return createtime;
+    }
+
+    public void setCreatetime(Date createtime) {
+        this.createtime = createtime;
+    }
+
     /**
      * 流程事务描述
      */
-    private Integer conternt;
+    @ApiModelProperty("流程事务描述")
+    private String logcontent;
     /**
      * 流程流转时间
      */
+    @ApiModelProperty("流程流转时间")
     @TableField("created_time")
-    private Date createdTime;
+    private Date createtime;
     /**
      * 当前流程步骤
      */
-    private Integer step;
+    @ApiModelProperty("当前流程步骤")
+    private Integer status;
 
 
     public Integer getId() {
@@ -55,51 +80,36 @@ public class TaskassignLog extends Model<TaskassignLog> {
         this.id = id;
     }
 
-    public Integer getTaskId() {
-        return taskId;
-    }
 
-    public void setTaskId(Integer taskId) {
-        this.taskId = taskId;
-    }
 
-    public Integer getConternt() {
-        return conternt;
-    }
-
-    public void setConternt(Integer conternt) {
-        this.conternt = conternt;
-    }
-
-    public Date getCreatedTime() {
-        return createdTime;
-    }
-
-    public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
-    }
-
-    public Integer getStep() {
-        return step;
-    }
-
-    public void setStep(Integer step) {
-        this.step = step;
-    }
 
     @Override
     protected Serializable pkVal() {
         return this.id;
     }
 
-    @Override
-    public String toString() {
-        return "TaskassignLog{" +
-        ", id=" + id +
-        ", taskId=" + taskId +
-        ", conternt=" + conternt +
-        ", createdTime=" + createdTime +
-        ", step=" + step +
-        "}";
+
+    public Integer getTassignid() {
+        return tassignid;
+    }
+
+    public void setTassignid(Integer tassignid) {
+        this.tassignid = tassignid;
+    }
+
+    public Integer getTaskid() {
+        return taskid;
+    }
+
+    public void setTaskid(Integer taskid) {
+        this.taskid = taskid;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

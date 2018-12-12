@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -17,6 +19,7 @@ import java.util.Date;
  * @since 2018-12-10
  */
 @TableName("td_taskassign_unit")
+@ApiModel
 public class TaskassignUnit extends Model<TaskassignUnit> {
 
     private static final long serialVersionUID = 1L;
@@ -26,31 +29,39 @@ public class TaskassignUnit extends Model<TaskassignUnit> {
     /**
      * 交办事项时间表ID
      */
+    @ApiModelProperty("交办事项时间表ID")
     private Integer tassignid;
     /**
      * 责任单位ID
      */
+    @ApiModelProperty("责任单位ID")
     private Integer unitid;
     /**
      * 督办责任人ID
      */
+    @ApiModelProperty("督办责任人ID")
     private Integer personid;
     /**
      * 办结时限
      */
+    @ApiModelProperty("办结时限")
     private Date endtime;
     /**
      * 办理要求
      */
+    @ApiModelProperty("办理要求")
     private String requirements;
     /**
      * 状态（1-新建未反馈；2-已反馈限期办理中；3-已反馈超期办理中；4-办理完成；）
      */
+    @ApiModelProperty("状态")
     private Integer status;
     /**
      * 更新时间
      */
+    @ApiModelProperty("更新时间")
     private Date updatetime;
+    @ApiModelProperty("创建时间")
     private Date createtime;
 
 

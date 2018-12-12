@@ -112,7 +112,7 @@ public class ApiWorkTypeController extends BaseController {
     @RequestMapping(value = "/companylist", method = RequestMethod.GET)
     @ResponseBody
     public ResponseData Companylist() {
-        return ResponseData.success(companyService.selectList(null));
+        return ResponseData.success(companyService.selectList(Condition.create().eq("status", 1)));
     }
 
     /**

@@ -4,6 +4,11 @@ import cn.stylefeng.guns.core.log.LogObjectHolder;
 import cn.stylefeng.guns.modular.system.model.TaskassignLog;
 import cn.stylefeng.guns.modular.tdtaskassignLog.service.ITaskassignLogService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
+import cn.stylefeng.roses.core.reqres.response.ResponseData;
+import com.baomidou.mybatisplus.mapper.Condition;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @Date 2018-12-10 16:02:53
  */
 @Controller
-@RequestMapping("/taskassignLog")
+@RequestMapping("/api/taskassignLog")
 public class TaskassignLogController extends BaseController {
 
     private String PREFIX = "/tdtaskassignLog/taskassignLog/";
@@ -57,10 +62,14 @@ public class TaskassignLogController extends BaseController {
     /**
      * 获取督察督办运转记录列表
      */
+    @ApiOperation(value = "督察督办运转记录列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "交办事项id", required = false, dataType = "String")
+    })
     @RequestMapping(value = "/list")
     @ResponseBody
-    public Object list(String condition) {
-        return taskassignLogService.selectList(null);
+    public ResponseData list(@RequestParam Integer id) {
+        return ResponseData.success(taskassignLogService.selectList(Condition.create().eq("tassignid", id).orderBy("status",true).orderBy("createtime", true)));
     }
 
     /**

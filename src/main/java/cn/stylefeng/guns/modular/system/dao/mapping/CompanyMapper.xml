@@ -12,11 +12,12 @@
         <result column="contact" property="contact"/>
         <result column="contact_phone" property="contactPhone"/>
         <result column="remarks" property="remarks"/>
+        <result column="status" property="status"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, title, abb_title, adress, tel, contact, contact_phone, remarks
+        id, title, abb_title, adress, tel, contact, contact_phone, remarks,status
     </sql>
 
 </mapper>

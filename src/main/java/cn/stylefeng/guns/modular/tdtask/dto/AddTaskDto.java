@@ -16,6 +16,8 @@ public class AddTaskDto {
     /**
      * 督办事项
      */
+    @ApiModelProperty("督办事项id")
+    private Integer pid;
     @ApiModelProperty("督办事项名称")
     @NotNull(message = "督办事项名称不能为空")
     private String title;
@@ -90,5 +92,13 @@ public class AddTaskDto {
 
     public void setCompanyIds(List<TaskassignUnit> companyIds) {
         this.companyIds = companyIds;
+    }
+
+    public Integer getPid() {
+        return pid;
+    }
+
+    public void setPid(Integer pid) {
+        this.pid = pid;
     }
 }

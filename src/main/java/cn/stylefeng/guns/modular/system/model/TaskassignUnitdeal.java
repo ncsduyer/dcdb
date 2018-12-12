@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,6 +20,7 @@ import java.util.Date;
  * @since 2018-12-10
  */
 @TableName("td_taskassign_unitdeal")
+@ApiModel
 public class TaskassignUnitdeal extends Model<TaskassignUnitdeal> {
 
     private static final long serialVersionUID = 1L;
@@ -27,39 +30,49 @@ public class TaskassignUnitdeal extends Model<TaskassignUnitdeal> {
     /**
      * 交办责任单位ID
      */
+    @ApiModelProperty("交办责任单位ID")
+//    @NotNull(message = "督办事项名称不能为空")
     private Integer taunitid;
     /**
      * 处理情况描述
      */
+    @ApiModelProperty("处理情况描述")
     private String dealdesc;
     /**
      * 状态（0-未完成；1-完成）
      */
+    @ApiModelProperty("状态")
     private Integer status;
     /**
      * 是否延期（0-未延期；1-延期）
      */
+    @ApiModelProperty("是否延期")
     private Integer isdelay;
     /**
      * 延期前办结时限
      */
+    @ApiModelProperty("延期前办结时限")
     private Date pretime;
     /**
      * 延期时间做为新的办结时限
      */
+    @ApiModelProperty("延期时间")
     private Date delaytime;
     /**
      * 创建人ID
      */
+    @ApiModelProperty("创建人ID")
     private Integer creatorid;
     /**
      * 创建时间
      */
+    @ApiModelProperty("创建时间")
     private Date createtime;
     /**
      * 完成时间
      */
     @TableField("finish_time")
+    @ApiModelProperty("完成时间")
     private Date finishTime;
 
 

@@ -1,8 +1,15 @@
 package cn.stylefeng.guns.modular.tdtaskassignUnit.service.impl;
 
+import cn.hutool.core.date.DateTime;
+import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
+import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.modular.system.dao.TaskassignUnitMapper;
 import cn.stylefeng.guns.modular.system.model.TaskassignUnit;
 import cn.stylefeng.guns.modular.tdtaskassignUnit.service.ITaskassignUnitService;
+import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
+import cn.stylefeng.roses.core.reqres.response.ResponseData;
+import cn.stylefeng.roses.core.util.ToolUtil;
+import com.baomidou.mybatisplus.mapper.Condition;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -17,4 +24,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper, TaskassignUnit> implements ITaskassignUnitService {
 
+    @Override
+    public ResponseData updateByTaskassignUnit(TaskassignUnit taskassignUnit) {
+        try{
+            TaskassignUnit ts=selectOne(Condition.create().eq("personid", ShiroKit.getUser().getId()).eq("id", taskassignUnit.getId()));
+            if (ToolUtil.isEmpty(ts)){
+                return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
+            }
+            ts.setEndtime(taskassignUnit.getEndtime());
+            ts.setRequirements(taskassignUnit.getRequirements());
+            ts.setUpdatetime(new DateTime());
+            ts.setStatus(taskassignUnit.getStatus());
+            updateById(ts);
+            return ResponseData.success();
+        }catch (Exception e){
+            return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
+        }
+    }
 }

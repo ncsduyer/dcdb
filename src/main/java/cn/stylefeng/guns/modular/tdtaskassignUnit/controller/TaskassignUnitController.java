@@ -1,16 +1,16 @@
 package cn.stylefeng.guns.modular.tdtaskassignUnit.controller;
 
-import cn.stylefeng.guns.core.log.LogObjectHolder;
+import cn.stylefeng.guns.core.common.annotion.Permission;
 import cn.stylefeng.guns.modular.system.model.TaskassignUnit;
 import cn.stylefeng.guns.modular.tdtaskassignUnit.service.ITaskassignUnitService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
+import cn.stylefeng.roses.core.reqres.response.ResponseData;
+import com.baomidou.mybatisplus.mapper.Condition;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 单位督办记录控制器
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author fengshuonan
  * @Date 2018-12-10 16:04:22
  */
-@Controller
+@RestController
 @RequestMapping("/taskassignUnit")
 public class TaskassignUnitController extends BaseController {
 
@@ -27,78 +27,66 @@ public class TaskassignUnitController extends BaseController {
     @Autowired
     private ITaskassignUnitService taskassignUnitService;
 
-    /**
-     * 跳转到单位督办记录首页
-     */
-    @RequestMapping("")
-    public String index() {
-        return PREFIX + "taskassignUnit.html";
-    }
-
-    /**
-     * 跳转到添加单位督办记录
-     */
-    @RequestMapping("/taskassignUnit_add")
-    public String taskassignUnitAdd() {
-        return PREFIX + "taskassignUnit_add.html";
-    }
-
-    /**
-     * 跳转到修改单位督办记录
-     */
-    @RequestMapping("/taskassignUnit_update/{taskassignUnitId}")
-    public String taskassignUnitUpdate(@PathVariable Integer taskassignUnitId, Model model) {
-        TaskassignUnit taskassignUnit = taskassignUnitService.selectById(taskassignUnitId);
-        model.addAttribute("item",taskassignUnit);
-        LogObjectHolder.me().set(taskassignUnit);
-        return PREFIX + "taskassignUnit_edit.html";
-    }
+    
 
     /**
      * 获取单位督办记录列表
      */
-    @RequestMapping(value = "/list")
+    @ApiOperation(value = "获取单位督办记录列表")
+    @ApiImplicitParams({
+
+    })
+    @RequestMapping(value = "/list",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public Object list(String condition) {
-        return taskassignUnitService.selectList(null);
+    @Permission
+    public ResponseData list() {
+        return ResponseData.success(taskassignUnitService.selectList(Condition.create().orderBy("tassignid", false)));
     }
 
-    /**
-     * 新增单位督办记录
-     */
-    @RequestMapping(value = "/add")
-    @ResponseBody
-    public Object add(TaskassignUnit taskassignUnit) {
-        taskassignUnitService.insert(taskassignUnit);
-        return SUCCESS_TIP;
-    }
+//    /**
+//     * 新增单位督办记录
+//     */
+//    @ApiOperation(value = "新增单位督办记录")
+//    @Permission
+//    @RequestMapping(value = "/add")
+//    @ResponseBody
+//    public ResponseData add(TaskassignUnit taskassignUnit) {
+//        taskassignUnitService.insert(taskassignUnit);
+//        return SUCCESS_TIP;
+//    }
 
-    /**
-     * 删除单位督办记录
-     */
-    @RequestMapping(value = "/delete")
-    @ResponseBody
-    public Object delete(@RequestParam Integer taskassignUnitId) {
-        taskassignUnitService.deleteById(taskassignUnitId);
-        return SUCCESS_TIP;
-    }
+//    /**
+//     * 删除单位督办记录
+//     */
+//    @RequestMapping(value = "/delete")
+//    @ResponseBody
+//    public ResponseData delete(@RequestParam Integer taskassignUnitId) {
+//        taskassignUnitService.deleteById(taskassignUnitId);
+//        return SUCCESS_TIP;
+//    }
 
     /**
      * 修改单位督办记录
      */
+    @ApiOperation(value = "修改单位督办记录")
+    @Permission
     @RequestMapping(value = "/update")
     @ResponseBody
-    public Object update(TaskassignUnit taskassignUnit) {
-        taskassignUnitService.updateById(taskassignUnit);
-        return SUCCESS_TIP;
+    public ResponseData update(TaskassignUnit taskassignUnit) {
+       return taskassignUnitService.updateByTaskassignUnit(taskassignUnit);
     }
 
     /**
      * 单位督办记录详情
      */
-    @RequestMapping(value = "/detail/{taskassignUnitId}")
+    @ApiOperation(value = "单位督办记录详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "交办事项事项id", required = true, dataType = "Long"),
+    })
+    @Permission
+    @RequestMapping(value = "/detail/{id}")
     @ResponseBody
-    public Object detail(@PathVariable("taskassignUnitId") Integer taskassignUnitId) {
-        return taskassignUnitService.selectById(taskassignUnitId);
+    public ResponseData detail(@PathVariable("id") Integer taskassignUnitId) {
+        return ResponseData.success(taskassignUnitService.selectById(taskassignUnitId));
     }
 }
