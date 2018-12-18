@@ -16,13 +16,33 @@
                             style="background-color: #ffffff !important;"
                             selectFlag="true" selectId="pcodeTreeDiv" selectTreeId="pcodeTree" selectStyle="width:244px !important;"/>
                     <#select id="ismenu" name="是否是菜单">
-                        <option value="1">是</option>
-                        <option value="0">不是</option>
+                    <option value="1"
+                            @if(menu.ismenu==1){
+                            selected
+                            @}
+                    >是</option>
+                    <option value="0"
+                            @if(menu.ismenu==0){
+                            selected
+                            @}
+                    >否</option>
                     </#select>
                 <#select id="menutype" name="菜单端类型">
-                <option value="1">公用</option>
-                <option value="2">pc</option>
-                <option value="3">app</option>
+                <option value="1"
+                        @if(menu.menutype==1){
+                        selected
+                        @}
+                >公用</option>
+                <option value="2"
+                        @if(menu.menutype==2){
+                        selected
+                        @}
+                >pc</option>
+                <option value="3"
+                        @if(menu.menutype==3){
+                        selected
+                        @}
+                >app</option>
                 </#select>
 
                 </div>

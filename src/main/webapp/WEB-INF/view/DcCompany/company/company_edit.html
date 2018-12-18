@@ -18,8 +18,16 @@
                     <#input id="contactPhone" name="负责人电话" value="${item.contactPhone}" underline="true"/>
                     <#input id="remarks" name="详细信息" value="${item.remarks}" />
                     <#select id="status" name="是否可用">
-                    <option value="1">是</option>
-                    <option value="0">否</option>
+                    <option value="1"
+                            @if(item.status==1){
+                            selected
+                            @}
+                    >是</option>
+                    <option value="0"
+                            @if(item.status==0){
+                            selected
+                            @}
+                    >否</option>
                 </#select>
                 </div>
             </div>

@@ -6,6 +6,7 @@ import cn.stylefeng.guns.modular.tdtaskassignUnit.service.ITaskassignUnitService
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import com.baomidou.mybatisplus.mapper.Condition;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
  * @author fengshuonan
  * @Date 2018-12-10 16:04:22
  */
+@Api(tags = "单位督办记录")
 @RestController
 @RequestMapping("/taskassignUnit")
 public class TaskassignUnitController extends BaseController {
@@ -70,7 +72,7 @@ public class TaskassignUnitController extends BaseController {
      */
     @ApiOperation(value = "修改单位督办记录")
     @Permission
-    @RequestMapping(value = "/update")
+    @RequestMapping(value = "/update",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
     public ResponseData update(TaskassignUnit taskassignUnit) {
        return taskassignUnitService.updateByTaskassignUnit(taskassignUnit);
@@ -84,7 +86,7 @@ public class TaskassignUnitController extends BaseController {
             @ApiImplicitParam(name = "id", value = "交办事项事项id", required = true, dataType = "Long"),
     })
     @Permission
-    @RequestMapping(value = "/detail/{id}")
+    @RequestMapping(value = "/detail/{id}",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
     public ResponseData detail(@PathVariable("id") Integer taskassignUnitId) {
         return ResponseData.success(taskassignUnitService.selectById(taskassignUnitId));

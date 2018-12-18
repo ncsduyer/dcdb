@@ -1,4 +1,4 @@
-package cn.stylefeng.guns.core.aop;
+package cn.stylefeng.guns.modular.tdtask.aop;
 
 import cn.hutool.core.date.DateTime;
 import cn.stylefeng.guns.core.util.JsonUtils;
@@ -86,7 +86,7 @@ public class TaskAop {
         for (TaskassignUnit t :
                 taskassignUnits) {
             //获取手机号
-           User user = userService.selectById(Condition.create().eq("id",t.getPersonid()));
+            User user = userService.selectById(t.getPersonid());
             AppNotice appNotice = new AppNotice();
             appNotice.setTitle(task.getTitle());
             appNotice.setContent(taskassign.getAssignmemo());

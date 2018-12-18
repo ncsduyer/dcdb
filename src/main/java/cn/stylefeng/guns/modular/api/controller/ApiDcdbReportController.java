@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -153,12 +154,11 @@ public class ApiDcdbReportController extends BaseController {
      */
     @RequestMapping(value = "/export", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public void export(@RequestParam(value = "dateGroup") String dateGroup, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void export(@RequestParam(value = "dateGroup") String dateGroup, @RequestParam(value = "type",defaultValue = "1") Integer type, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         //excle模板文件名
         String template="dcdbzhcx.xml";
         //excel文件名
-        String fileName = "督查督办数据分析表" + ".xls";
 
         //sheet名
         String sheetName = "督查督办数据分析表";
@@ -181,20 +181,39 @@ public class ApiDcdbReportController extends BaseController {
 //            content[i][5] = obj.getUseTime();
 //            content[i][6] = obj.getStatus();
 //        }
+        String fileName;
+    switch (type){
+        case 1:
+            //创建HSSFWorkbook
+             fileName = "督查督办数据分析表" + ".xls";
+            HSSFWorkbook wb = ExportUtil.getHSSFWorkbook(template,sheetName,content);
 
-        //创建HSSFWorkbook
-        HSSFWorkbook wb = ExportUtil.getHSSFWorkbook(template,sheetName,content);
+            //响应到客户端
+            try {
+                ExportUtil.setResponseHeader(response, fileName);
+                OutputStream os = response.getOutputStream();
+                wb.write(os);
+                os.flush();
+                os.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        case 2:
+             fileName = "督查督办数据分析表" + ".doc";
+            //创建HSSFWorkbook
+            XWPFDocument wd = ExportUtil.getXWPFDocument(template,sheetName,content);
 
-        //响应到客户端
-        try {
-            ExportUtil.setResponseHeader(response, fileName);
-            OutputStream os = response.getOutputStream();
-            wb.write(os);
-            os.flush();
-            os.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            //响应到客户端
+            try {
+                ExportUtil.setResponseHeader(response, fileName);
+                OutputStream os = response.getOutputStream();
+                wd.write(os);
+                os.flush();
+                os.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+    }
     }
 
 

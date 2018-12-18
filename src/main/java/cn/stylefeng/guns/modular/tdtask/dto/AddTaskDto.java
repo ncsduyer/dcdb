@@ -5,14 +5,13 @@ import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
 @ApiModel
-public class AddTaskDto {
+public class AddTaskDto{
     /**
      * 督办事项
      */
@@ -39,8 +38,30 @@ public class AddTaskDto {
     @ApiModelProperty("最后期限")
     @JSONField(format = "yyyy-MM-dd HH:mm")
     @NotNull(message = "最后期限不能为空")
-    @Future
     private Date assigntime;
+
+    public Date getCreatetime() {
+        return createtime;
+    }
+
+    public void setCreatetime(Date createtime) {
+        this.createtime = createtime;
+    }
+
+    public Date getEndtime() {
+        return endtime;
+    }
+
+    public void setEndtime(Date endtime) {
+        this.endtime = endtime;
+    }
+
+    @ApiModelProperty("创建时间")
+    @JSONField(format = "yyyy-MM-dd HH:mm")
+    private Date createtime;
+    @JSONField(format = "yyyy-MM-dd HH:mm")
+    @ApiModelProperty("归档时间")
+    private Date endtime;
     /**
      * 办理要求
      */

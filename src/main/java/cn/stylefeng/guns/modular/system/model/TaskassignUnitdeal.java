@@ -68,12 +68,21 @@ public class TaskassignUnitdeal extends Model<TaskassignUnitdeal> {
      */
     @ApiModelProperty("创建时间")
     private Date createtime;
+
+    public Date getFinishtime() {
+        return finishtime;
+    }
+
+    public void setFinishtime(Date finishtime) {
+        this.finishtime = finishtime;
+    }
+
     /**
      * 完成时间
      */
-    @TableField("finish_time")
+    @TableField("finishtime")
     @ApiModelProperty("完成时间")
-    private Date finishTime;
+    private Date finishtime;
 
 
     public Integer getId() {
@@ -148,13 +157,7 @@ public class TaskassignUnitdeal extends Model<TaskassignUnitdeal> {
         this.createtime = createtime;
     }
 
-    public Date getFinishTime() {
-        return finishTime;
-    }
 
-    public void setFinishTime(Date finishTime) {
-        this.finishTime = finishTime;
-    }
 
     @Override
     protected Serializable pkVal() {
@@ -173,7 +176,7 @@ public class TaskassignUnitdeal extends Model<TaskassignUnitdeal> {
         ", delaytime=" + delaytime +
         ", creatorid=" + creatorid +
         ", createtime=" + createtime +
-        ", finishTime=" + finishTime +
+        ", finishTime=" + finishtime +
         "}";
     }
 }

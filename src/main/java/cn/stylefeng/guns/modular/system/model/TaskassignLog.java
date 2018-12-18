@@ -63,7 +63,7 @@ public class TaskassignLog extends Model<TaskassignLog> {
      * 流程流转时间
      */
     @ApiModelProperty("流程流转时间")
-    @TableField("created_time")
+    @TableField("createtime")
     private Date createtime;
     /**
      * 当前流程步骤

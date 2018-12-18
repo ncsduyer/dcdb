@@ -31,7 +31,7 @@ public class VoUtil {
             return date;
         }else{
             float days = (float) (total / (1000 * 60 * 60 * 24));
-            return String.format("%d天", days);
+            return String.format("%f天", days);
         }
     }
     private String accuracy(double num, double total, int scale){

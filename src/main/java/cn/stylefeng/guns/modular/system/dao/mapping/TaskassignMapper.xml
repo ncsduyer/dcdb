@@ -15,6 +15,21 @@
         <result column="closememo" property="closememo" />
         <result column="endtime" property="endtime" />
         <result column="is_exceed" property="is_exceed"/>
+        <association property="createuser" javaType="cn.stylefeng.guns.modular.system.model.User">
+            <id column="uid" property="id"/>
+            <result column="name" property="name"/>
+        </association>
+        <association property="workType" javaType="cn.stylefeng.guns.modular.system.model.WorkType">
+            <id column="wtid" property="id"/>
+            <result column="title" property="title"/>
+        </association>
+        <association property="eventStep" javaType="cn.stylefeng.guns.modular.system.model.EventStep">
+            <id column="esid" property="id"/>
+            <result column="pid" property="pid"/>
+            <result column="status" property="status"/>
+            <result column="event_type" property="eventType"/>
+            <result column="step" property="step"/>
+        </association>
         <collection property="taskassignUnits" ofType="cn.stylefeng.guns.modular.system.model.TaskassignUnit">
             <id column="unitid" property="id" />
             <result column="tassignid" property="tassignid" />

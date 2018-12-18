@@ -34,36 +34,10 @@ public class Task extends Model<Task> {
      */
     private Integer endstatus;
 
-    public User getCreateuser() {
-        return createuser;
-    }
 
-    public void setCreateuser(User createuser) {
-        this.createuser = createuser;
-    }
 
-    public WorkType getWorkType() {
-        return workType;
-    }
 
-    public void setWorkType(WorkType workType) {
-        this.workType = workType;
-    }
 
-    public EventStep getEventStep() {
-        return eventStep;
-    }
-
-    public void setEventStep(EventStep eventStep) {
-        this.eventStep = eventStep;
-    }
-
-    @TableField(exist = false)
-    private User createuser;
-    @TableField(exist = false)
-    private WorkType workType;
-    @TableField(exist = false)
-    private EventStep eventStep;
     @TableField(exist = false)
     private List<Taskassign> taskassigns;
 

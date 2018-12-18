@@ -8,6 +8,7 @@ import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import com.baomidou.mybatisplus.mapper.Condition;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
  * @author fengshuonan
  * @Date 2018-12-10 16:04:49
  */
+@Api(tags = "单位督办日志")
 @RestController
 @RequestMapping("/taskassignUnitdeal")
 public class TaskassignUnitdealController extends BaseController {
@@ -50,7 +52,7 @@ public class TaskassignUnitdealController extends BaseController {
      */
     @ApiOperation(value = "新增单位督办日志记录")
     @Permission
-    @RequestMapping(value = "/add")
+    @RequestMapping(value = "/add",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
     public ResponseData add(TaskassignUnitdeal taskassignUnitdeal) {
         if (taskassignUnitdealService.insert(taskassignUnitdeal)){
@@ -74,7 +76,7 @@ public class TaskassignUnitdealController extends BaseController {
      */
     @ApiOperation(value = "修改单位督办日志记录")
     @Permission
-    @RequestMapping(value = "/update")
+    @RequestMapping(value = "/update",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
     public ResponseData update(TaskassignUnitdeal taskassignUnitdeal) {
        return taskassignUnitdealService.updateByTaskassignUnitdeal(taskassignUnitdeal);
@@ -89,7 +91,7 @@ public class TaskassignUnitdealController extends BaseController {
             @ApiImplicitParam(name = "id", value = "交办事项事项id", required = true, dataType = "Long"),
     })
     @Permission
-    @RequestMapping(value = "/detail/{id}")
+    @RequestMapping(value = "/detail/{id}",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
     public ResponseData detail(@PathVariable("id") Integer id) {
         return ResponseData.success(taskassignUnitdealService.selectById(id));

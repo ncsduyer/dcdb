@@ -12,6 +12,7 @@ import cn.stylefeng.guns.modular.system.model.TaskassignUnit;
 import cn.stylefeng.guns.modular.tdtask.dto.AddTaskDto;
 import cn.stylefeng.guns.modular.tdtask.dto.SreachTaskDto;
 import cn.stylefeng.guns.modular.tdtask.service.ITaskService;
+import cn.stylefeng.guns.modular.tdtask.vo.TaskVo;
 import cn.stylefeng.guns.modular.tdtaskassign.service.ITaskassignService;
 import cn.stylefeng.guns.modular.tdtaskassignUnit.service.ITaskassignUnitService;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
@@ -54,7 +55,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
             Bettime bettime=new Bettime(sreachTaskDto);
             sreachTaskDto.setBeforeTime(bettime.getBeforeTime());
             sreachTaskDto.setAfterTime(bettime.getAfterTime());
-            Page<Task> page = new Page<>(sreachTaskDto.getPage(), sreachTaskDto.getLimit());
+            Page<TaskVo> page = new Page<>(sreachTaskDto.getPage(), sreachTaskDto.getLimit());
             EntityWrapper<Task> ew = new EntityWrapper<>();
             ew.setEntity(new Task());
             ew.between("ta.createtime", sreachTaskDto.getBeforeTime(), sreachTaskDto.getAfterTime());
@@ -87,13 +88,16 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
 
 
             ArrayList<Task> arrayList = taskMapper.selectAsPage(page,ew);
-
+            ArrayList<TaskVo> taskVos=new ArrayList<>();
             for (Task task : arrayList) {
                 for (Taskassign taskassign:task.getTaskassigns()){
                     taskassign.setUseTime(VoUtil.getUseTime(taskassign.getCreatetime(), taskassign.getEndtime()));
+                    TaskVo taskVo=new TaskVo(task.getTitle(),taskassign);
+
+                    taskVos.add(taskVo);
                 }
             }
-            page.setRecords(arrayList);
+            page.setRecords(taskVos);
             page.setTotal(arrayList.size());
             return ResponseData.success(page);
         }catch (Exception e){

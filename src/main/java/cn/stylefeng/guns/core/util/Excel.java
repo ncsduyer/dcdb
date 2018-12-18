@@ -13,7 +13,9 @@ import java.io.IOException;
 import java.util.List;
 
 public class Excel {
-    private String sheet;
+    private  HSSFSheet sheet;
+    private int rownum=0;
+    private String sheetname;
     private Element root;
 
 
@@ -31,11 +33,12 @@ public class Excel {
             hssfWorkbook=new HSSFWorkbook();
 
             String templateName=root.getAttribute("name").getValue();
-            if (StringUtils.isNotBlank(this.sheet)){
-            HSSFSheet sheet = hssfWorkbook.createSheet(this.sheet);
+            if (StringUtils.isNotBlank(this.sheetname)){
+                this.sheet = hssfWorkbook.createSheet(this.sheetname);
+            }else{
+                sheet = hssfWorkbook.createSheet(templateName);
             }
-            HSSFSheet sheet = hssfWorkbook.createSheet(templateName);
-            int rownum=0;
+             rownum=0;
             int colnum=0;
             Element colgroup=root.getChild("colgroup");
             //设置列宽
@@ -66,6 +69,23 @@ public class Excel {
             e.printStackTrace();
         }
 
+    }
+
+    public Excel(String template, String[][] values) {
+        new Excel(template).setContet(values);
+    }
+
+    private void setContet(String[][] values) {
+        //创建内容
+        HSSFRow row;
+        for (int i = 1; i < values.length; i++) {
+            row = sheet.createRow(rownum);
+
+            for (int j = 0; j < values[i].length; j++) {
+                //将内容按顺序赋给对应的列对象
+                row.createCell(j).setCellValue(values[i][j]);
+            }
+        }
     }
 
     private int setThead(HSSFSheet sheet, int rownum) {
@@ -133,8 +153,8 @@ public class Excel {
         return rownum;
     }
 
-    public Excel(String template,String sheet) {
-        this.sheet = sheet;
+    public Excel(String template,String sheetname) {
+        this.sheetname = sheetname;
         new Excel(template);
     }
 

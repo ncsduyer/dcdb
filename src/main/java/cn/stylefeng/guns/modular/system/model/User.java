@@ -74,6 +74,7 @@ public class User extends Model<User> {
      * 状态(1：启用  2：冻结  3：删除）
      */
     private Integer status;
+    private Integer isagent;
     /**
      * 创建时间
      */
@@ -228,5 +229,13 @@ public class User extends Model<User> {
                 ", createtime=" + createtime +
                 ", version=" + version +
                 "}";
+    }
+
+    public Integer getIsagent() {
+        return isagent;
+    }
+
+    public void setIsagent(Integer isagent) {
+        this.isagent = isagent;
     }
 }

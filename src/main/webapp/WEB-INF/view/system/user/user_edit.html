@@ -31,6 +31,18 @@
 						style="background-color: #ffffff !important;"/>
 
 						<#input id="phone" name="电话" value="${user.phone}"/>
+						<#select id="isagent" name="是否为督办负责人">
+						<option value="1"
+								@if(user.isagent==1){
+								selected
+					@}
+					>是</option>
+						<option value="0"
+								@if(user.isagent==0){
+								selected
+								@}
+						>否</option>
+					</#select>
 					</div>
 				</div>
 			</div>

@@ -9,6 +9,7 @@ import cn.stylefeng.guns.modular.tdtaskassign.service.ITaskassignService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import com.baomidou.mybatisplus.mapper.Condition;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -25,6 +26,7 @@ import java.util.Map;
  * @author fengshuonan
  * @Date 2018-12-10 15:59:04
  */
+@Api(tags = "交办事项")
 @RestController
 @RequestMapping("/api/task")
 public class TaskController extends BaseController {
@@ -41,7 +43,7 @@ public class TaskController extends BaseController {
     /**
      * 跳转到添加交办事项
      */
-    @RequestMapping("/index")
+    @RequestMapping(value = "/index",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
     public ResponseData index(@RequestBody Map<String, Integer[]> map) {
         Map<String, Integer> ret = new HashMap<>();

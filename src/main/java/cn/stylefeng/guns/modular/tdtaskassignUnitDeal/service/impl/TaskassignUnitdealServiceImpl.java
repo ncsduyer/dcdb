@@ -26,16 +26,16 @@ public class TaskassignUnitdealServiceImpl extends ServiceImpl<TaskassignUnitdea
     public ResponseData updateByTaskassignUnitdeal(TaskassignUnitdeal taskassignUnitdeal) {
         try {
             if (taskassignUnitdeal.getStatus()==1){
-                if (taskassignUnitdeal.getFinishTime().before(taskassignUnitdeal.getCreatetime())){
+                if (taskassignUnitdeal.getFinishtime().before(taskassignUnitdeal.getCreatetime())){
                    return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
                 }
-                if (ToolUtil.isEmpty(taskassignUnitdeal.getFinishTime())){
-                  taskassignUnitdeal.setFinishTime(new DateTime());
+                if (ToolUtil.isEmpty(taskassignUnitdeal.getFinishtime())){
+                  taskassignUnitdeal.setFinishtime(new DateTime());
                 }
                 taskassignUnitdeal.setPretime(null);
                 taskassignUnitdeal.setDelaytime(null);
             }else{
-                taskassignUnitdeal.setFinishTime(null);
+                taskassignUnitdeal.setFinishtime(null);
                 if (taskassignUnitdeal.getIsdelay()==1){
                     taskassignUnitdeal.setPretime(selectById(taskassignUnitdeal.getId()).getDelaytime());
                 }

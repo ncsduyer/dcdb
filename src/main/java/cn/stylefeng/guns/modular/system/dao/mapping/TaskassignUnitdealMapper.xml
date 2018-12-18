@@ -13,12 +13,12 @@
         <result column="delaytime" property="delaytime" />
         <result column="creatorid" property="creatorid" />
         <result column="createtime" property="createtime" />
-        <result column="finish_time" property="finishTime" />
+        <result column="finishtime" property="finishtime" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, taunitid, dealdesc, status, isdelay, pretime, delaytime, creatorid, createtime, finish_time
+        id, taunitid, dealdesc, status, isdelay, pretime, delaytime, creatorid, createtime, finishtime
     </sql>
 
 </mapper>

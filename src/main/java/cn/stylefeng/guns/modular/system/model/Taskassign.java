@@ -76,7 +76,34 @@ public class Taskassign extends Model<Taskassign> {
     private String closememo;
     @ApiModelProperty("归档时间")
     private Date endtime;
+    @TableField(exist = false)
+    private User createuser;
+    @TableField(exist = false)
+    private WorkType workType;
+    @TableField(exist = false)
+    private EventStep eventStep;
+    public WorkType getWorkType() {
+        return workType;
+    }
 
+    public void setWorkType(WorkType workType) {
+        this.workType = workType;
+    }
+
+    public EventStep getEventStep() {
+        return eventStep;
+    }
+
+    public void setEventStep(EventStep eventStep) {
+        this.eventStep = eventStep;
+    }
+    public User getCreateuser() {
+        return createuser;
+    }
+
+    public void setCreateuser(User createuser) {
+        this.createuser = createuser;
+    }
     public List<TaskassignUnit> getTaskassignUnits() {
         return taskassignUnits;
     }

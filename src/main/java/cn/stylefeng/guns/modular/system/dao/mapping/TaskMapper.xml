@@ -28,7 +28,7 @@
             </association>
             <association property="workType" javaType="cn.stylefeng.guns.modular.system.model.WorkType">
                 <id column="wtid" property="id"/>
-                <result column="title" property="title"/>
+                <result column="wtitle" property="title"/>
             </association>
             <association property="eventStep" javaType="cn.stylefeng.guns.modular.system.model.EventStep">
                 <id column="esid" property="id"/>
@@ -40,13 +40,28 @@
             <collection property="taskassignUnits" ofType="cn.stylefeng.guns.modular.system.model.TaskassignUnit">
                 <id column="unitid" property="id" />
                 <result column="tassignid" property="tassignid" />
-                <result column="unitid" property="unitId" />
+                <result column="unitid" property="unitid" />
                 <result column="personid" property="personid" />
                 <result column="endtime" property="endtime" />
                 <result column="requirements" property="requirements" />
                 <result column="status" property="status" />
                 <result column="updatetime" property="updatetime" />
-                <result column="create_time" property="createTime" />
+                <result column="createtime" property="createtime" />
+                <association property="company" javaType="cn.stylefeng.guns.modular.system.model.Company">
+                    <result column="ctitle" property="title"/>
+                </association>
+                <collection property="taskassignUnitdeals" ofType="cn.stylefeng.guns.modular.system.model.TaskassignUnitdeal" >
+                    <id column="tudid" property="id" />
+                    <result column="tudtaunitid" property="taunitid" />
+                    <result column="tuddealdesc" property="dealdesc" />
+                    <result column="tudstatus" property="status" />
+                    <result column="tudisdelay" property="isdelay" />
+                    <result column="tudpretime" property="pretime" />
+                    <result column="tuddelaytime" property="delaytime" />
+                    <result column="tudcreatorid" property="creatorid" />
+                    <result column="tudcreatetime" property="createtime" />
+                    <result column="tudfinishtime" property="finishtime" />
+                </collection>
             </collection>
         </collection>
 
@@ -81,12 +96,11 @@
     <select id="selectAsPage" resultMap="ResultMoreMap">
         SELECT
         t.id, t.title,ta.id taid, ta.taskid, ta.worktype, ta.assigntime, ta.assignmemo, ta.status, ta.creatorid, ta.createtime, ta.closememo,ta.endtime, CASE when sysdate()>ta.assigntime then '已超期' else
-        '未超期' end as is_exceed ,u.name,wt.title,e.step
-        ,tu.id unitid, tu.tassignid, tu.unitid,tu.personid, tu.endtime, tu.requirements, tu.status, tu.updatetime, tu.createtime FROM
+        '未超期' end as is_exceed ,u.name,wt.title wtitle,e.step
+        ,tu.id unitid, tu.tassignid, tu.unitid,tu.personid, tu.endtime, tu.requirements, tu.status, tu.updatetime, tu.createtime,c.title ctitle , tud.id tudid, tud.taunitid tudtaunitid, tud.dealdesc tuddealdesc, tud.status tudstatus, tud.isdelay tudisdelay, tud.pretime tudpretime, tud.delaytime tuddelaytime, tud.creatorid tudcreatorid, tud.createtime tudcreatetime, tud.finishtime tudfinishtime FROM
         td_task t LEFT JOIN td_taskassign ta ON ta.taskid = t.id LEFT JOIN t_tb_work_type wt ON wt.id =
         ta.worktype
-        LEFT JOIN t_tb_event_step e ON e.status=ta.status and e.event_type=1 LEFT JOIN sys_user u ON u.id = ta.creatorid LEFT JOIN td_taskassign_unit tu ON tu.tassignid =  ta.id  LEFT JOIN t_tb_company c
-        ON c.id=tu.unitid
+        LEFT JOIN t_tb_event_step e ON e.status=ta.status and e.event_type=1 LEFT JOIN sys_user u ON u.id = ta.creatorid LEFT JOIN td_taskassign_unit tu ON tu.tassignid =  ta.id  LEFT JOIN t_tb_company c ON c.id=tu.unitid LEFT JOIN td_taskassign_unitdeal tud ON tud.taunitid=tu.id
         <where>
             ${ew.sqlSegment}
         </where>

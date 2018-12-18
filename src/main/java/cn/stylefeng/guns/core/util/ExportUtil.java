@@ -19,13 +19,13 @@ public class ExportUtil {
     public static HSSFWorkbook getHSSFWorkbook(String template, String sheetName, String[][] values) {
 
         // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
-        HSSFWorkbook wb=new Excel(template).getHssfWorkbook();
+        HSSFWorkbook wb=new Excel(template,values).getHssfWorkbook();
         return wb;
     }
-    public static XWPFDocument getXWPFTemplate (String template, String sheetName, String[][] values) {
+    public static XWPFDocument getXWPFDocument (String template, String sheetName, String[][] values) {
 
         // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
-        XWPFDocument wb=new Word(template).getXWPFTemplate();
+        XWPFDocument wb=new Word(template,values).getXWPFDocument();
         return wb;
     }
 

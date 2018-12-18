@@ -20,14 +20,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 督查类型管理控制器
+ * 交办事项类型管理控制器
  *
  * @author fengshuonan
  * @Date 2018-10-15 16:21:35
  */
 @Controller
 @RequestMapping("/api/apiworkType")
-@Api(tags = "督查类型api")
+@Api(tags = "交办事项类型api")
 public class ApiWorkTypeController extends BaseController {
 
     private String PREFIX = "/DcWorkType/workType/";
@@ -42,7 +42,7 @@ public class ApiWorkTypeController extends BaseController {
     private IEventStepService eventStepService;
 
     /**
-     * 跳转到督查类型管理首页
+     * 跳转到交办事项类型管理首页
      */
     @RequestMapping("")
 
@@ -51,7 +51,7 @@ public class ApiWorkTypeController extends BaseController {
     }
 
     /**
-     * 跳转到添加督查类型管理
+     * 跳转到添加交办事项类型管理
      */
     @RequestMapping("/workType_add")
 
@@ -60,7 +60,7 @@ public class ApiWorkTypeController extends BaseController {
     }
 
     /**
-     * 跳转到修改督查类型管理
+     * 跳转到修改交办事项类型管理
      */
     @RequestMapping("/workType_update/{workTypeId}")
 
@@ -73,9 +73,9 @@ public class ApiWorkTypeController extends BaseController {
     }
 
     /**
-     * 获取督查类型管理列表
+     * 获取交办事项类型管理列表
      */
-    @ApiOperation(value = "获取督查类型管理列表")
+    @ApiOperation(value = "获取交办事项类型管理列表")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
     public ResponseData list() {
@@ -89,7 +89,7 @@ public class ApiWorkTypeController extends BaseController {
     @RequestMapping(value = "/userlist", method = RequestMethod.GET)
     @ResponseBody
     public ResponseData Userlist() {
-        return ResponseData.success(userService.selectList(Condition.create().setSqlSelect("id,name").eq("status", 1)));
+        return ResponseData.success(userService.selectList(Condition.create().setSqlSelect("id,name").eq("status", 1).eq("isagent", 1)));
     }
 
     /**
@@ -106,17 +106,17 @@ public class ApiWorkTypeController extends BaseController {
     }
 
     /**
-     * 获取督查单位列表
+     * 获取交办事项单位列表
      */
-    @ApiOperation(value = "获取督查单位列表")
+    @ApiOperation(value = "获取交办事项单位列表")
     @RequestMapping(value = "/companylist", method = RequestMethod.GET)
     @ResponseBody
     public ResponseData Companylist() {
-        return ResponseData.success(companyService.selectList(Condition.create().eq("status", 1)));
+        return ResponseData.success(companyService.selectList(Condition.create().eq("status", 1).orderBy("id", true)));
     }
 
     /**
-     * 新增督查类型管理
+     * 新增交办事项类型管理
      */
     @RequestMapping(value = "/add")
     @Permission
@@ -127,7 +127,7 @@ public class ApiWorkTypeController extends BaseController {
     }
 
     /**
-     * 删除督查类型管理
+     * 删除交办事项类型管理
      */
     @RequestMapping(value = "/delete")
     @Permission
@@ -138,7 +138,7 @@ public class ApiWorkTypeController extends BaseController {
     }
 
     /**
-     * 修改督查类型管理
+     * 修改交办事项类型管理
      */
     @RequestMapping(value = "/update")
     @Permission
@@ -149,7 +149,7 @@ public class ApiWorkTypeController extends BaseController {
     }
 
     /**
-     * 督查类型管理详情
+     * 交办事项类型管理详情
      */
     @RequestMapping(value = "/detail/{id}")
     @ResponseBody

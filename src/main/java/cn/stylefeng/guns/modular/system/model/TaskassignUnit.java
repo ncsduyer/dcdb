@@ -1,6 +1,7 @@
 package cn.stylefeng.guns.modular.system.model;
 
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
@@ -9,6 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -64,6 +66,27 @@ public class TaskassignUnit extends Model<TaskassignUnit> {
     @ApiModelProperty("创建时间")
     private Date createtime;
 
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
+    @TableField(exist = false)
+    private Company company;
+
+    public List<TaskassignUnitdeal> getTaskassignUnitdeals() {
+        return taskassignUnitdeals;
+    }
+
+    public void setTaskassignUnitdeals(List<TaskassignUnitdeal> taskassignUnitdeals) {
+        this.taskassignUnitdeals = taskassignUnitdeals;
+    }
+
+    @TableField(exist = false)
+    private List<TaskassignUnitdeal> taskassignUnitdeals;
 
     public Integer getId() {
         return id;
