@@ -67,6 +67,27 @@ public class TaskassignUnit extends Model<TaskassignUnit> {
     private Date createtime;
 
 
+    public Taskassign getTaskassign() {
+        return taskassign;
+    }
+
+    public void setTaskassign(Taskassign taskassign) {
+        this.taskassign = taskassign;
+    }
+
+    @TableField(exist = false)
+    private Taskassign taskassign;
+    @TableField(exist = false)
+    private User person;
+
+    public User getPerson() {
+        return person;
+    }
+
+    public void setPerson(User person) {
+        this.person = person;
+    }
+
     @TableField(exist = false)
     private Company company;
     public Company getCompany() {

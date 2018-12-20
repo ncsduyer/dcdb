@@ -24,4 +24,5 @@ public interface TaskMapper extends BaseMapper<Task> {
     ArrayList<Task> selectAsPage(Pagination page, @Param("ew") Wrapper<Task> wrapper);
     Integer selectCountByUnit(@Param("ew") Wrapper<T> wrapper);
     List<HashMap<Integer,Object>> selectCountByUnitIds(@Param("ew") Wrapper<T> wrapper);
+//    ArrayList<Task> selectExport(Pagination page, @Param("ew") Wrapper<Task> wrapper);
 }

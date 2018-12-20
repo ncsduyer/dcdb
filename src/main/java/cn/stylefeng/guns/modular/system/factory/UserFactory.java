@@ -63,6 +63,9 @@ public class UserFactory {
             if (ToolUtil.isNotEmpty(newUser.getPhone())) {
                 oldUser.setPhone(newUser.getPhone());
             }
+            if (ToolUtil.isNotEmpty(newUser.getIsagent())) {
+                oldUser.setIsagent(newUser.getIsagent());
+            }
             return oldUser;
         }
     }

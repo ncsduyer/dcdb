@@ -15,6 +15,7 @@ import cn.stylefeng.guns.modular.system.model.TaskassignUnit;
 import cn.stylefeng.guns.modular.tdtask.dto.AddTaskDto;
 import cn.stylefeng.guns.modular.tdtask.dto.SreachTaskDto;
 import cn.stylefeng.guns.modular.tdtask.service.ITaskService;
+import cn.stylefeng.guns.modular.tdtask.vo.ReportsVo;
 import cn.stylefeng.guns.modular.tdtask.vo.TaskVo;
 import cn.stylefeng.guns.modular.tdtask.vo.chart.*;
 import cn.stylefeng.guns.modular.tdtaskassign.service.ITaskassignService;
@@ -33,10 +34,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -59,65 +58,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
     private IEventStepService eventStepService;
     @Override
     public ResponseData SreachPage(SreachTaskDto sreachTaskDto) {
-        try {
-            if (ToolUtil.isEmpty(sreachTaskDto)) {
-                sreachTaskDto = new SreachTaskDto();
-            }
-            Page<TaskVo> page = new Page<>(sreachTaskDto.getPage(), sreachTaskDto.getLimit());
-            Bettime bettime=new Bettime(sreachTaskDto);
-            sreachTaskDto.setBeforeTime(bettime.getBeforeTime());
-            sreachTaskDto.setAfterTime(bettime.getAfterTime());
-            EntityWrapper<Task> ew = new EntityWrapper<>();
-            ew.setEntity(new Task());
-            if (ToolUtil.isNotEmpty(sreachTaskDto.getBeforeTime())){
-                ew.gt("ta.assigntime", sreachTaskDto.getBeforeTime());
-            }
-            if (ToolUtil.isNotEmpty(sreachTaskDto.getAfterTime())){
-                ew.lt("ta.assigntime", sreachTaskDto.getAfterTime());
-            }
-            if (ToolUtil.isNotEmpty(sreachTaskDto.getCreatorid())){
-                ew.eq("ta.creatorid", sreachTaskDto.getCreatorid());
-            }
-//            拼接查询条件
-            if (ToolUtil.isNotEmpty(sreachTaskDto.getTitle())){
-               ew.like("t.title", sreachTaskDto.getTitle());
-            }
-            if (ToolUtil.isNotEmpty(sreachTaskDto.getWorkType())){
-               ew.in("ta.worktype", sreachTaskDto.getWorkType());
-            }
-            if (ToolUtil.isNotEmpty(sreachTaskDto.getStatus())){
-               ew.in("ta.status", sreachTaskDto.getStatus());
-            }
-            if (ToolUtil.isNotEmpty(sreachTaskDto.getAgent())){
-               ew.in("tu.personid", sreachTaskDto.getAgent());
-            }
-            if (ToolUtil.isNotEmpty(sreachTaskDto.getCompanyIds())){
-               ew.in("tu.unitid", sreachTaskDto.getCompanyIds());
-            }
-            if (sreachTaskDto.getIsExceed()==1){
-               ew.lt("tu.endtime",new Date()).isNull("ta.endtime");
-            }
-            if (ToolUtil.isNotEmpty(sreachTaskDto.getOrder())){
-               ew.orderBy(sreachTaskDto.getOrder());
-            }else{
-                ew.orderBy("t.id,ta.id",false);
-            }
-
-            ArrayList<Task> arrayList = taskMapper.selectAsPage(page,ew);
-            ArrayList<TaskVo> taskVos=new ArrayList<>();
-            for (Task task : arrayList) {
-                for (Taskassign taskassign:task.getTaskassigns()){
-                    taskassign.setUseTime(VoUtil.getUseTime(taskassign.getAssigntime(), taskassign.getEndtime()));
-                    TaskVo taskVo=new TaskVo(task,taskassign);
-                    taskVos.add(taskVo);
-                }
-            }
-            page.setRecords(taskVos);
-            page.setTotal(arrayList.size());
-            return ResponseData.success(page);
-        }catch (Exception e){
-            return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
-        }
+       return taskassignUnitService.selectAsPage(sreachTaskDto);
 
     }
 
@@ -176,7 +117,72 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
 
     @Override
     public ResponseData getDcdbReports(SreachTaskDto sreachTaskDto) {
-        return SreachPage(sreachTaskDto);
+        try {
+            if (ToolUtil.isEmpty(sreachTaskDto)) {
+                sreachTaskDto = new SreachTaskDto();
+            }
+            Page<ReportsVo> page = new Page<>(sreachTaskDto.getPage(), sreachTaskDto.getLimit());
+            Bettime bettime=new Bettime(sreachTaskDto);
+            sreachTaskDto.setBeforeTime(bettime.getBeforeTime());
+            sreachTaskDto.setAfterTime(bettime.getAfterTime());
+            EntityWrapper<Task> ew = new EntityWrapper<>();
+            ew.setEntity(new Task());
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getBeforeTime())){
+                ew.gt("ta.assigntime", sreachTaskDto.getBeforeTime());
+            }
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getAfterTime())){
+                ew.lt("ta.assigntime", sreachTaskDto.getAfterTime());
+            }
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getCreatorid())){
+                ew.eq("ta.creatorid", sreachTaskDto.getCreatorid());
+            }
+//            拼接查询条件
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getTitle())){
+                ew.like("t.title", sreachTaskDto.getTitle());
+            }
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getWorkType())){
+                ew.in("ta.worktype", sreachTaskDto.getWorkType());
+            }
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getStatus())){
+                ew.in("ta.status", sreachTaskDto.getStatus());
+            }
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getAgent())){
+                ew.in("tu.personid", sreachTaskDto.getAgent());
+            }
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getCompanyIds())){
+                ew.in("tu.unitid", sreachTaskDto.getCompanyIds());
+            }
+            if (sreachTaskDto.getIsExceed()==1){
+                ew.lt("tu.endtime",new Date()).isNull("ta.endtime");
+            }
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getOrder())){
+                ew.orderBy(sreachTaskDto.getOrder());
+            }else{
+                ew.orderBy("t.id,ta.id",false);
+            }
+
+            ArrayList<Task> arrayList = taskMapper.selectAsPage(page,ew);
+            ArrayList<TaskVo> taskVos=new ArrayList<>();
+            for (Task task : arrayList) {
+                for (Taskassign taskassign:task.getTaskassigns()){
+                    taskassign.setUseTime(VoUtil.getUseTime(taskassign.getAssigntime(), taskassign.getEndtime()));
+                    TaskVo taskVo=new TaskVo(task,taskassign);
+                    taskVos.add(taskVo);
+                }
+            }
+            Map<String, List<TaskVo>> map=taskVos.stream().collect(Collectors.groupingBy(x->x.getStep()));
+            ArrayList<ReportsVo> reportsVos=new ArrayList<>();
+            for (Map.Entry<String, List<TaskVo>> et: map.entrySet()
+                 ) {
+                    ReportsVo reportsVo=new ReportsVo(et.getKey(),et.getValue());
+                    reportsVos.add(reportsVo);
+            }
+            page.setRecords(reportsVos);
+            page.setTotal(arrayList.size());
+            return ResponseData.success(page);
+        }catch (Exception e){
+            return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
+        }
     }
     @Override
     public ResponseData sreachChart(SreachTaskDto sreachTaskDto) {

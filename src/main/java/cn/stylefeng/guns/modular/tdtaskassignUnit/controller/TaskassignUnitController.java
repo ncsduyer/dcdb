@@ -12,6 +12,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * 单位督办记录控制器
  *
@@ -71,10 +73,13 @@ public class TaskassignUnitController extends BaseController {
      * 修改单位督办记录
      */
     @ApiOperation(value = "修改单位督办记录")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "list", value = "单位督办记录列表", required = true, dataType = "Long"),
+    })
     @Permission
     @RequestMapping(value = "/update",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public ResponseData update(TaskassignUnit taskassignUnit) {
+    public ResponseData update(@RequestBody List<TaskassignUnit> taskassignUnit) {
        return taskassignUnitService.updateByTaskassignUnit(taskassignUnit);
     }
 

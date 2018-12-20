@@ -41,6 +41,7 @@ public class UserDto {
     private String roleid;
     private Integer deptid;
     private Integer status;
+    private Integer isagent;
     private Date createtime;
     private Integer version;
     private String avatar;
@@ -164,5 +165,13 @@ public class UserDto {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public Integer getIsagent() {
+        return isagent;
+    }
+
+    public void setIsagent(Integer isagent) {
+        this.isagent = isagent;
     }
 }

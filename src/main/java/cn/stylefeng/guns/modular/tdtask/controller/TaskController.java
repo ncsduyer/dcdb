@@ -77,6 +77,7 @@ public class TaskController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "title", value = "事项名称", required = false, dataType = "String"),
             @ApiImplicitParam(name = "agent", value = "督办责任人id数组", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "creatorid", value = "创建人id", required = false, dataType = "Long"),
             @ApiImplicitParam(name = "beforeTime", value = "开始时间", required = false, dataType = "String"),
             @ApiImplicitParam(name = "afterTime", value = "结束时间", required = false, dataType = "String"),
             @ApiImplicitParam(name = "status", value = "事项状态 1-未反馈；2-已反馈办理中；3-部分完成；4-全部完成;5-事项归档；6-人为关闭", required = false, dataType = "Long"),
@@ -147,6 +148,20 @@ public class TaskController extends BaseController {
 ////        return SUCCESS_TIP;
 ////    }
     /**
+     * 交办事项报表图表
+     */
+    @ApiOperation(value = "交办事项报表图表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "beforeTime", value = "开始时间", required = false, dataType = "String"),
+            @ApiImplicitParam(name = "afterTime", value = "结束时间", required = false, dataType = "String"),
+            @ApiImplicitParam(name = "chartType", value = "图表类型，默认为柱状图 1：柱状图，2：饼图", required = false, dataType = "Long"),
+    })
+    @RequestMapping(value = "/chart", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
+    public ResponseData chart(@RequestBody SreachTaskDto sreachTaskDto) {
+        return taskService.sreachChart(sreachTaskDto);
+    }
+    /**
      * 交办事项报表列表
      */
     @ApiOperation(value = "交办事项报表列表")
@@ -165,20 +180,6 @@ public class TaskController extends BaseController {
     @ResponseBody
     public ResponseData report(@RequestBody SreachTaskDto sreachTaskDto) {
         return taskService.getDcdbReports(sreachTaskDto);
-    }
-    /**
-     * 交办事项报表图表
-     */
-    @ApiOperation(value = "交办事项报表图表")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "beforeTime", value = "开始时间", required = false, dataType = "String"),
-            @ApiImplicitParam(name = "afterTime", value = "结束时间", required = false, dataType = "String"),
-            @ApiImplicitParam(name = "chartType", value = "图表类型，默认为柱状图 1：柱状图，2：饼图", required = false, dataType = "Long"),
-    })
-    @RequestMapping(value = "/chart", method = {RequestMethod.POST, RequestMethod.GET})
-    @ResponseBody
-    public ResponseData chart(@RequestBody SreachTaskDto sreachTaskDto) {
-        return taskService.sreachChart(sreachTaskDto);
     }
     /**
      * 导出报表
@@ -210,6 +211,7 @@ public class TaskController extends BaseController {
 
         //sheet名
         String sheetName = "督查督办数据分析表";
+        taskService.getDcdbReports(sreachTaskDto);
 //
 //        HashMap<String, String> map = new HashMap<>();
 //        map.put("dateGroup", dateGroup);

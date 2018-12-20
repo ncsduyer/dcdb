@@ -9,10 +9,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 @Component
 public class TaskVo implements Serializable {
@@ -27,10 +25,13 @@ public class TaskVo implements Serializable {
     private String workType;
     private List<TaskUntiVo> taskUntiVo;
 
-    private Date createtime;
-    private Date assigntime;
+    private String createtime;
+    private String assigntime;
     private String assignmemo;
-
+    private String step;
+    private String status;
+    private String usetime;
+    private String is_exceed;
     public TaskVo() {
         super();
     }
@@ -39,16 +40,6 @@ public class TaskVo implements Serializable {
         taskVo=this;
         taskVo.userService=this.userService;
     }
-    public TaskVo(String name, List<TaskUntiVo> taskUntiVo, Date createtime, Date assigntime, String assignmemo, String status, String usetime, String overdue) {
-        this.name = name;
-        this.taskUntiVo = taskUntiVo;
-        this.createtime = createtime;
-        this.assigntime = assigntime;
-        this.assignmemo = assignmemo;
-        this.status = status;
-        this.usetime = usetime;
-        this.is_exceed = overdue;
-    }
 
     public TaskVo(Task task, Taskassign taskassign) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -56,6 +47,7 @@ public class TaskVo implements Serializable {
         this.id = task.getId();
         this.taid = taskassign.getId();
         this.workType = taskassign.getWorkType().getTitle();
+        this.step = taskassign.getEventStep().getStep();
         this.taskUntiVo = new ArrayList<>();
 
         for (TaskassignUnit tu:taskassign.getTaskassignUnits()){
@@ -64,12 +56,9 @@ public class TaskVo implements Serializable {
             this.taskUntiVo.add(taskUntiVo);
         }
 
-        try {
-            this.createtime = sdf.parse(sdf.format(taskassign.getCreatetime()));
-            this.assigntime = sdf.parse(sdf.format(taskassign.getAssigntime()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+            this.createtime = sdf.format(taskassign.getCreatetime());
+            this.assigntime = sdf.format(taskassign.getAssigntime());
+
         this.assignmemo = taskassign.getAssignmemo();
         this.status = taskassign.getEventStep().getStep();
         this.usetime = taskassign.getUseTime();
@@ -107,19 +96,19 @@ public class TaskVo implements Serializable {
         this.taskUntiVo = taskUntiVo;
     }
 
-    public Date getCreatetime() {
+    public String getCreatetime() {
         return createtime;
     }
 
-    public void setCreatetime(Date createtime) {
+    public void setCreatetime(String createtime) {
         this.createtime = createtime;
     }
 
-    public Date getAssigntime() {
+    public String getAssigntime() {
         return assigntime;
     }
 
-    public void setAssigntime(Date assigntime) {
+    public void setAssigntime(String assigntime) {
         this.assigntime = assigntime;
     }
 
@@ -155,9 +144,6 @@ public class TaskVo implements Serializable {
         this.is_exceed = is_exceed;
     }
 
-    private String status;
-    private String usetime;
-    private String is_exceed;
 
     public String getWorkType() {
         return workType;
@@ -165,5 +151,13 @@ public class TaskVo implements Serializable {
 
     public void setWorkType(String workType) {
         this.workType = workType;
+    }
+
+    public String getStep() {
+        return step;
+    }
+
+    public void setStep(String step) {
+        this.step = step;
     }
 }
