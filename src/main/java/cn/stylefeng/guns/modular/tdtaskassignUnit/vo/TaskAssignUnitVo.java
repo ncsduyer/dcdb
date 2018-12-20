@@ -10,6 +10,7 @@ public class TaskAssignUnitVo implements Serializable {
     private Integer taid;
     private String campany;
     private String agent;
+    private Integer agentId;
     private String title;
     private String workType;
     private String createtime;
@@ -25,6 +26,7 @@ public class TaskAssignUnitVo implements Serializable {
          taid=tu.getTassignid();
          campany=tu.getCompany().getTitle();
          agent=tu.getPerson().getName();
+         agentId=tu.getPerson().getId();
          title=tu.getTaskassign().getTask().getTitle();
          workType=tu.getTaskassign().getWorkType().getTitle();
          createtime=sdf.format(tu.getTaskassign().getCreatetime());
@@ -138,5 +140,13 @@ public class TaskAssignUnitVo implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Integer getAgentId() {
+        return agentId;
+    }
+
+    public void setAgentId(Integer agentId) {
+        this.agentId = agentId;
     }
 }
