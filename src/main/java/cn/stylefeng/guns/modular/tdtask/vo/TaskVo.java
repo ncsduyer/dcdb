@@ -29,7 +29,7 @@ public class TaskVo implements Serializable {
     private String assigntime;
     private String assignmemo;
     private String step;
-    private String status;
+    private Integer status;
     private String usetime;
     private String is_exceed;
     public TaskVo() {
@@ -60,7 +60,7 @@ public class TaskVo implements Serializable {
             this.assigntime = sdf.format(taskassign.getAssigntime());
 
         this.assignmemo = taskassign.getAssignmemo();
-        this.status = taskassign.getEventStep().getStep();
+        this.status = taskassign.getStatus();
         this.usetime = taskassign.getUseTime();
         this.is_exceed = taskassign.getIs_exceed();
     }
@@ -120,11 +120,11 @@ public class TaskVo implements Serializable {
         this.assignmemo = assignmemo;
     }
 
-    public String getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

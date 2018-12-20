@@ -4,12 +4,14 @@ import cn.hutool.core.date.DateTime;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.util.Bettime;
+import cn.stylefeng.guns.core.util.VoUtil;
 import cn.stylefeng.guns.modular.system.dao.TaskassignMapper;
 import cn.stylefeng.guns.modular.system.dao.TaskassignUnitMapper;
 import cn.stylefeng.guns.modular.system.model.Taskassign;
 import cn.stylefeng.guns.modular.system.model.TaskassignUnit;
 import cn.stylefeng.guns.modular.tdtask.dto.SreachTaskDto;
 import cn.stylefeng.guns.modular.tdtaskassignUnit.service.ITaskassignUnitService;
+import cn.stylefeng.guns.modular.tdtaskassignUnit.vo.TaskAssignUnitVo;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
@@ -94,7 +96,7 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
             if (ToolUtil.isEmpty(sreachTaskDto)) {
                 sreachTaskDto = new SreachTaskDto();
             }
-            Page<TaskassignUnit> page = new Page<>(sreachTaskDto.getPage(), sreachTaskDto.getLimit());
+            Page<TaskAssignUnitVo> page = new Page<>(sreachTaskDto.getPage(), sreachTaskDto.getLimit());
             Bettime bettime=new Bettime(sreachTaskDto);
             sreachTaskDto.setBeforeTime(bettime.getBeforeTime());
             sreachTaskDto.setAfterTime(bettime.getAfterTime());
@@ -135,8 +137,14 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
             }
 
             ArrayList<TaskassignUnit> arrayList = taskassignUnitMapper.selectAsPage(page,ew);
-            page.setRecords(arrayList);
-            page.setTotal(arrayList.size());
+            ArrayList<TaskAssignUnitVo> taskVos=new ArrayList<>();
+            for (TaskassignUnit task : arrayList) {
+                task.getTaskassign().setUseTime(VoUtil.getUseTime(task.getTaskassign().getAssigntime(), task.getTaskassign().getEndtime()));
+                TaskAssignUnitVo taskAssignUnitVo=new TaskAssignUnitVo(task);
+                taskVos.add(taskAssignUnitVo);
+            }
+            page.setRecords(taskVos);
+            page.setTotal(taskVos.size());
             return ResponseData.success(page);
         }catch (Exception e){
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
