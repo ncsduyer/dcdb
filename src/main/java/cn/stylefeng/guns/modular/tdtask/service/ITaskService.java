@@ -1,7 +1,6 @@
 package cn.stylefeng.guns.modular.tdtask.service;
 
 import cn.stylefeng.guns.modular.system.model.Task;
-import cn.stylefeng.guns.modular.system.model.Taskassign;
 import cn.stylefeng.guns.modular.tdtask.dto.AddTaskDto;
 import cn.stylefeng.guns.modular.tdtask.dto.SreachTaskDto;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
@@ -23,5 +22,7 @@ public interface ITaskService extends IService<Task> {
 
     ResponseData selectWithManyById(Integer id);
 
-    ResponseData updateByTaskassign(Taskassign taskassign);
+    ResponseData getDcdbReports(SreachTaskDto sreachTaskDto);
+
+    ResponseData sreachChart(SreachTaskDto sreachTaskDto);
 }

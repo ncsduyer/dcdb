@@ -7,6 +7,7 @@ import cn.stylefeng.guns.modular.system.model.Company;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import com.baomidou.mybatisplus.mapper.Condition;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
  * @author fengshuonan
  * @Date 2018-10-15 16:29:44
  */
+@Api(tags = "督查责任单位")
 @Controller
 @RequestMapping("/api/apicompany")
 public class ApiCompanyController extends BaseController {

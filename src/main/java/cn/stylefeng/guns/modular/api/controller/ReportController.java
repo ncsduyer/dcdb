@@ -13,6 +13,7 @@ import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import com.baomidou.mybatisplus.mapper.Condition;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -35,6 +36,7 @@ import java.util.List;
  * @author fengshuonan
  * @Date 2018-12-02 11:31:27
  */
+@Api(tags = "报表统计")
 @Controller
 @RequestMapping("/api/report")
 public class ReportController extends BaseController {

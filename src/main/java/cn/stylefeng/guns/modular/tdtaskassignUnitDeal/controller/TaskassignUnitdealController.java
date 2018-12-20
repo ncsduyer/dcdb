@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Api(tags = "单位督办日志")
 @RestController
-@RequestMapping("/taskassignUnitdeal")
+@RequestMapping("/api/taskassignUnitdeal")
 public class TaskassignUnitdealController extends BaseController {
 
     private String PREFIX = "/tdtaskassignUnitDeal/taskassignUnitdeal/";

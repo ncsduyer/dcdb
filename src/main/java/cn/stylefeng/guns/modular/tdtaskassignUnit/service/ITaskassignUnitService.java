@@ -4,6 +4,8 @@ import cn.stylefeng.guns.modular.system.model.TaskassignUnit;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import com.baomidou.mybatisplus.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * 交办事项时间-责任单位责任人表 服务类
@@ -15,4 +17,6 @@ import com.baomidou.mybatisplus.service.IService;
 public interface ITaskassignUnitService extends IService<TaskassignUnit> {
 
     ResponseData updateByTaskassignUnit(TaskassignUnit taskassignUnit);
+
+    List<TaskassignUnit> selectList1(int id, Integer personid);
 }

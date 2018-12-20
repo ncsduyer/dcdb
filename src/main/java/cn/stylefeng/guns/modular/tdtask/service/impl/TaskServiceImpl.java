@@ -4,8 +4,11 @@ import cn.hutool.core.date.DateTime;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.util.Bettime;
+import cn.stylefeng.guns.core.util.ChartUtil;
 import cn.stylefeng.guns.core.util.VoUtil;
+import cn.stylefeng.guns.modular.EventStep.service.IEventStepService;
 import cn.stylefeng.guns.modular.system.dao.TaskMapper;
+import cn.stylefeng.guns.modular.system.model.EventStep;
 import cn.stylefeng.guns.modular.system.model.Task;
 import cn.stylefeng.guns.modular.system.model.Taskassign;
 import cn.stylefeng.guns.modular.system.model.TaskassignUnit;
@@ -13,11 +16,13 @@ import cn.stylefeng.guns.modular.tdtask.dto.AddTaskDto;
 import cn.stylefeng.guns.modular.tdtask.dto.SreachTaskDto;
 import cn.stylefeng.guns.modular.tdtask.service.ITaskService;
 import cn.stylefeng.guns.modular.tdtask.vo.TaskVo;
+import cn.stylefeng.guns.modular.tdtask.vo.chart.*;
 import cn.stylefeng.guns.modular.tdtaskassign.service.ITaskassignService;
 import cn.stylefeng.guns.modular.tdtaskassignUnit.service.ITaskassignUnitService;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
+import com.baomidou.mybatisplus.mapper.Condition;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -26,8 +31,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * <p>
@@ -46,19 +55,29 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
     private ITaskassignService taskassignService;
     @Autowired
     private ITaskassignUnitService taskassignUnitService;
+    @Autowired
+    private IEventStepService eventStepService;
     @Override
     public ResponseData SreachPage(SreachTaskDto sreachTaskDto) {
         try {
             if (ToolUtil.isEmpty(sreachTaskDto)) {
                 sreachTaskDto = new SreachTaskDto();
             }
+            Page<TaskVo> page = new Page<>(sreachTaskDto.getPage(), sreachTaskDto.getLimit());
             Bettime bettime=new Bettime(sreachTaskDto);
             sreachTaskDto.setBeforeTime(bettime.getBeforeTime());
             sreachTaskDto.setAfterTime(bettime.getAfterTime());
-            Page<TaskVo> page = new Page<>(sreachTaskDto.getPage(), sreachTaskDto.getLimit());
             EntityWrapper<Task> ew = new EntityWrapper<>();
             ew.setEntity(new Task());
-            ew.between("ta.createtime", sreachTaskDto.getBeforeTime(), sreachTaskDto.getAfterTime());
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getBeforeTime())){
+                ew.gt("ta.assigntime", sreachTaskDto.getBeforeTime());
+            }
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getAfterTime())){
+                ew.lt("ta.assigntime", sreachTaskDto.getAfterTime());
+            }
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getCreatorid())){
+                ew.eq("ta.creatorid", sreachTaskDto.getCreatorid());
+            }
 //            拼接查询条件
             if (ToolUtil.isNotEmpty(sreachTaskDto.getTitle())){
                ew.like("t.title", sreachTaskDto.getTitle());
@@ -76,7 +95,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
                ew.in("tu.unitid", sreachTaskDto.getCompanyIds());
             }
             if (sreachTaskDto.getIsExceed()==1){
-               ew.lt("ta.assigntime",new Date()).isNull("ta.endtime");
+               ew.lt("tu.endtime",new Date()).isNull("ta.endtime");
             }
             if (ToolUtil.isNotEmpty(sreachTaskDto.getOrder())){
                ew.orderBy(sreachTaskDto.getOrder());
@@ -84,16 +103,12 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
                 ew.orderBy("t.id,ta.id",false);
             }
 
-            System.out.println(ew.getSqlSegment());
-
-
             ArrayList<Task> arrayList = taskMapper.selectAsPage(page,ew);
             ArrayList<TaskVo> taskVos=new ArrayList<>();
             for (Task task : arrayList) {
                 for (Taskassign taskassign:task.getTaskassigns()){
-                    taskassign.setUseTime(VoUtil.getUseTime(taskassign.getCreatetime(), taskassign.getEndtime()));
-                    TaskVo taskVo=new TaskVo(task.getTitle(),taskassign);
-
+                    taskassign.setUseTime(VoUtil.getUseTime(taskassign.getAssigntime(), taskassign.getEndtime()));
+                    TaskVo taskVo=new TaskVo(task,taskassign);
                     taskVos.add(taskVo);
                 }
             }
@@ -111,9 +126,11 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
         try{
             if (ToolUtil.isNotEmpty(addTaskDto.getCompanyIds())) {
 
-                Task task = new Task();
-                BeanUtils.copyProperties(addTaskDto, task);
-                insert(task);
+                    Task task = new Task();
+                    BeanUtils.copyProperties(addTaskDto, task);
+                if (ToolUtil.isEmpty(selectById(task.getId()))){
+                    insert(task);
+                }
                 Taskassign taskassign = new Taskassign();
                 taskassign.setTaskid(task.getId());
                 taskassign.setWorktype(addTaskDto.getWorktype());
@@ -155,21 +172,92 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
         return ResponseData.success(task);
     }
 
+
+
     @Override
-    public ResponseData updateByTaskassign(Taskassign taskassign) {
-        try {
-            if(taskassign.getEndtime().before(taskassign.getCreatetime())){
-                    return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(),"办结时间错误");
-            }
-                Taskassign taskassign1 = new Taskassign();
-                taskassign1.setId(taskassign.getId());
-                taskassign1.setStatus(taskassign.getStatus());
-                taskassign1.setClosememo(taskassign.getClosememo());
-                taskassign1.setEndtime(taskassign.getEndtime());
-                 taskassignService.updateById(taskassign1);
-            return ResponseData.success();
-        } catch (Exception e) {
-            return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
+    public ResponseData getDcdbReports(SreachTaskDto sreachTaskDto) {
+        return SreachPage(sreachTaskDto);
+    }
+    @Override
+    public ResponseData sreachChart(SreachTaskDto sreachTaskDto) {
+        //循环获取类型
+        List<EventStep> eventSteps=eventStepService.selectList(Condition.create().eq("event_type", 1));
+        List<Series> seriess=new LinkedList<>();
+        Legend legend=new Legend();
+
+        Series<DataBean> series=new Series<>();
+
+        switch (sreachTaskDto.getChartType()){
+            case ChartUtil.PIE:
+                legend.setData(new ArrayList<>());
+                series.setData(new ArrayList<>());
+                Bettime bettime= null;
+                try {
+                    bettime = new Bettime(sreachTaskDto);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                sreachTaskDto.setBeforeTime(bettime.getBeforeTime());
+                sreachTaskDto.setAfterTime(bettime.getAfterTime());
+                for (EventStep et:eventSteps){
+                    EntityWrapper<Taskassign> ew = new EntityWrapper<>();
+                    ew.setEntity(new Taskassign());
+                    if (ToolUtil.isNotEmpty(sreachTaskDto.getBeforeTime())){
+                        ew.gt("assigntime", sreachTaskDto.getBeforeTime());
+                    }
+                    if (ToolUtil.isNotEmpty(sreachTaskDto.getAfterTime())){
+                        ew.lt("assigntime", sreachTaskDto.getAfterTime());
+                    }
+                    ew.eq("status", et.getStatus());
+                    legend.getData().add(et.getStep());
+                    series.getData().add(new DataBean(et.getStep(),taskassignService.selectCount(ew)));
+                }
+                //填充数据到map
+
+                seriess.add(series);
+                return ResponseData.success(new ChartVo(seriess,legend));
+            default:
+                //拆分时间
+                Axis axis=new Axis();
+                axis.setData(new ArrayList<>());
+                List<Date> dates=Bettime.getDates(sreachTaskDto.getBeforeTime(), sreachTaskDto.getAfterTime());
+                Date beforeTime;
+                Date afterTime;
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                seriess = new LinkedList<>();
+                for (EventStep et:eventSteps){
+                        Series<Integer> series1=new Series<>();
+                        series1.setData(new ArrayList<>());
+                        legend.setData(new ArrayList<>());
+                    legend.getData().add(et.getStep());
+                    series1.setName(et.getStep());
+                    for (Date date :dates) {
+                        axis.getData().add(sdf.format(date));
+                        Bettime bettime1= new Bettime(date);
+                        beforeTime=bettime1.getBeforeTime();
+                        afterTime=bettime1.getAfterTime();
+
+                        EntityWrapper<Taskassign> ew = new EntityWrapper<>();
+                        ew.setEntity(new Taskassign());
+                        if (ToolUtil.isNotEmpty(beforeTime)){
+                            ew.gt("assigntime", beforeTime);
+                        }
+                        if (ToolUtil.isNotEmpty(afterTime)){
+                            ew.lt("assigntime", afterTime);
+                        }
+                        ew.eq("status", et.getStatus());
+
+                        series1.getData().add(taskassignService.selectCount(ew));
+                    }
+
+                    seriess.add(series1);
+                }
+
+
+
+
+                return ResponseData.success(new ChartVo(seriess,legend,axis));
         }
     }
+
 }

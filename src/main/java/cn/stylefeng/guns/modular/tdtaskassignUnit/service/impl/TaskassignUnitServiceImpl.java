@@ -11,7 +11,10 @@ import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import com.baomidou.mybatisplus.mapper.Condition;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -23,7 +26,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper, TaskassignUnit> implements ITaskassignUnitService {
-
+    @Autowired
+    private TaskassignUnitMapper taskassignUnitMapper;
     @Override
     public ResponseData updateByTaskassignUnit(TaskassignUnit taskassignUnit) {
         try{
@@ -40,5 +44,10 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
         }catch (Exception e){
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
         }
+    }
+
+    @Override
+    public List<TaskassignUnit> selectList1(int id, Integer personid) {
+        return taskassignUnitMapper.selectList1(id,personid);
     }
 }

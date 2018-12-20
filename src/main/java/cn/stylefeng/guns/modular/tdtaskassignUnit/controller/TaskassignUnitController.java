@@ -5,7 +5,6 @@ import cn.stylefeng.guns.modular.system.model.TaskassignUnit;
 import cn.stylefeng.guns.modular.tdtaskassignUnit.service.ITaskassignUnitService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
-import com.baomidou.mybatisplus.mapper.Condition;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -21,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Api(tags = "单位督办记录")
 @RestController
-@RequestMapping("/taskassignUnit")
+@RequestMapping("/api/taskassignUnit")
 public class TaskassignUnitController extends BaseController {
 
     private String PREFIX = "/tdtaskassignUnit/taskassignUnit/";
@@ -36,13 +35,14 @@ public class TaskassignUnitController extends BaseController {
      */
     @ApiOperation(value = "获取单位督办记录列表")
     @ApiImplicitParams({
-
+            @ApiImplicitParam(name = "id", value = "交办事项事项id", required = true, dataType = "Long"),
+            @ApiImplicitParam(name = "personid", value = "督办负责人id", required = true, dataType = "Long"),
     })
     @RequestMapping(value = "/list",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
     @Permission
-    public ResponseData list() {
-        return ResponseData.success(taskassignUnitService.selectList(Condition.create().orderBy("tassignid", false)));
+    public ResponseData list(@RequestParam(value = "id") Integer id, @RequestParam(value = "personid") Integer personid) {
+        return ResponseData.success(taskassignUnitService.selectList1(id,personid));
     }
 
 //    /**

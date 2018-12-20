@@ -27,7 +27,6 @@ import cn.stylefeng.guns.core.util.JwtTokenUtil;
 import cn.stylefeng.guns.core.util.KaptchaUtil;
 import cn.stylefeng.guns.modular.AppMenu.service.IAppMenuService;
 import cn.stylefeng.guns.modular.AppNotice.service.IAppNoticeService;
-import cn.stylefeng.guns.modular.AssignWork.service.IAssignWorkService;
 import cn.stylefeng.guns.modular.VersionUpgrade.service.IVersionUpgradeService;
 import cn.stylefeng.guns.modular.api.vo.AppMenusVo;
 import cn.stylefeng.guns.modular.system.dao.UserMapper;
@@ -87,8 +86,7 @@ public class ApiController extends BaseController {
     private IVersionUpgradeService versionUpgradeService;
     @Autowired
     GunsProperties gunsProperties;
-    @Autowired
-    private IAssignWorkService assignWorkService;
+
     @Autowired
     private IAppMenuService appMenuService;
     @Autowired

@@ -4,11 +4,14 @@ import cn.hutool.core.date.DateTime;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.modular.system.dao.TaskassignUnitdealMapper;
 import cn.stylefeng.guns.modular.system.model.TaskassignUnitdeal;
+import cn.stylefeng.guns.modular.tdtaskassign.service.ITaskassignService;
+import cn.stylefeng.guns.modular.tdtaskassignUnit.service.ITaskassignUnitService;
 import cn.stylefeng.guns.modular.tdtaskassignUnitDeal.service.ITaskassignUnitdealService;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,7 +24,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class TaskassignUnitdealServiceImpl extends ServiceImpl<TaskassignUnitdealMapper, TaskassignUnitdeal> implements ITaskassignUnitdealService {
-
+    @Autowired
+    private ITaskassignService taskassignService;
+    @Autowired
+    private ITaskassignUnitService taskassignUnitService;
     @Override
     public ResponseData updateByTaskassignUnitdeal(TaskassignUnitdeal taskassignUnitdeal) {
         try {
@@ -34,6 +40,12 @@ public class TaskassignUnitdealServiceImpl extends ServiceImpl<TaskassignUnitdea
                 }
                 taskassignUnitdeal.setPretime(null);
                 taskassignUnitdeal.setDelaytime(null);
+//                Taskassign taskassign=taskassignService.selectById(taskassignUnitService.selectOne(Condition.create().eq("taunitid", taskassignUnitdeal.getTaunitid())).getTassignid());
+//                if (taskassign.getEndtime().before(taskassignUnitdeal.getFinishtime())){
+//                taskassign.setEndtime(taskassignUnitdeal.getFinishtime());
+//                taskassignService.updateByTaskassign(taskassign);
+//
+//                }
             }else{
                 taskassignUnitdeal.setFinishtime(null);
                 if (taskassignUnitdeal.getIsdelay()==1){

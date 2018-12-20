@@ -1,14 +1,10 @@
 package cn.stylefeng.guns.modular.zhreport.service.impl;
 
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
-import cn.stylefeng.guns.modular.reportGroup.service.IReportGroupService;
-import cn.stylefeng.guns.modular.system.dao.AssignWorkMapper;
-import cn.stylefeng.guns.modular.system.dao.MeetingSituationMapper;
 import cn.stylefeng.guns.modular.system.dao.ReportMapper;
-import cn.stylefeng.guns.modular.system.dao.SupervisionTypeMapper;
+import cn.stylefeng.guns.modular.system.dao.TaskMapper;
 import cn.stylefeng.guns.modular.system.model.AssignWork;
 import cn.stylefeng.guns.modular.system.model.Report;
-import cn.stylefeng.guns.modular.system.model.ReportGroup;
 import cn.stylefeng.guns.modular.zhreport.dto.ReportDto;
 import cn.stylefeng.guns.modular.zhreport.service.IReportService;
 import cn.stylefeng.guns.modular.zhreport.vo.ReportVo;
@@ -41,20 +37,14 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> implements IReportService {
-    @Autowired
-    private AssignWorkMapper assignWorkMapper;
+
     @Autowired
     private ReportMapper reportMapper;
     @Autowired
-    private IReportGroupService reportGroupService;
+    private TaskMapper taskMapper;
+
     @Autowired
     private IReportService reportService;
-//    @Autowired
-//    private CompanyMapper companyMapper;
-    @Autowired
-    private SupervisionTypeMapper supervisionTypeMapper;
-    @Autowired
-    private MeetingSituationMapper meetingSituationMapper;
 
 
     @Override
@@ -92,21 +82,14 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
             Bettime bettime = new Bettime(addReportDto).invoke();
             Date beforeTime = bettime.getBeforeTime();
             Date afterTime = bettime.getAfterTime();
-            ReportGroup reportGroup = reportGroupService.selectOne(Condition.create().eq("name", addReportDto.getGroupName()));
-            if (ToolUtil.isEmpty(reportGroup)) {
-                reportGroup = new ReportGroup();
-                reportGroup.setName(addReportDto.getGroupName());
-                reportGroup.setBeforeTime(beforeTime);
-                reportGroup.setAfterTime(afterTime);
-                reportGroupService.insert(reportGroup);
-            }
-            int groupid=reportGroup.getId();
+
+
             List<ReportVo> reportVos  = selectReportVos(addReportDto);
             List<Report> reports=new ArrayList<>();
             for (ReportVo reportVo:reportVos){
                 for (Object reports2:reportVo.getMap().values()) {
                     for (Report report : (List<Report>) reports2) {
-                        report.setGroupId(groupid);
+
                         report.setCreatedTime(beforeTime);
                         reports.add(report);
                     }
@@ -158,7 +141,7 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
         List<ReportVo> reportVos = new ArrayList<>();
 
         //获取所有单位列表
-        List<HashMap<Integer,Object>> companyList= assignWorkMapper.selectCountByCompanyids(Condition.create().between("created_time",beforeTime,afterTime));
+        List<HashMap<Integer,Object>> companyList= taskMapper.selectCountByUnitIds(Condition.create().between("created_time",beforeTime,afterTime));
         for (HashMap<Integer, Object> company:companyList){
             LinkedHashMap map=new LinkedHashMap();
             int  companyId= (int) company.get("companyId");
@@ -168,11 +151,11 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
             Integer eventType=1;
             int count=arr.length;
             Report report=new Report(eventType,companyId,"交办事项总数",String.valueOf(count));
-            String xqbj=accuracy(assignWorkMapper.selectCountByCompany(Condition.create().in("id",arr).in("status",new Integer[]{6,9}).addFilter("end_time<deadline")),count,2);
+            String xqbj=accuracy(taskMapper.selectCountByUnit(Condition.create().in("id",arr).in("status",new Integer[]{6,9}).addFilter("end_time<deadline")),count,2);
             Report report1=new Report(eventType,companyId,"按期办结率",xqbj);
-            String cqbj=accuracy(assignWorkMapper.selectCountByCompany(Condition.create().in("id",arr).in("status",new Integer[]{6,9}).addFilter("end_time>deadline")),count,2);
+            String cqbj=accuracy(taskMapper.selectCountByUnit(Condition.create().in("id",arr).in("status",new Integer[]{6,9}).addFilter("end_time>deadline")),count,2);
             Report report2=new Report(eventType,companyId,"逾期办结率",cqbj);
-            ArrayList<AssignWork> arrayList = (ArrayList<AssignWork>) assignWorkMapper.selectList(Condition.create().in("id",arr).isNotNull("end_time"));
+            ArrayList<AssignWork> arrayList = (ArrayList<AssignWork>) taskMapper.selectList(Condition.create().in("id",arr).isNotNull("end_time"));
             Long total=0L;
             for (AssignWork assignWork :arrayList) {
                 total+=assignWork.getEndTime().getTime()-assignWork.getCreatedTime().getTime();

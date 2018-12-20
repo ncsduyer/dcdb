@@ -1,16 +1,15 @@
 package cn.stylefeng.guns.modular.tdtaskassign.controller;
 
-import cn.stylefeng.guns.core.log.LogObjectHolder;
+import cn.stylefeng.guns.core.common.annotion.Permission;
 import cn.stylefeng.guns.modular.system.model.Taskassign;
 import cn.stylefeng.guns.modular.tdtaskassign.service.ITaskassignService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
+import cn.stylefeng.roses.core.reqres.response.ResponseData;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 交办事项时间控制器
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author fengshuonan
  * @Date 2018-12-10 16:01:49
  */
+@Api(tags = "交办事项内容")
 @Controller
 @RequestMapping("/api/taskassign")
 public class TaskassignController extends BaseController {
@@ -26,33 +26,6 @@ public class TaskassignController extends BaseController {
 
     @Autowired
     private ITaskassignService taskassignService;
-
-    /**
-     * 跳转到交办事项时间首页
-     */
-    @RequestMapping("")
-    public String index() {
-        return PREFIX + "taskassign.html";
-    }
-
-    /**
-     * 跳转到添加交办事项时间
-     */
-    @RequestMapping("/taskassign_add")
-    public String taskassignAdd() {
-        return PREFIX + "taskassign_add.html";
-    }
-
-    /**
-     * 跳转到修改交办事项时间
-     */
-    @RequestMapping("/taskassign_update/{taskassignId}")
-    public String taskassignUpdate(@PathVariable Integer taskassignId, Model model) {
-        Taskassign taskassign = taskassignService.selectById(taskassignId);
-        model.addAttribute("item",taskassign);
-        LogObjectHolder.me().set(taskassign);
-        return PREFIX + "taskassign_edit.html";
-    }
 
     /**
      * 获取交办事项时间列表
@@ -84,13 +57,14 @@ public class TaskassignController extends BaseController {
     }
 
     /**
-     * 修改交办事项时间
+     * 修改交办事项
      */
-    @RequestMapping(value = "/update")
+    @ApiOperation(value = "修改交办事项")
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @Permission
     @ResponseBody
-    public Object update(Taskassign taskassign) {
-        taskassignService.updateById(taskassign);
-        return SUCCESS_TIP;
+    public ResponseData update(@RequestBody Taskassign taskassign) {
+        return taskassignService.updateByTaskassign(taskassign);
     }
 
     /**

@@ -66,6 +66,9 @@ public class TaskassignUnit extends Model<TaskassignUnit> {
     @ApiModelProperty("创建时间")
     private Date createtime;
 
+
+    @TableField(exist = false)
+    private Company company;
     public Company getCompany() {
         return company;
     }
@@ -73,9 +76,6 @@ public class TaskassignUnit extends Model<TaskassignUnit> {
     public void setCompany(Company company) {
         this.company = company;
     }
-
-    @TableField(exist = false)
-    private Company company;
 
     public List<TaskassignUnitdeal> getTaskassignUnitdeals() {
         return taskassignUnitdeals;

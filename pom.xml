@@ -215,7 +215,12 @@
             <artifactId>poi-tl</artifactId>
             <version>1.4.2</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
 
 
         <!--需要分布式session的话需要放开注释-->

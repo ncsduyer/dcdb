@@ -11,7 +11,7 @@
     </resultMap>
     <resultMap id="ResultMoreMap" type="cn.stylefeng.guns.modular.system.model.Task" extends="BaseResultMap">
         <collection property="taskassigns" ofType="cn.stylefeng.guns.modular.system.model.Taskassign">
-            <id column="tuid" property="id" />
+            <id column="taid" property="id" />
             <result column="taskid" property="taskid" />
             <result column="worktype" property="worktype" />
             <result column="assigntime" property="assigntime" />
@@ -95,7 +95,7 @@
 </select>
     <select id="selectAsPage" resultMap="ResultMoreMap">
         SELECT
-        t.id, t.title,ta.id taid, ta.taskid, ta.worktype, ta.assigntime, ta.assignmemo, ta.status, ta.creatorid, ta.createtime, ta.closememo,ta.endtime, CASE when sysdate()>ta.assigntime then '已超期' else
+        t.id, t.title,ta.id taid, ta.taskid, ta.worktype, ta.assigntime, ta.assignmemo, ta.status, ta.creatorid, ta.createtime, ta.closememo,ta.endtime, CASE when sysdate()>tu.endtime then '已超期' else
         '未超期' end as is_exceed ,u.name,wt.title wtitle,e.step
         ,tu.id unitid, tu.tassignid, tu.unitid,tu.personid, tu.endtime, tu.requirements, tu.status, tu.updatetime, tu.createtime,c.title ctitle , tud.id tudid, tud.taunitid tudtaunitid, tud.dealdesc tuddealdesc, tud.status tudstatus, tud.isdelay tudisdelay, tud.pretime tudpretime, tud.delaytime tuddelaytime, tud.creatorid tudcreatorid, tud.createtime tudcreatetime, tud.finishtime tudfinishtime FROM
         td_task t LEFT JOIN td_taskassign ta ON ta.taskid = t.id LEFT JOIN t_tb_work_type wt ON wt.id =

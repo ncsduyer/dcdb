@@ -1,6 +1,7 @@
 package cn.stylefeng.guns.modular.tdtaskassign.service;
 
 import cn.stylefeng.guns.modular.system.model.Taskassign;
+import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import com.baomidou.mybatisplus.service.IService;
 
 /**
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.service.IService;
  */
 public interface ITaskassignService extends IService<Taskassign> {
 
+    ResponseData updateByTaskassign(Taskassign taskassign);
 }

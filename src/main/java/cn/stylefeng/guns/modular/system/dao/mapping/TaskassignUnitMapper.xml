@@ -6,18 +6,38 @@
     <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.system.model.TaskassignUnit">
         <id column="id" property="id" />
         <result column="tassignid" property="tassignid" />
-        <result column="unit_id" property="unitId" />
+        <result column="unitid" property="unitid" />
         <result column="personid" property="personid" />
         <result column="endtime" property="endtime" />
         <result column="requirements" property="requirements" />
         <result column="status" property="status" />
         <result column="updatetime" property="updatetime" />
-        <result column="create_time" property="createTime" />
+        <result column="createtime" property="createtime" />
+        <association property="company" javaType="cn.stylefeng.guns.modular.system.model.Company" column="unitid"
+                     select="cn.stylefeng.guns.modular.system.dao.CompanyMapper.selectById">
+        </association>
+        <collection property="taskassignUnitdeals" ofType="cn.stylefeng.guns.modular.system.model.TaskassignUnitdeal">
+            <id column="id" property="id" />
+            <result column="taunitid" property="taunitid" />
+            <result column="dealdesc" property="dealdesc" />
+            <result column="status" property="status" />
+            <result column="isdelay" property="isdelay" />
+            <result column="pretime" property="pretime" />
+            <result column="delaytime" property="delaytime" />
+            <result column="creatorid" property="creatorid" />
+            <result column="createtime" property="createtime" />
+            <result column="finishtime" property="finishtime" />
+        </collection>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, tassignid, unitid, personid, endtime, requirements, status, updatetime, create_time
+        id, tassignid, unitid, personid, endtime, requirements, status, updatetime, createtime
     </sql>
-
+    <select id="selectdealList" resultType="cn.stylefeng.guns.modular.system.model.TaskassignUnitdeal">
+        SELECT id, taunitid, dealdesc, status, isdelay, pretime, delaytime, creatorid, createtime, finishtime FROM td_taskassign_unitdeal where taunitid=#{taunitid}
+    </select>
+    <select id="selectList1" resultMap="BaseResultMap">
+        SELECT tu.*,tud.* FROM td_taskassign_unit tu LEFT JOIN td_taskassign_unitdeal tud ON tud.taunitid=tu.id where tu.tassignid=#{id} AND tu.personid=#{personid}
+    </select>
 </mapper>

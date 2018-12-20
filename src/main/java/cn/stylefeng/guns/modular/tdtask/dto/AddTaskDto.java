@@ -16,7 +16,7 @@ public class AddTaskDto{
      * 督办事项
      */
     @ApiModelProperty("督办事项id")
-    private Integer pid;
+    private Integer id;
     @ApiModelProperty("督办事项名称")
     @NotNull(message = "督办事项名称不能为空")
     private String title;
@@ -35,9 +35,9 @@ public class AddTaskDto{
      * 限期时间
      */
 
-    @ApiModelProperty("最后期限")
+    @ApiModelProperty("交办时间")
     @JSONField(format = "yyyy-MM-dd HH:mm")
-    @NotNull(message = "最后期限不能为空")
+    @NotNull(message = "交办时间不能为空")
     private Date assigntime;
 
     public Date getCreatetime() {
@@ -115,11 +115,11 @@ public class AddTaskDto{
         this.companyIds = companyIds;
     }
 
-    public Integer getPid() {
-        return pid;
+    public Integer getId() {
+        return id;
     }
 
-    public void setPid(Integer pid) {
-        this.pid = pid;
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

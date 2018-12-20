@@ -27,9 +27,12 @@ public class SreachTaskDto extends SreachDto {
      */
     @ApiModelProperty("督办负责人id")
     private Integer[] agent;
-//    @ApiModelProperty("创建人id")
-//    private Integer created_id;
-
+    @ApiModelProperty("创建人id")
+    private Integer creatorid;
+    @ApiModelProperty("导出文件类型，默认为excel 1：excel，2：doc")
+    private Integer type=1;
+    @ApiModelProperty("图表类型，默认为柱状图 1：柱状图，2：饼图")
+    private Integer ChartType=1;
     /**
      * 当前状态
      */
@@ -74,14 +77,6 @@ public class SreachTaskDto extends SreachDto {
         this.agent = agent;
     }
 
-//    public Integer getCreated_id() {
-//        return created_id;
-//    }
-//
-//    public void setCreated_id(Integer created_id) {
-//        this.created_id = created_id;
-//    }
-
     public Integer[] getStatus() {
         return status;
     }
@@ -104,5 +99,29 @@ public class SreachTaskDto extends SreachDto {
 
     public void setIsExceed(Integer isExceed) {
         this.isExceed = isExceed;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public Integer getChartType() {
+        return ChartType;
+    }
+
+    public void setChartType(Integer chartType) {
+        ChartType = chartType;
+    }
+
+    public Integer getCreatorid() {
+        return creatorid;
+    }
+
+    public void setCreatorid(Integer creatorid) {
+        this.creatorid = creatorid;
     }
 }

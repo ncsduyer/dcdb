@@ -1,5 +1,6 @@
 package cn.stylefeng.guns.modular.tdtask.vo;
 
+import cn.stylefeng.guns.modular.system.model.Task;
 import cn.stylefeng.guns.modular.system.model.Taskassign;
 import cn.stylefeng.guns.modular.system.model.TaskassignUnit;
 import cn.stylefeng.guns.modular.system.service.IUserService;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +19,9 @@ public class TaskVo implements Serializable {
     @Autowired
     private IUserService userService;
     public static TaskVo taskVo;
+    private Integer id;
+    private Integer taid;
+
 
     private String name;
     private String workType;
@@ -44,8 +50,11 @@ public class TaskVo implements Serializable {
         this.is_exceed = overdue;
     }
 
-    public TaskVo(String title, Taskassign taskassign) {
-        this.name = title;
+    public TaskVo(Task task, Taskassign taskassign) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        this.name = task.getTitle();
+        this.id = task.getId();
+        this.taid = taskassign.getId();
         this.workType = taskassign.getWorkType().getTitle();
         this.taskUntiVo = new ArrayList<>();
 
@@ -55,12 +64,31 @@ public class TaskVo implements Serializable {
             this.taskUntiVo.add(taskUntiVo);
         }
 
-        this.createtime = taskassign.getCreatetime();
-        this.assigntime = taskassign.getAssigntime();
+        try {
+            this.createtime = sdf.parse(sdf.format(taskassign.getCreatetime()));
+            this.assigntime = sdf.parse(sdf.format(taskassign.getAssigntime()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         this.assignmemo = taskassign.getAssignmemo();
         this.status = taskassign.getEventStep().getStep();
         this.usetime = taskassign.getUseTime();
         this.is_exceed = taskassign.getIs_exceed();
+    }
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getTaid() {
+        return taid;
+    }
+
+    public void setTaid(Integer taid) {
+        this.taid = taid;
     }
 
     public String getName() {
