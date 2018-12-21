@@ -15,4 +15,6 @@ import com.baomidou.mybatisplus.service.IService;
 public interface ITaskassignService extends IService<Taskassign> {
 
     ResponseData updateByTaskassign(Taskassign taskassign);
+
+    Taskassign selectByManyId(Integer id);
 }

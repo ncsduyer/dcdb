@@ -2,6 +2,7 @@ package cn.stylefeng.guns.modular.system.dao;
 
 import cn.stylefeng.guns.modular.system.model.Taskassign;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 public interface TaskassignMapper extends BaseMapper<Taskassign> {
 
+    Taskassign selectByManyId(@Param("id") Integer id);
 }

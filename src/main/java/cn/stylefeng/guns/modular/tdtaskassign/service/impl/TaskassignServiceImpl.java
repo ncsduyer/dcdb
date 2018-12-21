@@ -1,6 +1,7 @@
 package cn.stylefeng.guns.modular.tdtaskassign.service.impl;
 
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
+import cn.stylefeng.guns.core.util.VoUtil;
 import cn.stylefeng.guns.modular.system.dao.TaskassignMapper;
 import cn.stylefeng.guns.modular.system.model.Taskassign;
 import cn.stylefeng.guns.modular.tdtaskassign.service.ITaskassignService;
@@ -8,6 +9,7 @@ import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -20,6 +22,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class TaskassignServiceImpl extends ServiceImpl<TaskassignMapper, Taskassign> implements ITaskassignService {
+    @Autowired
+    private TaskassignMapper taskassignMapper;
     @Override
     public ResponseData updateByTaskassign(Taskassign taskassign) {
         try {
@@ -36,5 +40,12 @@ public class TaskassignServiceImpl extends ServiceImpl<TaskassignMapper, Taskass
         } catch (Exception e) {
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
         }
+    }
+
+    @Override
+    public Taskassign selectByManyId(Integer taskassignId) {
+       Taskassign taskassign= taskassignMapper.selectByManyId(taskassignId);
+        taskassign.setUseTime(VoUtil.getUseTime(taskassign.getCreatetime(), taskassign.getEndtime()));
+        return taskassign;
     }
 }

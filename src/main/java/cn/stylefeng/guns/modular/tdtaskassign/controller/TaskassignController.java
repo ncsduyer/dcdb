@@ -70,9 +70,10 @@ public class TaskassignController extends BaseController {
     /**
      * 交办事项时间详情
      */
-    @RequestMapping(value = "/detail/{taskassignId}")
+    @ApiOperation(value = "交办事项时间详情")
+    @RequestMapping(value = "/detail/{id}")
     @ResponseBody
-    public Object detail(@PathVariable("taskassignId") Integer taskassignId) {
-        return taskassignService.selectById(taskassignId);
+    public ResponseData detail(@PathVariable("id") Integer taskassignId) {
+        return ResponseData.success(taskassignService.selectByManyId(taskassignId));
     }
 }
