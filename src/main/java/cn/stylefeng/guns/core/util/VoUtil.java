@@ -8,7 +8,7 @@ import java.text.NumberFormat;
 import java.util.Date;
 
 public class VoUtil {
-    public static boolean hasHour=false;
+    public static boolean hasHour=true;
     public static String getUseTime(Date createdTime, Date endTime){
         return getUseTime(createdTime,endTime,hasHour);
     }
