@@ -1,7 +1,7 @@
 package cn.stylefeng.guns.modular.tdtask.vo.chart;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.LinkedHashSet;
 
 public class Axis implements Serializable {
 
@@ -11,7 +11,7 @@ public class Axis implements Serializable {
      */
 
     private String type;
-    private List<String> data;
+    private LinkedHashSet<String> data;
 
     public String getType() {
         return type;
@@ -21,11 +21,11 @@ public class Axis implements Serializable {
         this.type = type;
     }
 
-    public List<String> getData() {
+    public LinkedHashSet<String> getData() {
         return data;
     }
 
-    public void setData(List<String> data) {
+    public void setData(LinkedHashSet<String> data) {
         this.data = data;
     }
 }

@@ -178,7 +178,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
                     reportsVos.add(reportsVo);
             }
             page.setRecords(reportsVos);
-            page.setTotal(arrayList.size());
+            page.setTotal(taskMapper.selectAsCount(ew));
             return ResponseData.success(page);
         }catch (Exception e){
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
@@ -186,26 +186,28 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
     }
     @Override
     public ResponseData sreachChart(SreachTaskDto sreachTaskDto) {
+
         //循环获取类型
         List<EventStep> eventSteps=eventStepService.selectList(Condition.create().eq("event_type", 1));
-        List<Series> seriess=new LinkedList<>();
+        List<Series> seriess;
         Legend legend=new Legend();
-
-        Series<DataBean> series=new Series<>();
 
         switch (sreachTaskDto.getChartType()){
             case ChartUtil.PIE:
                 legend.setData(new ArrayList<>());
-                series.setData(new ArrayList<>());
-                Bettime bettime= null;
+
+                seriess = new LinkedList<>();
                 try {
-                    bettime = new Bettime(sreachTaskDto);
+                    new Bettime(sreachTaskDto);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                sreachTaskDto.setBeforeTime(bettime.getBeforeTime());
-                sreachTaskDto.setAfterTime(bettime.getAfterTime());
+
+
+
                 for (EventStep et:eventSteps){
+                     Series<DataBean> series=new Series<>();
+                    series.setData(new ArrayList<>());
                     EntityWrapper<Taskassign> ew = new EntityWrapper<>();
                     ew.setEntity(new Taskassign());
                     if (ToolUtil.isNotEmpty(sreachTaskDto.getBeforeTime())){
@@ -217,48 +219,60 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
                     ew.eq("status", et.getStatus());
                     legend.getData().add(et.getStep());
                     series.getData().add(new DataBean(et.getStep(),taskassignService.selectCount(ew)));
+                    seriess.add(series);
                 }
                 //填充数据到map
 
-                seriess.add(series);
                 return ResponseData.success(new ChartVo(seriess,legend));
             default:
                 //拆分时间
                 Axis axis=new Axis();
-                axis.setData(new ArrayList<>());
+                axis.setData(new LinkedHashSet<>());
                 List<Date> dates=Bettime.getDates(sreachTaskDto.getBeforeTime(), sreachTaskDto.getAfterTime());
-                Date beforeTime;
-                Date afterTime;
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+                legend.setData(new ArrayList<>());
                 seriess = new LinkedList<>();
+
+                try {
+                   new Bettime(sreachTaskDto);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+
                 for (EventStep et:eventSteps){
-                        Series<Integer> series1=new Series<>();
-                        series1.setData(new ArrayList<>());
-                        legend.setData(new ArrayList<>());
+                    Series<Integer> series=new Series<>();
+                    series.setData(new ArrayList<>());
                     legend.getData().add(et.getStep());
-                    series1.setName(et.getStep());
-                    for (Date date :dates) {
-                        axis.getData().add(sdf.format(date));
-                        Bettime bettime1= new Bettime(date);
-                        beforeTime=bettime1.getBeforeTime();
-                        afterTime=bettime1.getAfterTime();
+                    series.setName(et.getStep());
+
 
                         EntityWrapper<Taskassign> ew = new EntityWrapper<>();
                         ew.setEntity(new Taskassign());
-                        if (ToolUtil.isNotEmpty(beforeTime)){
-                            ew.gt("assigntime", beforeTime);
+                        ew.setSqlSelect("date_format(assigntime, '%Y-%m-%d') time,count(id) size");
+                        if (ToolUtil.isNotEmpty(sreachTaskDto.getBeforeTime())){
+                            ew.gt("assigntime", sreachTaskDto.getBeforeTime());
                         }
-                        if (ToolUtil.isNotEmpty(afterTime)){
-                            ew.lt("assigntime", afterTime);
+                        if (ToolUtil.isNotEmpty(sreachTaskDto.getAfterTime())){
+                            ew.lt("assigntime", sreachTaskDto.getAfterTime());
                         }
                         ew.eq("status", et.getStatus());
-
-                        series1.getData().add(taskassignService.selectCount(ew));
+                        ew.groupBy("date_format(assigntime, '%Y-%m-%d')");
+                      List<Map<String, Object>> maps= taskassignService.selectMaps(ew);
+                    for (Date date :dates) {
+                        axis.getData().add(sdf.format(date));
+                        series.getData().add(0);
                     }
-
-                    seriess.add(series1);
+                    for (Map<String, Object> map:maps){
+                        try {
+                            series.getData().set(dates.indexOf(sdf.parse((String) map.get("time"))),((Number) map.get("size")).intValue());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    seriess.add(series);
                 }
-
 
 
 

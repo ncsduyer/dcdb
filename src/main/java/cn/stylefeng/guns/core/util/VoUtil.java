@@ -26,9 +26,18 @@ public class VoUtil {
             int days = (int) (total / (1000 * 60 * 60 * 24));
             int hours = (int) (total / (1000 * 60 * 60) % 24);
             int minutes = (int) (total / (1000 * 60) % 60);
-            String date = "";
-            date = String.format("%d天%d小时%d分", days, hours, minutes);
-            return date;
+            StringBuilder date = new StringBuilder();
+            if(days>0){
+                date.append(days+"天");
+            }
+            if(hours>0){
+                date.append(hours+"小时");
+            }
+            if(minutes>0){
+                date.append(minutes+"分");
+            }
+//            date = String.format("%d天%d小时%d分", days, hours, minutes);
+            return date.toString();
         }else{
             float days = (float) (total / (1000 * 60 * 60 * 24));
             return String.format("%.1f天", days);

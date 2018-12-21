@@ -80,6 +80,8 @@ public class Bettime {
             afterTime = sdf.parse(sdf.format(afterTime));
             afterTime = DateUtils.addSeconds(afterTime, 24 * 60 * 60 - 1);
         }
+        sreachDto.setBeforeTime(beforeTime);
+        sreachDto.setAfterTime(afterTime);
     }
     public Date getBeforeTime() {
         return beforeTime;
