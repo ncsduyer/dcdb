@@ -144,7 +144,7 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
                 taskVos.add(taskAssignUnitVo);
             }
             page.setRecords(taskVos);
-            page.setTotal(taskVos.size());
+            page.setTotal(taskassignUnitMapper.selectAsCount(ew));
             return ResponseData.success(page);
         }catch (Exception e){
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());

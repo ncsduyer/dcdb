@@ -1,6 +1,7 @@
 package cn.stylefeng.guns.modular.tdtaskassignUnit.vo;
 
 import cn.stylefeng.guns.modular.system.model.TaskassignUnit;
+import cn.stylefeng.roses.core.util.ToolUtil;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -18,8 +19,11 @@ public class TaskAssignUnitVo implements Serializable {
     private String assignmemo;
     private String step;
     private Integer status;
+    private Integer createrId;
+    private String endtime;
     private String usetime;
     private String is_exceed;
+
     public TaskAssignUnitVo(TaskassignUnit tu) {
          SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
          id=tu.getTaskassign().getTaskid();
@@ -31,6 +35,10 @@ public class TaskAssignUnitVo implements Serializable {
          workType=tu.getTaskassign().getWorkType().getTitle();
          createtime=sdf.format(tu.getTaskassign().getCreatetime());
          assigntime=sdf.format(tu.getTaskassign().getAssigntime());
+         createrId=tu.getTaskassign().getCreatorid();
+         if (ToolUtil.isNotEmpty(tu.getEndtime())){
+            endtime=sdf.format(tu.getEndtime());
+         }
          assignmemo=tu.getTaskassign().getAssignmemo();
          step=tu.getTaskassign().getEventStep().getStep();
          status=tu.getTaskassign().getStatus();
@@ -148,5 +156,21 @@ public class TaskAssignUnitVo implements Serializable {
 
     public void setAgentId(Integer agentId) {
         this.agentId = agentId;
+    }
+
+    public Integer getCreaterId() {
+        return createrId;
+    }
+
+    public void setCreaterId(Integer createrId) {
+        this.createrId = createrId;
+    }
+
+    public String getEndtime() {
+        return endtime;
+    }
+
+    public void setEndtime(String endtime) {
+        this.endtime = endtime;
     }
 }

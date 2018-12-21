@@ -2,11 +2,13 @@ package cn.stylefeng.guns.modular.tdtaskassignUnitDeal.controller;
 
 import cn.stylefeng.guns.core.common.annotion.Permission;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
+import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.modular.system.model.TaskassignUnitdeal;
 import cn.stylefeng.guns.modular.tdtaskassignUnitDeal.service.ITaskassignUnitdealService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
+import cn.stylefeng.roses.core.util.ToolUtil;
 import com.baomidou.mybatisplus.mapper.Condition;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -54,7 +56,10 @@ public class TaskassignUnitdealController extends BaseController {
     @Permission
     @RequestMapping(value = "/add",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public ResponseData add(TaskassignUnitdeal taskassignUnitdeal) {
+    public ResponseData add(@RequestBody TaskassignUnitdeal taskassignUnitdeal) {
+        if (ToolUtil.isEmpty(taskassignUnitdeal.getCreatorid())){
+            taskassignUnitdeal.setCreatorid(ShiroKit.getUser().getId());
+        }
         if (taskassignUnitdealService.insert(taskassignUnitdeal)){
             return SUCCESS_TIP;
         }
@@ -78,7 +83,7 @@ public class TaskassignUnitdealController extends BaseController {
     @Permission
     @RequestMapping(value = "/update",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public ResponseData update(TaskassignUnitdeal taskassignUnitdeal) {
+    public ResponseData update(@RequestBody TaskassignUnitdeal taskassignUnitdeal) {
        return taskassignUnitdealService.updateByTaskassignUnitdeal(taskassignUnitdeal);
 
     }
