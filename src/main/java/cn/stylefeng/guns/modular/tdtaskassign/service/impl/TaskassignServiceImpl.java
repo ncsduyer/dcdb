@@ -1,6 +1,7 @@
 package cn.stylefeng.guns.modular.tdtaskassign.service.impl;
 
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
+import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.util.VoUtil;
 import cn.stylefeng.guns.modular.system.dao.TaskassignMapper;
 import cn.stylefeng.guns.modular.system.model.Taskassign;
@@ -8,6 +9,7 @@ import cn.stylefeng.guns.modular.tdtaskassign.service.ITaskassignService;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,7 +46,13 @@ public class TaskassignServiceImpl extends ServiceImpl<TaskassignMapper, Taskass
 
     @Override
     public Taskassign selectByManyId(Integer taskassignId) {
-       Taskassign taskassign= taskassignMapper.selectByManyId(taskassignId);
+        EntityWrapper<Taskassign> ew = new EntityWrapper<>();
+        ew.setEntity(new Taskassign());
+        ew.eq("ta.id", taskassignId);
+        if (ToolUtil.isNotEmpty(ShiroKit.getUser())){
+            ew.eq("tu.personid", ShiroKit.getUser().getId());
+        }
+       Taskassign taskassign= taskassignMapper.selectByManyId(ew);
         taskassign.setUseTime(VoUtil.getUseTime(taskassign.getCreatetime(), taskassign.getEndtime()));
         return taskassign;
     }

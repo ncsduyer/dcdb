@@ -43,7 +43,7 @@ public class VoUtil {
             return String.format("%.1f天", days);
         }
     }
-    private String accuracy(double num, double total, int scale){
+    public static String accuracy(double num, double total, int scale){
         try {
             DecimalFormat df = (DecimalFormat) NumberFormat.getInstance();
             //可以设置精确几位小数
@@ -57,7 +57,7 @@ public class VoUtil {
         }
 
     }
-    private String getPjUseTime(Long total, int size) {
+    public static String getPjUseTime(Long total, int size) {
         if (size==0){
             return "0天0小时0分";
         }

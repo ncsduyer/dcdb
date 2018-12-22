@@ -29,10 +29,7 @@ public class SreachTaskDto extends SreachDto {
     private Integer[] agent;
     @ApiModelProperty("创建人id")
     private Integer creatorid;
-    @ApiModelProperty("导出文件类型，默认为excel 1：excel，2：doc")
-    private Integer type=1;
-    @ApiModelProperty("图表类型，默认为柱状图 1：柱状图，2：饼图")
-    private Integer ChartType=1;
+
     /**
      * 当前状态
      */
@@ -101,21 +98,6 @@ public class SreachTaskDto extends SreachDto {
         this.isExceed = isExceed;
     }
 
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
-
-    public Integer getChartType() {
-        return ChartType;
-    }
-
-    public void setChartType(Integer chartType) {
-        ChartType = chartType;
-    }
 
     public Integer getCreatorid() {
         return creatorid;

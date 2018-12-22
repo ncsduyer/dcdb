@@ -1,11 +1,9 @@
 package cn.stylefeng.guns.modular.zhreport.service;
 
 import cn.stylefeng.guns.modular.system.model.Report;
-import cn.stylefeng.guns.modular.zhreport.dto.ReportDto;
+import cn.stylefeng.guns.modular.zhreport.dto.SreachReportDto;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import com.baomidou.mybatisplus.service.IService;
-
-import java.text.ParseException;
 
 /**
  * <p>
@@ -17,8 +15,10 @@ import java.text.ParseException;
  */
 public interface IReportService extends IService<Report> {
 
-    ResponseData getList(ReportDto sreachReportDto) throws ParseException;
-    ResponseData add(ReportDto addReportDto);
+    ResponseData getReport(SreachReportDto sreachReportDto);
 
-    Boolean deleteByGidCompany(Integer groupId, String company);
+    ResponseData getChart(SreachReportDto sreachReportDto);
+    ResponseData selectByUnitCount(SreachReportDto sreachReportDto);
+    ResponseData selectByPersionCount(SreachReportDto sreachReportDto);
+    ResponseData selectByAffairCount(SreachReportDto sreachReportDto);
 }

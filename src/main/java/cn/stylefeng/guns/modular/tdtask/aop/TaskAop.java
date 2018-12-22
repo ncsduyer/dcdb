@@ -50,7 +50,7 @@ public class TaskAop {
 
     }
 
-    @Pointcut("execution(* cn.stylefeng.guns.modular.tdtask.service.ITaskService.updateByTaskassign(..))")
+    @Pointcut("execution(* cn.stylefeng.guns.modular.tdtaskassign.service.ITaskassignService.updateByTaskassign(..))")
     private void editTaskService() {
 
     }

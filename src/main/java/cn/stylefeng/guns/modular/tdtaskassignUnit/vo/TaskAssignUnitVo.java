@@ -23,10 +23,11 @@ public class TaskAssignUnitVo implements Serializable {
     private String endtime;
     private String usetime;
     private String is_exceed;
-
+    private Integer tuid;
     public TaskAssignUnitVo(TaskassignUnit tu) {
          SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
          id=tu.getTaskassign().getTaskid();
+         tuid=tu.getId();
          taid=tu.getTassignid();
          campany=tu.getCompany().getTitle();
          agent=tu.getPerson().getName();
@@ -172,5 +173,13 @@ public class TaskAssignUnitVo implements Serializable {
 
     public void setEndtime(String endtime) {
         this.endtime = endtime;
+    }
+
+    public Integer getTuid() {
+        return tuid;
+    }
+
+    public void setTuid(Integer tuid) {
+        this.tuid = tuid;
     }
 }

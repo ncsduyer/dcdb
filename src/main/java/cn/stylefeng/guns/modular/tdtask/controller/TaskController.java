@@ -198,7 +198,7 @@ public class TaskController extends BaseController {
             @ApiImplicitParam(name = "page", value = "页码", required = false, dataType = "Long"),
             @ApiImplicitParam(name = "limit", value = "每页条数", required = false, dataType = "Long"),
             //上面是sreachTaskDto属性
-            @ApiImplicitParam(name = "type", value = "导出类型 默认为excel 1：excel，2：doc", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "exportType", value = "导出类型 默认为excel 1：excel，2：doc", required = false, dataType = "Long"),
 
     })
     @RequestMapping(value = "/export", method = {RequestMethod.GET, RequestMethod.POST})
@@ -232,7 +232,7 @@ public class TaskController extends BaseController {
 //            content[i][6] = obj.getStatus();
 //        }
         String fileName;
-        switch (sreachTaskDto.getType()){
+        switch (sreachTaskDto.getExportType()){
             case 1:
                 //创建HSSFWorkbook
                 fileName = new Date().toString() + ".xls";

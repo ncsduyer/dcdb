@@ -6,7 +6,8 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.poi.ss.formula.functions.T;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * <p>
@@ -17,6 +18,7 @@ import java.util.ArrayList;
  * @since 2018-12-02
  */
 public interface ReportMapper extends BaseMapper<Report> {
-
-    ArrayList<Report> selectMoreList(@Param("ew") Wrapper<T> wrapper);
+    List<HashMap<String,Object>> selectByUnitCount(@Param("ew") Wrapper<T> wrapper);
+    List<HashMap<String,Object>> selectByPersionCount(@Param("ew") Wrapper<T> wrapper);
+    List<HashMap<String,Object>> selectByAffairCount(@Param("ew") Wrapper<T> wrapper);
 }
