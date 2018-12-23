@@ -14,16 +14,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.OutputStream;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -231,38 +227,6 @@ public class TaskController extends BaseController {
 //            content[i][5] = obj.getUseTime();
 //            content[i][6] = obj.getStatus();
 //        }
-        String fileName;
-        switch (sreachTaskDto.getExportType()){
-            case 1:
-                //创建HSSFWorkbook
-                fileName = new Date().toString() + ".xls";
-                HSSFWorkbook wb = ExportUtil.getHSSFWorkbook(template,sheetName,content);
-
-                //响应到客户端
-                try {
-                    ExportUtil.setResponseHeader(response, fileName);
-                    OutputStream os = response.getOutputStream();
-                    wb.write(os);
-                    os.flush();
-                    os.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            case 2:
-                fileName = new Date().toString() + ".doc";
-                //创建HSSFWorkbook
-                XWPFDocument wd = ExportUtil.getXWPFDocument(template,sheetName,content);
-
-                //响应到客户端
-                try {
-                    ExportUtil.setResponseHeader(response, fileName);
-                    OutputStream os = response.getOutputStream();
-                    wd.write(os);
-                    os.flush();
-                    os.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-        }
+        ExportUtil.outExport(sreachTaskDto, response, template, sheetName, content);
     }
 }

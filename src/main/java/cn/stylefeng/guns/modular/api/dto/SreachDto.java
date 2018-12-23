@@ -16,7 +16,8 @@ public abstract class SreachDto {
     private Integer exportType=1;
     @ApiModelProperty("图表类型，默认为柱状图 1：柱状图，2：饼图")
     private Integer ChartType=1;
-
+    @ApiModelProperty("order")
+    private String order;
 
     @ApiModelProperty("页码")
     private int page = 1;
@@ -70,4 +71,11 @@ public abstract class SreachDto {
         ChartType = chartType;
     }
 
+    public String getOrder() {
+        return order;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
+    }
 }

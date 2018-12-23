@@ -2,8 +2,8 @@ package cn.stylefeng.guns.core.util;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xwpf.usermodel.*;
-import org.jdom2.Document;
 import org.jdom2.*;
+import org.jdom2.Document;
 import org.jdom2.input.SAXBuilder;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 

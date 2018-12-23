@@ -10,25 +10,28 @@ import java.util.Date;
 
 /**
  * <p>
- * 区委会议
+ * 公文运转
  * </p>
  *
  * @author 三千霜
  * @since 2018-12-23
  */
-@TableName("td_meeting")
-public class Meeting extends Model<Meeting> {
+@TableName("td_docs")
+public class Docs extends Model<Docs> {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * id
+     */
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
     /**
-     * 会议时间
+     * 信息时间
      */
     private Date mtime;
     /**
-     * 会议名称
+     * 信息名称
      */
     private String title;
     /**
@@ -36,11 +39,11 @@ public class Meeting extends Model<Meeting> {
      */
     private Integer creatorid;
     /**
-     * 会议状态(0-停用；1-启用)
+     * 信息状态(0-停用；1-启用)
      */
     private Integer status;
     /**
-     * 会议备注
+     * 信息备注
      */
     private String memo;
 
@@ -100,7 +103,7 @@ public class Meeting extends Model<Meeting> {
 
     @Override
     public String toString() {
-        return "Meeting{" +
+        return "Docs{" +
         ", id=" + id +
         ", mtime=" + mtime +
         ", title=" + title +

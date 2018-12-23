@@ -1,11 +1,14 @@
 package cn.stylefeng.guns.core.util;
 
+import cn.stylefeng.guns.modular.api.dto.SreachDto;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Date;
 
 public class ExportUtil {
     /**
@@ -44,6 +47,41 @@ public class ExportUtil {
             response.addHeader("Cache-Control", "no-cache");
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+    public static void outExport(SreachDto sreachDto, HttpServletResponse response, String template, String sheetName, String[][] content) {
+        String fileName;
+        switch (sreachDto.getExportType()) {
+            case 1:
+                //创建HSSFWorkbook
+                fileName = new Date().toString() + ".xls";
+                HSSFWorkbook wb = ExportUtil.getHSSFWorkbook(template, sheetName, content);
+
+                //响应到客户端
+                try {
+                    ExportUtil.setResponseHeader(response, fileName);
+                    OutputStream os = response.getOutputStream();
+                    wb.write(os);
+                    os.flush();
+                    os.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            case 2:
+                fileName = new Date().toString() + ".doc";
+                //创建HSSFWorkbook
+                XWPFDocument wd = ExportUtil.getXWPFDocument(template, sheetName, content);
+
+                //响应到客户端
+                try {
+                    ExportUtil.setResponseHeader(response, fileName);
+                    OutputStream os = response.getOutputStream();
+                    wd.write(os);
+                    os.flush();
+                    os.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
         }
     }
 }

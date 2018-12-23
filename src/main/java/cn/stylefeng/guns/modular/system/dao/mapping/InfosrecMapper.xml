@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.system.dao.InfosrecMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.system.model.Infosrec">
+        <id column="id" property="id" />
+        <result column="infosid" property="infosid" />
+        <result column="checkitemid" property="checkitemid" />
+        <result column="checkvalue" property="checkvalue" />
+        <result column="createtime" property="createtime" />
+        <result column="unitid" property="unitid" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, infosid, checkitemid, checkvalue, createtime, unitid
+    </sql>
+
+</mapper>

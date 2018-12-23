@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.system.dao.MeetingrecMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.system.model.Meetingrec">
+        <id column="id" property="id" />
+        <result column="meetingid" property="meetingid" />
+        <result column="checkitemid" property="checkitemid" />
+        <result column="checkvalue" property="checkvalue" />
+        <result column="createtime" property="createtime" />
+        <result column="unitid" property="unitid" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, meetingid, checkitemid, checkvalue, createtime, unitid
+    </sql>
+    <select id="getInfoByPid" resultType="java.util.HashMap">
+        select user.name,sum(case when unit.id is null then 0 else 1 end) as unitnum , sum(case when ass.id is null then 0 else 1 end)as taskCrenum
+        from td_meetingrec rec
+        left join t_tb_company c on c.id=rec.unitid
+        left join td_checkitem ch on ch.id=rec.checkitemid
+        <where>
+            ${ew.sqlSegment}
+        </where>
+        group by user.id,user.name
+    </select>
+</mapper>
