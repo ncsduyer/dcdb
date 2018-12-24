@@ -55,21 +55,25 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
                 }
             }
 
-            if (isall){
                 Taskassign taskassign=taskassignService.selectById(taskassignId);
-                    if (count > 0 && selectCount(Condition.create().eq("status", 4).eq("tassignid", taskassignId)) == count) {
-                        taskassign.setStatus(4);
-                taskassign.setEndtime(new DateTime());
+            if (count > 0){
 
-                    } else {
-                        taskassign.setStatus(3);
+                if (selectCount(Condition.create().gt("status", 1).eq("tassignid", taskassignId))==count){
+                    if (taskassign.getStatus()<=2){
+                        taskassign.setStatus(2);
                     }
-                if (taskassign.getStatus()<=2){
-                    taskassign.setStatus(2);
                 }
+                if (selectCount(Condition.create().eq("status", 4).eq("tassignid", taskassignId)) == count) {
+                            taskassign.setStatus(4);
+                    taskassign.setEndtime(new DateTime());
+                } else if (selectCount(Condition.create().eq("status", 4).eq("tassignid", taskassignId))>0){
+                    taskassign.setStatus(3);
+                    }
+            }
+
                 taskassignService.updateByTaskassign(taskassign);
                 count=-1;
-            }
+
             return ResponseData.success();
         }catch (Exception e){
             count=-1;
@@ -103,10 +107,7 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
 
         updateById(ts);
         //检查是否全部反馈
-      if (count>0&&selectCount(Condition.create().gt("status", 1).eq("tassignid", taskassignId))==count){
 
-          isall=true;
-      }
         return true;
     }
 
