@@ -56,7 +56,10 @@ public class TaskassignUnitdealServiceImpl extends ServiceImpl<TaskassignUnitdea
             }else{
                 taskassignUnitdeal.setFinishtime(null);
                 if (taskassignUnitdeal.getIsdelay()==1){
-                    taskassignUnitdeal.setPretime(selectById(taskassignUnitdeal.getId()).getDelaytime());
+                    if (ToolUtil.isNotEmpty(taskassignUnitdeal.getId())){
+                        taskassignUnitdeal.setPretime(selectById(taskassignUnitdeal.getId()).getDelaytime());
+                    }
+                        taskassignUnitdeal.setPretime(taskassignUnitdeal.getDelaytime());
                     taskassignUnit.setStatus(3);
                 }else{
                     taskassignUnit.setStatus(2);
