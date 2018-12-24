@@ -11,10 +11,55 @@
         <result column="status" property="status" />
         <result column="memo" property="memo" />
     </resultMap>
-
+    <resultMap id="BaseMoreMap" type="cn.stylefeng.guns.modular.system.model.Docs">
+        <id column="mid" property="id" />
+        <result column="mmtime" property="mtime" />
+        <result column="mtitle" property="title" />
+        <result column="mcreatorid" property="creatorid" />
+        <result column="mstatus" property="status" />
+        <result column="mmemo" property="memo" />
+        <result column="mcount" property="count"/>
+        <association property="createuser" javaType="cn.stylefeng.guns.modular.system.model.User">
+            <id column="uid" property="id"/>
+            <result column="uname" property="name"/>
+        </association>
+        <association property="eventStep" javaType="cn.stylefeng.guns.modular.system.model.EventStep">
+            <id column="esid" property="id"/>
+            <result column="espid" property="pid"/>
+            <result column="esstatus" property="status"/>
+            <result column="esevent_type" property="eventType"/>
+            <result column="esstep" property="step"/>
+        </association>
+    </resultMap>
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, mtime, title, creatorid, status, memo
     </sql>
+    <sql id="AS_Column_List">
+        m.id mid, m.mtime mmtime, m.title mtitle, m.creatorid mcreatorid, m.status mstatus, m.memo mmemo,count(distinct mr.unitid) mcount,u.id uid, u.name uname,es.id esid,es.pid espid,es.status esstatus,es.event_type esevent_type,es.step esstep
+    </sql>
+    <sql id="base_with">
+        FROM
+        td_docs m LEFT JOIN td_docassignrec mr ON mr.docassignid = m.id
+        LEFT JOIN t_tb_event_step es ON es.status=m.status and es.event_type=3 LEFT JOIN sys_user u ON u.id = m.creatorid
+    </sql>
+    <select id="selectWithManyById" resultMap="BaseMoreMap">
+        SELECT <include refid="AS_Column_List"/>
+        <include refid="base_with"/>  WHERE t.id=#{id}
+    </select>
+    <select id="selectAsPage" resultMap="BaseMoreMap">
+        SELECT <include refid="AS_Column_List"/>
+        <include refid="base_with"/>
+        <where>
+            ${ew.sqlSegment}
+        </where>
+    </select>
+    <select id="selectAsCount" resultType="java.lang.Long">
+        SELECT count(m.id)
+        <include refid="base_with"/>
+        <where>
+            ${ew.sqlSegment}
+        </where>
+    </select>
 
 </mapper>

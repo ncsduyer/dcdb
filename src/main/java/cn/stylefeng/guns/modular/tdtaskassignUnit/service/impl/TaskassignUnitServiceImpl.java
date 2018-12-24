@@ -21,6 +21,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,6 +36,7 @@ import java.util.List;
  * @since 2018-12-10
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper, TaskassignUnit> implements ITaskassignUnitService {
     @Autowired
     private TaskassignUnitMapper taskassignUnitMapper;
@@ -55,10 +57,6 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
 
             if (isall){
                 Taskassign taskassign=taskassignService.selectById(taskassignId);
-                if (taskassign.getStatus()<=2){
-                    taskassign.setStatus(2);
-
-                }else {
                     if (count > 0 && selectCount(Condition.create().eq("status", 4).eq("tassignid", taskassignId)) == count) {
                         taskassign.setStatus(4);
                 taskassign.setEndtime(new DateTime());
@@ -66,6 +64,8 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
                     } else {
                         taskassign.setStatus(3);
                     }
+                if (taskassign.getStatus()<=2){
+                    taskassign.setStatus(2);
                 }
                 taskassignService.updateByTaskassign(taskassign);
                 count=-1;

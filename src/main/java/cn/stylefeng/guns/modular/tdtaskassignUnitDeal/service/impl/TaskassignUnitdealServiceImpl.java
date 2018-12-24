@@ -15,6 +15,7 @@ import com.baomidou.mybatisplus.mapper.Condition;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ import java.util.List;
  * @since 2018-12-10
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class TaskassignUnitdealServiceImpl extends ServiceImpl<TaskassignUnitdealMapper, TaskassignUnitdeal> implements ITaskassignUnitdealService {
     @Autowired
     private ITaskassignService taskassignService;
@@ -36,10 +38,11 @@ public class TaskassignUnitdealServiceImpl extends ServiceImpl<TaskassignUnitdea
     @Override
     public ResponseData updateByTaskassignUnitdeal(TaskassignUnitdeal taskassignUnitdeal) {
         try {
-                if (selectList(Condition.create().eq("status", 1).eq("taunitid", taskassignUnitdeal.getTaunitid())).size()>0){
+                TaskassignUnit taskassignUnit=taskassignUnitService.selectById(taskassignUnitdeal.getTaunitid());
+                if (selectCount(Condition.create().eq("status", 1).eq("taunitid", taskassignUnitdeal.getTaunitid()))>0||taskassignUnit.getStatus()==4){
                     return new ErrorResponseData(45000, "已经完成不可重复提交！");
                 }
-                TaskassignUnit taskassignUnit=taskassignUnitService.selectById(taskassignUnitdeal.getTaunitid());
+
             if (taskassignUnitdeal.getStatus()==1){
                 if (ToolUtil.isEmpty(taskassignUnitdeal.getFinishtime())){
                   taskassignUnitdeal.setFinishtime(new DateTime());
@@ -60,8 +63,11 @@ public class TaskassignUnitdealServiceImpl extends ServiceImpl<TaskassignUnitdea
                 }
 
             }
-
-            updateById(taskassignUnitdeal);
+            if (ToolUtil.isEmpty(taskassignUnitdeal.getId())){
+                insert(taskassignUnitdeal);
+            }else{
+                updateById(taskassignUnitdeal);
+            }
 //            判断是否完成 修改unit状态 1-新建未反馈；2-已反馈限期办理中；3-已反馈超期办理中；4-办理完成；）
             List<TaskassignUnit> tsus=new ArrayList<>();
             tsus.add(taskassignUnit);

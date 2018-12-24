@@ -1,12 +1,10 @@
 package cn.stylefeng.guns.modular.tdtaskassignUnitDeal.controller;
 
 import cn.stylefeng.guns.core.common.annotion.Permission;
-import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.modular.system.model.TaskassignUnitdeal;
 import cn.stylefeng.guns.modular.tdtaskassignUnitDeal.service.ITaskassignUnitdealService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
-import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import com.baomidou.mybatisplus.mapper.Condition;
@@ -60,10 +58,7 @@ public class TaskassignUnitdealController extends BaseController {
         if (ToolUtil.isEmpty(taskassignUnitdeal.getCreatorid())){
             taskassignUnitdeal.setCreatorid(ShiroKit.getUser().getId());
         }
-        if (taskassignUnitdealService.insert(taskassignUnitdeal)){
-            return SUCCESS_TIP;
-        }
-        return ErrorResponseData.error(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
+       return taskassignUnitdealService.updateByTaskassignUnitdeal(taskassignUnitdeal);
     }
 
 //    /**

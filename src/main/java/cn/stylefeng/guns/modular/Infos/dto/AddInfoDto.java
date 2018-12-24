@@ -10,7 +10,8 @@ import java.util.Date;
 import java.util.List;
 
 @ApiModel("AddInfoDto")
-public class AddInfoDto {
+public class AddInfoDto  {
+    private Integer id;
     @ApiModelProperty("名称")
     @NotNull(message = "名称不能为空")
     private String title;
@@ -26,6 +27,14 @@ public class AddInfoDto {
     private Integer status;
     @ApiModelProperty("上报信息数组")
     private List<Infosrec> resc;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;

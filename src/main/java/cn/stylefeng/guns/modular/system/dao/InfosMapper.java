@@ -1,7 +1,13 @@
 package cn.stylefeng.guns.modular.system.dao;
 
 import cn.stylefeng.guns.modular.system.model.Infos;
+import cn.stylefeng.guns.modular.system.model.Meeting;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.ArrayList;
 
 /**
  * <p>
@@ -12,5 +18,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * @since 2018-12-23
  */
 public interface InfosMapper extends BaseMapper<Infos> {
-
+    Meeting selectWithManyById(Integer id);
+    ArrayList<Infos> selectAsPage(Pagination page, @Param("ew") Wrapper<Infos> wrapper);
+    Long selectAsCount(@Param("ew") Wrapper<Infos> wrapper);
 }

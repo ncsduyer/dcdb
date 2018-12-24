@@ -1,12 +1,15 @@
 package cn.stylefeng.guns.modular.system.model;
 
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * <p>
@@ -43,7 +46,22 @@ public class Meeting extends Model<Meeting> {
      * 会议备注
      */
     private String memo;
+    @TableField(exist = false)
+    private Integer count;
+    @TableField(exist = false)
+    private User createuser;
+    @TableField(exist = false)
+    private EventStep eventStep;
 
+    @TableField(exist = false)
+    private   List<HashMap<String,Object>> companys;
+    public List<HashMap<String, Object>> getCompanys() {
+        return companys;
+    }
+
+    public void setCompanys(List<HashMap<String, Object>> companys) {
+        this.companys = companys;
+    }
 
     public Integer getId() {
         return id;
@@ -91,6 +109,30 @@ public class Meeting extends Model<Meeting> {
 
     public void setMemo(String memo) {
         this.memo = memo;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
+    public User getCreateuser() {
+        return createuser;
+    }
+
+    public void setCreateuser(User createuser) {
+        this.createuser = createuser;
+    }
+
+    public EventStep getEventStep() {
+        return eventStep;
+    }
+
+    public void setEventStep(EventStep eventStep) {
+        this.eventStep = eventStep;
     }
 
     @Override
