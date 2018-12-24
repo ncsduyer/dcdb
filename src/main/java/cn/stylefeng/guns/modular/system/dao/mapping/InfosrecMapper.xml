@@ -16,5 +16,19 @@
     <sql id="Base_Column_List">
         id, infosid, checkitemid, checkvalue, createtime, unitid
     </sql>
+    <select id="getInfoByPid" resultType="java.util.HashMap">
+        SELECT c.title ctitle ,
+        <if test="courses != null">
+            <foreach collection="courses" item="item" separator=",">
+                CASE rec.checkitemid WHEN #{item.id} THEN rec.checkvalue ElSE 0 END ) "${item.itemdesc}"
+            </foreach>
+        </if>
+        from td_infosrec rec
+        left join t_tb_company c on c.id=rec.unitid
 
+        <where>
+            ${ew.sqlSegment}
+        </where>
+
+    </select>
 </mapper>

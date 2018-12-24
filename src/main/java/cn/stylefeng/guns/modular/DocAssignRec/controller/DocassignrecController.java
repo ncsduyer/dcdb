@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Api(tags = "公文运转上报")
 @Controller
-@RequestMapping("/docassignrec")
+@RequestMapping("/api/docassignrec")
 public class DocassignrecController extends BaseController {
 
     private String PREFIX = "/DocAssignRec/docassignrec/";

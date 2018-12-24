@@ -7,6 +7,7 @@ import cn.stylefeng.guns.core.util.CopyUtils;
 import cn.stylefeng.guns.modular.Docs.dto.AddDocDto;
 import cn.stylefeng.guns.modular.Docs.dto.SreachDocDto;
 import cn.stylefeng.guns.modular.Docs.service.IDocsService;
+import cn.stylefeng.guns.modular.checkitem.service.ICheckitemService;
 import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
 import cn.stylefeng.guns.modular.system.dao.DocassignrecMapper;
 import cn.stylefeng.guns.modular.system.dao.DocsMapper;
@@ -39,6 +40,8 @@ public class DocsServiceImpl extends ServiceImpl<DocsMapper, Docs> implements ID
     private DocsMapper docsMapper;
     @Autowired
     private DocassignrecMapper docassignrecMapper;
+    @Autowired
+    private ICheckitemService checkitemService;
     @Override
     public ResponseData SreachPage(SreachMeetingDto sreachDto) {
         try {
@@ -76,7 +79,10 @@ public class DocsServiceImpl extends ServiceImpl<DocsMapper, Docs> implements ID
             }
 
             ArrayList<Docs> arrayList = docsMapper.selectAsPage(page,ew);
-
+            for (Docs meeting: arrayList
+            ) {
+                meeting.setCompanys(docassignrecMapper.getInfoByPid((EntityWrapper<Docassignrec>) Condition.create().eq("rec.meetingid",  meeting.getId()),checkitemService.selectList(Condition.create().eq("itemclass", 3).eq("status", 1))));
+            }
             page.setRecords(arrayList);
             page.setTotal(docsMapper.selectAsCount(ew));
             return ResponseData.success(page);
@@ -134,7 +140,7 @@ public class DocsServiceImpl extends ServiceImpl<DocsMapper, Docs> implements ID
     @Override
     public ResponseData selectWithManyById(Integer id) {
         Docs meeting = docsMapper.selectWithManyById(id);
-        meeting.setCompanys(docassignrecMapper.getInfoByPid((EntityWrapper<Docassignrec>) Condition.create().eq("rec.meetingid",  id)));
+        meeting.setCompanys(docassignrecMapper.getInfoByPid((EntityWrapper<Docassignrec>) Condition.create().eq("rec.meetingid",  id),checkitemService.selectList(Condition.create().eq("itemclass", 3).eq("status", 1))));
         return ResponseData.success(meeting);
     }
 

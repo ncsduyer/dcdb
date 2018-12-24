@@ -1,5 +1,6 @@
 package cn.stylefeng.guns.modular.tdtaskassign.service.impl;
 
+import cn.hutool.core.date.DateTime;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.util.VoUtil;
@@ -38,7 +39,13 @@ public class TaskassignServiceImpl extends ServiceImpl<TaskassignMapper, Taskass
             taskassign1.setId(taskassign.getId());
             taskassign1.setStatus(taskassign.getStatus());
             taskassign1.setClosememo(taskassign.getClosememo());
+            if(ToolUtil.isEmpty(taskassign.getEndtime())){
+
+            taskassign1.setEndtime(new DateTime());
+            }else{
+
             taskassign1.setEndtime(taskassign.getEndtime());
+            }
             updateById(taskassign1);
             return ResponseData.success();
         } catch (Exception e) {

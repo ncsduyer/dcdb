@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateTime;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.util.Bettime;
 import cn.stylefeng.guns.core.util.CopyUtils;
+import cn.stylefeng.guns.modular.checkitem.service.ICheckitemService;
 import cn.stylefeng.guns.modular.meeting.dto.AddMeetingDto;
 import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
 import cn.stylefeng.guns.modular.meeting.service.IMeetingService;
@@ -38,6 +39,8 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
     private MeetingMapper meetingMapper;
     @Autowired
     private MeetingrecMapper meetingrecMapper;
+    @Autowired
+    private ICheckitemService checkitemService;
     @Override
     public ResponseData SreachPage(SreachMeetingDto sreachDto) {
         try {
@@ -75,7 +78,10 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
             }
 
             ArrayList<Meeting> arrayList = meetingMapper.selectAsPage(page,ew);
-
+            for (Meeting meeting: arrayList
+                 ) {
+                meeting.setCompanys(meetingrecMapper.getInfoByPid((EntityWrapper<Meetingrec>) Condition.create().eq("rec.meetingid",  meeting.getId()),checkitemService.selectList(Condition.create().eq("itemclass", 2).eq("status", 1))));
+            }
             page.setRecords(arrayList);
             page.setTotal(meetingMapper.selectAsCount(ew));
             return ResponseData.success(page);
@@ -133,7 +139,7 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
     @Override
     public ResponseData selectWithManyById(Integer id) {
         Meeting meeting = meetingMapper.selectWithManyById(id);
-        meeting.setCompanys(meetingrecMapper.getInfoByPid((EntityWrapper<Meetingrec>) Condition.create().eq("rec.meetingid",  id)));
+        meeting.setCompanys(meetingrecMapper.getInfoByPid((EntityWrapper<Meetingrec>) Condition.create().eq("rec.meetingid",  id),checkitemService.selectList(Condition.create().eq("itemclass", 2).eq("status", 1))));
         return ResponseData.success(meeting);
     }
 

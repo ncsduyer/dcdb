@@ -17,13 +17,18 @@
         id, meetingid, checkitemid, checkvalue, createtime, unitid
     </sql>
     <select id="getInfoByPid" resultType="java.util.HashMap">
-        select user.name,sum(case when unit.id is null then 0 else 1 end) as unitnum , sum(case when ass.id is null then 0 else 1 end)as taskCrenum
+        SELECT c.title ctitle ,
+        <if test="courses != null">
+            <foreach collection="courses" item="item" separator=",">
+            CASE rec.checkitemid WHEN ${item.id} THEN rec.checkvalue ElSE 0 END  "${item.itemdesc}"
+            </foreach>
+        </if>
         from td_meetingrec rec
         left join t_tb_company c on c.id=rec.unitid
-        left join td_checkitem ch on ch.id=rec.checkitemid
+
         <where>
             ${ew.sqlSegment}
         </where>
-        group by user.id,user.name
+
     </select>
 </mapper>

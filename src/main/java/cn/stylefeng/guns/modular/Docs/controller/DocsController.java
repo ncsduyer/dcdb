@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Api(tags = "公文运转")
 @Controller
-@RequestMapping("/docs")
+@RequestMapping("/api/docs")
 public class DocsController extends BaseController {
 
     private String PREFIX = "/Docs/docs/";

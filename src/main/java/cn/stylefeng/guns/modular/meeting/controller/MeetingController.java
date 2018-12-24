@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Api(tags = "区委会议")
 @Controller
-@RequestMapping("/meeting")
+@RequestMapping("/api/meeting")
 public class MeetingController extends BaseController {
 
     private String PREFIX = "/meeting/meeting/";

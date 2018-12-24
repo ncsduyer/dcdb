@@ -7,6 +7,7 @@ import cn.stylefeng.guns.core.util.CopyUtils;
 import cn.stylefeng.guns.modular.Infos.dto.AddInfoDto;
 import cn.stylefeng.guns.modular.Infos.dto.SreachInfoDto;
 import cn.stylefeng.guns.modular.Infos.service.IInfosService;
+import cn.stylefeng.guns.modular.checkitem.service.ICheckitemService;
 import cn.stylefeng.guns.modular.system.dao.InfosMapper;
 import cn.stylefeng.guns.modular.system.dao.InfosrecMapper;
 import cn.stylefeng.guns.modular.system.model.Infos;
@@ -39,6 +40,8 @@ public class InfosServiceImpl extends ServiceImpl<InfosMapper, Infos> implements
     private InfosMapper infosMapper;
     @Autowired
     private InfosrecMapper infosrecMapper;
+    @Autowired
+    private ICheckitemService checkitemService;
     @Override
     public ResponseData SreachPage(SreachInfoDto sreachDto) {
         try {
@@ -76,7 +79,10 @@ public class InfosServiceImpl extends ServiceImpl<InfosMapper, Infos> implements
             }
 
             ArrayList<Infos> arrayList = infosMapper.selectAsPage(page,ew);
-
+            for (Infos meeting: arrayList
+            ) {
+                meeting.setCompanys(infosrecMapper.getInfoByPid((EntityWrapper<Infosrec>) Condition.create().eq("rec.meetingid",  meeting.getId()),checkitemService.selectList(Condition.create().eq("itemclass", 4).eq("status", 1))));
+            }
             page.setRecords(arrayList);
             page.setTotal(infosMapper.selectAsCount(ew));
             return ResponseData.success(page);
@@ -134,7 +140,7 @@ public class InfosServiceImpl extends ServiceImpl<InfosMapper, Infos> implements
     @Override
     public ResponseData selectWithManyById(Integer id) {
         Meeting meeting = infosMapper.selectWithManyById(id);
-        meeting.setCompanys(infosrecMapper.getInfoByPid((EntityWrapper<Infosrec>) Condition.create().eq("rec.meetingid",  id)));
+        meeting.setCompanys(infosrecMapper.getInfoByPid((EntityWrapper<Infosrec>) Condition.create().eq("rec.meetingid",  id),checkitemService.selectList(Condition.create().eq("itemclass", 4).eq("status", 1))));
         return ResponseData.success(meeting);
     }
 

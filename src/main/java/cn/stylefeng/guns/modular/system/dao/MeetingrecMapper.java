@@ -1,8 +1,10 @@
 package cn.stylefeng.guns.modular.system.dao;
 
+import cn.stylefeng.guns.modular.system.model.Checkitem;
 import cn.stylefeng.guns.modular.system.model.Meetingrec;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,5 +19,5 @@ import java.util.List;
  */
 public interface MeetingrecMapper extends BaseMapper<Meetingrec> {
 
-    List<HashMap<String,Object>> getInfoByPid(EntityWrapper<Meetingrec> ew);
+    List<HashMap<String,Object>> getInfoByPid(@Param(value = "ew") EntityWrapper<Meetingrec> ew,@Param(value = "courses") List<Checkitem> courses);
 }

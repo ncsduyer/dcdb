@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Api(tags = "区委信息")
 @Controller
-@RequestMapping("/infos")
+@RequestMapping("/api/infos")
 public class InfosController extends BaseController {
 
     private String PREFIX = "/Infos/infos/";

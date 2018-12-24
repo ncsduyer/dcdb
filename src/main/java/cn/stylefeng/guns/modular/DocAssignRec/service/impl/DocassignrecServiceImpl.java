@@ -3,11 +3,13 @@ package cn.stylefeng.guns.modular.DocAssignRec.service.impl;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.modular.DocAssignRec.service.IDocassignrecService;
 import cn.stylefeng.guns.modular.MeetingRec.dto.SreachMeetingRecDto;
+import cn.stylefeng.guns.modular.checkitem.service.ICheckitemService;
 import cn.stylefeng.guns.modular.system.dao.DocassignrecMapper;
 import cn.stylefeng.guns.modular.system.model.Docassignrec;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
+import com.baomidou.mybatisplus.mapper.Condition;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,8 @@ import org.springframework.stereotype.Service;
 public class DocassignrecServiceImpl extends ServiceImpl<DocassignrecMapper, Docassignrec> implements IDocassignrecService {
     @Autowired
     private DocassignrecMapper docassignrecMapper;
+    @Autowired
+    private ICheckitemService checkitemService;
     @Override
     public ResponseData selectListByDto(SreachMeetingRecDto sreachDto) {
         try{
@@ -41,7 +45,7 @@ public class DocassignrecServiceImpl extends ServiceImpl<DocassignrecMapper, Doc
                 ew.in("rec.unitid", sreachDto.getCompanyIds());
             }
             ew.orderBy("rec.createtime");
-            return ResponseData.success(docassignrecMapper.getInfoByPid(ew));
+            return ResponseData.success(docassignrecMapper.getInfoByPid(ew,checkitemService.selectList(Condition.create().eq("itemclass", 3).eq("status", 1))));
         }catch (Exception e){
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
         }

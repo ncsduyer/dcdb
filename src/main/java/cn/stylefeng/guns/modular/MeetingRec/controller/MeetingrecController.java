@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Api(tags = "会议督查")
 @Controller
-@RequestMapping("/meetingrec")
+@RequestMapping("/api/meetingrec")
 public class MeetingrecController extends BaseController {
 
     private String PREFIX = "/MeetingRec/meetingrec/";

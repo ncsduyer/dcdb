@@ -107,11 +107,11 @@ public class TaskAop {
     @AfterReturning("editTaskService()")
     public void editTaskLog(JoinPoint joinPoint) {
         Taskassign taskassign = (Taskassign) joinPoint.getArgs()[0];
-        if (taskassignLogService.selectOne(Condition.create()
-                .eq("tassignid", taskassign.getId()).eq("status", taskassign.getStatus())) != null) {
+        if (taskassignLogService.selectOne(Condition.create().eq("tassignid", taskassign.getId()).eq("status", taskassign.getStatus())) != null) {
             return;
         }
         EventStep eventStep=eventStepService.selectOne(Condition.create().eq("event_type",1).eq("status", taskassign.getStatus()));
+        taskassign=taskassignService.selectById(taskassign.getId());
         Task task=taskService.selectById(taskassign.getTaskid());
 
 
