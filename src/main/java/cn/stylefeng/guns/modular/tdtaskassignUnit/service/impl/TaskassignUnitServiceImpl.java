@@ -61,7 +61,7 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
 
             if (count > 0){
 
-                if (selectCount(Condition.create().gt("status", 1).eq("tassignid", taskassignId))==count){
+                if (selectCount(Condition.create().gt("status", 1).eq("tassignid", taskassignId))>0){
                     if (taskassign.getStatus()<=2){
                         taskassign.setStatus(2);
                     }
@@ -88,7 +88,7 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
 
     public boolean updateOne(TaskassignUnit taskassignUnit) {
         TaskassignUnit ts=selectOne(Condition.create().eq("personid", ShiroKit.getUser().getId()).eq("id", taskassignUnit.getId()));
-        if (ToolUtil.isEmpty(ts)){
+        if (ToolUtil.isEmpty(ts)||(ToolUtil.isNotEmpty(ts.getEndtime())&&ToolUtil.isNotEmpty(ts.getRequirements()))){
             return false;
         }
         taskassignId=ts.getTassignid();
