@@ -47,6 +47,7 @@ public class MeetingrecController extends BaseController {
     })
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @Permission
+    @ResponseBody
     public ResponseData list(@Validated @RequestBody SreachMeetingRecDto sreachMeetingRecDto) {
         return meetingrecService.selectListByDto(sreachMeetingRecDto);
     }

@@ -35,7 +35,7 @@ public class DocassignrecServiceImpl extends ServiceImpl<DocassignrecMapper, Doc
             EntityWrapper<Docassignrec> ew = new EntityWrapper<>();
             ew.setEntity(new Docassignrec());
             if (ToolUtil.isNotEmpty(sreachDto.getPid())){
-                ew.eq("rec.meetingid", sreachDto.getPid());
+                ew.eq("rec.docassignid", sreachDto.getPid());
             }
 
             if (ToolUtil.isNotEmpty(sreachDto.getCheckitemid())){

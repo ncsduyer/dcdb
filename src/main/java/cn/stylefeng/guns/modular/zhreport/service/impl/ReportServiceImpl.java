@@ -91,10 +91,10 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
         }
         Condition ew=Condition.create();
         if (ToolUtil.isNotEmpty(sreachReportDto.getBeforeTime())){
-            ew.gt("taskunit.createtime", sreachReportDto.getBeforeTime());
+            ew.ge("taskunit.createtime", sreachReportDto.getBeforeTime());
         }
         if (ToolUtil.isNotEmpty(sreachReportDto.getAfterTime())){
-            ew.lt("taskunit.createtime", sreachReportDto.getAfterTime());
+            ew.le("taskunit.createtime", sreachReportDto.getAfterTime());
         }
         reportMapper.selectByUnitCount(ew);
         return null;
@@ -108,10 +108,10 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
         }
         Condition ew=Condition.create();
         if (ToolUtil.isNotEmpty(sreachReportDto.getBeforeTime())){
-            ew.gt("td_taskassign.assigntime", sreachReportDto.getBeforeTime());
+            ew.ge("td_taskassign.assigntime", sreachReportDto.getBeforeTime());
         }
         if (ToolUtil.isNotEmpty(sreachReportDto.getAfterTime())){
-            ew.lt("td_taskassign.assigntime", sreachReportDto.getAfterTime());
+            ew.le("td_taskassign.assigntime", sreachReportDto.getAfterTime());
         }
         reportMapper.selectByPersionCount(ew);
         return null;
@@ -130,10 +130,10 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
         }
         Condition ew=Condition.create();
             if (ToolUtil.isNotEmpty(sreachReportDto.getBeforeTime())){
-                ew.gt("taskunit.createtime", sreachReportDto.getBeforeTime());
+                ew.ge("taskunit.createtime", sreachReportDto.getBeforeTime());
             }
             if (ToolUtil.isNotEmpty(sreachReportDto.getAfterTime())){
-                ew.lt("taskunit.createtime", sreachReportDto.getAfterTime());
+                ew.le("taskunit.createtime", sreachReportDto.getAfterTime());
             }
         return ResponseData.success(reportMapper.selectByUnitCount(ew));
     }
@@ -147,10 +147,10 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
         }
         Condition ew=Condition.create();
         if (ToolUtil.isNotEmpty(sreachReportDto.getBeforeTime())){
-            ew.gt("td_taskassign.assigntime", sreachReportDto.getBeforeTime());
+            ew.ge("td_taskassign.assigntime", sreachReportDto.getBeforeTime());
         }
         if (ToolUtil.isNotEmpty(sreachReportDto.getAfterTime())){
-            ew.lt("td_taskassign.assigntime", sreachReportDto.getAfterTime());
+            ew.le("td_taskassign.assigntime", sreachReportDto.getAfterTime());
         }
         return ResponseData.success(reportMapper.selectByPersionCount(ew));
     }
@@ -164,10 +164,10 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
 //        }
 //        Condition ew=Condition.create();
 //        if (ToolUtil.isNotEmpty(sreachReportDto.getBeforeTime())){
-//            ew.gt("taskunit.createtime", sreachReportDto.getBeforeTime());
+//            ew.ge("taskunit.createtime", sreachReportDto.getBeforeTime());
 //        }
 //        if (ToolUtil.isNotEmpty(sreachReportDto.getAfterTime())){
-//            ew.lt("taskunit.createtime", sreachReportDto.getAfterTime());
+//            ew.le("taskunit.createtime", sreachReportDto.getAfterTime());
 //        }
         return ResponseData.success(reportMapper.selectByAffairCount(null));
     }

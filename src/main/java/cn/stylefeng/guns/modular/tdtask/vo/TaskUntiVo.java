@@ -12,6 +12,7 @@ import java.util.List;
 public class TaskUntiVo implements Serializable {
     private String campany;
     private String agent;
+    private String endTime;
     private List<TaskassignUnitdealVo> taskassignUnitdeals;
     public TaskUntiVo() {
         super();
@@ -65,5 +66,13 @@ public class TaskUntiVo implements Serializable {
                 });
 
         this.taskassignUnitdeals = taskassignUnitdealVos;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }

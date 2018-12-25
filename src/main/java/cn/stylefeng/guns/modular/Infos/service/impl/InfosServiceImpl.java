@@ -2,6 +2,7 @@ package cn.stylefeng.guns.modular.Infos.service.impl;
 
 import cn.hutool.core.date.DateTime;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
+import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.util.Bettime;
 import cn.stylefeng.guns.core.util.CopyUtils;
 import cn.stylefeng.guns.modular.Infos.dto.AddInfoDto;
@@ -12,7 +13,6 @@ import cn.stylefeng.guns.modular.system.dao.InfosMapper;
 import cn.stylefeng.guns.modular.system.dao.InfosrecMapper;
 import cn.stylefeng.guns.modular.system.model.Infos;
 import cn.stylefeng.guns.modular.system.model.Infosrec;
-import cn.stylefeng.guns.modular.system.model.Meeting;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
@@ -53,10 +53,10 @@ public class InfosServiceImpl extends ServiceImpl<InfosMapper, Infos> implements
             EntityWrapper<Infos> ew = new EntityWrapper<>();
             ew.setEntity(new Infos());
             if (ToolUtil.isNotEmpty(sreachDto.getBeforeTime())){
-                ew.gt("m.mtime", sreachDto.getBeforeTime());
+                ew.ge("m.mtime", sreachDto.getBeforeTime());
             }
             if (ToolUtil.isNotEmpty(sreachDto.getAfterTime())){
-                ew.lt("m.mtime", sreachDto.getAfterTime());
+                ew.le("m.mtime", sreachDto.getAfterTime());
             }
             if (ToolUtil.isNotEmpty(sreachDto.getCreatorid())){
                 ew.eq("m.creatorid", sreachDto.getCreatorid());
@@ -81,7 +81,7 @@ public class InfosServiceImpl extends ServiceImpl<InfosMapper, Infos> implements
             ArrayList<Infos> arrayList = infosMapper.selectAsPage(page,ew);
             for (Infos meeting: arrayList
             ) {
-                meeting.setCompanys(infosrecMapper.getInfoByPid((EntityWrapper<Infosrec>) Condition.create().eq("rec.meetingid",  meeting.getId()),checkitemService.selectList(Condition.create().eq("itemclass", 4).eq("status", 1))));
+                meeting.setCompanys(infosrecMapper.getInfoByPid(Condition.create().eq("rec.infosid",  meeting.getId()),checkitemService.selectList(Condition.create().eq("itemclass", 4).eq("status", 1))));
             }
             page.setRecords(arrayList);
             page.setTotal(infosMapper.selectAsCount(ew));
@@ -97,6 +97,9 @@ public class InfosServiceImpl extends ServiceImpl<InfosMapper, Infos> implements
 
             Infos meeting = new Infos();
             BeanUtils.copyProperties(addDto, meeting);
+            if(ToolUtil.isEmpty(meeting.getCreatorid())){
+                meeting.setCreatorid(ShiroKit.getUser().getId());
+            }
             insert(meeting);
 
             Infosrec meetingrec= new Infosrec();
@@ -104,6 +107,7 @@ public class InfosServiceImpl extends ServiceImpl<InfosMapper, Infos> implements
 //                循环插入交办单位
                 for (Infosrec map : addDto.getResc()) {
                     BeanUtils.copyProperties(map, meetingrec);
+            meetingrec.setInfosid(meeting.getId());
                     if (ToolUtil.isEmpty(meetingrec.getCreatetime())) {
                         meetingrec.setCreatetime(new DateTime());
                     }
@@ -139,8 +143,8 @@ public class InfosServiceImpl extends ServiceImpl<InfosMapper, Infos> implements
     }
     @Override
     public ResponseData selectWithManyById(Integer id) {
-        Meeting meeting = infosMapper.selectWithManyById(id);
-        meeting.setCompanys(infosrecMapper.getInfoByPid((EntityWrapper<Infosrec>) Condition.create().eq("rec.meetingid",  id),checkitemService.selectList(Condition.create().eq("itemclass", 4).eq("status", 1))));
+        Infos meeting = infosMapper.selectWithManyById(id);
+        meeting.setCompanys(infosrecMapper.getInfoByPid(Condition.create().eq("rec.infosid",  id),checkitemService.selectList(Condition.create().eq("itemclass", 4).eq("status", 1))));
         return ResponseData.success(meeting);
     }
 
@@ -176,10 +180,10 @@ public class InfosServiceImpl extends ServiceImpl<InfosMapper, Infos> implements
 //                    EntityWrapper<Taskassign> ew = new EntityWrapper<>();
 //                    ew.setEntity(new Taskassign());
 //                    if (ToolUtil.isNotEmpty(sreachDto.getBeforeTime())){
-//                        ew.gt("assigntime", sreachDto.getBeforeTime());
+//                        ew.ge("assigntime", sreachDto.getBeforeTime());
 //                    }
 //                    if (ToolUtil.isNotEmpty(sreachDto.getAfterTime())){
-//                        ew.lt("assigntime", sreachDto.getAfterTime());
+//                        ew.le("assigntime", sreachDto.getAfterTime());
 //                    }
 //                    ew.eq("status", et.getStatus());
 //                    legend.getData().add(et.getStep());
@@ -217,10 +221,10 @@ public class InfosServiceImpl extends ServiceImpl<InfosMapper, Infos> implements
 //                    ew.setEntity(new Taskassign());
 //                    ew.setSqlSelect("date_format(assigntime, '%Y-%m-%d') time,count(id) size");
 //                    if (ToolUtil.isNotEmpty(sreachDto.getBeforeTime())){
-//                        ew.gt("assigntime", sreachDto.getBeforeTime());
+//                        ew.ge("assigntime", sreachDto.getBeforeTime());
 //                    }
 //                    if (ToolUtil.isNotEmpty(sreachDto.getAfterTime())){
-//                        ew.lt("assigntime", sreachDto.getAfterTime());
+//                        ew.le("assigntime", sreachDto.getAfterTime());
 //                    }
 //                    ew.eq("status", et.getStatus());
 //                    ew.groupBy("date_format(assigntime, '%Y-%m-%d')");

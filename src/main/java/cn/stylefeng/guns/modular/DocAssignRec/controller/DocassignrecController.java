@@ -49,6 +49,7 @@ public class DocassignrecController extends BaseController {
     })
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @Permission
+    @ResponseBody
     public ResponseData list(@Validated @RequestBody SreachMeetingRecDto sreachMeetingRecDto) {
         return docassignrecService.selectListByDto(sreachMeetingRecDto);
     }

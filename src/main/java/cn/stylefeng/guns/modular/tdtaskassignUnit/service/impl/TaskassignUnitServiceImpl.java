@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateTime;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.util.Bettime;
+import cn.stylefeng.guns.core.util.LogUtil;
 import cn.stylefeng.guns.core.util.VoUtil;
 import cn.stylefeng.guns.modular.system.dao.TaskassignUnitMapper;
 import cn.stylefeng.guns.modular.system.model.Taskassign;
@@ -45,6 +46,8 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
     private boolean isall=false;
     private Integer taskassignId;
     private Integer count=-1;
+    private Taskassign taskassign;
+
     @Override
     public ResponseData updateByTaskassignUnit(List<TaskassignUnit> taskassignUnits) {
         try{
@@ -54,8 +57,8 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
                     return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
                 }
             }
+            taskassign=taskassignService.selectById(taskassignId);
 
-                Taskassign taskassign=taskassignService.selectById(taskassignId);
             if (count > 0){
 
                 if (selectCount(Condition.create().gt("status", 1).eq("tassignid", taskassignId))==count){
@@ -89,6 +92,7 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
             return false;
         }
         taskassignId=ts.getTassignid();
+        taskassign=taskassignService.selectById(taskassignId);
         if (count<=0){
 
         count=selectCount(Condition.create().eq("tassignid", taskassignId));
@@ -104,10 +108,8 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
         }
 
         ts.setUpdatetime(new DateTime());
-
         updateById(ts);
-        //检查是否全部反馈
-
+        LogUtil.addLog(taskassign, ShiroKit.getUser().getName()+"提交了新反馈，单位id为："+ts.getUnitid().toString());
         return true;
     }
 
@@ -127,10 +129,10 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
             EntityWrapper<TaskassignUnit> ew = new EntityWrapper<>();
             ew.setEntity(new TaskassignUnit());
             if (ToolUtil.isNotEmpty(sreachTaskDto.getBeforeTime())){
-                ew.gt("ta.assigntime", sreachTaskDto.getBeforeTime());
+                ew.ge("ta.assigntime", sreachTaskDto.getBeforeTime());
             }
             if (ToolUtil.isNotEmpty(sreachTaskDto.getAfterTime())){
-                ew.lt("ta.assigntime", sreachTaskDto.getAfterTime());
+                ew.le("ta.assigntime", sreachTaskDto.getAfterTime());
             }
             if (ToolUtil.isNotEmpty(sreachTaskDto.getCreatorid())){
                 ew.eq("ta.creatorid", sreachTaskDto.getCreatorid());
@@ -152,7 +154,7 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
                 ew.in("tu.unitid", sreachTaskDto.getCompanyIds());
             }
             if (sreachTaskDto.getIsExceed()==1){
-                ew.lt("tu.endtime",new Date()).isNull("ta.endtime");
+                ew.le("tu.endtime",new Date()).isNull("ta.endtime");
             }
             if (ToolUtil.isNotEmpty(sreachTaskDto.getOrder())){
                 ew.orderBy(sreachTaskDto.getOrder());

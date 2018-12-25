@@ -2,6 +2,7 @@ package cn.stylefeng.guns.modular.meeting.service.impl;
 
 import cn.hutool.core.date.DateTime;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
+import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.util.Bettime;
 import cn.stylefeng.guns.core.util.CopyUtils;
 import cn.stylefeng.guns.modular.checkitem.service.ICheckitemService;
@@ -24,6 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * <p>
@@ -52,10 +55,10 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
             EntityWrapper<Meeting> ew = new EntityWrapper<>();
             ew.setEntity(new Meeting());
             if (ToolUtil.isNotEmpty(sreachDto.getBeforeTime())){
-                ew.gt("m.mtime", sreachDto.getBeforeTime());
+                ew.ge("m.mtime", sreachDto.getBeforeTime());
             }
             if (ToolUtil.isNotEmpty(sreachDto.getAfterTime())){
-                ew.lt("m.mtime", sreachDto.getAfterTime());
+                ew.le("m.mtime", sreachDto.getAfterTime());
             }
             if (ToolUtil.isNotEmpty(sreachDto.getCreatorid())){
                 ew.eq("m.creatorid", sreachDto.getCreatorid());
@@ -80,7 +83,8 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
             ArrayList<Meeting> arrayList = meetingMapper.selectAsPage(page,ew);
             for (Meeting meeting: arrayList
                  ) {
-                meeting.setCompanys(meetingrecMapper.getInfoByPid((EntityWrapper<Meetingrec>) Condition.create().eq("rec.meetingid",  meeting.getId()),checkitemService.selectList(Condition.create().eq("itemclass", 2).eq("status", 1))));
+                List<HashMap<String,Object>> compangys= meetingrecMapper.getInfoByPid(Condition.create().eq("rec.meetingid",  meeting.getId()),checkitemService.selectList(Condition.create().eq("itemclass", 2).eq("status", 1)));
+                meeting.setCompanys(compangys);
             }
             page.setRecords(arrayList);
             page.setTotal(meetingMapper.selectAsCount(ew));
@@ -96,6 +100,9 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
 
                 Meeting meeting = new Meeting();
                 BeanUtils.copyProperties(addDto, meeting);
+                if(ToolUtil.isEmpty(meeting.getCreatorid())){
+                    meeting.setCreatorid(ShiroKit.getUser().getId());
+                }
                 insert(meeting);
 
                    Meetingrec meetingrec= new Meetingrec();
@@ -103,6 +110,7 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
 //                循环插入交办单位
                 for (Meetingrec map : addDto.getResc()) {
                     BeanUtils.copyProperties(map, meetingrec);
+                   meetingrec.setMeetingid(meeting.getId());
                     if (ToolUtil.isEmpty(meetingrec.getCreatetime())) {
                         meetingrec.setCreatetime(new DateTime());
                     }
@@ -139,7 +147,7 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
     @Override
     public ResponseData selectWithManyById(Integer id) {
         Meeting meeting = meetingMapper.selectWithManyById(id);
-        meeting.setCompanys(meetingrecMapper.getInfoByPid((EntityWrapper<Meetingrec>) Condition.create().eq("rec.meetingid",  id),checkitemService.selectList(Condition.create().eq("itemclass", 2).eq("status", 1))));
+        meeting.setCompanys(meetingrecMapper.getInfoByPid(Condition.create().eq("rec.meetingid",  id),checkitemService.selectList(Condition.create().eq("itemclass", 2).eq("status", 1))));
         return ResponseData.success(meeting);
     }
 
@@ -175,10 +183,10 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
 //                    EntityWrapper<Taskassign> ew = new EntityWrapper<>();
 //                    ew.setEntity(new Taskassign());
 //                    if (ToolUtil.isNotEmpty(sreachDto.getBeforeTime())){
-//                        ew.gt("assigntime", sreachDto.getBeforeTime());
+//                        ew.ge("assigntime", sreachDto.getBeforeTime());
 //                    }
 //                    if (ToolUtil.isNotEmpty(sreachDto.getAfterTime())){
-//                        ew.lt("assigntime", sreachDto.getAfterTime());
+//                        ew.le("assigntime", sreachDto.getAfterTime());
 //                    }
 //                    ew.eq("status", et.getStatus());
 //                    legend.getData().add(et.getStep());
@@ -216,10 +224,10 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
 //                    ew.setEntity(new Taskassign());
 //                    ew.setSqlSelect("date_format(assigntime, '%Y-%m-%d') time,count(id) size");
 //                    if (ToolUtil.isNotEmpty(sreachDto.getBeforeTime())){
-//                        ew.gt("assigntime", sreachDto.getBeforeTime());
+//                        ew.ge("assigntime", sreachDto.getBeforeTime());
 //                    }
 //                    if (ToolUtil.isNotEmpty(sreachDto.getAfterTime())){
-//                        ew.lt("assigntime", sreachDto.getAfterTime());
+//                        ew.le("assigntime", sreachDto.getAfterTime());
 //                    }
 //                    ew.eq("status", et.getStatus());
 //                    ew.groupBy("date_format(assigntime, '%Y-%m-%d')");

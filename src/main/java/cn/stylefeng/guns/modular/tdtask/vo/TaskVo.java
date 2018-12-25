@@ -52,6 +52,7 @@ public class TaskVo implements Serializable {
 
         for (TaskassignUnit tu:taskassign.getTaskassignUnits()){
             TaskUntiVo taskUntiVo=new TaskUntiVo(taskVo.userService.selectById(tu.getPersonid()).getName(),tu.getCompany().getTitle());
+            taskUntiVo.setEndTime(sdf.format(tu.getEndtime()));
             taskUntiVo.setTaskassignUnitdeals(tu.getTaskassignUnitdeals());
             this.taskUntiVo.add(taskUntiVo);
         }

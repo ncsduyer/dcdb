@@ -45,7 +45,7 @@
     </sql>
     <select id="selectWithManyById" resultMap="BaseMoreMap">
         SELECT <include refid="AS_Column_List"/>
-        <include refid="base_with"/>  WHERE t.id=#{id}
+        <include refid="base_with"/>  WHERE m.id=#{id}
     </select>
     <select id="selectAsPage" resultMap="BaseMoreMap">
         SELECT <include refid="AS_Column_List"/>

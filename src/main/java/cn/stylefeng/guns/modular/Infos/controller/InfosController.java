@@ -54,6 +54,7 @@ public class InfosController extends BaseController {
     })
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @Permission
+    @ResponseBody
     public ResponseData list(@RequestBody(required = false) SreachInfoDto sreachInfoDto) {
         ResponseData responseData = infosService.SreachPage(sreachInfoDto);
         return responseData;

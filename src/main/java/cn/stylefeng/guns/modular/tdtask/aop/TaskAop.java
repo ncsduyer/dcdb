@@ -1,6 +1,7 @@
 package cn.stylefeng.guns.modular.tdtask.aop;
 
 import cn.hutool.core.date.DateTime;
+import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.util.JsonUtils;
 import cn.stylefeng.guns.core.util.SmsUtil;
 import cn.stylefeng.guns.core.util.ValidateUtils;
@@ -78,7 +79,7 @@ public class TaskAop {
             taskassignLog.setTaskid(taskassign.getTaskid());
             taskassignLog.setTassignid(taskassign.getId());
             taskassignLog.setCreatetime(new DateTime());
-            taskassignLog.setLogcontent("新建《"+task.getTitle()+"》");
+            taskassignLog.setLogcontent(ShiroKit.getUser().getName()+"新建《"+task.getTitle()+"》");
             taskassignLog.setStatus(taskassign.getStatus());
             taskassignLogService.insert(taskassignLog);
 
@@ -119,7 +120,7 @@ public class TaskAop {
         taskassignLog.setTaskid(taskassign.getTaskid());
         taskassignLog.setTassignid(taskassign.getId());
         taskassignLog.setCreatetime(new DateTime());
-        taskassignLog.setLogcontent(task.getTitle()+eventStep.getStep());
+        taskassignLog.setLogcontent(task.getTitle()+"变更状态为："+eventStep.getStep());
         taskassignLog.setStatus(taskassign.getStatus());
         taskassignLogService.insert(taskassignLog);
     }

@@ -54,6 +54,7 @@ public class MeetingController extends BaseController {
     })
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @Permission
+    @ResponseBody
     public ResponseData list(@RequestBody(required = false) SreachMeetingDto sreachMeetingDto) {
         ResponseData responseData = meetingService.SreachPage(sreachMeetingDto);
         return responseData;

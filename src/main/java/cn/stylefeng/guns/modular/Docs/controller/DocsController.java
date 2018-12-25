@@ -54,6 +54,7 @@ public class DocsController extends BaseController {
     })
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @Permission
+    @ResponseBody
     public ResponseData list(@RequestBody(required = false) SreachDocDto sreachDocDto) {
         ResponseData responseData = docsService.SreachPage(sreachDocDto);
         return responseData;

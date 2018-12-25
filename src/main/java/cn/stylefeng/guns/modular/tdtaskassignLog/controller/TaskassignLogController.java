@@ -68,7 +68,7 @@ public class TaskassignLogController extends BaseController {
     @RequestMapping(value = "/list",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
     public ResponseData list(@RequestParam Integer id) {
-        return ResponseData.success(taskassignLogService.selectList(Condition.create().eq("tassignid", id).orderBy("status",true).orderBy("createtime", true)));
+        return ResponseData.success(taskassignLogService.selectList(Condition.create().eq("tassignid", id).orderBy("createtime", true)));
     }
 
     /**

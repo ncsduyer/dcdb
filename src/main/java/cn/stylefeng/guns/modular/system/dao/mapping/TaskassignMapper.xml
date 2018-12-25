@@ -88,6 +88,9 @@
                     <id column="cid" property="id" />
                     <result column="ctitle" property="title"/>
                 </association>
+                <association property="person" javaType="cn.stylefeng.guns.modular.system.model.User" column="tupersonid"
+                             select="cn.stylefeng.guns.modular.system.dao.UserMapper.selectById">
+                </association>
                 <collection property="taskassignUnitdeals" ofType="cn.stylefeng.guns.modular.system.model.TaskassignUnitdeal" >
                     <id column="tudid" property="id" />
                     <result column="tudtaunitid" property="taunitid" />

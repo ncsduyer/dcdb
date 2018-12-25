@@ -20,7 +20,7 @@
         SELECT c.title ctitle ,
         <if test="courses != null">
             <foreach collection="courses" item="item" separator=",">
-                CASE rec.checkitemid WHEN #{item.id} THEN rec.checkvalue ElSE 0 END ) "${item.itemdesc}"
+                CASE rec.checkitemid WHEN ${item.id} THEN rec.checkvalue ElSE 0 END  "${item.itemdesc}"
             </foreach>
         </if>
         from td_infosrec rec

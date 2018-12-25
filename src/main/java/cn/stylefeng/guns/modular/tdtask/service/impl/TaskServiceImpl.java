@@ -128,10 +128,10 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
             EntityWrapper<Task> ew = new EntityWrapper<>();
             ew.setEntity(new Task());
             if (ToolUtil.isNotEmpty(sreachTaskDto.getBeforeTime())){
-                ew.gt("ta.assigntime", sreachTaskDto.getBeforeTime());
+                ew.ge("ta.assigntime", sreachTaskDto.getBeforeTime());
             }
             if (ToolUtil.isNotEmpty(sreachTaskDto.getAfterTime())){
-                ew.lt("ta.assigntime", sreachTaskDto.getAfterTime());
+                ew.le("ta.assigntime", sreachTaskDto.getAfterTime());
             }
             if (ToolUtil.isNotEmpty(sreachTaskDto.getCreatorid())){
                 ew.eq("ta.creatorid", sreachTaskDto.getCreatorid());
@@ -153,7 +153,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
                 ew.in("tu.unitid", sreachTaskDto.getCompanyIds());
             }
             if (sreachTaskDto.getIsExceed()==1){
-                ew.lt("tu.endtime",new Date()).isNull("ta.endtime");
+                ew.le("tu.endtime",new Date()).isNull("ta.endtime");
             }
             ew.groupBy("tu.id");
             if (ToolUtil.isNotEmpty(sreachTaskDto.getOrder())){
@@ -183,10 +183,10 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
             ew = new EntityWrapper<>();
             ew.setEntity(new Task());
             if (ToolUtil.isNotEmpty(sreachTaskDto.getBeforeTime())){
-                ew.gt("ta.assigntime", sreachTaskDto.getBeforeTime());
+                ew.ge("ta.assigntime", sreachTaskDto.getBeforeTime());
             }
             if (ToolUtil.isNotEmpty(sreachTaskDto.getAfterTime())){
-                ew.lt("ta.assigntime", sreachTaskDto.getAfterTime());
+                ew.le("ta.assigntime", sreachTaskDto.getAfterTime());
             }
             if (ToolUtil.isNotEmpty(sreachTaskDto.getCreatorid())){
                 ew.eq("ta.creatorid", sreachTaskDto.getCreatorid());
@@ -208,7 +208,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
                 ew.in("tu.unitid", sreachTaskDto.getCompanyIds());
             }
             if (sreachTaskDto.getIsExceed()==1){
-                ew.lt("tu.endtime",new Date()).isNull("ta.endtime");
+                ew.le("tu.endtime",new Date()).isNull("ta.endtime");
             }
 
 
@@ -246,10 +246,10 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
                     EntityWrapper<Taskassign> ew = new EntityWrapper<>();
                     ew.setEntity(new Taskassign());
                     if (ToolUtil.isNotEmpty(sreachTaskDto.getBeforeTime())){
-                        ew.gt("assigntime", sreachTaskDto.getBeforeTime());
+                        ew.ge("assigntime", sreachTaskDto.getBeforeTime());
                     }
                     if (ToolUtil.isNotEmpty(sreachTaskDto.getAfterTime())){
-                        ew.lt("assigntime", sreachTaskDto.getAfterTime());
+                        ew.le("assigntime", sreachTaskDto.getAfterTime());
                     }
                     ew.eq("status", et.getStatus());
                     legend.getData().add(et.getStep());
@@ -287,10 +287,10 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
                         ew.setEntity(new Taskassign());
                         ew.setSqlSelect("date_format(assigntime, '%Y-%m-%d') time,count(id) size");
                         if (ToolUtil.isNotEmpty(sreachTaskDto.getBeforeTime())){
-                            ew.gt("assigntime", sreachTaskDto.getBeforeTime());
+                            ew.ge("assigntime", sreachTaskDto.getBeforeTime());
                         }
                         if (ToolUtil.isNotEmpty(sreachTaskDto.getAfterTime())){
-                            ew.lt("assigntime", sreachTaskDto.getAfterTime());
+                            ew.le("assigntime", sreachTaskDto.getAfterTime());
                         }
                         ew.eq("status", et.getStatus());
                         ew.groupBy("date_format(assigntime, '%Y-%m-%d')");

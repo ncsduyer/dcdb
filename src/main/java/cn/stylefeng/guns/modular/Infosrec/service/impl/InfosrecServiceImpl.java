@@ -37,7 +37,7 @@ public class InfosrecServiceImpl extends ServiceImpl<InfosrecMapper, Infosrec> i
             EntityWrapper<Infosrec> ew = new EntityWrapper<>();
             ew.setEntity(new Infosrec());
             if (ToolUtil.isNotEmpty(sreachDto.getPid())){
-                ew.eq("rec.meetingid", sreachDto.getPid());
+                ew.eq("rec.infosid", sreachDto.getPid());
             }
 
             if (ToolUtil.isNotEmpty(sreachDto.getCheckitemid())){
