@@ -6,6 +6,7 @@ import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.util.Bettime;
 import cn.stylefeng.guns.core.util.LogUtil;
 import cn.stylefeng.guns.core.util.VoUtil;
+import cn.stylefeng.guns.modular.DcCompany.service.ICompanyService;
 import cn.stylefeng.guns.modular.system.dao.TaskassignUnitMapper;
 import cn.stylefeng.guns.modular.system.model.Taskassign;
 import cn.stylefeng.guns.modular.system.model.TaskassignUnit;
@@ -43,6 +44,8 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
     private TaskassignUnitMapper taskassignUnitMapper;
     @Autowired
     private ITaskassignService taskassignService;
+    @Autowired
+    private ICompanyService companyService;
     private boolean isall=false;
     private Integer taskassignId;
     private Integer count=-1;
@@ -109,7 +112,7 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
 
         ts.setUpdatetime(new DateTime());
         updateById(ts);
-        LogUtil.addLog(taskassign, ShiroKit.getUser().getName()+"提交了新反馈，单位id为："+ts.getUnitid().toString());
+        LogUtil.addLog(taskassign, ShiroKit.getUser().getName()+"提交了新反馈，单位为："+companyService.selectById(ts.getUnitid()).getTitle());
         return true;
     }
 

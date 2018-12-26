@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateTime;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.util.LogUtil;
+import cn.stylefeng.guns.modular.DcCompany.service.ICompanyService;
 import cn.stylefeng.guns.modular.system.dao.TaskassignUnitdealMapper;
 import cn.stylefeng.guns.modular.system.model.Taskassign;
 import cn.stylefeng.guns.modular.system.model.TaskassignUnit;
@@ -38,6 +39,8 @@ public class TaskassignUnitdealServiceImpl extends ServiceImpl<TaskassignUnitdea
     private ITaskassignService taskassignService;
     @Autowired
     private ITaskassignUnitService taskassignUnitService;
+    @Autowired
+    private ICompanyService companyService;
     @Override
     public ResponseData updateByTaskassignUnitdeal(TaskassignUnitdeal taskassignUnitdeal) {
         try {
@@ -72,10 +75,10 @@ public class TaskassignUnitdealServiceImpl extends ServiceImpl<TaskassignUnitdea
             }
             if (ToolUtil.isEmpty(taskassignUnitdeal.getId())){
                 insert(taskassignUnitdeal);
-                LogUtil.addLog(taskassign, ShiroKit.getUser().getName()+"提交了新进度，单位id为："+taskassignUnit.getUnitid().toString());
+                LogUtil.addLog(taskassign, ShiroKit.getUser().getName()+"提交了新进度，单位为："+companyService.selectById(taskassignUnit.getUnitid()).getTitle());
             }else{
                 updateById(taskassignUnitdeal);
-                LogUtil.addLog(taskassign,ShiroKit.getUser().getName()+"设置了延期，单位id为："+taskassignUnit.getUnitid().toString());
+                LogUtil.addLog(taskassign,ShiroKit.getUser().getName()+"设置了延期，单位为："+companyService.selectById(taskassignUnit.getUnitid()).getTitle());
             }
 //            判断是否完成 修改unit状态 1-新建未反馈；2-已反馈限期办理中；3-已反馈超期办理中；4-办理完成；）
             List<TaskassignUnit> tsus=new ArrayList<>();

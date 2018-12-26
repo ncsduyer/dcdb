@@ -31,10 +31,12 @@ public class VoUtil {
                 date.append(days+"天");
             }
             if(hours>0){
-                date.append(hours+"小时");
+//                date.append(hours+"小时");
+                date.append("1天");
             }
             if(minutes>0){
-                date.append(minutes+"分");
+//                date.append(minutes+"分");
+                date.append("1天");
             }
 //            date = String.format("%d天%d小时%d分", days, hours, minutes);
             return date.toString();
