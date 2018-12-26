@@ -75,7 +75,7 @@
              select '区委信息'as titlename,td.name,0 as num,4 as colsort
 				from t_td_date td
 			 group by td.name
-		 )a
+		 ) a
            group by titlename order by colsort
     </select>
 </mapper>
