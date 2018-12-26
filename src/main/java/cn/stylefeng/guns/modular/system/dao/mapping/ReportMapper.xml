@@ -30,40 +30,38 @@
         id, group_id, event_type, company_id, row_name, val, created_time
     </sql>
     <select id="selectByUnitCount" resultType="java.util.HashMap">
-        select title,DealSuccNum,Totalnum-DealSuccNum as NotDealSuccNum,case when DealSuccNum>0 then cast(DealDate*1.0/DealSuccNum as signed) else 0 end avgDate
-	from (
-        select com.title,sum(case when taskunit.status=4 then 1 else 0 end) as DealSuccNum,sum(case when taskunit.id is not null   then 1 else 0 end)Totalnum
-			   ,sum(case when taskunit.status=4 then  cast(timestampdiff(SECOND,taskunit.createtime,taskunit.endtime)/86400 as signed) else 0 end)as DealDate
-			from t_tb_company com
-			left join td_taskassign_unit taskunit on taskunit.unitid=com.id
-        <where>
-            ${ew.sqlSegment}
-        </where>
+        select title,Totalnum-DealSuccNum as NotDealSuccNum,case when DealSuccNum>0 then cast(DealDate*1.0/DealSuccNum
+        as signed) else 0 end avgDate,Totalnum
+        ,concat(case when Totalnum>0 then cast(DealSuccNum*100.0/Totalnum as decimal(18,2)) else 0.00 end,'%')avgrate
+        from (
+        select com.title,sum(case when taskunit.status=4 then 1 else 0 end) as DealSuccNum,sum(case when taskunit.id is
+        not null then 1 else 0 end)Totalnum
+        ,sum(case when taskunit.status=4 then cast(timestampdiff(SECOND,taskunit.createtime,taskunit.endtime)/86400 as
+        signed) else 0 end)as DealDate
+        from t_tb_company com
+        left join td_taskassign_unit taskunit on taskunit.unitid=com.id and taskunit.createtime between #{beforeTime,jdbcType=TIMESTAMP} and #{afterTime,jdbcType=TIMESTAMP}
         group by com.id,com.title
-	)a
-
+        )a
     </select>
     <select id="selectByPersionCount" resultType="java.util.HashMap">
-       select user.name,sum(case when unit.id is null then 0 else 1 end) as unitnum , sum(case when ass.id is null then 0 else 1 end)as taskCrenum
-			from sys_user user
-			left join td_taskassign_unit unit on unit.personid=user.id
-            left join td_taskassign ass on ass.creatorid=user.id
-        <where>
-            ${ew.sqlSegment}
-        </where>
-		group by user.id,user.name
+        select user.name,sum(case when unit.id is null then 0 else 1 end) as unitnum , sum(case when ass.id is null then 0 else 1 end)as taskCrenum,ifnull(aunit.num,0) as dealnum
+        from sys_user user
+        left join td_taskassign_unit unit on unit.personid=user.id and unit.createtime between #{beforeTime,jdbcType=TIMESTAMP} and #{afterTime,jdbcType=TIMESTAMP}
+        left join td_taskassign ass on ass.creatorid=user.id and ass.id=unit.tassignid and ass.createtime between #{beforeTime,jdbcType=TIMESTAMP} and #{afterTime,jdbcType=TIMESTAMP}
+        left join ( select personid,count(1) as num from (select personid from td_taskassign_unit where createtime between #{beforeTime,jdbcType=TIMESTAMP} and #{afterTime,jdbcType=TIMESTAMP}  group by personid,tassignid)a) as aunit on aunit.personid=user.id
+        group by user.id,user.name,aunit.num
     </select>
     <select id="selectByAffairCount" resultType="java.util.HashMap">
          select titlename,max(case when name=1 then num else 0 end ) as 'one',max(case when name=2 then num else 0 end ) as 'two'
 			,max(case when name=3 then num else 0 end ) as 'three',max(case when name=4 then num else 0 end ) as 'four',max(case when name=5 then num else 0 end ) as 'five'
             ,max(case when name=6 then num else 0 end ) as 'six',max(case when name=7 then num else 0 end ) as 'seven',max(case when name=8 then num else 0 end ) as 'eight'
-            ,max(case when name=9 then num else 0 end ) as 'nine',max(case when name=10 then num else 0 end ) as 'ten',max(case when name=11 then num else 0 end ) as 'eleven '
+            ,max(case when name=9 then num else 0 end ) as 'nine',max(case when name=10 then num else 0 end ) as 'ten',max(case when name=11 then num else 0 end ) as 'eleven'
 			,max(case when name=12 then num else 0 end ) as 'twelve'
 		 from (
             select '督办事项'as titlename,td.name,sum(if(tak.createtime is null,0,1)) as num,1 as colsort
 				from t_td_date td
-				left join td_taskassign tak on td.name=month(tak.createtime)
-			   where 1=1  -- 查询条件
+				left join td_taskassign tak on td.name=month(tak.createtime) and year(tak.createtime)=year(#{beforeTime,jdbcType=TIMESTAMP})
+			   where 1=1
 			 group by td.name
              union all
              select '区委会议'as titlename,td.name,0 as num,2 as colsort
@@ -77,7 +75,6 @@
              select '区委信息'as titlename,td.name,0 as num,4 as colsort
 				from t_td_date td
 			 group by td.name
-
 		 )a
            group by titlename order by colsort
     </select>

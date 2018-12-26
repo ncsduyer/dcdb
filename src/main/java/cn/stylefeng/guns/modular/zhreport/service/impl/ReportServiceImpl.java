@@ -43,13 +43,13 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
                 case TASK:
                     SreachTaskDto sreachTaskDto=new SreachTaskDto();
                     BeanUtils.copyProperties(sreachReportDto, sreachTaskDto);
-                     return taskService.getDcdbReports( sreachTaskDto);
+                    return taskService.getDcdbReports( sreachTaskDto);
                 case UNIT:
-                     return selectByUnitCount(sreachReportDto);
-                 case PERSION:
-                     return selectByPersionCount(sreachReportDto);
+                    return selectByUnitCount(sreachReportDto);
+                case PERSION:
+                    return selectByPersionCount(sreachReportDto);
                 case AFFAIR:
-                     return selectByAffairCount(sreachReportDto);
+                    return selectByAffairCount(sreachReportDto);
                 default:
                     return null;
             }
@@ -96,7 +96,7 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
         if (ToolUtil.isNotEmpty(sreachReportDto.getAfterTime())){
             ew.le("taskunit.createtime", sreachReportDto.getAfterTime());
         }
-        reportMapper.selectByUnitCount(ew);
+        reportMapper.selectByUnitCount(ew,sreachReportDto.getAfterTime(),sreachReportDto.getBeforeTime());
         return null;
     }
 
@@ -113,11 +113,11 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
         if (ToolUtil.isNotEmpty(sreachReportDto.getAfterTime())){
             ew.le("td_taskassign.assigntime", sreachReportDto.getAfterTime());
         }
-        reportMapper.selectByPersionCount(ew);
+        reportMapper.selectByPersionCount(ew,sreachReportDto.getAfterTime(),sreachReportDto.getBeforeTime());
         return null;
     }
     private ResponseData sreachChartByAffairCount(SreachReportDto sreachReportDto) {
-        reportMapper.selectByAffairCount(null);
+        reportMapper.selectByAffairCount(null,sreachReportDto.getBeforeTime());
         return null;
     }
 
@@ -129,13 +129,13 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
             e.printStackTrace();
         }
         Condition ew=Condition.create();
-            if (ToolUtil.isNotEmpty(sreachReportDto.getBeforeTime())){
-                ew.ge("taskunit.createtime", sreachReportDto.getBeforeTime());
-            }
-            if (ToolUtil.isNotEmpty(sreachReportDto.getAfterTime())){
-                ew.le("taskunit.createtime", sreachReportDto.getAfterTime());
-            }
-        return ResponseData.success(reportMapper.selectByUnitCount(ew));
+        if (ToolUtil.isNotEmpty(sreachReportDto.getBeforeTime())){
+            ew.ge("taskunit.createtime", sreachReportDto.getBeforeTime());
+        }
+        if (ToolUtil.isNotEmpty(sreachReportDto.getAfterTime())){
+            ew.le("taskunit.createtime", sreachReportDto.getAfterTime());
+        }
+        return ResponseData.success(reportMapper.selectByUnitCount(ew,sreachReportDto.getAfterTime(),sreachReportDto.getBeforeTime()));
     }
 
     @Override
@@ -152,23 +152,11 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
         if (ToolUtil.isNotEmpty(sreachReportDto.getAfterTime())){
             ew.le("td_taskassign.assigntime", sreachReportDto.getAfterTime());
         }
-        return ResponseData.success(reportMapper.selectByPersionCount(ew));
+        return ResponseData.success(reportMapper.selectByPersionCount(ew,sreachReportDto.getAfterTime(),sreachReportDto.getBeforeTime()));
     }
 
     @Override
     public ResponseData selectByAffairCount(SreachReportDto sreachReportDto) {
-//        try {
-//            new Bettime(sreachReportDto);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        Condition ew=Condition.create();
-//        if (ToolUtil.isNotEmpty(sreachReportDto.getBeforeTime())){
-//            ew.ge("taskunit.createtime", sreachReportDto.getBeforeTime());
-//        }
-//        if (ToolUtil.isNotEmpty(sreachReportDto.getAfterTime())){
-//            ew.le("taskunit.createtime", sreachReportDto.getAfterTime());
-//        }
-        return ResponseData.success(reportMapper.selectByAffairCount(null));
+        return ResponseData.success(reportMapper.selectByAffairCount(null,sreachReportDto.getBeforeTime()));
     }
 }

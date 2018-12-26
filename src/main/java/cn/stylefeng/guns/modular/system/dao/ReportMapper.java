@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.poi.ss.formula.functions.T;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
  * @since 2018-12-02
  */
 public interface ReportMapper extends BaseMapper<Report> {
-    List<HashMap<String,Object>> selectByUnitCount(@Param("ew") Wrapper<T> wrapper);
-    List<HashMap<String,Object>> selectByPersionCount(@Param("ew") Wrapper<T> wrapper);
-    List<HashMap<String,Object>> selectByAffairCount(@Param("ew") Wrapper<T> wrapper);
+    List<HashMap<String,Object>> selectByUnitCount(@Param("ew") Wrapper<T> wrapper, @Param("afterTime") Date afterTime, @Param("beforeTime") Date beforeTime);
+    List<HashMap<String,Object>> selectByPersionCount(@Param("ew") Wrapper<T> wrapper,@Param("afterTime") Date afterTime, @Param("beforeTime") Date beforeTime);
+    List<HashMap<String,Object>> selectByAffairCount(@Param("ew") Wrapper<T> wrapper,@Param("beforeTime") Date beforeTime);
 }
