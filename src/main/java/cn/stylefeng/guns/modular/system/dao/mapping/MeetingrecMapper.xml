@@ -20,7 +20,7 @@
         SELECT c.title ctitle ,
         <if test="courses != null">
             <foreach collection="courses" item="item" separator=",">
-            CASE rec.checkitemid WHEN ${item.id} THEN rec.checkvalue ElSE 0 END  "${item.id}"
+                MAX(CASE rec.checkitemid WHEN ${item.id} THEN rec.checkvalue ElSE 0 END)  "${item.id}"
             </foreach>
         </if>
         from td_meetingrec rec
@@ -29,6 +29,6 @@
         <where>
             ${ew.sqlSegment}
         </where>
-
+        GROUP BY rec.unitid
     </select>
 </mapper>

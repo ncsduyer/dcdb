@@ -226,7 +226,7 @@ public class TaskController extends BaseController {
         for (Taskassign ta:task.getTaskassigns()) {
             //设置总行数
             exportVo.setTotal(ta.getTaskassignUnits().size()+exportVo.getTotal());
-            rowVo=new ExportRowVo()
+            rowVo=new ExportRowVo();
             rowVo.setCols(new ArrayList<>());
             //设置交办事项
             rowVo.getCols().add(new ExportColVo(exportVo.getTotal(),task.getTitle()));
@@ -241,8 +241,8 @@ public class TaskController extends BaseController {
 //            设置办理情况
             rowVo.getCols().add(new ExportColVo(ta.getTaskassignUnits().size(),sdf.format(ta.getAssigntime())));
 //            设置办结总时间
-        }
         exportVo.getRowVos().add(rowVo);
+        }
 
 
 
