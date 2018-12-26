@@ -197,7 +197,7 @@ public class MeetingController extends BaseController {
 //            content[i][5] = obj.getUseTime();
 //            content[i][6] = obj.getStatus();
 //        }
-        ExportUtil.outExport(sreachMeetingDto, response, template, sheetName, content);
+        ExportUtil.outExport(sreachMeetingDto, response, template, sheetName, null);
     }
 
 

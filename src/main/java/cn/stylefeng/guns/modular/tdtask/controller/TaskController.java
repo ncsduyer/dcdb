@@ -2,7 +2,11 @@ package cn.stylefeng.guns.modular.tdtask.controller;
 
 import cn.stylefeng.guns.core.common.annotion.Permission;
 import cn.stylefeng.guns.core.util.ExportUtil;
+import cn.stylefeng.guns.core.util.vo.ExportColVo;
+import cn.stylefeng.guns.core.util.vo.ExportRowVo;
+import cn.stylefeng.guns.core.util.vo.ExportVo;
 import cn.stylefeng.guns.modular.system.model.Task;
+import cn.stylefeng.guns.modular.system.model.Taskassign;
 import cn.stylefeng.guns.modular.tdtask.dto.AddTaskDto;
 import cn.stylefeng.guns.modular.tdtask.dto.SreachTaskDto;
 import cn.stylefeng.guns.modular.tdtask.service.ITaskService;
@@ -20,7 +24,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -203,19 +210,43 @@ public class TaskController extends BaseController {
 
         //excle模板文件名
         String template="dcdbzhcx.xml";
-        //excel文件名
-
         //sheet名
         String sheetName = "督查督办数据分析表";
         taskService.getDcdbReports(sreachTaskDto);
-//
-//        HashMap<String, String> map = new HashMap<>();
-//        map.put("dateGroup", dateGroup);
-//        //获取数据
-//        List<Object> list = (List<Object>) dcdbReportService.getDcdbReports(map).getData();
-//
-//        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String[][] content = new String[5][5];
+
+        //获取数据
+        Task task = (Task) taskService.selectWithManyById(1).getData();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        List<ExportVo> exportVos=new ArrayList<>();
+            ExportVo exportVo=new ExportVo();
+            exportVo.setRowVos(new ArrayList<>());
+        exportVo.setTotal(0);
+            ExportRowVo rowVo;
+        for (Taskassign ta:task.getTaskassigns()) {
+            //设置总行数
+            exportVo.setTotal(ta.getTaskassignUnits().size()+exportVo.getTotal());
+            rowVo=new ExportRowVo()
+            rowVo.setCols(new ArrayList<>());
+            //设置交办事项
+            rowVo.getCols().add(new ExportColVo(exportVo.getTotal(),task.getTitle()));
+//            设置交办时间
+            rowVo.getCols().add(new ExportColVo(ta.getTaskassignUnits().size(),sdf.format(ta.getAssigntime())));
+//            设置责任单位
+            rowVo.getCols().add(new ExportColVo(ta.getTaskassignUnits().size(),sdf.format(ta.getAssigntime())));
+//            设置督办责任人
+            rowVo.getCols().add(new ExportColVo(ta.getTaskassignUnits().size(),sdf.format(ta.getAssigntime())));
+//            设置办理要求
+            rowVo.getCols().add(new ExportColVo(ta.getTaskassignUnits().size(),sdf.format(ta.getAssigntime())));
+//            设置办理情况
+            rowVo.getCols().add(new ExportColVo(ta.getTaskassignUnits().size(),sdf.format(ta.getAssigntime())));
+//            设置办结总时间
+        }
+        exportVo.getRowVos().add(rowVo);
+
+
+
+
 //        for (int i = 0; i < list.size(); i++) {
 //            content[i] = new String[title.length];
 //            DcdbReport obj = (DcdbReport) list.get(i);
@@ -227,6 +258,6 @@ public class TaskController extends BaseController {
 //            content[i][5] = obj.getUseTime();
 //            content[i][6] = obj.getStatus();
 //        }
-        ExportUtil.outExport(sreachTaskDto, response, template, sheetName, content);
+        ExportUtil.outExport(sreachTaskDto, response, template, sheetName, exportVos);
     }
 }

@@ -197,6 +197,6 @@ public class DocsController extends BaseController {
 //            content[i][5] = obj.getUseTime();
 //            content[i][6] = obj.getStatus();
 //        }
-        ExportUtil.outExport(sreachDocDto, response, template, sheetName, content);
+        ExportUtil.outExport(sreachDocDto, response, template, sheetName, null);
     }
 }

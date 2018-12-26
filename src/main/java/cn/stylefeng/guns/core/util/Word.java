@@ -1,9 +1,10 @@
 package cn.stylefeng.guns.core.util;
 
+import cn.stylefeng.guns.core.util.vo.ExportVo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xwpf.usermodel.*;
-import org.jdom2.*;
 import org.jdom2.Document;
+import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 
@@ -78,24 +79,24 @@ public class Word {
         }
     }
 
-    public Word(String template, String[][] values) {
+    public Word(String template,List<ExportVo> exportVos) {
         new Word(template,"");
-        setContent(values);
+        setContent(exportVos);
     }
 
-    private void setContent(String[][] values) {
+    private void setContent(List<ExportVo> exportVos) {
         // 自动填充数据
         XWPFTableRow dataRow = null;
         XWPFTableCell dataCell = null;
-        //循环行数
-        for(int i = 0; i<values.length; i++) {
-            dataRow = table.getRow(rownum);
-            for (int j = 0; j < values[i].length; j++) {
-                //将内容按顺序赋给对应的列对象
-                dataCell = dataRow.getCell(j);
-                dataCell.setText(values[i][j]);
-            }
-        }
+//        //循环行数
+//        for(int i = 0; i<values.length; i++) {
+//            dataRow = table.getRow(rownum);
+//            for (int j = 0; j < values[i].length; j++) {
+//                //将内容按顺序赋给对应的列对象
+//                dataCell = dataRow.getCell(j);
+//                dataCell.setText(values[i][j]);
+//            }
+//        }
     }
 
     public XWPFDocument getXWPFDocument() {

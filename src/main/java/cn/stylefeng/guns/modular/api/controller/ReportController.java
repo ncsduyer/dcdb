@@ -117,7 +117,7 @@ public class ReportController extends BaseController {
 //        }
 
         //创建HSSFWorkbook
-        HSSFWorkbook wb = ExportUtil.getHSSFWorkbook(template,sheetName,content);
+        HSSFWorkbook wb = ExportUtil.getHSSFWorkbook(template,sheetName,null);
 
         //响应到客户端
         try {

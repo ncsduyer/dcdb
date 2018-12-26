@@ -1,5 +1,6 @@
 package cn.stylefeng.guns.core.util;
 
+import cn.stylefeng.guns.core.util.vo.ExportVo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.CellType;
@@ -71,19 +72,21 @@ public class Excel {
 
     }
 
-    public Excel(String template, String[][] values) {
-        new Excel(template).setContet(values);
+    public Excel(String template, List<ExportVo> exportVos) {
+        new Excel(template).setContet(exportVos);
     }
 
-    private void setContet(String[][] values) {
+    private void setContet(List<ExportVo> exportVos) {
         //创建内容
         HSSFRow row;
-        for (int i = 1; i < values.length; i++) {
-            row = sheet.createRow(rownum);
+        for (ExportVo exportVo : exportVos){
+            for (int i = 1; i < exportVo.getRowVos().size(); i++) {
+                row = sheet.createRow(rownum);
 
-            for (int j = 0; j < values[i].length; j++) {
-                //将内容按顺序赋给对应的列对象
-                row.createCell(j).setCellValue(values[i][j]);
+//                for (int j = 0; j < exportVo[i].length; j++) {
+//                    //将内容按顺序赋给对应的列对象
+//                    row.createCell(j).setCellValue(exportVo[i][j]);
+//                }
             }
         }
     }

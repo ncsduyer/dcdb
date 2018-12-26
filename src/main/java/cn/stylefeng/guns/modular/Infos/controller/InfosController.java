@@ -197,6 +197,6 @@ public class InfosController extends BaseController {
 //            content[i][5] = obj.getUseTime();
 //            content[i][6] = obj.getStatus();
 //        }
-        ExportUtil.outExport(sreachInfoDto, response, template, sheetName, content);
+        ExportUtil.outExport(sreachInfoDto, response, template, sheetName, null);
     }
 }

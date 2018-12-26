@@ -162,7 +162,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
             if (ToolUtil.isNotEmpty(sreachTaskDto.getOrder())){
                 ew.orderBy(sreachTaskDto.getOrder());
             }else{
-                ew.orderBy("t.id,ta.id",false);
+                ew.orderBy("t.id,ta.id,tud.id",false);
             }
 
             ArrayList<Task> arrayList = taskMapper.selectAsPage(page,ew);
