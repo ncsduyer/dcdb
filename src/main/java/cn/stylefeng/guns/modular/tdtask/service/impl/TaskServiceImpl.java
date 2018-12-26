@@ -65,6 +65,9 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
     @Override
     public ResponseData add(AddTaskDto addTaskDto) {
         try{
+            if (selectCount(Condition.create().eq("title", addTaskDto.getTitle()))>0){
+                return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(),"交办事项重名");
+            }
             if (ToolUtil.isNotEmpty(addTaskDto.getCompanyIds())) {
 
                     Task task = new Task();
@@ -210,9 +213,6 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
             if (sreachTaskDto.getIsExceed()==1){
                 ew.le("tu.endtime",new Date()).isNull("ta.endtime");
             }
-
-
-
             page.setTotal(taskMapper.selectAsCount(ew));
             return ResponseData.success(page);
         }catch (Exception e){

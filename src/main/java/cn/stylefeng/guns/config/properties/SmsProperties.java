@@ -20,6 +20,12 @@ public class SmsProperties {
     static final String accessKeyId = "LTAIfwJzYqznM6jI";
     static final String accessKeySecret = "ocwhBKzkGVxdi0yM5jn7UkFyjFdfkk";
 
+
+    static final Boolean isAutoRemind = false;
+
+    public static Boolean getIsAutoRemind() {
+        return isAutoRemind;
+    }
     public static String getPREFIX() {
         return PREFIX;
     }
@@ -35,4 +41,6 @@ public class SmsProperties {
     public static String getAccessKeySecret() {
         return accessKeySecret;
     }
+
+
 }

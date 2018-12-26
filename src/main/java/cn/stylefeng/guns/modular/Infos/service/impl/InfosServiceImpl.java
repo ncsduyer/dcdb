@@ -71,7 +71,7 @@ public class InfosServiceImpl extends ServiceImpl<InfosMapper, Infos> implements
             if (ToolUtil.isNotEmpty(sreachDto.getCompanyIds())){
                 ew.in("mr.unitid", sreachDto.getCompanyIds());
             }
-
+            ew.groupBy("m.id");
             if (ToolUtil.isNotEmpty(sreachDto.getOrder())){
                 ew.orderBy(sreachDto.getOrder());
             }else{
@@ -84,7 +84,7 @@ public class InfosServiceImpl extends ServiceImpl<InfosMapper, Infos> implements
                 meeting.setCompanys(infosrecMapper.getInfoByPid(Condition.create().eq("rec.infosid",  meeting.getId()),checkitemService.selectList(Condition.create().eq("itemclass", 4).eq("status", 1))));
             }
             page.setRecords(arrayList);
-            page.setTotal(infosMapper.selectAsCount(ew));
+//            page.setTotal(infosMapper.selectAsCount(ew));
             return ResponseData.success(page);
         }catch (Exception e){
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());

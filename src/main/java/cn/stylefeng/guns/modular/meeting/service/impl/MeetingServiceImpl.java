@@ -73,7 +73,7 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
             if (ToolUtil.isNotEmpty(sreachDto.getCompanyIds())){
                 ew.in("mr.unitid", sreachDto.getCompanyIds());
             }
-
+            ew.groupBy("m.id");
             if (ToolUtil.isNotEmpty(sreachDto.getOrder())){
                 ew.orderBy(sreachDto.getOrder());
             }else{
@@ -87,7 +87,7 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
                 meeting.setCompanys(compangys);
             }
             page.setRecords(arrayList);
-            page.setTotal(meetingMapper.selectAsCount(ew));
+//            page.setTotal(meetingMapper.selectAsCount(ew));
             return ResponseData.success(page);
         }catch (Exception e){
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());

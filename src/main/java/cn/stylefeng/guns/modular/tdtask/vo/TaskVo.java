@@ -4,6 +4,7 @@ import cn.stylefeng.guns.modular.system.model.Task;
 import cn.stylefeng.guns.modular.system.model.Taskassign;
 import cn.stylefeng.guns.modular.system.model.TaskassignUnit;
 import cn.stylefeng.guns.modular.system.service.IUserService;
+import cn.stylefeng.roses.core.util.ToolUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +12,7 @@ import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 @Component
 public class TaskVo implements Serializable {
@@ -52,7 +54,11 @@ public class TaskVo implements Serializable {
 
         for (TaskassignUnit tu:taskassign.getTaskassignUnits()){
             TaskUntiVo taskUntiVo=new TaskUntiVo(taskVo.userService.selectById(tu.getPersonid()).getName(),tu.getCompany().getTitle());
-            taskUntiVo.setEndTime(sdf.format(tu.getEndtime()));
+            if (ToolUtil.isNotEmpty(tu.getEndtime())){
+                taskUntiVo.setEndTime(sdf.format(tu.getEndtime()));
+            }else{
+                taskUntiVo.setEndTime(sdf.format(new Date()));
+            }
             taskUntiVo.setTaskassignUnitdeals(tu.getTaskassignUnitdeals());
             this.taskUntiVo.add(taskUntiVo);
         }
