@@ -1,6 +1,8 @@
 package cn.stylefeng.guns.core.util;
 
-import cn.stylefeng.guns.core.util.vo.ExportVo;
+import cn.stylefeng.guns.core.util.vo.ExportColVo;
+import cn.stylefeng.guns.core.util.vo.ExportRowVo;
+import cn.stylefeng.roses.core.util.ToolUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.CellType;
@@ -72,21 +74,31 @@ public class Excel {
 
     }
 
-    public Excel(String template, List<ExportVo> exportVos) {
-        new Excel(template).setContet(exportVos);
+    public Excel(String template, List<ExportRowVo> exportRowVos) {
+        new Excel(template).setContet(exportRowVos);
     }
 
-    private void setContet(List<ExportVo> exportVos) {
+    private void setContet(List<ExportRowVo> exportRowVos) {
         //创建内容
         HSSFRow row;
-        for (ExportVo exportVo : exportVos){
-            for (int i = 1; i < exportVo.getRowVos().size(); i++) {
+        HSSFCell cell ;
+        for (ExportRowVo exportRowVo : exportRowVos){
+            for (int i = 0; i < exportRowVo.getTotal(); i++) {
+                int startRow=rownum;
                 row = sheet.createRow(rownum);
+                for (int j = 0; j< exportRowVo.getColVos().size(); j++) {
+                ExportColVo exportColVo=exportRowVo.getColVos().get(j);
+                    cell=row.createCell(j);
+                    if (ToolUtil.isNotEmpty(exportColVo.getCols().get(i).getContent())){
 
-//                for (int j = 0; j < exportVo[i].length; j++) {
-//                    //将内容按顺序赋给对应的列对象
-//                    row.createCell(j).setCellValue(exportVo[i][j]);
-//                }
+                    cell.setCellValue(exportColVo.getCols().get(i).getContent());
+                    }else {
+                    cell.setCellValue("");
+                    }
+                sheet.addMergedRegion(new CellRangeAddress(startRow,startRow+exportColVo.getCols().get(i).getRowspan(),j,j));
+                    startRow+=startRow+exportColVo.getCols().get(i).getRowspan();
+                }
+                rownum++;
             }
         }
     }

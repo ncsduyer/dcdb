@@ -6,6 +6,8 @@ import cn.stylefeng.guns.modular.tdtask.dto.SreachTaskDto;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import com.baomidou.mybatisplus.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * 交办事项表 服务类
@@ -25,4 +27,6 @@ public interface ITaskService extends IService<Task> {
     ResponseData getDcdbReports(SreachTaskDto sreachTaskDto);
 
     ResponseData sreachChart(SreachTaskDto sreachTaskDto);
+
+    List<Task> getAll(SreachTaskDto sreachTaskDto);
 }

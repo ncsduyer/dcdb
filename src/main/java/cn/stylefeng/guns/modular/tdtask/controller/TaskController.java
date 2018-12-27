@@ -2,17 +2,19 @@ package cn.stylefeng.guns.modular.tdtask.controller;
 
 import cn.stylefeng.guns.core.common.annotion.Permission;
 import cn.stylefeng.guns.core.util.ExportUtil;
+import cn.stylefeng.guns.core.util.vo.ExportColSubVo;
 import cn.stylefeng.guns.core.util.vo.ExportColVo;
 import cn.stylefeng.guns.core.util.vo.ExportRowVo;
-import cn.stylefeng.guns.core.util.vo.ExportVo;
 import cn.stylefeng.guns.modular.system.model.Task;
 import cn.stylefeng.guns.modular.system.model.Taskassign;
+import cn.stylefeng.guns.modular.system.model.TaskassignUnit;
 import cn.stylefeng.guns.modular.tdtask.dto.AddTaskDto;
 import cn.stylefeng.guns.modular.tdtask.dto.SreachTaskDto;
 import cn.stylefeng.guns.modular.tdtask.service.ITaskService;
 import cn.stylefeng.guns.modular.tdtaskassign.service.ITaskassignService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
+import cn.stylefeng.roses.core.util.ToolUtil;
 import com.baomidou.mybatisplus.mapper.Condition;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -211,58 +213,82 @@ public class TaskController extends BaseController {
     public void export(@RequestBody SreachTaskDto sreachTaskDto, HttpServletRequest request, HttpServletResponse response) {
 
         //excle模板文件名
-        String template="dcdbzhcx.xml";
+        String template = "dcdbzhcx.xml";
         //sheet名
         String sheetName = "督查督办数据分析表";
-        taskService.getDcdbReports(sreachTaskDto);
-        int index=1;
-        //获取数据
-        Task task = (Task) taskService.selectWithManyById(1).getData();
-
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        List<ExportVo> exportVos=new ArrayList<>();
-            ExportVo exportVo=new ExportVo();
-            exportVo.setRowVos(new ArrayList<>());
-        exportVo.setTotal(0);
-            ExportRowVo rowVo;
-            rowVo=new ExportRowVo();
-        for (Taskassign ta:task.getTaskassigns()) {
-            //设置总行数
-            exportVo.setTotal(ta.getTaskassignUnits().size()+exportVo.getTotal());
-            rowVo.setCols(new ArrayList<>());
+        List<ExportRowVo> exportRowVos = new ArrayList<>();
+        //循环次数
+        int index = 1;
+        //获取数据
+        List<Task> tasks = taskService.getAll(sreachTaskDto);
 
-//            设置交办时间
-            rowVo.getCols().add(new ExportColVo(ta.getTaskassignUnits().size(),sdf.format(ta.getAssigntime())));
-//            设置责任单位
-            rowVo.getCols().add(new ExportColVo(ta.getTaskassignUnits().size(),sdf.format(ta.getAssigntime())));
-//            设置督办责任人
-            rowVo.getCols().add(new ExportColVo(ta.getTaskassignUnits().size(),sdf.format(ta.getAssigntime())));
-//            设置办理要求
-            rowVo.getCols().add(new ExportColVo(ta.getTaskassignUnits().size(),sdf.format(ta.getAssigntime())));
-//            设置办理情况
-            rowVo.getCols().add(new ExportColVo(ta.getTaskassignUnits().size(),sdf.format(ta.getAssigntime())));
-//            设置办结总时间
+
+        for (Task task : tasks) {
+            ExportRowVo exportRowVo = new ExportRowVo();
+            exportRowVo.setColVos(new ArrayList<>());
+            exportRowVo.setTotal(0);
+            //交办时间
+            ExportColVo assigntimeCol = new ExportColVo();
+            //责任单位
+            ExportColVo unitCol = new ExportColVo();
+            // 督办责任人
+            ExportColVo personCol = new ExportColVo();
+            // 办理要求
+            ExportColVo assignmemoCol = new ExportColVo();
+            // 办理情况
+            ExportColVo dealdescCol = new ExportColVo();
+            //延期办理情况
+            ExportColVo delaydescCol = new ExportColVo();
+            //办结总时间
+            ExportColVo usetimeCol = new ExportColVo();
+            for (Taskassign ta : task.getTaskassigns()) {
+                //设置总行数
+                exportRowVo.setTotal(ta.getTaskassignUnits().size() + exportRowVo.getTotal());
+                // 设置交办时间
+                assigntimeCol.getCols().add(new ExportColSubVo(ta.getTaskassignUnits().size(), sdf.format(ta.getAssigntime())));
+                for (TaskassignUnit tu : ta.getTaskassignUnits()) {
+                    // 设置责任单位
+                    unitCol.getCols().add(new ExportColSubVo(1, tu.getCompany().getTitle()));
+                    // 设置督办责任人
+                    personCol.getCols().add(new ExportColSubVo(1, tu.getPerson().getName()));
+                    // 设置办理情况
+                    if (ToolUtil.isNotEmpty(tu.getTaskassignUnitdeals()) && tu.getTaskassignUnitdeals().size() > 0) {
+                        if (tu.getStatus() == 3) {
+                            dealdescCol.getCols().add(new ExportColSubVo(1, " "));
+                            // 设置延期办理情况
+                            delaydescCol.getCols().add(new ExportColSubVo(1, tu.getTaskassignUnitdeals().get(0).getDealdesc()));
+                        } else {
+                            dealdescCol.getCols().add(new ExportColSubVo(1, tu.getTaskassignUnitdeals().get(0).getDealdesc()));
+                            delaydescCol.getCols().add(new ExportColSubVo(1, " "));
+                            // 设置延期办理情况
+                        }
+                    } else {
+                        dealdescCol.getCols().add(new ExportColSubVo(1, " "));
+                        delaydescCol.getCols().add(new ExportColSubVo(1, " "));
+                    }
+                }
+                // 设置办理要求
+                assignmemoCol.getCols().add(new ExportColSubVo(ta.getTaskassignUnits().size(), ta.getAssignmemo()));
+                // 设置办结总时间
+                usetimeCol.getCols().add(new ExportColSubVo(ta.getTaskassignUnits().size(), ta.getUseTime()));
+
+            }
+            //        编号
+            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(exportRowVo.getTotal(), String.valueOf(index))));
+            //设置交办事项
+            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(exportRowVo.getTotal(), task.getTitle())));
+            exportRowVo.getColVos().add(assigntimeCol);
+            exportRowVo.getColVos().add(unitCol);
+            exportRowVo.getColVos().add(personCol);
+            exportRowVo.getColVos().add(assignmemoCol);
+            exportRowVo.getColVos().add(dealdescCol);
+            exportRowVo.getColVos().add(delaydescCol);
+            exportRowVo.getColVos().add(usetimeCol);
+            index++;
+            exportRowVos.add(exportRowVo);
         }
-        rowVo=new ExportRowVo();
-//        编号
-        rowVo.getCols().add(0,new ExportColVo(exportVo.getTotal(),String.valueOf(index)));
-        //设置交办事项
-        rowVo.getCols().add(1,new ExportColVo(exportVo.getTotal(),task.getTitle()));
 
-        exportVo.getRowVos().add(rowVo);
-        index++;
-
-//        for (int i = 0; i < list.size(); i++) {
-//            content[i] = new String[title.length];
-//            DcdbReport obj = (DcdbReport) list.get(i);
-//            content[i][0] = obj.getTitle();
-//            content[i][1] = obj.getAgent();
-//            content[i][2] = obj.getCompany();
-//            content[i][3] = obj.getRequirement();
-//            content[i][4] = formatter.format(obj.getCreatedTime());
-//            content[i][5] = obj.getUseTime();
-//            content[i][6] = obj.getStatus();
-//        }
-        ExportUtil.outExport(sreachTaskDto, response, template, sheetName, exportVos);
+        ExportUtil.outExport(sreachTaskDto, response, template, sheetName, exportRowVos);
     }
 }

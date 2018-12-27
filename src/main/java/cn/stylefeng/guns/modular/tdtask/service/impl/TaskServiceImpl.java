@@ -308,11 +308,63 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
                     }
                     seriess.add(series);
                 }
-
-
-
                 return ResponseData.success(new ChartVo(seriess,legend,axis));
         }
+    }
+
+    @Override
+    public List<Task> getAll(SreachTaskDto sreachTaskDto) {
+        Bettime bettime= null;
+        try {
+            bettime = new Bettime(sreachTaskDto);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        sreachTaskDto.setBeforeTime(bettime.getBeforeTime());
+        sreachTaskDto.setAfterTime(bettime.getAfterTime());
+        EntityWrapper<Task> ew = new EntityWrapper<>();
+        ew.setEntity(new Task());
+        if (ToolUtil.isNotEmpty(sreachTaskDto.getBeforeTime())){
+            ew.ge("ta.assigntime", sreachTaskDto.getBeforeTime());
+        }
+        if (ToolUtil.isNotEmpty(sreachTaskDto.getAfterTime())){
+            ew.le("ta.assigntime", sreachTaskDto.getAfterTime());
+        }
+        if (ToolUtil.isNotEmpty(sreachTaskDto.getCreatorid())){
+            ew.eq("ta.creatorid", sreachTaskDto.getCreatorid());
+        }
+//            拼接查询条件
+        if (ToolUtil.isNotEmpty(sreachTaskDto.getTitle())){
+            ew.like("t.title", sreachTaskDto.getTitle());
+        }
+        if (ToolUtil.isNotEmpty(sreachTaskDto.getWorkType())){
+            ew.in("ta.worktype", sreachTaskDto.getWorkType());
+        }
+        if (ToolUtil.isNotEmpty(sreachTaskDto.getStatus())){
+            ew.in("ta.status", sreachTaskDto.getStatus());
+        }
+        if (ToolUtil.isNotEmpty(sreachTaskDto.getAgent())){
+            ew.in("tu.personid", sreachTaskDto.getAgent());
+        }
+        if (ToolUtil.isNotEmpty(sreachTaskDto.getCompanyIds())){
+            ew.in("tu.unitid", sreachTaskDto.getCompanyIds());
+        }
+        if (sreachTaskDto.getIsExceed()==1){
+            ew.le("tu.endtime",new Date()).isNull("ta.endtime");
+        }
+        ew.groupBy("t.id,ta.id,tu.id");
+        if (ToolUtil.isNotEmpty(sreachTaskDto.getOrder())){
+            ew.orderBy(sreachTaskDto.getOrder());
+        }else{
+            ew.orderBy("t.id,ta.id,tud.id",false);
+        }
+       List<Task> tasks=taskMapper.getAll(ew);
+        for (Task task : tasks) {
+            for (Taskassign taskassign:task.getTaskassigns()){
+                taskassign.setUseTime(VoUtil.getUseTime(taskassign.getAssigntime(), taskassign.getEndtime()));
+            }
+        }
+        return tasks;
     }
 
 }

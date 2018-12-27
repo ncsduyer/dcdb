@@ -1,6 +1,6 @@
 package cn.stylefeng.guns.core.util;
 
-import cn.stylefeng.guns.core.util.vo.ExportVo;
+import cn.stylefeng.guns.core.util.vo.ExportRowVo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xwpf.usermodel.*;
 import org.jdom2.Document;
@@ -79,12 +79,12 @@ public class Word {
         }
     }
 
-    public Word(String template,List<ExportVo> exportVos) {
+    public Word(String template,List<ExportRowVo> exportRowVos) {
         new Word(template,"");
-        setContent(exportVos);
+        setContent(exportRowVos);
     }
 
-    private void setContent(List<ExportVo> exportVos) {
+    private void setContent(List<ExportRowVo> exportRowVos) {
         // 自动填充数据
         XWPFTableRow dataRow = null;
         XWPFTableCell dataCell = null;

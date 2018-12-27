@@ -7,6 +7,7 @@ import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
 import cn.stylefeng.guns.modular.meeting.service.IMeetingService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
+import com.baomidou.mybatisplus.mapper.Condition;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -35,7 +36,15 @@ public class MeetingController extends BaseController {
     @Autowired
     private IMeetingService meetingService;
 
-
+    /**
+     * 获取会议单表列表
+     */
+    @ApiOperation(value = "会议单表列表")
+    @RequestMapping(value = "/getList", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData getList() {
+        return ResponseData.success(meetingService.selectList(Condition.create().orderBy("id", false)));
+    }
 
     /**
      * 获取会议管理列表

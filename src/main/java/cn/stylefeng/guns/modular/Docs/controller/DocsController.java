@@ -7,6 +7,7 @@ import cn.stylefeng.guns.modular.Docs.dto.SreachDocDto;
 import cn.stylefeng.guns.modular.Docs.service.IDocsService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
+import com.baomidou.mybatisplus.mapper.Condition;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -40,7 +41,16 @@ public class DocsController extends BaseController {
     /**
      * 获取公文运转列表
      */
-    @ApiOperation(value = "会议列表")
+    @ApiOperation(value = "公文运转单表列表")
+    @RequestMapping(value = "/getList", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData getList() {
+        return ResponseData.success(docsService.selectList(Condition.create().orderBy("id", false)));
+    }
+    /**
+     * 获取公文运转列表
+     */
+    @ApiOperation(value = "公文运转列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "title", value = "关键词", required = false, dataType = "String"),
             @ApiImplicitParam(name = "creatorid", value = "创建人id", required = false, dataType = "Long"),
@@ -61,9 +71,9 @@ public class DocsController extends BaseController {
     }
 
     /**
-     * 新增会议
+     * 新增公文运转
      */
-    @ApiOperation(value = "新增会议")
+    @ApiOperation(value = "新增公文运转")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @Permission
     @ResponseBody
@@ -74,9 +84,9 @@ public class DocsController extends BaseController {
 
 
     /**
-     * 修改会议
+     * 修改公文运转
      */
-    @ApiOperation(value = "修改会议")
+    @ApiOperation(value = "修改公文运转")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @Permission
     @ResponseBody
@@ -87,11 +97,11 @@ public class DocsController extends BaseController {
 
 
     /**
-     * 会议详情
+     * 公文运转详情
      */
-    @ApiOperation(value = "会议单条详情")
+    @ApiOperation(value = "公文运转单条详情")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", value = "会议事项id", required = true, dataType = "Long"),
+            @ApiImplicitParam(name = "id", value = "公文运转事项id", required = true, dataType = "Long"),
     })
     @RequestMapping(value = "/detail/{id}", method = RequestMethod.GET)
     @Permission
@@ -100,9 +110,9 @@ public class DocsController extends BaseController {
         return docsService.selectWithManyById(id);
     }
     /**
-     * 删除会议
+     * 删除公文运转
      */
-////    @ApiOperation(value = "删除会议")
+////    @ApiOperation(value = "删除公文运转")
 ////    @ApiImplicitParams({
 ////            @ApiImplicitParam(name = "assignWorkId", value = "id", required = true, dataType = "Long"),
 ////    })
@@ -114,9 +124,9 @@ public class DocsController extends BaseController {
 ////        return SUCCESS_TIP;
 ////    }
     /**
-     * 会议报表图表
+     * 公文运转报表图表
      */
-    @ApiOperation(value = "会议报表图表")
+    @ApiOperation(value = "公文运转报表图表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "beforeTime", value = "开始时间", required = false, dataType = "String"),
             @ApiImplicitParam(name = "afterTime", value = "结束时间", required = false, dataType = "String"),
@@ -128,9 +138,9 @@ public class DocsController extends BaseController {
         return docsService.sreachChart(sreachDocDto);
     }
     /**
-     * 会议报表列表
+     * 公文运转报表列表
      */
-    @ApiOperation(value = "会议报表列表")
+    @ApiOperation(value = "公文运转报表列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "title", value = "关键词", required = false, dataType = "String"),
             @ApiImplicitParam(name = "creatorid", value = "创建人id", required = false, dataType = "Long"),

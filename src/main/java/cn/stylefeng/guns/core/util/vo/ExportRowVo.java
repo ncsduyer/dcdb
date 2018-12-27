@@ -1,22 +1,29 @@
 package cn.stylefeng.guns.core.util.vo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ExportRowVo {
-   private List<ExportColVo> cols;
+    private int total;
+    List<ExportColVo>  colVos;
 
     public ExportRowVo() {
+        this.colVos = new ArrayList<>();
     }
 
-    public ExportRowVo(List<ExportColVo> cols) {
-        this.cols = cols;
+    public int getTotal() {
+        return total;
     }
 
-    public List<ExportColVo> getCols() {
-        return cols;
+    public void setTotal(int total) {
+        this.total = total;
     }
 
-    public void setCols(List<ExportColVo> cols) {
-        this.cols = cols;
+    public List<ExportColVo> getColVos() {
+        return colVos;
+    }
+
+    public void setColVos(List<ExportColVo> rowVos) {
+        this.colVos = rowVos;
     }
 }

@@ -29,12 +29,10 @@ public class VoUtil {
             StringBuilder date = new StringBuilder();
             if(days>0){
                 date.append(days+"天");
-            }
-            if(hours>0){
+            }else if(hours>0){
 //                date.append(hours+"小时");
                 date.append("1天");
-            }
-            if(minutes>0){
+            }else if(minutes>0){
 //                date.append(minutes+"分");
                 date.append("1天");
             }

@@ -7,6 +7,7 @@ import cn.stylefeng.guns.modular.Infos.dto.SreachInfoDto;
 import cn.stylefeng.guns.modular.Infos.service.IInfosService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
+import com.baomidou.mybatisplus.mapper.Condition;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -35,7 +36,15 @@ public class InfosController extends BaseController {
     @Autowired
     private IInfosService infosService;
 
-    
+    /**
+     * 获取区委信息单表列表
+     */
+    @ApiOperation(value = "区委信息单表列表")
+    @RequestMapping(value = "/getList", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData getList() {
+        return ResponseData.success(infosService.selectList(Condition.create().orderBy("id", false)));
+    }
 
     /**
      * 获取区委信息列表

@@ -1,6 +1,6 @@
 package cn.stylefeng.guns.core.util;
 
-import cn.stylefeng.guns.core.util.vo.ExportVo;
+import cn.stylefeng.guns.core.util.vo.ExportRowVo;
 import cn.stylefeng.guns.modular.api.dto.SreachDto;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -21,16 +21,16 @@ public class ExportUtil {
      * @param values    内容
      * @return
      */
-    public static HSSFWorkbook getHSSFWorkbook(String template, String sheetName, List<ExportVo> exportVos) {
+    public static HSSFWorkbook getHSSFWorkbook(String template, String sheetName, List<ExportRowVo> exportRowVos) {
 
         // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
-        HSSFWorkbook wb=new Excel(template,exportVos).getHssfWorkbook();
+        HSSFWorkbook wb=new Excel(template, exportRowVos).getHssfWorkbook();
         return wb;
     }
-    public static XWPFDocument getXWPFDocument (String template, String sheetName, List<ExportVo> exportVos) {
+    public static XWPFDocument getXWPFDocument (String template, String sheetName, List<ExportRowVo> exportRowVos) {
 
         // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
-        XWPFDocument wb=new Word(template,exportVos).getXWPFDocument();
+        XWPFDocument wb=new Word(template, exportRowVos).getXWPFDocument();
         return wb;
     }
 
@@ -51,13 +51,13 @@ public class ExportUtil {
             ex.printStackTrace();
         }
     }
-    public static void outExport(SreachDto sreachDto, HttpServletResponse response, String template, String sheetName, List<ExportVo> exportVos) {
+    public static void outExport(SreachDto sreachDto, HttpServletResponse response, String template, String sheetName, List<ExportRowVo> exportRowVos) {
         String fileName;
         switch (sreachDto.getExportType()) {
             case 1:
                 //创建HSSFWorkbook
                 fileName = new Date().toString() + ".xls";
-                HSSFWorkbook wb = ExportUtil.getHSSFWorkbook(template, sheetName, exportVos);
+                HSSFWorkbook wb = ExportUtil.getHSSFWorkbook(template, sheetName, exportRowVos);
 
                 //响应到客户端
                 try {
@@ -72,7 +72,7 @@ public class ExportUtil {
             case 2:
                 fileName = new Date().toString() + ".doc";
                 //创建HSSFWorkbook
-                XWPFDocument wd = ExportUtil.getXWPFDocument(template, sheetName, exportVos);
+                XWPFDocument wd = ExportUtil.getXWPFDocument(template, sheetName, exportRowVos);
 
                 //响应到客户端
                 try {
