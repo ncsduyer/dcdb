@@ -67,6 +67,7 @@ public class TaskController extends BaseController {
      */
     @ApiOperation(value = "交办事项列表单表数据")
     @RequestMapping(value = "/list", method = RequestMethod.POST)
+    @ResponseBody
     public ResponseData list() {
         return   ResponseData.success(taskService.selectList(Condition.create().eq("endstatus", 1).orderBy("id", false)));
 
@@ -91,6 +92,7 @@ public class TaskController extends BaseController {
     })
     @RequestMapping(value = "/getTaskList", method = RequestMethod.POST)
     @Permission
+    @ResponseBody
     public ResponseData getTaskList(@RequestBody(required = false) SreachTaskDto sreachTaskDto) {
         ResponseData responseData = taskService.SreachPage(sreachTaskDto);
         return responseData;
@@ -213,7 +215,7 @@ public class TaskController extends BaseController {
         //sheet名
         String sheetName = "督查督办数据分析表";
         taskService.getDcdbReports(sreachTaskDto);
-
+        int index=1;
         //获取数据
         Task task = (Task) taskService.selectWithManyById(1).getData();
 
@@ -223,13 +225,12 @@ public class TaskController extends BaseController {
             exportVo.setRowVos(new ArrayList<>());
         exportVo.setTotal(0);
             ExportRowVo rowVo;
+            rowVo=new ExportRowVo();
         for (Taskassign ta:task.getTaskassigns()) {
             //设置总行数
             exportVo.setTotal(ta.getTaskassignUnits().size()+exportVo.getTotal());
-            rowVo=new ExportRowVo();
             rowVo.setCols(new ArrayList<>());
-            //设置交办事项
-            rowVo.getCols().add(new ExportColVo(exportVo.getTotal(),task.getTitle()));
+
 //            设置交办时间
             rowVo.getCols().add(new ExportColVo(ta.getTaskassignUnits().size(),sdf.format(ta.getAssigntime())));
 //            设置责任单位
@@ -241,11 +242,15 @@ public class TaskController extends BaseController {
 //            设置办理情况
             rowVo.getCols().add(new ExportColVo(ta.getTaskassignUnits().size(),sdf.format(ta.getAssigntime())));
 //            设置办结总时间
-        exportVo.getRowVos().add(rowVo);
         }
+        rowVo=new ExportRowVo();
+//        编号
+        rowVo.getCols().add(0,new ExportColVo(exportVo.getTotal(),String.valueOf(index)));
+        //设置交办事项
+        rowVo.getCols().add(1,new ExportColVo(exportVo.getTotal(),task.getTitle()));
 
-
-
+        exportVo.getRowVos().add(rowVo);
+        index++;
 
 //        for (int i = 0; i < list.size(); i++) {
 //            content[i] = new String[title.length];
