@@ -16,9 +16,15 @@ public class SmsProperties {
     /**
      * 签名
      */
-    static final String SIGN_NAME = "电大助手";
-    static final String accessKeyId = "LTAIfwJzYqznM6jI";
-    static final String accessKeySecret = "ocwhBKzkGVxdi0yM5jn7UkFyjFdfkk";
+    static final String SIGN_NAME = "顺庆区委办信息化办公系统";
+    static final String accessKeyId = "LTAIF8Z66n5HFs0B";
+    static final String accessKeySecret = "riZoozIWNzMKGwNY8VbQjzlJ7cl4gK";
+    static final String AddDcDbtmpCode = "SMS_152207559";
+
+    public static String getAddDcDbtmpCode() {
+        return AddDcDbtmpCode;
+    }
+
 
 
     static final Boolean isAutoRemind = false;

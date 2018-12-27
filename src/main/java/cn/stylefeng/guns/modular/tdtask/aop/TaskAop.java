@@ -1,6 +1,7 @@
 package cn.stylefeng.guns.modular.tdtask.aop;
 
 import cn.hutool.core.date.DateTime;
+import cn.stylefeng.guns.config.properties.SmsProperties;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.util.JsonUtils;
 import cn.stylefeng.guns.core.util.SmsUtil;
@@ -133,7 +134,8 @@ public class TaskAop {
         }
         //发送短信
         ObjectNode json = JsonUtils.getMapperInstance().createObjectNode();
-        json.put("code", appNotice.getTitle());
-        SmsUtil.sendSms(null,appNotice,"SMS_146809603", JsonUtils.beanToJson(json), null);
+        json.put("status", "1");
+        json.put("remark", appNotice.getTitle());
+        SmsUtil.sendSms(null,appNotice,SmsProperties.getAddDcDbtmpCode(), JsonUtils.beanToJson(json), null);
     }
 }
