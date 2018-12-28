@@ -11,7 +11,8 @@ public enum QueryType {
     TASK(1, "督办事项统计"),
     UNIT(2, "责任单位统计"),
     PERSION(3, "责任人员统计"),
-    AFFAIR(4, "事务统计");
+    AFFAIR(4, "事务统计"),
+    MeetChart(5, "会议图形报表");
 
     private Integer code;
 
@@ -32,6 +33,9 @@ public enum QueryType {
                 return QueryType.PERSION;
             case 4:
                 return QueryType.AFFAIR;
+            case 5:
+                return QueryType.MeetChart;
+
             default:
                 return null;
         }
