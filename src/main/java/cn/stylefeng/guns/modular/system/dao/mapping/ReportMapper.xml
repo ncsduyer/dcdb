@@ -78,4 +78,54 @@
 		 ) a
            group by titlename order by colsort
     </select>
+
+    <!-- 图表 -->
+    <select id="selectByUnitChartCount" resultType="java.util.HashMap">
+        select GROUP_CONCAT(title)as title,GROUP_CONCAT(NotDealSuccNum) as NotDealSuccNum,GROUP_CONCAT(avgDate)as avgDate,GROUP_CONCAT(DealSuccNum)as DealSuccNum
+        ,GROUP_CONCAT(Totalnum)as Totalnum
+        from (
+        select title,Totalnum-DealSuccNum as NotDealSuccNum,case when DealSuccNum>0 then cast(DealDate*1.0/DealSuccNum
+        as signed) else 0 end avgDate,Totalnum
+        ,concat(case when Totalnum>0 then cast(DealSuccNum*100.0/Totalnum as decimal(18,2)) else 0.00 end,'%')avgrate,DealSuccNum
+        from (
+        select com.title,sum(case when taskunit.status=4 then 1 else 0 end) as DealSuccNum,sum(case when taskunit.id is
+        not null then 1 else 0 end)Totalnum
+        ,sum(case when taskunit.status=4 then cast(timestampdiff(SECOND,taskunit.createtime,taskunit.endtime)/86400 as
+        signed) else 0 end)as DealDate
+        from t_tb_company com
+        left join td_taskassign_unit taskunit on taskunit.unitid=com.id  and taskunit.createtime between #{beforeTime,jdbcType=TIMESTAMP} and #{afterTime,jdbcType=TIMESTAMP}
+        group by com.id,com.title
+        )a
+        )b
+    </select>
+    <select id="selectByPersionChartCount" resultType="java.util.HashMap">
+        select GROUP_CONCAT(name)as name,GROUP_CONCAT(unitnum)as unitnum,GROUP_CONCAT(dealnum)as dealnum,GROUP_CONCAT(taskCrenum)as taskCrenum from (
+        select user.name,sum(case when unit.id is null then 0 else 1 end) as unitnum , sum(case when ass.id is null then 0 else 1 end)as taskCrenum,ifnull(aunit.num,0) as dealnum
+        from sys_user user
+        left join td_taskassign_unit unit on unit.personid=user.id  and unit.createtime between #{beforeTime,jdbcType=TIMESTAMP} and #{afterTime,jdbcType=TIMESTAMP}
+        left join td_taskassign ass on ass.creatorid=user.id and ass.id=unit.tassignid and ass.createtime between #{beforeTime,jdbcType=TIMESTAMP} and #{afterTime,jdbcType=TIMESTAMP}
+        left join ( select personid,count(1) as num from (select personid from td_taskassign_unit where createtime between #{beforeTime,jdbcType=TIMESTAMP} and #{afterTime,jdbcType=TIMESTAMP}  group by personid,tassignid)a) as aunit on aunit.personid=user.id
+        group by user.id,user.name,aunit.num
+        )a
+    </select>
+    <select id="selectByAffairChartCount" resultType="java.util.HashMap">
+        select titlename,group_concat(num order by cast(name as SIGNED) asc)as num from (
+        select '督办事项'as titlename,td.name,sum(if(tak.createtime is null,0,1)) as num,1 as colsort
+        from t_td_date td
+        left join td_taskassign tak on td.name=month(tak.createtime)  and year(tak.createtime)=year(#{beforeTime,jdbcType=TIMESTAMP})
+        group by td.name
+        union all
+        select '区委会议'as titlename,td.name,0 as num,2 as colsort
+        from t_td_date td
+        group by td.name
+        union all
+        select '区委公文'as titlename,td.name,0 as num,3 as colsort
+        from t_td_date td
+        group by td.name
+        union all
+        select '区委信息'as titlename,td.name,0 as num,4 as colsort
+        from t_td_date td
+        group by td.name
+        )b group by titlename,colsort order by colsort
+    </select>
 </mapper>
