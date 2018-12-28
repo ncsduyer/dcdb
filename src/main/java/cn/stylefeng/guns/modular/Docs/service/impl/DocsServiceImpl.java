@@ -82,7 +82,7 @@ public class DocsServiceImpl extends ServiceImpl<DocsMapper, Docs> implements ID
             ArrayList<Docs> arrayList = docsMapper.selectAsPage(page,ew);
             for (Docs meeting: arrayList
             ) {
-                meeting.setCompanys(docassignrecMapper.getInfoByPid(Condition.create().eq("rec.docassignid",  meeting.getId()),checkitemService.selectList(Condition.create().eq("itemclass", 3).eq("status", 1))));
+                meeting.setCompanys(docassignrecMapper.getInfoByPid(Condition.create().eq("rec.docassignid",  meeting.getId()).in("rec.unitid", sreachDto.getCompanyIds()),checkitemService.selectList(Condition.create().eq("itemclass", 3).eq("status", 1))));
             }
             page.setRecords(arrayList);
 //            page.setTotal(docsMapper.selectAsCount(ew));

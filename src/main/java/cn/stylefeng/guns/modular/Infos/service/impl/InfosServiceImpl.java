@@ -81,7 +81,7 @@ public class InfosServiceImpl extends ServiceImpl<InfosMapper, Infos> implements
             ArrayList<Infos> arrayList = infosMapper.selectAsPage(page,ew);
             for (Infos meeting: arrayList
             ) {
-                meeting.setCompanys(infosrecMapper.getInfoByPid(Condition.create().eq("rec.infosid",  meeting.getId()),checkitemService.selectList(Condition.create().eq("itemclass", 4).eq("status", 1))));
+                meeting.setCompanys(infosrecMapper.getInfoByPid(Condition.create().eq("rec.infosid",  meeting.getId()).in("rec.unitid", sreachDto.getCompanyIds()),checkitemService.selectList(Condition.create().eq("itemclass", 4).eq("status", 1))));
             }
             page.setRecords(arrayList);
 //            page.setTotal(infosMapper.selectAsCount(ew));

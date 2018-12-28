@@ -2,7 +2,6 @@ package cn.stylefeng.guns.core.util;
 
 import cn.stylefeng.guns.core.util.vo.ExportColVo;
 import cn.stylefeng.guns.core.util.vo.ExportRowVo;
-import cn.stylefeng.roses.core.util.ToolUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.CellType;
@@ -26,9 +25,13 @@ public class Excel {
     private HSSFWorkbook hssfWorkbook;
 
     public Excel(String template) {
-//        String path =System.getProperty("user.dir")+template;
-//        File file=new File(this.getClass().getResource(template).getPath());
-       SAXBuilder builder = new SAXBuilder();
+
+        createExcel(template);
+
+    }
+
+    private Excel createExcel(String template) {
+        SAXBuilder builder = new SAXBuilder();
         try {
 
             Document parse=builder.build(this.getClass().getResourceAsStream("/excel/"+template));
@@ -62,8 +65,8 @@ public class Excel {
                    HSSFCell cell=row.createCell(colnum);
                    setType(hssfWorkbook,cell,td);
                }
-               rownum++;
             }
+            rownum++;
 
 
         } catch (JDOMException e) {
@@ -71,11 +74,11 @@ public class Excel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        return this;
     }
 
     public Excel(String template, List<ExportRowVo> exportRowVos) {
-        new Excel(template).setContet(exportRowVos);
+        createExcel(template).setContet(exportRowVos);
     }
 
     private void setContet(List<ExportRowVo> exportRowVos) {
@@ -87,15 +90,16 @@ public class Excel {
                 int startRow=rownum;
                 row = sheet.createRow(rownum);
                 for (int j = 0; j< exportRowVo.getColVos().size(); j++) {
-                ExportColVo exportColVo=exportRowVo.getColVos().get(j);
+                    ExportColVo exportColVo=exportRowVo.getColVos().get(j);
                     cell=row.createCell(j);
-                    if (ToolUtil.isNotEmpty(exportColVo.getCols().get(i).getContent())){
-                    cell.setCellValue(exportColVo.getCols().get(i).getContent());
-                    }else {
-                    cell.setCellValue("");
+                    if (i<exportColVo.getCols().size()){
+                        cell.setCellValue(exportColVo.getCols().get(i).getContent());
+                    }else{
+                        cell.setCellValue("");
                     }
-                sheet.addMergedRegion(new CellRangeAddress(startRow,startRow+exportColVo.getCols().get(i).getRowspan(),j,j));
-                    startRow+=startRow+exportColVo.getCols().get(i).getRowspan();
+                    if(i<exportColVo.getCols().size()&&exportColVo.getCols().get(i).getRowspan()>1){
+                    sheet.addMergedRegion(new CellRangeAddress(rownum,startRow+exportColVo.getCols().get(i).getRowspan()-1,j,j+exportColVo.getCols().get(i).getColspan()-1));
+                    }
                 }
                 rownum++;
             }

@@ -17,7 +17,8 @@ public class AddInfoDto  {
     private String title;
     @ApiModelProperty("会议备注")
     private String memo;
-
+    @ApiModelProperty("起草人ID")
+    private Integer creatorid;
 
     @ApiModelProperty("会议时间")
     @JSONField(format = "yyyy-MM-dd HH:mm")
@@ -74,5 +75,13 @@ public class AddInfoDto  {
 
     public void setResc(List<Infosrec> resc) {
         this.resc = resc;
+    }
+
+    public Integer getCreatorid() {
+        return creatorid;
+    }
+
+    public void setCreatorid(Integer creatorid) {
+        this.creatorid = creatorid;
     }
 }

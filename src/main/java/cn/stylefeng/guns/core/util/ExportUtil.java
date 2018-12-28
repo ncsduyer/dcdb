@@ -69,6 +69,9 @@ public class ExportUtil {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                finally {
+                    break;
+                }
             case 2:
                 fileName = new Date().toString() + ".doc";
                 //创建HSSFWorkbook
@@ -83,6 +86,8 @@ public class ExportUtil {
                     os.close();
                 } catch (Exception e) {
                     e.printStackTrace();
+                }finally {
+                    break;
                 }
         }
     }

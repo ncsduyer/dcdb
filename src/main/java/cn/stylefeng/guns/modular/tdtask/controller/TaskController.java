@@ -255,17 +255,17 @@ public class TaskController extends BaseController {
                     // 设置办理情况
                     if (ToolUtil.isNotEmpty(tu.getTaskassignUnitdeals()) && tu.getTaskassignUnitdeals().size() > 0) {
                         if (tu.getStatus() == 3) {
-                            dealdescCol.getCols().add(new ExportColSubVo(1, " "));
+                            dealdescCol.getCols().add(new ExportColSubVo(1, ""));
                             // 设置延期办理情况
                             delaydescCol.getCols().add(new ExportColSubVo(1, tu.getTaskassignUnitdeals().get(0).getDealdesc()));
                         } else {
                             dealdescCol.getCols().add(new ExportColSubVo(1, tu.getTaskassignUnitdeals().get(0).getDealdesc()));
-                            delaydescCol.getCols().add(new ExportColSubVo(1, " "));
+                            delaydescCol.getCols().add(new ExportColSubVo(1, ""));
                             // 设置延期办理情况
                         }
                     } else {
-                        dealdescCol.getCols().add(new ExportColSubVo(1, " "));
-                        delaydescCol.getCols().add(new ExportColSubVo(1, " "));
+                        dealdescCol.getCols().add(new ExportColSubVo(1, ""));
+                        delaydescCol.getCols().add(new ExportColSubVo(1, ""));
                     }
                 }
                 // 设置办理要求
@@ -278,6 +278,13 @@ public class TaskController extends BaseController {
             exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(exportRowVo.getTotal(), String.valueOf(index))));
             //设置交办事项
             exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(exportRowVo.getTotal(), task.getTitle())));
+            assigntimeCol.removeDuplication();
+            unitCol.removeDuplication();
+            personCol.removeDuplication();
+            assignmemoCol.removeDuplication();
+            dealdescCol.removeDuplication();
+            delaydescCol.removeDuplication();
+            usetimeCol.removeDuplication();
             exportRowVo.getColVos().add(assigntimeCol);
             exportRowVo.getColVos().add(unitCol);
             exportRowVo.getColVos().add(personCol);

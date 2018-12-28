@@ -1,7 +1,8 @@
 package cn.stylefeng.guns.core.util.vo;
 
 public class ExportColSubVo {
-    private int rowspan;
+    private int rowspan=1;
+    private int colspan=1;
     private String content;
 
     public ExportColSubVo() {
@@ -9,6 +10,12 @@ public class ExportColSubVo {
 
     public ExportColSubVo(int rowspan, String content) {
         this.rowspan = rowspan;
+        this.content = content;
+    }
+
+    public ExportColSubVo(int rowspan, int colspan, String content) {
+        this.rowspan = rowspan;
+        this.colspan = colspan;
         this.content = content;
     }
 
@@ -26,5 +33,13 @@ public class ExportColSubVo {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public int getColspan() {
+        return colspan;
+    }
+
+    public void setColspan(int colspan) {
+        this.colspan = colspan;
     }
 }

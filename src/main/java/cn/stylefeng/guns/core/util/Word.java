@@ -68,8 +68,8 @@ public class Word {
                     XWPFTableCell cell=row.createCell();
 //                    setType(hssfWorkbook,cell,td);
                 }
-                rownum++;
             }
+            rownum++;
 
 
         } catch (JDOMException e) {
