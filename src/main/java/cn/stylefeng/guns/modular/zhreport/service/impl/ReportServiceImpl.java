@@ -73,6 +73,8 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
                     return sreachChartByPersionCount(sreachReportDto);
                 case AFFAIR:
                     return sreachChartByAffairCount(sreachReportDto);
+                case MeetChart:
+                    return sreachChartByMeetCount(sreachReportDto);
                 default:
                     return null;
             }
@@ -90,13 +92,16 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
             e.printStackTrace();
         }
         Condition ew=Condition.create();
-        if (ToolUtil.isNotEmpty(sreachReportDto.getBeforeTime())){
-            ew.ge("taskunit.createtime", sreachReportDto.getBeforeTime());
-        }
-        if (ToolUtil.isNotEmpty(sreachReportDto.getAfterTime())){
-            ew.le("taskunit.createtime", sreachReportDto.getAfterTime());
-        }
         return ResponseData.success(reportMapper.selectByUnitChartCount(ew,sreachReportDto.getAfterTime(),sreachReportDto.getBeforeTime()));
+    }
+    private ResponseData sreachChartByMeetCount(SreachReportDto sreachReportDto) {
+        try {
+            new Bettime(sreachReportDto);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Condition ew=Condition.create();
+        return ResponseData.success(reportMapper.selectByMeetChartCount(ew,sreachReportDto.getAfterTime(),sreachReportDto.getBeforeTime()));
     }
 
     private ResponseData sreachChartByPersionCount(SreachReportDto sreachReportDto) {
@@ -106,12 +111,6 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
             e.printStackTrace();
         }
         Condition ew=Condition.create();
-        if (ToolUtil.isNotEmpty(sreachReportDto.getBeforeTime())){
-            ew.ge("td_taskassign.assigntime", sreachReportDto.getBeforeTime());
-        }
-        if (ToolUtil.isNotEmpty(sreachReportDto.getAfterTime())){
-            ew.le("td_taskassign.assigntime", sreachReportDto.getAfterTime());
-        }
         return ResponseData.success( reportMapper.selectByPersionChartCount(ew,sreachReportDto.getAfterTime(),sreachReportDto.getBeforeTime()));
     }
     private ResponseData sreachChartByAffairCount(SreachReportDto sreachReportDto) {

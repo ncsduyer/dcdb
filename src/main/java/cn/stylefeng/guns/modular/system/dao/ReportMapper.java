@@ -19,11 +19,12 @@ import java.util.List;
  * @since 2018-12-02
  */
 public interface ReportMapper extends BaseMapper<Report> {
-    List<HashMap<String,Object>> selectByUnitCount(@Param("ew") Wrapper<T> wrapper, @Param("afterTime") Date afterTime, @Param("beforeTime") Date beforeTime);
+    List<java.util.LinkedHashMap<String,Object>> selectByUnitCount(@Param("ew") Wrapper<T> wrapper, @Param("afterTime") Date afterTime, @Param("beforeTime") Date beforeTime);
     List<HashMap<String,Object>> selectByPersionCount(@Param("ew") Wrapper<T> wrapper,@Param("afterTime") Date afterTime, @Param("beforeTime") Date beforeTime);
     List<HashMap<String,Object>> selectByAffairCount(@Param("ew") Wrapper<T> wrapper,@Param("beforeTime") Date beforeTime);
 
     List<HashMap<String,Object>> selectByUnitChartCount(@Param("ew") Wrapper<T> wrapper, @Param("afterTime") Date afterTime, @Param("beforeTime") Date beforeTime);
+    List<HashMap<String,Object>> selectByMeetChartCount(@Param("ew") Wrapper<T> wrapper, @Param("afterTime") Date afterTime, @Param("beforeTime") Date beforeTime);
     List<HashMap<String,Object>> selectByPersionChartCount(@Param("ew") Wrapper<T> wrapper,@Param("afterTime") Date afterTime, @Param("beforeTime") Date beforeTime);
     List<HashMap<String,Object>> selectByAffairChartCount(@Param("ew") Wrapper<T> wrapper,@Param("beforeTime") Date beforeTime);
 }
