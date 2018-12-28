@@ -90,7 +90,6 @@ public class Excel {
                 ExportColVo exportColVo=exportRowVo.getColVos().get(j);
                     cell=row.createCell(j);
                     if (ToolUtil.isNotEmpty(exportColVo.getCols().get(i).getContent())){
-
                     cell.setCellValue(exportColVo.getCols().get(i).getContent());
                     }else {
                     cell.setCellValue("");

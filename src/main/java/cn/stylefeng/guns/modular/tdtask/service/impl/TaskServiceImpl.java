@@ -65,14 +65,14 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
     @Override
     public ResponseData add(AddTaskDto addTaskDto) {
         try{
-            if (selectCount(Condition.create().eq("title", addTaskDto.getTitle()))>0){
-                return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(),"交办事项重名");
-            }
             if (ToolUtil.isNotEmpty(addTaskDto.getCompanyIds())) {
 
                     Task task = new Task();
                     BeanUtils.copyProperties(addTaskDto, task);
                 if (ToolUtil.isEmpty(selectById(task.getId()))){
+                    if (selectCount(Condition.create().eq("title", addTaskDto.getTitle()))>0){
+                        return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(),"交办事项重名");
+                    }
                     insert(task);
                 }
                 Taskassign taskassign = new Taskassign();
