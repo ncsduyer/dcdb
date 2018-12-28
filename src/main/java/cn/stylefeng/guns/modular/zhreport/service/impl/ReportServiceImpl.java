@@ -96,8 +96,7 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
         if (ToolUtil.isNotEmpty(sreachReportDto.getAfterTime())){
             ew.le("taskunit.createtime", sreachReportDto.getAfterTime());
         }
-        reportMapper.selectByUnitCount(ew,sreachReportDto.getAfterTime(),sreachReportDto.getBeforeTime());
-        return null;
+        return ResponseData.success(reportMapper.selectByUnitChartCount(ew,sreachReportDto.getAfterTime(),sreachReportDto.getBeforeTime()));
     }
 
     private ResponseData sreachChartByPersionCount(SreachReportDto sreachReportDto) {
@@ -113,12 +112,10 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
         if (ToolUtil.isNotEmpty(sreachReportDto.getAfterTime())){
             ew.le("td_taskassign.assigntime", sreachReportDto.getAfterTime());
         }
-        reportMapper.selectByPersionCount(ew,sreachReportDto.getAfterTime(),sreachReportDto.getBeforeTime());
-        return null;
+        return ResponseData.success( reportMapper.selectByPersionChartCount(ew,sreachReportDto.getAfterTime(),sreachReportDto.getBeforeTime()));
     }
     private ResponseData sreachChartByAffairCount(SreachReportDto sreachReportDto) {
-        reportMapper.selectByAffairCount(null,sreachReportDto.getBeforeTime());
-        return null;
+        return ResponseData.success(reportMapper.selectByAffairChartCount(null,sreachReportDto.getBeforeTime()));
     }
 
     @Override
