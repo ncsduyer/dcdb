@@ -75,6 +75,10 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
                     return sreachChartByAffairCount(sreachReportDto);
                 case MeetChart:
                     return sreachChartByMeetCount(sreachReportDto);
+                case DocChart:
+                    return sreachChartByDocCount(sreachReportDto);
+                case InfoChart:
+                    return sreachChartByInfoCount(sreachReportDto);
                 default:
                     return null;
             }
@@ -102,6 +106,24 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
         }
         Condition ew=Condition.create();
         return ResponseData.success(reportMapper.selectByMeetChartCount(ew,sreachReportDto.getAfterTime(),sreachReportDto.getBeforeTime()));
+    }
+    private ResponseData sreachChartByDocCount(SreachReportDto sreachReportDto) {
+        try {
+            new Bettime(sreachReportDto);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Condition ew=Condition.create();
+        return ResponseData.success(reportMapper.selectByDocChartCount(ew,sreachReportDto.getAfterTime(),sreachReportDto.getBeforeTime()));
+    }
+    private ResponseData sreachChartByInfoCount(SreachReportDto sreachReportDto) {
+        try {
+            new Bettime(sreachReportDto);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Condition ew=Condition.create();
+        return ResponseData.success(reportMapper.selectByInfoChartCount(ew,sreachReportDto.getAfterTime(),sreachReportDto.getBeforeTime()));
     }
 
     private ResponseData sreachChartByPersionCount(SreachReportDto sreachReportDto) {
