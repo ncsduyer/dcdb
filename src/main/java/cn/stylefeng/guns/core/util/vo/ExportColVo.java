@@ -41,7 +41,7 @@ public class ExportColVo {
                         int a=cols.get(i).getRowspan()+cols1.get(j).getRowspan();
                         cols1.get(i).setRowspan(a);
                     }else{
-                        ExportColSubVo z1 = new ExportColSubVo(cols.get(1).getRowspan(),cols.get(1).getColspan(),cols.get(1).getContent());
+                        ExportColSubVo z1 = new ExportColSubVo(cols.get(i).getRowspan(),cols.get(i).getColspan(),cols.get(i).getContent());
                         cols1.add(z1);
                     }
                 }
