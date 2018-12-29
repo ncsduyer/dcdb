@@ -50,8 +50,8 @@
                 <association property="company" javaType="cn.stylefeng.guns.modular.system.model.Company">
                     <result column="ctitle" property="title"/>
                 </association>
-                <association property="person" javaType="cn.stylefeng.guns.modular.system.model.User" column="personid"
-                             select="cn.stylefeng.guns.modular.system.dao.UserMapper.selectById">
+                <association property="person" javaType="cn.stylefeng.guns.modular.system.model.User">
+                    <result column="personname" property="name"/>
                 </association>
                 <collection property="taskassignUnitdeals" ofType="cn.stylefeng.guns.modular.system.model.TaskassignUnitdeal" >
                     <id column="tudid" property="id" />
@@ -125,11 +125,11 @@
     </select>
 
     <select id="getAll" resultMap="ResultMoreMap">
-        SELECT <include refid="AS_Column_List1"/>
+        SELECT <include refid="AS_Column_List1"/>,person.name personname
         FROM
         td_task t LEFT JOIN td_taskassign ta ON ta.taskid = t.id LEFT JOIN t_tb_work_type wt ON wt.id =
         ta.worktype
-        LEFT JOIN t_tb_event_step e ON e.status=ta.status and e.event_type=1 LEFT JOIN sys_user u ON u.id = ta.creatorid LEFT JOIN td_taskassign_unit tu ON tu.tassignid =  ta.id  LEFT JOIN t_tb_company c ON c.id=tu.unitid LEFT JOIN td_taskassign_unitdeal tud ON tud.taunitid=tu.id
+        LEFT JOIN t_tb_event_step e ON e.status=ta.status and e.event_type=1 LEFT JOIN sys_user u ON u.id = ta.creatorid LEFT JOIN td_taskassign_unit tu ON tu.tassignid =  ta.id  LEFT JOIN t_tb_company c ON c.id=tu.unitid LEFT JOIN td_taskassign_unitdeal tud ON tud.taunitid=tu.id LEFT JOIN sys_user person ON person.id = tu.personid
         <where>
             ${ew.sqlSegment}
         </where>

@@ -91,7 +91,7 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
 
     public boolean updateOne(TaskassignUnit taskassignUnit) {
         TaskassignUnit ts=selectOne(Condition.create().eq("personid", ShiroKit.getUser().getId()).eq("id", taskassignUnit.getId()));
-        if (ToolUtil.isEmpty(ts)||(ToolUtil.isNotEmpty(ts.getEndtime())&&ToolUtil.isNotEmpty(ts.getRequirements()))){
+        if (ToolUtil.isEmpty(ts)){
             return false;
         }
         taskassignId=ts.getTassignid();

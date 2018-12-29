@@ -66,7 +66,7 @@ public class Excel {
                    setType(hssfWorkbook,cell,td);
                }
             }
-            rownum++;
+//            rownum++;
 
 
         } catch (JDOMException e) {
@@ -97,13 +97,21 @@ public class Excel {
                     }else{
                         cell.setCellValue("");
                     }
-                    if(i<exportColVo.getCols().size()&&exportColVo.getCols().get(i).getRowspan()>1){
-                    sheet.addMergedRegion(new CellRangeAddress(rownum,startRow+exportColVo.getCols().get(i).getRowspan()-1,j,j+exportColVo.getCols().get(i).getColspan()-1));
+                    if(i<exportColVo.getCols().size()){
+
+                        if(exportColVo.getCols().get(i).getRowspan()>1){
+                        sheet.addMergedRegion(new CellRangeAddress(rownum,startRow+exportColVo.getCols().get(i).getRowspan()-1,j,j));
+                        }else if (exportColVo.getCols().get(i).getColspan()>1){
+                        sheet.addMergedRegion(new CellRangeAddress(rownum,rownum,j,j+exportColVo.getCols().get(i).getColspan()-1));
+
+                        }
                     }
                 }
                 rownum++;
             }
         }
+        // 处理中文不能自动调整列宽的问题
+        this.setSizeColumn(sheet);
     }
 
     private int setThead(HSSFSheet sheet, int rownum) {
@@ -240,5 +248,30 @@ public class Excel {
     public HSSFWorkbook getHssfWorkbook() {
         return hssfWorkbook;
     }
+    // 自适应宽度(中文支持)
+    private void setSizeColumn(HSSFSheet sheet) {
+            for (int rowNum = 0; rowNum < sheet.getLastRowNum(); rowNum++) {
+                for (int columnNum = 0; columnNum < sheet.getRow(rowNum).getPhysicalNumberOfCells(); columnNum++) {
+                    int columnWidth = sheet.getColumnWidth(columnNum) / 256;
+                HSSFRow currentRow;
+                //当前行未被使用过
+                if (sheet.getRow(rowNum) == null) {
+                    currentRow = sheet.createRow(rowNum);
+                } else {
+                    currentRow = sheet.getRow(rowNum);
+                }
 
+                if (currentRow.getCell(columnNum) != null) {
+                    HSSFCell currentCell = currentRow.getCell(columnNum);
+                    if (currentCell.getCellTypeEnum() == CellType.STRING) {
+                        int length = currentCell.getStringCellValue().getBytes().length;
+                        if (columnWidth < length) {
+                            columnWidth = length;
+                        }
+                    }
+                }
+            sheet.setColumnWidth(columnNum, columnWidth * 256);
+            }
+        }
+    }
 }

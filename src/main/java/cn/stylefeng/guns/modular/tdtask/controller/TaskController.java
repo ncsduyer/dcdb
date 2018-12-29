@@ -220,6 +220,7 @@ public class TaskController extends BaseController {
         List<ExportRowVo> exportRowVos = new ArrayList<>();
         //循环次数
         int index = 1;
+
         //获取数据
         List<Task> tasks = taskService.getAll(sreachTaskDto);
 
@@ -297,5 +298,6 @@ public class TaskController extends BaseController {
         }
 
         ExportUtil.outExport(sreachTaskDto, response, template, sheetName, exportRowVos);
+
     }
 }
