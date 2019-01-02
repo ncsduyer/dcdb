@@ -80,6 +80,34 @@ public class Excel {
     public Excel(String template, List<ExportRowVo> exportRowVos) {
         createExcel(template).setContet(exportRowVos);
     }
+    public Excel(List<ExportRowVo> titles,String template) {
+
+        createExcel(titles,template);
+
+    }
+
+    private Excel createExcel(List<ExportRowVo> titles,String template) {
+            hssfWorkbook=new HSSFWorkbook();
+            if (StringUtils.isNotBlank(this.sheetname)){
+                this.sheet = hssfWorkbook.createSheet(this.sheetname);
+            }else{
+                sheet = hssfWorkbook.createSheet(template);
+            }
+             rownum=0;
+            int colnum=0;
+
+            //设置标题
+            setContet(titles);
+
+
+
+
+        return this;
+    }
+
+    public Excel(List<ExportRowVo> titles,String template, List<ExportRowVo> exportRowVos) {
+        createExcel(titles,template).setContet(exportRowVos);
+    }
 
     private void setContet(List<ExportRowVo> exportRowVos) {
         //创建内容
@@ -100,9 +128,12 @@ public class Excel {
                     if(i<exportColVo.getCols().size()){
 
                         if(exportColVo.getCols().get(i).getRowspan()>1){
-                        sheet.addMergedRegion(new CellRangeAddress(rownum,startRow+exportColVo.getCols().get(i).getRowspan()-1,j,j));
+                            if (i>1&&exportColVo.getCols().get(i-1).getRowspan()>1){
+                                startRow+=exportColVo.getCols().get(i-1).getRowspan()-1;
+                            }
+                        sheet.addMergedRegion(new CellRangeAddress(startRow,startRow+exportColVo.getCols().get(i).getRowspan()-1,j,j+exportColVo.getCols().get(i).getColspan()-1));
                         }else if (exportColVo.getCols().get(i).getColspan()>1){
-                        sheet.addMergedRegion(new CellRangeAddress(rownum,rownum,j,j+exportColVo.getCols().get(i).getColspan()-1));
+                        sheet.addMergedRegion(new CellRangeAddress(startRow,startRow,j,j+exportColVo.getCols().get(i).getColspan()-1));
 
                         }
                     }
