@@ -137,7 +137,7 @@
     </select>
     <select id="selectByMeetChartCount" resultType="java.util.HashMap">
         select itemdesc,GROUP_CONCAT(title order by comid) as grouptitle,GROUP_CONCAT(num order by comid)as groupvalue from (
-        select Tab.itemdesc,Tab.title,sum(if(meeting.id is null,0,1)) as num,comid
+        select Tab.itemdesc,Tab.title,sum(if(meeting.id is null,0,meeting.checkvalue)) as num,comid
         from (select item.id,item.itemdesc,com.title,com.id as comid from td_checkitem item,t_tb_company com  where item.itemclass=2)Tab
         left join td_meetingrec meeting on meeting.checkitemid=Tab.id and Tab.comid=meeting.unitid
         and meeting.createtime  between #{beforeTime,jdbcType=TIMESTAMP} and #{afterTime,jdbcType=TIMESTAMP}
@@ -148,7 +148,7 @@
     </select>
     <select id="selectByDocChartCount" resultType="java.util.HashMap">
         select itemdesc,GROUP_CONCAT(title order by comid) grouptitle,GROUP_CONCAT(num order by comid) as groupvalue from (
-        select Tab.itemdesc,Tab.title,sum(if(doc.id is null,0,1)) as num,comid
+        select Tab.itemdesc,Tab.title,sum(if(doc.id is null,0,doc.checkvalue)) as num,comid
         from (select item.id,item.itemdesc,com.title,com.id as comid from td_checkitem item,t_tb_company com  where item.itemclass=3)Tab
         left join td_docassignrec doc on doc.checkitemid=Tab.id and Tab.comid=doc.unitid
         and doc.createtime between #{beforeTime,jdbcType=TIMESTAMP} and #{afterTime,jdbcType=TIMESTAMP}
@@ -158,7 +158,7 @@
     </select>
     <select id="selectByInfoChartCount" resultType="java.util.HashMap">
         select itemdesc,GROUP_CONCAT(title order by comid) grouptitle,GROUP_CONCAT(num order by comid) as groupvalue from (
-        select Tab.itemdesc,Tab.title,sum(if(info.id is null,0,1)) as num,comid
+        select Tab.itemdesc,Tab.title,sum(if(info.id is null,0,info.checkvalue)) as num,comid
         from (select item.id,item.itemdesc,com.title,com.id as comid from td_checkitem item,t_tb_company com  where item.itemclass=4)Tab
         left join td_infosrec info on info.checkitemid=Tab.id and Tab.comid=info.unitid
         and info.createtime between #{beforeTime,jdbcType=TIMESTAMP} and #{afterTime,jdbcType=TIMESTAMP}
