@@ -100,10 +100,10 @@ public class Excel {
                     if(i<exportColVo.getCols().size()){
 
                         if(exportColVo.getCols().get(i).getRowspan()>1){
-                            if (i>1&&exportColVo.getCols().get(i-1).getRowspan()>1){
-                                startRow+=exportColVo.getCols().get(i-1).getRowspan()-1;
-                            }
-                        sheet.addMergedRegion(new CellRangeAddress(startRow,startRow+exportColVo.getCols().get(i).getRowspan()-1,j,j+exportColVo.getCols().get(i).getColspan()-1));
+//                            if (i>1&&exportColVo.getCols().get(i-1).getRowspan()>1){
+//                                startRow+=exportColVo.getCols().get(i-1).getRowspan()-1;
+//                            }
+                        sheet.addMergedRegion(new CellRangeAddress(rownum,rownum+exportColVo.getCols().get(i).getRowspan()-1,j,j+exportColVo.getCols().get(i).getColspan()-1));
                         }else if (exportColVo.getCols().get(i).getColspan()>1){
                         sheet.addMergedRegion(new CellRangeAddress(startRow,startRow,j,j+exportColVo.getCols().get(i).getColspan()-1));
 

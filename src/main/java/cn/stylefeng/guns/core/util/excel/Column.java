@@ -13,12 +13,18 @@ public class Column {
 
     int totalRow;
     int totalCol;
-    int row;//excel第几行
-    int col;//excel第几列
-    int rLen; //excel 跨多少行
-    int cLen;//excel跨多少列
-    private boolean HasChilren;//是否有子节点
-    private int tree_step;//树的级别 从0开始
+    //excel第几行
+    int row;
+    //excel第几列
+    int col;
+    //excel 跨多少行
+    int rLen;
+    //excel跨多少列
+    int cLen;
+    //是否有子节点
+    private boolean HasChilren;
+    //树的级别 从0开始
+    private int tree_step;
     private String id;
     private String pid;
     public Column(){};

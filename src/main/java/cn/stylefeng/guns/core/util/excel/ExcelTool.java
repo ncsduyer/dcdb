@@ -27,7 +27,7 @@ public class ExcelTool<T> {
     private int rowHeight = 20;//单元格行高度
     private HSSFCellStyle styleHead; //表头样式
     private HSSFCellStyle styleBody; //主体样式
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //日期格式化,默认yyyy-MM-dd HH:mm:ss
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); //日期格式化,默认yyyy-MM-dd HH:mm:ss
 
     /**
      * 无参数 初始化 对象

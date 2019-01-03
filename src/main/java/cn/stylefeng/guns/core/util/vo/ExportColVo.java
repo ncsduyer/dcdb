@@ -30,6 +30,7 @@ public class ExportColVo {
     public void removeDuplication(){
         if (cols.size()>1){
                 int key=1;
+                int countRow=0;
             List<ExportColSubVo> cols1=new ArrayList<>();
             for (int i = 0; i < cols.size(); i++) {
                 if(key>= cols.size()) {
@@ -41,7 +42,8 @@ public class ExportColVo {
                 }
                 for (int j=key; j < cols.size(); j++){
                     if(cols.get(j).getContent().equals(cols1.get(i).getContent())){
-                        cols1.get(i).setRowspan(cols1.get(i).getRowspan()+cols.get(j).getRowspan());
+                        int z=cols1.get(i).getRowspan()+cols.get(j).getRowspan();
+                        cols1.get(i).setRowspan(z);
                         key++;
                     }else{
                             ExportColSubVo z1 = new ExportColSubVo(cols.get(j).getRowspan(),cols.get(j).getColspan(),cols.get(j).getContent());
@@ -51,7 +53,18 @@ public class ExportColVo {
 
                     }
                 }
-
+            for (int b=0;b<cols.size();b++){
+                countRow+=cols.get(b).getRowspan();
+            }
+            for (int a=0;a<cols1.size();a++){
+                if (cols1.get(a).getRowspan()>1){
+                    if (a+cols1.get(a).getRowspan()<countRow){
+                        for (int j1=1;j1<cols1.get(a).getRowspan();j1++){
+                            cols1.add(a+j1,new ExportColSubVo(1,1,""));
+                        }
+                    }
+                }
+            }
             this.cols=cols1;
         }
     }
