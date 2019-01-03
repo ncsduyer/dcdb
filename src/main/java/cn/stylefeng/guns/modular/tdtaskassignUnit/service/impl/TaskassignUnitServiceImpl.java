@@ -165,7 +165,7 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
                 ew.orderBy("tu.id",false);
             }
 
-            ArrayList<TaskassignUnit> arrayList = taskassignUnitMapper.selectAsPage(page,ew);
+            ArrayList<TaskassignUnit> arrayList = taskassignUnitMapper.selectAsPage(page,ew.groupBy("tu.id"));
             ArrayList<TaskAssignUnitVo> taskVos=new ArrayList<>();
             for (TaskassignUnit task : arrayList) {
                 task.getTaskassign().setUseTime(VoUtil.getUseTime(task.getTaskassign().getAssigntime(), task.getTaskassign().getEndtime()));
@@ -173,7 +173,7 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
                 taskVos.add(taskAssignUnitVo);
             }
             page.setRecords(taskVos);
-            page.setTotal(taskassignUnitMapper.selectAsCount(ew));
+//            page.setTotal(taskassignUnitMapper.selectAsCount(ew));
             return ResponseData.success(page);
         }catch (Exception e){
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());

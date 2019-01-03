@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@MapperScan("com.szss.admin.dao.*")
+@MapperScan("cn.stylefeng.guns.modular.system.dao.*")
 public class MybatisPlusConfig {
 
     /**

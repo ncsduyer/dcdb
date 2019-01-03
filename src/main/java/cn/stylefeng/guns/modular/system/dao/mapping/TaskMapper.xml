@@ -13,18 +13,18 @@
         <collection property="taskassigns" ofType="cn.stylefeng.guns.modular.system.model.Taskassign">
             <id column="taid" property="id" />
             <result column="taskid" property="taskid" />
-            <result column="worktype" property="worktype" />
-            <result column="assigntime" property="assigntime" />
-            <result column="assignmemo" property="assignmemo" />
-            <result column="status" property="status" />
-            <result column="creatorid" property="creatorid" />
-            <result column="createtime" property="createtime" />
-            <result column="closememo" property="closememo" />
-            <result column="endtime" property="endtime" />
+            <result column="taworktype" property="worktype" />
+            <result column="taassigntime" property="assigntime" />
+            <result column="taassignmemo" property="assignmemo" />
+            <result column="tastatus" property="status" />
+            <result column="tacreatorid" property="creatorid" />
+            <result column="tacreatetime" property="createtime" />
+            <result column="taclosememo" property="closememo" />
+            <result column="taendtime" property="endtime" />
             <result column="is_exceed" property="is_exceed"/>
             <association property="createuser" javaType="cn.stylefeng.guns.modular.system.model.User">
                 <id column="uid" property="id"/>
-                <result column="name" property="name"/>
+                <result column="uname" property="name"/>
             </association>
             <association property="workType" javaType="cn.stylefeng.guns.modular.system.model.WorkType">
                 <id column="wtid" property="id"/>
@@ -38,15 +38,15 @@
                 <result column="step" property="step"/>
             </association>
             <collection property="taskassignUnits" ofType="cn.stylefeng.guns.modular.system.model.TaskassignUnit">
-                <id column="unitid" property="id" />
-                <result column="tassignid" property="tassignid" />
-                <result column="unitid" property="unitid" />
-                <result column="personid" property="personid" />
-                <result column="endtime" property="endtime" />
-                <result column="requirements" property="requirements" />
-                <result column="status" property="status" />
-                <result column="updatetime" property="updatetime" />
-                <result column="createtime" property="createtime" />
+                <id column="tuid" property="id" />
+                <result column="tutassignid" property="tassignid" />
+                <result column="tuunitid" property="unitid" />
+                <result column="tupersonid" property="personid" />
+                <result column="tuendtime" property="endtime" />
+                <result column="turequirements" property="requirements" />
+                <result column="tustatus" property="status" />
+                <result column="tuupdatetime" property="updatetime" />
+                <result column="tucreatetime" property="createtime" />
                 <association property="company" javaType="cn.stylefeng.guns.modular.system.model.Company">
                     <result column="ctitle" property="title"/>
                 </association>
@@ -78,9 +78,9 @@
         t.id,t.pid, t.title, t.endstatus
     </sql>
     <sql id="AS_Column_List1">
-       t.id, t.title,ta.id taid, ta.taskid, ta.worktype, ta.assigntime, ta.assignmemo, ta.status, ta.creatorid, ta.createtime, ta.closememo,ta.endtime, CASE when sysdate()>tu.endtime then '已超期' else
-        '未超期' end as is_exceed ,u.name,wt.title wtitle,e.step
-        ,tu.id unitid, tu.tassignid, tu.unitid,tu.personid, tu.endtime, tu.requirements, tu.status, tu.updatetime, tu.createtime,c.title ctitle , tud.id tudid, tud.taunitid tudtaunitid, tud.dealdesc tuddealdesc, tud.status tudstatus, tud.isdelay tudisdelay, tud.pretime tudpretime, tud.delaytime tuddelaytime, tud.creatorid tudcreatorid, tud.createtime tudcreatetime, tud.finishtime tudfinishtime
+       t.id, t.title,ta.id taid, ta.taskid, ta.worktype taworktype, ta.assigntime taassigntime, ta.assignmemo taassignmemo, ta.status tastatus, ta.creatorid tacreatorid, ta.createtime tacreatetime, ta.closememo taclosememo,ta.endtime taendtime, CASE when sysdate()>tu.endtime then '已超期' else
+        '未超期' end as is_exceed ,u.name uname,wt.title wtitle,e.step
+        ,tu.id tuid, tu.tassignid tutassignid, tu.unitid tuunitid,tu.personid tupersonid, tu.endtime tuendtime, tu.requirements turequirements, tu.status tustatus, tu.updatetime tuupdatetime, tu.createtime tucreatetime,c.title ctitle , tud.id tudid, tud.taunitid tudtaunitid, tud.dealdesc tuddealdesc, tud.status tudstatus, tud.isdelay tudisdelay, tud.pretime tudpretime, tud.delaytime tuddelaytime, tud.creatorid tudcreatorid, tud.createtime tudcreatetime, tud.finishtime tudfinishtime
     </sql>
     <select id="selectWithManyById" resultMap="ResultMoreMap">
        SELECT <include refid="AS_Column_List1"/>

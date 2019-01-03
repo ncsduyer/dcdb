@@ -183,37 +183,37 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
             }
             page.setRecords(reportsVos);
 
-            ew = new EntityWrapper<>();
-            ew.setEntity(new Task());
-            if (ToolUtil.isNotEmpty(sreachTaskDto.getBeforeTime())){
-                ew.ge("ta.assigntime", sreachTaskDto.getBeforeTime());
-            }
-            if (ToolUtil.isNotEmpty(sreachTaskDto.getAfterTime())){
-                ew.le("ta.assigntime", sreachTaskDto.getAfterTime());
-            }
-            if (ToolUtil.isNotEmpty(sreachTaskDto.getCreatorid())){
-                ew.eq("ta.creatorid", sreachTaskDto.getCreatorid());
-            }
-//            拼接查询条件
-            if (ToolUtil.isNotEmpty(sreachTaskDto.getTitle())){
-                ew.like("t.title", sreachTaskDto.getTitle());
-            }
-            if (ToolUtil.isNotEmpty(sreachTaskDto.getWorkType())){
-                ew.in("ta.worktype", sreachTaskDto.getWorkType());
-            }
-            if (ToolUtil.isNotEmpty(sreachTaskDto.getStatus())){
-                ew.in("ta.status", sreachTaskDto.getStatus());
-            }
-            if (ToolUtil.isNotEmpty(sreachTaskDto.getAgent())){
-                ew.in("tu.personid", sreachTaskDto.getAgent());
-            }
-            if (ToolUtil.isNotEmpty(sreachTaskDto.getCompanyIds())){
-                ew.in("tu.unitid", sreachTaskDto.getCompanyIds());
-            }
-            if (sreachTaskDto.getIsExceed()==1){
-                ew.le("tu.endtime",new Date()).isNull("ta.endtime");
-            }
-            page.setTotal(taskMapper.selectAsCount(ew));
+//            ew = new EntityWrapper<>();
+//            ew.setEntity(new Task());
+//            if (ToolUtil.isNotEmpty(sreachTaskDto.getBeforeTime())){
+//                ew.ge("ta.assigntime", sreachTaskDto.getBeforeTime());
+//            }
+//            if (ToolUtil.isNotEmpty(sreachTaskDto.getAfterTime())){
+//                ew.le("ta.assigntime", sreachTaskDto.getAfterTime());
+//            }
+//            if (ToolUtil.isNotEmpty(sreachTaskDto.getCreatorid())){
+//                ew.eq("ta.creatorid", sreachTaskDto.getCreatorid());
+//            }
+////            拼接查询条件
+//            if (ToolUtil.isNotEmpty(sreachTaskDto.getTitle())){
+//                ew.like("t.title", sreachTaskDto.getTitle());
+//            }
+//            if (ToolUtil.isNotEmpty(sreachTaskDto.getWorkType())){
+//                ew.in("ta.worktype", sreachTaskDto.getWorkType());
+//            }
+//            if (ToolUtil.isNotEmpty(sreachTaskDto.getStatus())){
+//                ew.in("ta.status", sreachTaskDto.getStatus());
+//            }
+//            if (ToolUtil.isNotEmpty(sreachTaskDto.getAgent())){
+//                ew.in("tu.personid", sreachTaskDto.getAgent());
+//            }
+//            if (ToolUtil.isNotEmpty(sreachTaskDto.getCompanyIds())){
+//                ew.in("tu.unitid", sreachTaskDto.getCompanyIds());
+//            }
+//            if (sreachTaskDto.getIsExceed()==1){
+//                ew.le("tu.endtime",new Date()).isNull("ta.endtime");
+//            }
+//            page.setTotal(taskMapper.selectAsCount(ew));
             return ResponseData.success(page);
         }catch (Exception e){
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());

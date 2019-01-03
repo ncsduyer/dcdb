@@ -29,6 +29,7 @@ public class Excel {
         createExcel(template);
 
     }
+
     private Excel createExcel(String template) {
         SAXBuilder builder = new SAXBuilder();
         try {
@@ -79,31 +80,6 @@ public class Excel {
     public Excel(String template, List<ExportRowVo> exportRowVos) {
         createExcel(template).setContet(exportRowVos);
     }
-//    public Excel(List<ExportRowVo> titles,String templateName) {
-//
-//        createExcel(titles,templateName);
-//
-//    }
-//    public Excel(List<ExportRowVo> titles,String templateName, List<ExportRowVo> exportRowVos) {
-//        createExcel(titles,templateName).setContet(exportRowVos);
-//    }
-//    private Excel createExcel(List<ExportRowVo> titles,String templateName){
-//        hssfWorkbook=new HSSFWorkbook();
-//        if (StringUtils.isNotBlank(this.sheetname)){
-//            this.sheet = hssfWorkbook.createSheet(this.sheetname);
-//        }else{
-//            sheet = hssfWorkbook.createSheet(templateName);
-//        }
-//        rownum=0;
-//        int colnum=0;
-//        //设置标题
-//        setTitle(titles);
-//        return this;
-//    }
-
-    private void setTitle(List<ExportRowVo> titles) {
-        setContet(titles);
-    }
 
     private void setContet(List<ExportRowVo> exportRowVos) {
         //创建内容
@@ -111,20 +87,26 @@ public class Excel {
         HSSFCell cell ;
         for (ExportRowVo exportRowVo : exportRowVos){
             for (int i = 0; i < exportRowVo.getTotal(); i++) {
-                int startRow = rownum;
+                int startRow=rownum;
                 row = sheet.createRow(rownum);
-                for (int j = 0; j < exportRowVo.getColVos().size(); j++) {
-                    ExportColVo exportColVo = exportRowVo.getColVos().get(j);
-                    cell = row.createCell(j);
-                    if (i < exportColVo.getCols().size()) {
+                for (int j = 0; j< exportRowVo.getColVos().size(); j++) {
+                    ExportColVo exportColVo=exportRowVo.getColVos().get(j);
+                    cell=row.createCell(j);
+                    if (i<exportColVo.getCols().size()){
                         cell.setCellValue(exportColVo.getCols().get(i).getContent());
-                    } else {
+                    }else{
                         cell.setCellValue("");
                     }
-                    if (i < exportColVo.getCols().size()) {
+                    if(i<exportColVo.getCols().size()){
 
-                        if (exportColVo.getCols().get(i).getRowspan() > 1) {
-                            sheet.addMergedRegion(new CellRangeAddress(rownum, rownum + exportColVo.getCols().get(i).getRowspan() - 1, j, j + exportColVo.getCols().get(i).getColspan() - 1));
+                        if(exportColVo.getCols().get(i).getRowspan()>1){
+                            if (i>1&&exportColVo.getCols().get(i-1).getRowspan()>1){
+                                startRow+=exportColVo.getCols().get(i-1).getRowspan()-1;
+                            }
+                        sheet.addMergedRegion(new CellRangeAddress(startRow,startRow+exportColVo.getCols().get(i).getRowspan()-1,j,j+exportColVo.getCols().get(i).getColspan()-1));
+                        }else if (exportColVo.getCols().get(i).getColspan()>1){
+                        sheet.addMergedRegion(new CellRangeAddress(startRow,startRow,j,j+exportColVo.getCols().get(i).getColspan()-1));
+
                         }
                     }
                 }
@@ -184,8 +166,6 @@ public class Excel {
                     font.setBold(true);
                     font.setFontHeightInPoints((short) 12);
                     cellStyle.setFont(font);
-                    //指定当单元格内容显示不下时自动换行
-                    cellStyle.setWrapText(true);
                     cell.setCellStyle(cellStyle);
                     if (firstCol+cspan-1<=0){
                         firstCol++;

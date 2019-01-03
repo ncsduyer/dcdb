@@ -57,7 +57,7 @@
             </association>
             <association property="createuser" javaType="cn.stylefeng.guns.modular.system.model.User">
                 <id column="uid" property="id"/>
-                <result column="name" property="name"/>
+                <result column="uname" property="name"/>
             </association>
             <association property="workType" javaType="cn.stylefeng.guns.modular.system.model.WorkType">
                 <id column="wtid" property="id"/>
@@ -90,7 +90,7 @@
     </sql>
     <sql id="AS_Column_List1">
        ta.id taid, ta.taskid, ta.worktype taworktype, ta.assigntime taassigntime, ta.assignmemo taassignmemo, ta.status tastatus, ta.creatorid tacreatorid, ta.createtime tacreatetime, ta.closememo taclosememo,ta.endtime taendtime, CASE when sysdate()>tu.endtime then '已超期' else
-        '未超期' end as is_exceed ,u.name,wt.title wtitle,e.step
+        '未超期' end as is_exceed ,u.name uname,wt.title wtitle,e.step
         ,tu.id, tu.tassignid, tu.unitid,tu.personid, tu.endtime, tu.requirements, tu.status, tu.updatetime, tu.createtime,c.title ctitle , tud.id tudid, tud.taunitid tudtaunitid, tud.dealdesc tuddealdesc, tud.status tudstatus, tud.isdelay tudisdelay, tud.pretime tudpretime, tud.delaytime tuddelaytime, tud.creatorid tudcreatorid, tud.createtime tudcreatetime, tud.finishtime tudfinishtime
     </sql>
     <select id="selectdealList" resultType="cn.stylefeng.guns.modular.system.model.TaskassignUnitdeal">
