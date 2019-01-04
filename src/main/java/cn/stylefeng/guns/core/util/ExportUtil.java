@@ -18,7 +18,6 @@ public class ExportUtil {
      *
      * @param template template名称
      * @param sheetName sheet名称
-     * @param values    内容
      * @return
      */
     public static HSSFWorkbook getHSSFWorkbook(String template, String sheetName, List<ExportRowVo> exportRowVos) {
@@ -27,10 +26,16 @@ public class ExportUtil {
         HSSFWorkbook wb=new Excel(template, exportRowVos).getHssfWorkbook();
         return wb;
     }
-    public static XWPFDocument getXWPFDocument (String template, String sheetName, List<ExportRowVo> exportRowVos) {
+    public static HSSFWorkbook getHSSFWorkbook(List<ExportRowVo> titles,String template,List<ExportRowVo> exportRowVos) {
 
         // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
-        XWPFDocument wb=new Word(template, exportRowVos).getXWPFDocument();
+        HSSFWorkbook wb=new Excel(titles,template, exportRowVos).getHssfWorkbook();
+        return wb;
+    }
+    public static XWPFDocument getXWPFDocument (List<ExportRowVo> titles,String template,List<ExportRowVo> exportRowVos) {
+
+        // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
+        XWPFDocument wb=new Word(titles,template, exportRowVos).getXWPFDocument();
         return wb;
     }
 
@@ -51,13 +56,53 @@ public class ExportUtil {
             ex.printStackTrace();
         }
     }
-    public static void outExport(SreachDto sreachDto, HttpServletResponse response, String template, String sheetName, List<ExportRowVo> exportRowVos) {
+//    public static void outExport(SreachDto sreachDto, HttpServletResponse response, String template, String sheetName, List<ExportRowVo> exportRowVos) {
+//        String fileName;
+//        switch (sreachDto.getExportType()) {
+//            case 1:
+//                //创建HSSFWorkbook
+//                fileName = new Date().toString() + ".xls";
+//                HSSFWorkbook wb = ExportUtil.getHSSFWorkbook(template, sheetName, exportRowVos);
+//
+//                //响应到客户端
+//                try {
+//                    ExportUtil.setResponseHeader(response, fileName);
+//                    OutputStream os = response.getOutputStream();
+//                    wb.write(os);
+//                    os.flush();
+//                    os.close();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                finally {
+//                    break;
+//                }
+//            case 2:
+//                fileName = new Date().toString() + ".doc";
+//                //创建HSSFWorkbook
+//                XWPFDocument wd = ExportUtil.getXWPFDocument(template, sheetName, exportRowVos);
+//
+//                //响应到客户端
+//                try {
+//                    ExportUtil.setResponseHeader(response, fileName);
+//                    OutputStream os = response.getOutputStream();
+//                    wd.write(os);
+//                    os.flush();
+//                    os.close();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }finally {
+//                    break;
+//                }
+//        }
+//    }
+    public static void outExport(SreachDto sreachDto, HttpServletResponse response,List<ExportRowVo> titles, String template,  List<ExportRowVo> exportRowVos) {
         String fileName;
         switch (sreachDto.getExportType()) {
             case 1:
                 //创建HSSFWorkbook
                 fileName = new Date().toString() + ".xls";
-                HSSFWorkbook wb = ExportUtil.getHSSFWorkbook(template, sheetName, exportRowVos);
+                HSSFWorkbook wb = ExportUtil.getHSSFWorkbook(titles,template, exportRowVos);
 
                 //响应到客户端
                 try {
@@ -75,7 +120,7 @@ public class ExportUtil {
             case 2:
                 fileName = new Date().toString() + ".doc";
                 //创建HSSFWorkbook
-                XWPFDocument wd = ExportUtil.getXWPFDocument(template, sheetName, exportRowVos);
+                XWPFDocument wd = ExportUtil.getXWPFDocument(titles,template, exportRowVos);
 
                 //响应到客户端
                 try {

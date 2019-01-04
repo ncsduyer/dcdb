@@ -6,6 +6,8 @@ import cn.stylefeng.guns.modular.system.model.Meeting;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import com.baomidou.mybatisplus.service.IService;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * <p>
  * 区委会议 服务类
@@ -27,4 +29,6 @@ public interface IMeetingService extends IService<Meeting> {
     ResponseData getReports(SreachMeetingDto sreachDto);
 
     ResponseData edit(AddMeetingDto meeting);
+
+    void export(SreachMeetingDto sreachMeetingDto, HttpServletResponse response);
 }

@@ -18,7 +18,7 @@ public class Word {
     private String sheetname;
     private Element root;
     private XWPFDocument xWPFDocument;
-    public Word(String template,String sheetname) {
+    public Word(List<ExportRowVo> titles,String template) {
         SAXBuilder builder = new SAXBuilder();
         try {
 
@@ -79,8 +79,8 @@ public class Word {
         }
     }
 
-    public Word(String template,List<ExportRowVo> exportRowVos) {
-        new Word(template,"");
+    public Word(List<ExportRowVo> titles,String template,List<ExportRowVo> exportRowVos) {
+        new Word(titles,template);
         setContent(exportRowVos);
     }
 

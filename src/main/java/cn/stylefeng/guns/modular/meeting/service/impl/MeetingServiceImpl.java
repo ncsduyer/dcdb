@@ -5,12 +5,19 @@ import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.util.Bettime;
 import cn.stylefeng.guns.core.util.CopyUtils;
+import cn.stylefeng.guns.core.util.ExportUtil;
+import cn.stylefeng.guns.core.util.vo.ExportColSubVo;
+import cn.stylefeng.guns.core.util.vo.ExportColVo;
+import cn.stylefeng.guns.core.util.vo.ExportRowVo;
+import cn.stylefeng.guns.modular.EventStep.service.IEventStepService;
+import cn.stylefeng.guns.modular.MeetingRec.service.IMeetingrecService;
 import cn.stylefeng.guns.modular.checkitem.service.ICheckitemService;
 import cn.stylefeng.guns.modular.meeting.dto.AddMeetingDto;
 import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
 import cn.stylefeng.guns.modular.meeting.service.IMeetingService;
 import cn.stylefeng.guns.modular.system.dao.MeetingMapper;
 import cn.stylefeng.guns.modular.system.dao.MeetingrecMapper;
+import cn.stylefeng.guns.modular.system.model.Checkitem;
 import cn.stylefeng.guns.modular.system.model.Meeting;
 import cn.stylefeng.guns.modular.system.model.Meetingrec;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
@@ -24,6 +31,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +52,11 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
     private MeetingrecMapper meetingrecMapper;
     @Autowired
     private ICheckitemService checkitemService;
+    @Autowired
+    private IMeetingrecService meetingrecService;
+    @Autowired
+    private IEventStepService eventStepService;
+
     @Override
     public ResponseData SreachPage(SreachMeetingDto sreachDto) {
         try {
@@ -144,6 +157,40 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
         }
     }
+
+    @Override
+    public void export(SreachMeetingDto sreachMeetingDto, HttpServletResponse response) {
+        //sheet名
+        String sheetName = "会议督查数据分析表";
+        List<ExportRowVo> exportRowVos = new ArrayList<>();
+        List<HashMap<String,Object>> maps = meetingrecService.export(sreachMeetingDto);
+        List<ExportRowVo> titles=new ArrayList<>();
+        ExportRowVo title=  new ExportRowVo();
+        title.setTotal(1);
+        title.getColVos().add(new ExportColVo(new ExportColSubVo(1,"单位")));
+        ArrayList<Checkitem> checkitems= (ArrayList<Checkitem>) checkitemService.selectList(Condition.create().eq("itemclass", 2).eq("status", 1).orderBy("id", true));
+        for (int i=0;i<checkitems.size();i++) {
+            Checkitem ck=checkitems.get(i);
+            title.getColVos().add(new ExportColVo(new ExportColSubVo(1,ck.getItemdesc())));
+            //获取数据
+        }
+        titles.add(title);
+
+        for (HashMap<String,Object> map : maps) {
+            ExportRowVo exportRowVo = new ExportRowVo();
+            exportRowVo.setColVos(new ArrayList<>());
+            exportRowVo.setTotal(1);
+            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get("title"))));
+            for (int i=0;i<checkitems.size();i++) {
+                Checkitem ck=checkitems.get(i);
+                exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get(ck.getId().toString()))));
+                }
+            exportRowVos.add(exportRowVo);
+        }
+
+        ExportUtil.outExport(sreachMeetingDto, response, titles, sheetName, exportRowVos);
+    }
+
     @Override
     public ResponseData selectWithManyById(Integer id) {
         Meeting meeting = meetingMapper.selectWithManyById(id);

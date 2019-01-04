@@ -1,6 +1,5 @@
 package cn.stylefeng.guns.modular.api.controller;
 
-import cn.stylefeng.guns.core.util.ExportUtil;
 import cn.stylefeng.guns.modular.zhreport.dto.SreachReportDto;
 import cn.stylefeng.guns.modular.zhreport.service.IReportService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
@@ -9,7 +8,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.OutputStream;
 
 /**
  * 报表统计控制器
@@ -84,51 +81,9 @@ public class ReportController extends BaseController {
 
     @RequestMapping(value = "/export", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public void export(@RequestBody SreachReportDto sreachReportDto, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void export(@RequestBody SreachReportDto sreachReportDto, HttpServletRequest request, HttpServletResponse response) {
 
-        //获取数据
-//        List<ReportVo> list = (List<ReportVo>) reportService.getList(sreachReportDto).getData();
-
-        //excle模板文件名
-        String template="zhcx.xml";
-        //excel文件名
-        String fileName = "综合查询数据分析表" + ".xls";
-
-        //sheet名
-        String sheetName = "综合查询数据分析表";
-//
-//        HashMap<String, String> map = new HashMap<>();
-//        map.put("dateGroup", dateGroup);
-//        //获取数据
-//        List<Object> list = (List<Object>) dcdbReportService.getDcdbReports(map).getData();
-//
-//        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String[][] content = new String[5][5];
-//        for (int i = 0; i < list.size(); i++) {
-//            content[i] = new String[title.length];
-//            DcdbReport obj = (DcdbReport) list.get(i);
-//            content[i][0] = obj.getTitle();
-//            content[i][1] = obj.getAgent();
-//            content[i][2] = obj.getCompany();
-//            content[i][3] = obj.getRequirement();
-//            content[i][4] = formatter.format(obj.getCreatedTime());
-//            content[i][5] = obj.getUseTime();
-//            content[i][6] = obj.getStatus();
-//        }
-
-        //创建HSSFWorkbook
-        HSSFWorkbook wb = ExportUtil.getHSSFWorkbook(template,sheetName,null);
-
-        //响应到客户端
-        try {
-            ExportUtil.setResponseHeader(response, fileName);
-            OutputStream os = response.getOutputStream();
-            wb.write(os);
-            os.flush();
-            os.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        reportService.export(sreachReportDto,response);
     }
 
 }

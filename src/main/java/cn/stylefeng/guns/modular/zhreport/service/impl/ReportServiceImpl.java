@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 
 /**
@@ -177,4 +178,40 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
     public ResponseData selectByAffairCount(SreachReportDto sreachReportDto) {
         return ResponseData.success(reportMapper.selectByAffairCount(null,sreachReportDto.getBeforeTime()));
     }
+
+    @Override
+    public void export(SreachReportDto sreachReportDto, HttpServletResponse response) {
+        switch (QueryType.getQueryType(sreachReportDto.getQueryType())){
+            case TASK:
+                SreachTaskDto sreachTaskDto = new SreachTaskDto();
+                BeanUtils.copyProperties(sreachReportDto, sreachTaskDto);
+                taskService.export(sreachTaskDto,response);
+                break;
+            case UNIT:
+                ecportByUnitCount(sreachReportDto,response);
+                break;
+            case PERSION:
+                 ecportByPersionCount(sreachReportDto,response);
+                 break;
+            case AFFAIR:
+                 ecportByAffairCount(sreachReportDto,response);
+                 break;
+            default:
+               break;
+        }
+    }
+
+    private void ecportByUnitCount(SreachReportDto sreachReportDto, HttpServletResponse response) {
+
+    }
+
+    private void ecportByPersionCount(SreachReportDto sreachReportDto, HttpServletResponse response) {
+
+    }
+
+    private void ecportByAffairCount(SreachReportDto sreachReportDto, HttpServletResponse response) {
+
+    }
+
+
 }

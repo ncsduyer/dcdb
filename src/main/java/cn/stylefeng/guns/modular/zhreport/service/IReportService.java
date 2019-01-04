@@ -5,6 +5,8 @@ import cn.stylefeng.guns.modular.zhreport.dto.SreachReportDto;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import com.baomidou.mybatisplus.service.IService;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * <p>
  *  服务类
@@ -21,4 +23,6 @@ public interface IReportService extends IService<Report> {
     ResponseData selectByUnitCount(SreachReportDto sreachReportDto);
     ResponseData selectByPersionCount(SreachReportDto sreachReportDto);
     ResponseData selectByAffairCount(SreachReportDto sreachReportDto);
+
+    void export(SreachReportDto sreachReportDto, HttpServletResponse response);
 }

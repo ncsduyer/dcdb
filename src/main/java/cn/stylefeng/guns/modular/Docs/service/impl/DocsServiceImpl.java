@@ -5,13 +5,20 @@ import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.util.Bettime;
 import cn.stylefeng.guns.core.util.CopyUtils;
+import cn.stylefeng.guns.core.util.ExportUtil;
+import cn.stylefeng.guns.core.util.vo.ExportColSubVo;
+import cn.stylefeng.guns.core.util.vo.ExportColVo;
+import cn.stylefeng.guns.core.util.vo.ExportRowVo;
+import cn.stylefeng.guns.modular.DocAssignRec.service.IDocassignrecService;
 import cn.stylefeng.guns.modular.Docs.dto.AddDocDto;
 import cn.stylefeng.guns.modular.Docs.dto.SreachDocDto;
 import cn.stylefeng.guns.modular.Docs.service.IDocsService;
+import cn.stylefeng.guns.modular.EventStep.service.IEventStepService;
 import cn.stylefeng.guns.modular.checkitem.service.ICheckitemService;
 import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
 import cn.stylefeng.guns.modular.system.dao.DocassignrecMapper;
 import cn.stylefeng.guns.modular.system.dao.DocsMapper;
+import cn.stylefeng.guns.modular.system.model.Checkitem;
 import cn.stylefeng.guns.modular.system.model.Docassignrec;
 import cn.stylefeng.guns.modular.system.model.Docs;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
@@ -25,7 +32,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * <p>
@@ -43,6 +53,11 @@ public class DocsServiceImpl extends ServiceImpl<DocsMapper, Docs> implements ID
     private DocassignrecMapper docassignrecMapper;
     @Autowired
     private ICheckitemService checkitemService;
+    @Autowired
+    private IEventStepService eventStepService;
+    @Autowired
+    private IDocassignrecService docassignrecService;
+
     @Override
     public ResponseData SreachPage(SreachMeetingDto sreachDto) {
         try {
@@ -142,6 +157,40 @@ public class DocsServiceImpl extends ServiceImpl<DocsMapper, Docs> implements ID
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
         }
     }
+
+    @Override
+    public void export(SreachMeetingDto sreachDocDto, HttpServletResponse response) {
+//sheet名
+        String sheetName = "区委公文数据分析表";
+        List<ExportRowVo> exportRowVos = new ArrayList<>();
+        List<HashMap<String,Object>> maps = docassignrecService.export(sreachDocDto);
+        List<ExportRowVo> titles=new ArrayList<>();
+        ExportRowVo title=  new ExportRowVo();
+        title.setTotal(1);
+        title.getColVos().add(new ExportColVo(new ExportColSubVo(1,"单位")));
+        ArrayList<Checkitem> checkitems= (ArrayList<Checkitem>) checkitemService.selectList(Condition.create().eq("itemclass", 3).eq("status", 1).orderBy("id", true));
+        for (int i=0;i<checkitems.size();i++) {
+            Checkitem ck=checkitems.get(i);
+            title.getColVos().add(new ExportColVo(new ExportColSubVo(1,ck.getItemdesc())));
+            //获取数据
+        }
+        titles.add(title);
+
+        for (HashMap<String,Object> map : maps) {
+            ExportRowVo exportRowVo = new ExportRowVo();
+            exportRowVo.setColVos(new ArrayList<>());
+            exportRowVo.setTotal(1);
+            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get("title"))));
+            for (int i=0;i<checkitems.size();i++) {
+                Checkitem ck=checkitems.get(i);
+                exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get(ck.getId().toString()))));
+            }
+            exportRowVos.add(exportRowVo);
+        }
+
+        ExportUtil.outExport(sreachDocDto, response, titles, sheetName, exportRowVos);
+    }
+
     @Override
     public ResponseData selectWithManyById(Integer id) {
         Docs meeting = docsMapper.selectWithManyById(id);

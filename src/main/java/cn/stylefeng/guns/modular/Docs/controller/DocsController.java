@@ -1,7 +1,6 @@
 package cn.stylefeng.guns.modular.Docs.controller;
 
 import cn.stylefeng.guns.core.common.annotion.Permission;
-import cn.stylefeng.guns.core.util.ExportUtil;
 import cn.stylefeng.guns.modular.Docs.dto.AddDocDto;
 import cn.stylefeng.guns.modular.Docs.dto.SreachDocDto;
 import cn.stylefeng.guns.modular.Docs.service.IDocsService;
@@ -180,33 +179,6 @@ public class DocsController extends BaseController {
     @RequestMapping(value = "/export", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public void export(@RequestBody SreachDocDto sreachDocDto, HttpServletRequest request, HttpServletResponse response) {
-
-        //excle模板文件名
-        String template="dcdbzhcx.xml";
-        //excel文件名
-
-        //sheet名
-        String sheetName = "督查督办数据分析表";
-        docsService.getReports(sreachDocDto).getData();
-//
-//        HashMap<String, String> map = new HashMap<>();
-//        map.put("dateGroup", dateGroup);
-//        //获取数据
-//        List<Object> list = (List<Object>) dcdbReportService.getDcdbReports(map).getData();
-//
-//        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String[][] content = new String[5][5];
-//        for (int i = 0; i < list.size(); i++) {
-//            content[i] = new String[title.length];
-//            DcdbReport obj = (DcdbReport) list.get(i);
-//            content[i][0] = obj.getTitle();
-//            content[i][1] = obj.getAgent();
-//            content[i][2] = obj.getCompany();
-//            content[i][3] = obj.getRequirement();
-//            content[i][4] = formatter.format(obj.getCreatedTime());
-//            content[i][5] = obj.getUseTime();
-//            content[i][6] = obj.getStatus();
-//        }
-        ExportUtil.outExport(sreachDocDto, response, template, sheetName, null);
+        docsService.export(sreachDocDto, response);
     }
 }

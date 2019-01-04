@@ -20,4 +20,6 @@ import java.util.List;
 public interface MeetingrecMapper extends BaseMapper<Meetingrec> {
 
     List<HashMap<String,Object>> getInfoByPid(@Param(value = "ew") Wrapper<Meetingrec> ew, @Param(value = "courses") List<Checkitem> courses);
+
+    List<HashMap<String, Object>> export(@Param(value = "ew") Wrapper<Meetingrec> ew, @Param(value = "courses") List<Checkitem> courses);
 }

@@ -6,6 +6,7 @@ import cn.stylefeng.guns.modular.tdtask.dto.SreachTaskDto;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import com.baomidou.mybatisplus.service.IService;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -29,4 +30,6 @@ public interface ITaskService extends IService<Task> {
     ResponseData sreachChart(SreachTaskDto sreachTaskDto);
 
     List<Task> getAll(SreachTaskDto sreachTaskDto);
+
+    void export(SreachTaskDto sreachTaskDto, HttpServletResponse response);
 }

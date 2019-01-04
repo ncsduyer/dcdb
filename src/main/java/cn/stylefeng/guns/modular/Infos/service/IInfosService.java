@@ -2,9 +2,12 @@ package cn.stylefeng.guns.modular.Infos.service;
 
 import cn.stylefeng.guns.modular.Infos.dto.AddInfoDto;
 import cn.stylefeng.guns.modular.Infos.dto.SreachInfoDto;
+import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
 import cn.stylefeng.guns.modular.system.model.Infos;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import com.baomidou.mybatisplus.service.IService;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * <p>
@@ -27,4 +30,6 @@ public interface IInfosService extends IService<Infos> {
     ResponseData getReports(SreachInfoDto sreachDto);
 
     ResponseData edit(AddInfoDto addDto);
+
+    void export(SreachMeetingDto sreachInfoDto, HttpServletResponse response);
 }

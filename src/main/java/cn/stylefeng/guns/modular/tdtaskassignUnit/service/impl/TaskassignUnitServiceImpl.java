@@ -112,7 +112,18 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
 
         ts.setUpdatetime(new DateTime());
         updateById(ts);
-        LogUtil.addLog(taskassign, ShiroKit.getUser().getName()+"提交了新反馈，单位为："+companyService.selectById(ts.getUnitid()).getTitle());
+        switch (ts.getStatus()) {
+            case 2:
+                LogUtil.addLog(taskassign, ShiroKit.getUser().getName() + "提交了新反馈，反馈状态变为已反馈限期办理中，单位为：" + companyService.selectById(ts.getUnitid()).getTitle());
+                break;
+            case 3:
+                LogUtil.addLog(taskassign, ShiroKit.getUser().getName() + "更新了进度，反馈状态变为超期办理中，单位为：" + companyService.selectById(ts.getUnitid()).getTitle());
+                break;
+            case 4:
+                LogUtil.addLog(taskassign, ShiroKit.getUser().getName() + "更新了进度，反馈状态变为办理完成，单位为：" + companyService.selectById(ts.getUnitid()).getTitle());
+                break;
+        }
+
         return true;
     }
 

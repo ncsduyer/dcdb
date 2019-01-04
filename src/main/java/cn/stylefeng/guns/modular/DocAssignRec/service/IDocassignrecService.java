@@ -1,9 +1,13 @@
 package cn.stylefeng.guns.modular.DocAssignRec.service;
 
 import cn.stylefeng.guns.modular.MeetingRec.dto.SreachMeetingRecDto;
+import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
 import cn.stylefeng.guns.modular.system.model.Docassignrec;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import com.baomidou.mybatisplus.service.IService;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * <p>
@@ -15,4 +19,6 @@ import com.baomidou.mybatisplus.service.IService;
  */
 public interface IDocassignrecService extends IService<Docassignrec> {
     ResponseData selectListByDto(SreachMeetingRecDto sreachDto);
+
+    List<HashMap<String, Object>> export(SreachMeetingDto sreachDocDto);
 }

@@ -6,6 +6,8 @@ import cn.stylefeng.guns.modular.system.model.Docs;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import com.baomidou.mybatisplus.service.IService;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * <p>
  * 公文运转 服务类
@@ -26,4 +28,6 @@ public interface IDocsService extends IService<Docs> {
     ResponseData getReports(SreachMeetingDto sreachDto);
 
     ResponseData edit(AddDocDto addDto);
+
+    void export(SreachMeetingDto sreachDocDto, HttpServletResponse response);
 }

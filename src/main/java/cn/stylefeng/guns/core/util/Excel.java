@@ -80,6 +80,32 @@ public class Excel {
     public Excel(String template, List<ExportRowVo> exportRowVos) {
         createExcel(template).setContet(exportRowVos);
     }
+    public Excel(List<ExportRowVo> titles,String template) {
+
+        createExcel(titles,template);
+
+    }
+
+    private Excel createExcel(List<ExportRowVo> titles,String template) {
+
+            hssfWorkbook=new HSSFWorkbook();
+
+            if (StringUtils.isNotBlank(this.sheetname)){
+                this.sheet = hssfWorkbook.createSheet(this.sheetname);
+            }else{
+                sheet = hssfWorkbook.createSheet(template);
+            }
+             rownum=0;
+            int colnum=0;
+
+            //设置标题
+          setContet(titles);
+            return this;
+    }
+
+    public Excel(List<ExportRowVo> titles,String template, List<ExportRowVo> exportRowVos) {
+        createExcel(titles,template).setContet(exportRowVos);
+    }
 
     private void setContet(List<ExportRowVo> exportRowVos) {
         //创建内容

@@ -1,7 +1,6 @@
 package cn.stylefeng.guns.modular.meeting.controller;
 
 import cn.stylefeng.guns.core.common.annotion.Permission;
-import cn.stylefeng.guns.core.util.ExportUtil;
 import cn.stylefeng.guns.modular.meeting.dto.AddMeetingDto;
 import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
 import cn.stylefeng.guns.modular.meeting.service.IMeetingService;
@@ -179,34 +178,8 @@ public class MeetingController extends BaseController {
     @RequestMapping(value = "/export", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public void export(@RequestBody SreachMeetingDto sreachMeetingDto, HttpServletRequest request, HttpServletResponse response) {
+        meetingService.export(sreachMeetingDto, response);
 
-        //excle模板文件名
-        String template="dcdbzhcx.xml";
-        //excel文件名
-
-        //sheet名
-        String sheetName = "督查督办数据分析表";
-        meetingService.getReports(sreachMeetingDto).getData();
-//
-//        HashMap<String, String> map = new HashMap<>();
-//        map.put("dateGroup", dateGroup);
-//        //获取数据
-//        List<Object> list = (List<Object>) dcdbReportService.getDcdbReports(map).getData();
-//
-//        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String[][] content = new String[5][5];
-//        for (int i = 0; i < list.size(); i++) {
-//            content[i] = new String[title.length];
-//            DcdbReport obj = (DcdbReport) list.get(i);
-//            content[i][0] = obj.getTitle();
-//            content[i][1] = obj.getAgent();
-//            content[i][2] = obj.getCompany();
-//            content[i][3] = obj.getRequirement();
-//            content[i][4] = formatter.format(obj.getCreatedTime());
-//            content[i][5] = obj.getUseTime();
-//            content[i][6] = obj.getStatus();
-//        }
-        ExportUtil.outExport(sreachMeetingDto, response, template, sheetName, null);
     }
 
 
