@@ -401,7 +401,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
             List<Task> tasks = getAll(sreachTaskDto);
             ExportRowVo exportRowVo1 = new ExportRowVo();
             exportRowVo1.setTotal(1);
-            exportRowVo1.getColVos().add(new ExportColVo(new ExportColSubVo(1,9, et.getStep())));
+            exportRowVo1.getColVos().add(new ExportColVo(new ExportColSubVo(1,9, et.getStep()+"("+tasks.size()+")")));
             exportRowVos.add(exportRowVo1);
             for (Task task : tasks) {
                 ExportRowVo exportRowVo = new ExportRowVo();
