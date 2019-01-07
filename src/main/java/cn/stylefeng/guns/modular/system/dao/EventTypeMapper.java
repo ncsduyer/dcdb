@@ -3,6 +3,8 @@ package cn.stylefeng.guns.modular.system.dao;
 import cn.stylefeng.guns.modular.system.model.EventType;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 
+import java.util.ArrayList;
+
 /**
  * <p>
  * 事件类型 Mapper 接口
@@ -12,5 +14,5 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * @since 2018-10-15
  */
 public interface EventTypeMapper extends BaseMapper<EventType> {
-
+    ArrayList<EventType> selectMoreById();
 }

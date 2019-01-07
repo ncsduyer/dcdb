@@ -42,8 +42,16 @@ public class EventType extends Model<EventType> {
 
     @TableField("report_alias")
     private String reportAlias;
+    @TableField(exist = false)
+    private Checkitem checkitem;
 
+    public Checkitem getCheckitem() {
+        return checkitem;
+    }
 
+    public void setCheckitem(Checkitem checkitem) {
+        this.checkitem = checkitem;
+    }
     public Integer getId() {
         return id;
     }
