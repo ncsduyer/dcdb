@@ -45,6 +45,7 @@ public class TaskassignUnitdealServiceImpl extends ServiceImpl<TaskassignUnitdea
     public ResponseData updateByTaskassignUnitdeal(TaskassignUnitdeal taskassignUnitdeal) {
         try {
                 TaskassignUnit taskassignUnit=taskassignUnitService.selectById(taskassignUnitdeal.getTaunitid());
+                int oldStatus =taskassignUnit.getStatus();
                 if (selectCount(Condition.create().eq("status", 1).eq("taunitid", taskassignUnitdeal.getTaunitid()))>0||taskassignUnit.getStatus()==4){
                     return new ErrorResponseData(45000, "已经完成不可重复提交！");
                 }
@@ -78,12 +79,18 @@ public class TaskassignUnitdealServiceImpl extends ServiceImpl<TaskassignUnitdea
                 LogUtil.addLog(taskassign, ShiroKit.getUser().getName()+"提交了新进度，单位为："+companyService.selectById(taskassignUnit.getUnitid()).getTitle());
             }else{
                 updateById(taskassignUnitdeal);
+                if (taskassignUnitdeal.getStatus()==1){
+                    LogUtil.addLog(taskassign,ShiroKit.getUser().getName()+"设置进度完成，单位为："+companyService.selectById(taskassignUnit.getUnitid()).getTitle());
+                }else {
                 LogUtil.addLog(taskassign,ShiroKit.getUser().getName()+"设置了延期，单位为："+companyService.selectById(taskassignUnit.getUnitid()).getTitle());
+                }
             }
 //            判断是否完成 修改unit状态 1-新建未反馈；2-已反馈限期办理中；3-已反馈超期办理中；4-办理完成；）
-            List<TaskassignUnit> tsus=new ArrayList<>();
-            tsus.add(taskassignUnit);
-            taskassignUnitService.updateByTaskassignUnit(tsus);
+            if (oldStatus<taskassignUnit.getStatus()){
+                List<TaskassignUnit> tsus=new ArrayList<>();
+                tsus.add(taskassignUnit);
+                taskassignUnitService.updateByTaskassignUnit(tsus);
+            }
             return ResponseData.success();
         } catch (Exception e) {
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
