@@ -62,7 +62,10 @@ public class TaskassignServiceImpl extends ServiceImpl<TaskassignMapper, Taskass
             ew.eq("tu.personid", ShiroKit.getUser().getId());
         }
        Taskassign taskassign= taskassignMapper.selectByManyId(ew);
+        if (ToolUtil.isNotEmpty(taskassign)){
+
         taskassign.setUseTime(VoUtil.getUseTime(taskassign.getCreatetime(), taskassign.getEndtime()));
+        }
         return taskassign;
     }
 }
