@@ -14,5 +14,5 @@ import java.util.ArrayList;
  * @since 2018-10-15
  */
 public interface EventTypeMapper extends BaseMapper<EventType> {
-    ArrayList<EventType> selectMoreById();
+    ArrayList<EventType> selectAllMore();
 }

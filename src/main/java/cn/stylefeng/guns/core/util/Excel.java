@@ -115,9 +115,10 @@ public class Excel {
             for (int i = 0; i < exportRowVo.getTotal(); i++) {
                 int startRow=rownum;
                 row = sheet.createRow(rownum);
+                int firstCol=0;
                 for (int j = 0; j< exportRowVo.getColVos().size(); j++) {
                     ExportColVo exportColVo=exportRowVo.getColVos().get(j);
-                    cell=row.createCell(j);
+                    cell=row.createCell(firstCol);
                     if (i<exportColVo.getCols().size()){
                         cell.setCellValue(exportColVo.getCols().get(i).getContent());
                     }else{
@@ -125,15 +126,25 @@ public class Excel {
                     }
                     if(i<exportColVo.getCols().size()){
 
-                        if(exportColVo.getCols().get(i).getRowspan()>1){
-//                            if (i>1&&exportColVo.getCols().get(i-1).getRowspan()>1){
-//                                startRow+=exportColVo.getCols().get(i-1).getRowspan()-1;
+//                        if(exportColVo.getCols().get(i).getRowspan()>1){
+////                            if (i>1&&exportColVo.getCols().get(i-1).getRowspan()>1){
+////                                startRow+=exportColVo.getCols().get(i-1).getRowspan()-1;
+////                            }
+//                        sheet.addMergedRegion(new CellRangeAddress(rownum,rownum+exportColVo.getCols().get(i).getRowspan()-1,j,j+exportColVo.getCols().get(i).getColspan()-1));
+//                        }else if (exportColVo.getCols().get(i).getColspan()>1){
+                            int rspan = exportColVo.getCols().get(i).getRowspan()-1;
+                            int cspan = exportColVo.getCols().get(i).getColspan();
+//                            if (firstCol+cspan-1<=0){
+//                                firstCol++;
+//                                continue;
 //                            }
-                        sheet.addMergedRegion(new CellRangeAddress(rownum,rownum+exportColVo.getCols().get(i).getRowspan()-1,j,j+exportColVo.getCols().get(i).getColspan()-1));
-                        }else if (exportColVo.getCols().get(i).getColspan()>1){
-                        sheet.addMergedRegion(new CellRangeAddress(startRow,startRow,j,j+exportColVo.getCols().get(i).getColspan()-1));
-
-                        }
+                            if(rspan>0||cspan>1){
+                            sheet.addMergedRegion(new CellRangeAddress(rownum,rownum+rspan,firstCol,firstCol+cspan-1));
+                            }
+//                        }
+                            firstCol+=cspan;
+                    }else{
+                            firstCol++;
                     }
                 }
                 rownum++;

@@ -7,8 +7,8 @@
         <id column="id" property="id"/>
         <result column="event_type" property="eventType"/>
         <result column="report_alias" property="reportAlias"/>
-        <collection property="checkitem" ofType="cn.stylefeng.guns.modular.system.model.Checkitem" >
-            <id column="id" property="id" />
+        <collection property="checkitems" ofType="cn.stylefeng.guns.modular.system.model.Checkitem" >
+            <id column="chid" property="id" />
             <result column="itemclass" property="itemclass" />
             <result column="itemdesc" property="itemdesc" />
             <result column="status" property="status" />
@@ -19,8 +19,7 @@
     <sql id="Base_Column_List">
         id, event_type,report_alias
     </sql>
-    <select id="selectMoreById" resultMap="BaseResultMap">
-        SELECT et.id, et.event_type,et.report_alias ,ch.id, ch.itemclass, ch.itemdesc, ch.status FROM t_tb_event_type et LEFT JOIN td_checkitem ch ON ch.itemclass=et.id
-        ORDER BY et.id asc;
+    <select id="selectAllMore" resultMap="BaseResultMap">
+        SELECT et.id, et.event_type,et.report_alias ,ch.id chid, ch.itemclass, ch.itemdesc, ch.status FROM t_tb_event_type et LEFT JOIN td_checkitem ch ON ch.itemclass=et.id
     </select>
 </mapper>

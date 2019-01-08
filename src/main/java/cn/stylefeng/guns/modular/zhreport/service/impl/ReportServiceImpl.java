@@ -6,7 +6,9 @@ import cn.stylefeng.guns.core.util.ExportUtil;
 import cn.stylefeng.guns.core.util.vo.ExportColSubVo;
 import cn.stylefeng.guns.core.util.vo.ExportColVo;
 import cn.stylefeng.guns.core.util.vo.ExportRowVo;
+import cn.stylefeng.guns.modular.system.dao.EventTypeMapper;
 import cn.stylefeng.guns.modular.system.dao.ReportMapper;
+import cn.stylefeng.guns.modular.system.model.EventType;
 import cn.stylefeng.guns.modular.system.model.Report;
 import cn.stylefeng.guns.modular.tdtask.dto.SreachTaskDto;
 import cn.stylefeng.guns.modular.tdtask.service.ITaskService;
@@ -25,9 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -42,6 +42,8 @@ import java.util.List;
 public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> implements IReportService {
     @Autowired
     private ReportMapper reportMapper;
+    @Autowired
+    private EventTypeMapper eventTypeMapper;
     @Autowired
     private ITaskService taskService;
     @Override
@@ -211,32 +213,44 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
     private void ecportByUnitCount(SreachReportDto sreachReportDto, HttpServletResponse response) {
         String sheetName = "责任单位相关统计表";
         List<ExportRowVo> exportRowVos = new ArrayList<>();
-//        List<HashMap<String,Object>> maps = .export(sreachReportDto);
-//        List<ExportRowVo> titles=new ArrayList<>();
-//        ExportRowVo title=  new ExportRowVo();
-//        title.setTotal(1);
-//        title.getColVos().add(new ExportColVo(new ExportColSubVo(1,"单位")));
-//        ArrayList<Checkitem> checkitems= (ArrayList<Checkitem>) checkitemService.selectList(Condition.create().eq("itemclass", 4).eq("status", 1).orderBy("id", true));
-//        for (int i=0;i<checkitems.size();i++) {
-//            Checkitem ck=checkitems.get(i);
-//            title.getColVos().add(new ExportColVo(new ExportColSubVo(1,ck.getItemdesc())));
-//            //获取数据
-//        }
-//        titles.add(title);
-//
-//        for (HashMap<String,Object> map : maps) {
-//            ExportRowVo exportRowVo = new ExportRowVo();
-//            exportRowVo.setColVos(new ArrayList<>());
-//            exportRowVo.setTotal(1);
-//            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get("title"))));
-//            for (int i=0;i<checkitems.size();i++) {
-//                Checkitem ck=checkitems.get(i);
-//                exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get(ck.getId().toString()))));
-//            }
-//            exportRowVos.add(exportRowVo);
-//        }
-//
-//        ExportUtil.outExport(sreachReportDto, response, titles, sheetName, exportRowVos);
+        ArrayList<EventType> eventTypes=eventTypeMapper.selectAllMore();
+        List<java.util.LinkedHashMap<String,Object>> maps = (List<LinkedHashMap<String, Object>>) selectByUnitCount(sreachReportDto).getData();
+        List<ExportRowVo> titles=new ArrayList<>();
+        ExportRowVo title=  new ExportRowVo();
+        ExportRowVo title1=  new ExportRowVo();
+        title.setTotal(1);
+        title1.setTotal(1);
+        title.getColVos().add(new ExportColVo(new ExportColSubVo(1,"")));
+        title1.getColVos().add(new ExportColVo(new ExportColSubVo(1,"单位名称")));
+        for (int i = 0; i <eventTypes.size(); i++) {
+            title.getColVos().add(new ExportColVo(new ExportColSubVo(1,eventTypes.get(i).getCheckitems().size(),eventTypes.get(i).getReportAlias())));
+            for (int j = 0; j <eventTypes.get(i).getCheckitems().size(); j++){
+                title1.getColVos().add(new ExportColVo(new ExportColSubVo(1,eventTypes.get(i).getCheckitems().get(j).getItemdesc())));
+            }
+        }
+        titles.add(title);
+        titles.add(title1);
+        int index=1;
+        for (LinkedHashMap<String,Object> map : maps) {
+            ExportRowVo exportRowVo = new ExportRowVo();
+            exportRowVo.setColVos(new ArrayList<>());
+            exportRowVo.setTotal(1);
+            map.remove("unitid");
+            Iterator<Map.Entry<String, Object>> it = map.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<String, Object> entry = it.next();
+                if (ToolUtil.isNotEmpty(entry.getValue())){
+                exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1,entry.getValue().toString())));
+                }else{
+                exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, "0")));
+
+                }
+            }
+            exportRowVos.add(exportRowVo);
+            index++;
+        }
+
+        ExportUtil.outExport(sreachReportDto, response, titles, sheetName, exportRowVos);
     }
 
     private void ecportByPersionCount(SreachReportDto sreachReportDto, HttpServletResponse response) {
@@ -261,13 +275,13 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
             exportRowVo.setColVos(new ArrayList<>());
             exportRowVo.setTotal(1);
             exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, String.valueOf(index))));
-            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get("name"))));
-            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get("taskCrenum"))));
-            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get("unitnum"))));
-            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get("dealnum"))));
-            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get("meetnum"))));
-            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get("assignnum"))));
-            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get("infonum"))));
+            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, map.get("name").toString())));
+            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, map.get("taskCrenum").toString())));
+            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, map.get("unitnum").toString())));
+            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, map.get("dealnum").toString())));
+            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, map.get("meetnum").toString())));
+            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, map.get("assignnum").toString())));
+            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, map.get("infonum").toString())));
             exportRowVos.add(exportRowVo);
             index++;
         }
@@ -304,20 +318,21 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
             exportRowVo.setColVos(new ArrayList<>());
             exportRowVo.setTotal(1);
             exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, String.valueOf(index))));
-            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get("titlename"))));
-            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get("one"))));
-            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get("two"))));
-            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get("three"))));
-            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get("four"))));
-            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get("five"))));
-            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get("six"))));
-            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get("seven"))));
-            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get("eight"))));
-            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get("nine"))));
-            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get("ten"))));
-            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get("eleven"))));
-            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get("twelve"))));
+            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, map.get("titlename").toString())));
+            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, map.get("one").toString())));
+            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, map.get("two").toString())));
+            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, map.get("three").toString())));
+            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, map.get("four").toString())));
+            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, map.get("five").toString())));
+            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, map.get("six").toString())));
+            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, map.get("seven").toString())));
+            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, map.get("eight").toString())));
+            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, map.get("nine").toString())));
+            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, map.get("ten").toString())));
+            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, map.get("eleven").toString())));
+            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, map.get("twelve").toString())));
             exportRowVos.add(exportRowVo);
+            index++;
         }
 
         ExportUtil.outExport(sreachReportDto, response, titles, sheetName, exportRowVos);

@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * <p>
@@ -42,16 +43,20 @@ public class EventType extends Model<EventType> {
 
     @TableField("report_alias")
     private String reportAlias;
+
+
+    public ArrayList<Checkitem> getCheckitems() {
+        return checkitems;
+    }
+
+    public void setCheckitems(ArrayList<Checkitem> checkitems) {
+        this.checkitems = checkitems;
+    }
+
     @TableField(exist = false)
-    private Checkitem checkitem;
+    private ArrayList<Checkitem> checkitems;
 
-    public Checkitem getCheckitem() {
-        return checkitem;
-    }
 
-    public void setCheckitem(Checkitem checkitem) {
-        this.checkitem = checkitem;
-    }
     public Integer getId() {
         return id;
     }
