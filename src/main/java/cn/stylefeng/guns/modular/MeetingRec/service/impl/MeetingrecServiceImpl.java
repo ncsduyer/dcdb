@@ -64,26 +64,6 @@ public class MeetingrecServiceImpl extends ServiceImpl<MeetingrecMapper, Meeting
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        EntityWrapper<Meetingrec> ew = new EntityWrapper<>();
-        ew.setEntity(new Meetingrec());
-        if (ToolUtil.isNotEmpty(sreachDto.getBeforeTime())){
-            ew.ge("m.mtime", sreachDto.getBeforeTime());
-        }
-        if (ToolUtil.isNotEmpty(sreachDto.getAfterTime())){
-            ew.le("m.mtime", sreachDto.getAfterTime());
-        }
-        if (ToolUtil.isNotEmpty(sreachDto.getCreatorid())){
-            ew.eq("m.creatorid", sreachDto.getCreatorid());
-        }
-//            拼接查询条件
-        if (ToolUtil.isNotEmpty(sreachDto.getTitle())){
-            ew.like("m.title", sreachDto.getTitle());
-        }
-        if (ToolUtil.isNotEmpty(sreachDto.getStatus())){
-            ew.in("m.status", sreachDto.getStatus());
-        }
-        ew.groupBy("rec.unitid");
-        ew.orderBy("rec.createtime");
-        return meetingrecMapper.export(ew,checkitemService.selectList(Condition.create().eq("itemclass", 2).eq("status", 1)));
+        return meetingrecMapper.export(sreachDto,checkitemService.selectList(Condition.create().eq("itemclass", 2).eq("status", 1)));
     }
 }

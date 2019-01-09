@@ -1,5 +1,6 @@
 package cn.stylefeng.guns.modular.system.dao;
 
+import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
 import cn.stylefeng.guns.modular.system.model.Checkitem;
 import cn.stylefeng.guns.modular.system.model.Docassignrec;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
@@ -19,5 +20,5 @@ import java.util.List;
  */
 public interface DocassignrecMapper extends BaseMapper<Docassignrec> {
     List<HashMap<String,Object>> getInfoByPid(@Param(value = "ew") Wrapper<Docassignrec> ew, @Param(value = "courses") List<Checkitem> courses);
-    List<HashMap<String, Object>> export(@Param(value = "ew") Wrapper<Docassignrec> ew, @Param(value = "courses") List<Checkitem> courses);
+    List<HashMap<String, Object>> export(@Param(value = "sreachDto") SreachMeetingDto sreachDto, @Param(value = "courses") List<Checkitem> courses);
 }

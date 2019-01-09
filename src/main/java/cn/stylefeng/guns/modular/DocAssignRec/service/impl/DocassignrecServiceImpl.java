@@ -63,26 +63,6 @@ public class DocassignrecServiceImpl extends ServiceImpl<DocassignrecMapper, Doc
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        EntityWrapper<Docassignrec> ew = new EntityWrapper<>();
-        ew.setEntity(new Docassignrec());
-        if (ToolUtil.isNotEmpty(sreachDto.getBeforeTime())){
-            ew.ge("m.mtime", sreachDto.getBeforeTime());
-        }
-        if (ToolUtil.isNotEmpty(sreachDto.getAfterTime())){
-            ew.le("m.mtime", sreachDto.getAfterTime());
-        }
-        if (ToolUtil.isNotEmpty(sreachDto.getCreatorid())){
-            ew.eq("m.creatorid", sreachDto.getCreatorid());
-        }
-//            拼接查询条件
-        if (ToolUtil.isNotEmpty(sreachDto.getTitle())){
-            ew.like("m.title", sreachDto.getTitle());
-        }
-        if (ToolUtil.isNotEmpty(sreachDto.getStatus())){
-            ew.in("m.status", sreachDto.getStatus());
-        }
-        ew.groupBy("rec.unitid");
-        ew.orderBy("rec.createtime");
-        return docassignrecMapper.export(ew,checkitemService.selectList(Condition.create().eq("itemclass", 3).eq("status", 1)));
+        return docassignrecMapper.export(sreachDto,checkitemService.selectList(Condition.create().eq("itemclass", 3).eq("status", 1)));
     }
 }

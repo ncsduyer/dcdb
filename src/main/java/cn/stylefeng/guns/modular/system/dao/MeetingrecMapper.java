@@ -1,5 +1,6 @@
 package cn.stylefeng.guns.modular.system.dao;
 
+import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
 import cn.stylefeng.guns.modular.system.model.Checkitem;
 import cn.stylefeng.guns.modular.system.model.Meetingrec;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
@@ -21,5 +22,5 @@ public interface MeetingrecMapper extends BaseMapper<Meetingrec> {
 
     List<HashMap<String,Object>> getInfoByPid(@Param(value = "ew") Wrapper<Meetingrec> ew, @Param(value = "courses") List<Checkitem> courses);
 
-    List<HashMap<String, Object>> export(@Param(value = "ew") Wrapper<Meetingrec> ew, @Param(value = "courses") List<Checkitem> courses);
+    List<HashMap<String, Object>> export(@Param(value = "sreachDto") SreachMeetingDto sreachDto, @Param(value = "courses") List<Checkitem> courses);
 }

@@ -32,17 +32,18 @@
         GROUP BY rec.unitid
     </select>
     <select id="export" resultType="java.util.HashMap">
-        SELECT c.title title ,rec.unitid unitid,
+        SELECT c.title title ,c.id unitid,
         <if test="courses != null">
             <foreach collection="courses" item="item" separator=",">
                 MAX(CASE rec.checkitemid WHEN ${item.id} THEN rec.checkvalue ElSE 0 END)  "${item.id}"
             </foreach>
         </if>
-        from td_meetingrec rec LEFT JOIN td_meeting m  ON rec.meetingid = m.id
-        left join t_tb_company c on c.id=rec.unitid
-
-        <where>
-            ${ew.sqlSegment}
-        </where>
+        from t_tb_company c left join td_meetingrec rec on c.id=rec.unitid LEFT JOIN td_meeting m  ON rec.meetingid = m.id
+        <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(sreachDto.beforeTime)">and <![CDATA[ m.mtime >= #{sreachDto.beforeTime,jdbcType=TIMESTAMP}]]></if>
+        <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(sreachDto.afterTime)">and <![CDATA[ m.mtime <= #{sreachDto.afterTime,jdbcType=TIMESTAMP}]]></if>
+        <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(sreachDto.creatorid)">and <![CDATA[ m.creatorid = #{sreachDto.creatorid}]]></if>
+        <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(sreachDto.title)">and <![CDATA[ m.title like CONCAT('%',#{sreachDto.title},'%') ]]></if>
+        <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(sreachDto.status)">and <![CDATA[ m.status = #{sreachDto.status}]]></if>
+      GROUP BY c.id ORDER BY rec.createtime
     </select>
 </mapper>
