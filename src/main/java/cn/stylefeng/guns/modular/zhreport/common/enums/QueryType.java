@@ -14,7 +14,8 @@ public enum QueryType {
     AFFAIR(4, "事务统计"),
     MeetChart(5, "会议图形报表"),
     DocChart(6, "公文图形报表"),
-    InfoChart(7, "信息图形报表");
+    InfoChart(7, "信息图形报表"),
+    UnitOnly(8, "事项单位列表");
 
     private Integer code;
 
@@ -41,6 +42,8 @@ public enum QueryType {
                 return QueryType.DocChart;
             case 7:
                 return QueryType.InfoChart;
+            case 8:
+                return QueryType.UnitOnly;
 
             default:
                 return null;

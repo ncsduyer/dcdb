@@ -60,12 +60,23 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
                     return selectByPersionCount(sreachReportDto);
                 case AFFAIR:
                     return selectByAffairCount(sreachReportDto);
+                case UnitOnly:
+                    return selectByUnitOnlyCount(sreachReportDto);
                 default:
                     return null;
             }
         } catch (Exception e) {
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
         }
+    }
+    @Override
+    public ResponseData selectByUnitOnlyCount(SreachReportDto sreachReportDto) {
+        try {
+            new Bettime(sreachReportDto);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return ResponseData.success(reportMapper.selectByUnitOnlyCount(sreachReportDto.getAfterTime(),sreachReportDto.getBeforeTime()));
     }
 
     @Override

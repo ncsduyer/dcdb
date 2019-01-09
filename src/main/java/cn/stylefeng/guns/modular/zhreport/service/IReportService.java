@@ -21,6 +21,7 @@ public interface IReportService extends IService<Report> {
 
     ResponseData getChart(SreachReportDto sreachReportDto);
     ResponseData selectByUnitCount(SreachReportDto sreachReportDto);
+    ResponseData selectByUnitOnlyCount(SreachReportDto sreachReportDto);
     ResponseData selectByPersionCount(SreachReportDto sreachReportDto);
     ResponseData selectByAffairCount(SreachReportDto sreachReportDto);
 

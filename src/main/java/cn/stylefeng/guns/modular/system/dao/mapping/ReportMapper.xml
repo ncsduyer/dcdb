@@ -32,6 +32,20 @@
     <select id="selectByUnitCount" resultType="java.util.LinkedHashMap">
         call AnalysisReport(#{beforeTime,jdbcType=TIMESTAMP},#{afterTime,jdbcType=TIMESTAMP})
     </select>
+    <select id="selectByUnitOnlyCount" resultType="java.util.LinkedHashMap">
+select comp.title,Totalnum,concat(case when Totalnum>0 then cast(DealSuccNum*100.0/Totalnum as decimal(18,2)) else 0.00 end,'%') asbjl
+		,Totalnum-DealSuccNum ,case when DealSuccNum>0 then cast(DealDate*1.0/DealSuccNum as signed) else 0 end bjts
+	from
+    (
+        select com.title,com.id,sum(case when taskunit.status=4 then 1 else 0 end) as DealSuccNum,sum(case when taskunit.id is
+        not null then 1 else 0 end)Totalnum
+        ,sum(case when taskunit.status=4 then cast(timestampdiff(SECOND,taskunit.createtime,taskunit.endtime)/86400 as
+        signed) else 0 end)as DealDate
+        from t_tb_company com
+        left join td_taskassign_unit taskunit on taskunit.unitid=com.id  and taskunit.createtime between #{beforeTime,jdbcType=TIMESTAMP} and #{afterTime,jdbcType=TIMESTAMP}
+        group by com.id,com.title
+	 ) comp
+    </select>
     <select id="selectByPersionCount" resultType="java.util.HashMap">
         select user.name,ifnull(taskCrenum,0) taskCrenum,ifnull(unitnum,0) unitnum ,ifnull(dealnum,0) dealnum, ifnull(meetnum,0) meetnum,ifnull(assignnum,0) assignnum,ifnull(infonum,0) infonum
         from sys_user user
