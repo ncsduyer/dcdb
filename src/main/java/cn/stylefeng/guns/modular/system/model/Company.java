@@ -14,7 +14,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author 三千霜
- * @since 2018-10-15
+ * @since 2019-01-10
  */
 @TableName("t_tb_company")
 public class Company extends Model<Company> {
@@ -30,8 +30,13 @@ public class Company extends Model<Company> {
      * 责任单位名称
      */
     private String title;
+    /**
+     * 简称
+     */
     @TableField("abb_title")
     private String abbTitle;
+    private Integer order;
+    private Integer type;
     /**
      * 地址
      */
@@ -53,8 +58,18 @@ public class Company extends Model<Company> {
      * 详细信息
      */
     private String remarks;
-
     private Integer status;
+
+    public UnitType getUnitType() {
+        return unitType;
+    }
+
+    public void setUnitType(UnitType unitType) {
+        this.unitType = unitType;
+    }
+
+    @TableField(exist = false)
+    private UnitType unitType;
 
     public Integer getId() {
         return id;
@@ -78,6 +93,22 @@ public class Company extends Model<Company> {
 
     public void setAbbTitle(String abbTitle) {
         this.abbTitle = abbTitle;
+    }
+
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     public String getAdress() {
@@ -120,6 +151,14 @@ public class Company extends Model<Company> {
         this.remarks = remarks;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.id;
@@ -128,22 +167,17 @@ public class Company extends Model<Company> {
     @Override
     public String toString() {
         return "Company{" +
-                "id=" + id +
-                ", title=" + title +
-                ", abbTitle=" + abbTitle +
-                ", adress=" + adress +
-                ", tel=" + tel +
-                ", contact=" + contact +
-                ", contactPhone=" + contactPhone +
-                ", remarks=" + remarks +
-                "}";
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
+        ", id=" + id +
+        ", title=" + title +
+        ", abbTitle=" + abbTitle +
+        ", order=" + order +
+        ", type=" + type +
+        ", adress=" + adress +
+        ", tel=" + tel +
+        ", contact=" + contact +
+        ", contactPhone=" + contactPhone +
+        ", remarks=" + remarks +
+        ", status=" + status +
+        "}";
     }
 }

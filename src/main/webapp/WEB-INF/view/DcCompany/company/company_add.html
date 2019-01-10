@@ -7,6 +7,7 @@
                 <div class="col-sm-6 b-r">
                     <#input id="title" name="单位名称" underline="true"/>
                     <#input id="abbTitle" name="简称" underline="true"/>
+                    <#input id="order" name="排序" underline="true"/>
                     <#input id="adress" name="地址"/>
                     <#input id="tel" name="联系电话" underline="true"/>
                 </div>
@@ -15,6 +16,11 @@
                     <#input id="contact" name="负责人" underline="true"/>
                     <#input id="contactPhone" name="负责人电话" underline="true"/>
                     <#input id="remarks" name="详细信息" underline="true"/>
+                    <#select id="status" name="类型">
+                        @for(type in unitTypes){
+                            <option value="${type.id}">${type.title}</option>
+                        @}
+                    </#select>
                     <#select id="status" name="是否可用">
                     <option value="1">是</option>
                     <option value="0">否</option>

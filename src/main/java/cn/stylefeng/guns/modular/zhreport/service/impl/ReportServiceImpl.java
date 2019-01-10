@@ -251,7 +251,11 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
             while (it.hasNext()) {
                 Map.Entry<String, Object> entry = it.next();
                 if (ToolUtil.isNotEmpty(entry.getValue())){
-                exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1,entry.getValue().toString())));
+                    if (entry.getValue() instanceof Double){
+                        exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1,String.valueOf(Integer.parseInt(new java.text.DecimalFormat("0").format(entry.getValue()))))));
+                    }else{
+                        exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1,entry.getValue().toString())));
+                    }
                 }else{
                 exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, "0")));
 

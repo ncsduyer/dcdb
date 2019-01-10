@@ -8,6 +8,7 @@
                     <#input id="title" name="单位名称" value="${item.title}" underline="true" hidden="id"
                     hiddenValue="${item.id}"/>
                     <#input id="abbTitle" name="简称" value="${item.abbTitle}" underline="true"/>
+                    <#input id="order" name="排序" value="${item.order}" underline="true"/>
                     <#input id="adress" name="地址" value="${item.adress}" />
                     <#input id="tel" name="联系电话" value="${item.tel}" underline="true"/>
                 </div>
@@ -17,6 +18,15 @@
                     <#input id="contact" name="负责人" value="${item.contact}" underline="true"/>
                     <#input id="contactPhone" name="负责人电话" value="${item.contactPhone}" underline="true"/>
                     <#input id="remarks" name="详细信息" value="${item.remarks}" />
+                <#select id="status" name="类型">
+                    @for(type in unitTypes){
+                        <option value="${type.id}"
+                                @if(item.type==type.id){
+                                selected
+                                @}
+                        >${type.title}</option>
+                    @}
+                </#select>
                     <#select id="status" name="是否可用">
                     <option value="1"
                             @if(item.status==1){

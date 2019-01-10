@@ -1,0 +1,38 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>单位类型管理管理</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <#NameCon id="condition" name="名称" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#button name="搜索" icon="fa-search" clickFun="UnitType.search()"/>
+                            </div>
+                        </div>
+                        <div class="hidden-xs" id="UnitTypeTableToolbar" role="group">
+                            @if(shiro.hasPermission("/unitType/add")){
+                                <#button name="添加" icon="fa-plus" clickFun="UnitType.openAddUnitType()"/>
+                            @}
+                            @if(shiro.hasPermission("/unitType/update")){
+                                <#button name="修改" icon="fa-edit" clickFun="UnitType.openUnitTypeDetail()" space="true"/>
+                            @}
+                            @if(shiro.hasPermission("/unitType/delete")){
+                                <#button name="删除" icon="fa-remove" clickFun="UnitType.delete()" space="true"/>
+                            @}
+                        </div>
+                        <#table id="UnitTypeTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/UnitType/unitType/unitType.js"></script>
+@}

@@ -57,7 +57,7 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
             for (TaskassignUnit taskassignUnit:taskassignUnits
                  ) {
                 if (!updateOne(taskassignUnit)){
-                    return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
+                    return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), "无权操作！");
                 }
             }
             taskassign=taskassignService.selectById(taskassignId);

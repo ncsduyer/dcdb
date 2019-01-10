@@ -2,7 +2,6 @@ package cn.stylefeng.guns.modular.tdtaskassign.service.impl;
 
 import cn.hutool.core.date.DateTime;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
-import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.util.VoUtil;
 import cn.stylefeng.guns.modular.system.dao.TaskassignMapper;
 import cn.stylefeng.guns.modular.system.model.Taskassign;
@@ -39,12 +38,12 @@ public class TaskassignServiceImpl extends ServiceImpl<TaskassignMapper, Taskass
             taskassign1.setId(taskassign.getId());
             taskassign1.setStatus(taskassign.getStatus());
             taskassign1.setClosememo(taskassign.getClosememo());
-            if(ToolUtil.isEmpty(taskassign.getEndtime())){
-
-            taskassign1.setEndtime(new DateTime());
-            }else{
-
-            taskassign1.setEndtime(taskassign.getEndtime());
+            if(taskassign.getStatus()>3){
+                if(ToolUtil.isEmpty(taskassign.getEndtime())&&ToolUtil.isEmpty(taskassign1.getEndtime())){
+                taskassign1.setEndtime(new DateTime());
+                }else if (ToolUtil.isNotEmpty(taskassign.getEndtime())&&taskassign.getEndtime().after(taskassign1.getEndtime())){
+                taskassign1.setEndtime(taskassign.getEndtime());
+                }
             }
             updateById(taskassign1);
             return ResponseData.success();
@@ -58,9 +57,9 @@ public class TaskassignServiceImpl extends ServiceImpl<TaskassignMapper, Taskass
         EntityWrapper<Taskassign> ew = new EntityWrapper<>();
         ew.setEntity(new Taskassign());
         ew.eq("ta.id", taskassignId);
-        if (ToolUtil.isNotEmpty(ShiroKit.getUser())){
-            ew.eq("tu.personid", ShiroKit.getUser().getId());
-        }
+//        if (ToolUtil.isNotEmpty(ShiroKit.getUser())){
+//            ew.eq("tu.personid", ShiroKit.getUser().getId());
+//        }
        Taskassign taskassign= taskassignMapper.selectByManyId(ew);
         if (ToolUtil.isNotEmpty(taskassign)){
 

@@ -48,6 +48,8 @@ CompanyInfoDlg.collectData = function () {
         .set('id')
         .set('title')
         .set('abbTitle')
+        .set('type')
+        .set('order')
         .set('adress')
         .set('tel')
         .set('contact')

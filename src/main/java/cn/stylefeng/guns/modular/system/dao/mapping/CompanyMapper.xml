@@ -4,20 +4,31 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.system.model.Company">
-        <id column="id" property="id"/>
-        <result column="title" property="title"/>
-        <result column="abb_title" property="abbTitle"/>
-        <result column="adress" property="adress"/>
-        <result column="tel" property="tel"/>
-        <result column="contact" property="contact"/>
-        <result column="contact_phone" property="contactPhone"/>
-        <result column="remarks" property="remarks"/>
-        <result column="status" property="status"/>
+        <id column="id" property="id" />
+        <result column="title" property="title" />
+        <result column="abb_title" property="abbTitle" />
+        <result column="order" property="order" />
+        <result column="type" property="type" />
+        <result column="adress" property="adress" />
+        <result column="tel" property="tel" />
+        <result column="contact" property="contact" />
+        <result column="contact_phone" property="contactPhone" />
+        <result column="remarks" property="remarks" />
+        <result column="status" property="status" />
+        <association property="unitType" javaType="cn.stylefeng.guns.modular.system.model.UnitType" select="cn.stylefeng.guns.modular.system.dao.UnitTypeMapper.selectById" column="type">
+        </association>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, title, abb_title, adress, tel, contact, contact_phone, remarks,status
+        id, title, abb_title, order, type, adress, tel, contact, contact_phone, remarks, status
     </sql>
-
+    <select id="selectMoreList" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM
+        t_tb_company
+        <where>
+            ${ew.sqlSegment}
+        </where>
+    </select>
 </mapper>
