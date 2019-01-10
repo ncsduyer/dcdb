@@ -16,7 +16,7 @@
                     <#input id="contact" name="负责人" underline="true"/>
                     <#input id="contactPhone" name="负责人电话" underline="true"/>
                     <#input id="remarks" name="详细信息" underline="true"/>
-                    <#select id="status" name="类型">
+                    <#select id="type" name="类型">
                         @for(type in unitTypes){
                             <option value="${type.id}">${type.title}</option>
                         @}

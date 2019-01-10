@@ -69,7 +69,7 @@ public class ApiCompanyController extends BaseController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
     public ResponseData list() {
-        return ResponseData.success(companyService.selectMoreList(Condition.create().eq("status", 1).orderBy("order", false)));
+        return ResponseData.success(companyService.selectMoreList(Condition.create().eq("c.status", 1).orderBy("c.`order`", false)));
     }
 
     /**

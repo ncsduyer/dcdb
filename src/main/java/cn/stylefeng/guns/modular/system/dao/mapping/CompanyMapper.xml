@@ -15,18 +15,24 @@
         <result column="contact_phone" property="contactPhone" />
         <result column="remarks" property="remarks" />
         <result column="status" property="status" />
-        <association property="unitType" javaType="cn.stylefeng.guns.modular.system.model.UnitType" select="cn.stylefeng.guns.modular.system.dao.UnitTypeMapper.selectById" column="type">
+        <association property="unitType" javaType="cn.stylefeng.guns.modular.system.model.UnitType" >
+            <id column="uid" property="id" />
+            <result column="utitle" property="title" />
+            <result column="ustatus" property="status" />
         </association>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, title, abb_title, order, type, adress, tel, contact, contact_phone, remarks, status
+        id, title, abb_title, `order`, `type`, adress, tel, contact, contact_phone, remarks, status
+    </sql>
+    <sql id="Base_More_List">
+        c.id, c.title, c.abb_title, c.`order`, c.`type`, c.adress, c.tel, c.contact, c.contact_phone, c.remarks, c.status,u.id uid, u.title utitle, u.status ustatus
     </sql>
     <select id="selectMoreList" resultMap="BaseResultMap">
-        SELECT <include refid="Base_Column_List"/>
+        SELECT <include refid="Base_More_List"/>
         FROM
-        t_tb_company
+        t_tb_company c LEFT JOIN t_tb_unit_type u ON u.id=c.type
         <where>
             ${ew.sqlSegment}
         </where>
