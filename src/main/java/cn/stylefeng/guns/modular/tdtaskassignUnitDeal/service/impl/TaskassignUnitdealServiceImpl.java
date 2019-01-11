@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateTime;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.util.LogUtil;
+import cn.stylefeng.guns.core.util.VoUtil;
 import cn.stylefeng.guns.modular.DcCompany.service.ICompanyService;
 import cn.stylefeng.guns.modular.system.dao.TaskassignUnitdealMapper;
 import cn.stylefeng.guns.modular.system.model.Taskassign;
@@ -76,13 +77,13 @@ public class TaskassignUnitdealServiceImpl extends ServiceImpl<TaskassignUnitdea
             }
             if (ToolUtil.isEmpty(taskassignUnitdeal.getId())){
                 insert(taskassignUnitdeal);
-                LogUtil.addLog(taskassign, ShiroKit.getUser().getName()+"提交了新进度，单位为："+companyService.selectById(taskassignUnit.getUnitid()).getTitle());
+                LogUtil.addLog(taskassign, ShiroKit.getUser().getName()+"进行了督办登记，提交了新进度，单位为："+companyService.selectById(taskassignUnit.getUnitid()).getTitle()+"，处理情况："+taskassignUnitdeal.getDealdesc());
             }else{
                 updateById(taskassignUnitdeal);
                 if (taskassignUnitdeal.getStatus()==1){
-                    LogUtil.addLog(taskassign,ShiroKit.getUser().getName()+"设置进度完成，单位为："+companyService.selectById(taskassignUnit.getUnitid()).getTitle());
+                    LogUtil.addLog(taskassign,ShiroKit.getUser().getName()+"进行了督办登记，设置进度完成，单位为："+companyService.selectById(taskassignUnit.getUnitid()).getTitle()+"，处理情况："+taskassignUnitdeal.getDealdesc());
                 }else {
-                LogUtil.addLog(taskassign,ShiroKit.getUser().getName()+"设置了延期，单位为："+companyService.selectById(taskassignUnit.getUnitid()).getTitle());
+                LogUtil.addLog(taskassign,ShiroKit.getUser().getName()+"进行了督办登记，设置了延期，单位为："+companyService.selectById(taskassignUnit.getUnitid()).getTitle()+",延期时间问："+ VoUtil.getDate(taskassignUnitdeal.getDelaytime())+"，处理情况："+taskassignUnitdeal.getDealdesc());
                 }
             }
 //            判断是否完成 修改unit状态 1-新建未反馈；2-已反馈限期办理中；3-已反馈超期办理中；4-办理完成；）

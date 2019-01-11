@@ -74,13 +74,25 @@ public class TaskAop {
                 return;
             }
             Task task=taskService.selectById(taskassign.getTaskid());
+            taskassign=taskassignService.selectByManyId(taskassign.getId());
 
+            StringBuilder st=new StringBuilder();
+            st.append(ShiroKit.getUser().getName());
+            st.append("新建交办事项：<");
+            st.append(task.getTitle());
+            st.append(">分派说明:");
+            st.append(taskassign.getAssignmemo());
+            st.append("相关责任单位:");
+            for (TaskassignUnit tu:taskassign.getTaskassignUnits()){
+                st.append(tu.getCompany().getTitle());
+                st.append(" ");
+            }
 
             TaskassignLog taskassignLog = new TaskassignLog();
             taskassignLog.setTaskid(taskassign.getTaskid());
             taskassignLog.setTassignid(taskassign.getId());
             taskassignLog.setCreatetime(new DateTime());
-            taskassignLog.setLogcontent(ShiroKit.getUser().getName()+"新建《"+task.getTitle()+"》");
+            taskassignLog.setLogcontent(st.toString());
             taskassignLog.setStatus(taskassign.getStatus());
             taskassignLogService.insert(taskassignLog);
 
@@ -121,7 +133,11 @@ public class TaskAop {
         taskassignLog.setTaskid(taskassign.getTaskid());
         taskassignLog.setTassignid(taskassign.getId());
         taskassignLog.setCreatetime(new DateTime());
-        taskassignLog.setLogcontent(task.getTitle()+"变更状态为："+eventStep.getStep());
+        if(taskassign.getStatus()>4){
+            taskassignLog.setLogcontent(ShiroKit.getUser().getName()+"，变更交办事项：<"+task.getTitle()+">状态,当前状态为："+eventStep.getStep()+"归档信息为："+taskassign.getClosememo()+"");
+        }else {
+            taskassignLog.setLogcontent("交办事项："+task.getTitle()+"，自动变更状态为："+eventStep.getStep());
+        }
         taskassignLog.setStatus(taskassign.getStatus());
         taskassignLogService.insert(taskassignLog);
     }

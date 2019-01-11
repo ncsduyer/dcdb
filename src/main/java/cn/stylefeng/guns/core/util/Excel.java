@@ -125,7 +125,7 @@ public class Excel {
                         cell.setCellValue("");
                     }
                     if (exportColVo.getCols().get(i).getSetStyle()){
-                        cell.setCellStyle(exportColVo.getCols().get(i).getStyle());
+                        cell.getCellStyle().cloneStyleFrom(exportColVo.getCols().get(i).getStyle());
                     }
                     if(i<exportColVo.getCols().size()){
 
@@ -293,7 +293,7 @@ public class Excel {
     }
     // 自适应宽度(中文支持)
     private void setSizeColumn(HSSFSheet sheet) {
-            for (int rowNum = 0; rowNum < sheet.getLastRowNum(); rowNum++) {
+            for (int rowNum = 0; rowNum <= sheet.getLastRowNum(); rowNum++) {
                 for (int columnNum = 0; columnNum < sheet.getRow(rowNum).getPhysicalNumberOfCells(); columnNum++) {
                     int columnWidth = sheet.getColumnWidth(columnNum) / 256;
                 HSSFRow currentRow;
@@ -312,6 +312,14 @@ public class Excel {
                             columnWidth = length;
                         }
                     }
+                    HSSFCellStyle cellStyle=hssfWorkbook.createCellStyle();
+                    cellStyle.setAlignment(HorizontalAlignment.CENTER);
+                    HSSFFont font= hssfWorkbook.createFont();
+                    font.setFontName("仿宋_GB2312");
+                    font.setBold(true);
+                    font.setFontHeightInPoints((short) 12);
+                    cellStyle.setFont(font);
+                    currentCell.setCellStyle(cellStyle);
                 }
             sheet.setColumnWidth(columnNum, columnWidth * 256);
             }

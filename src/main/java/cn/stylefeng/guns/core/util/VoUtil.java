@@ -5,6 +5,7 @@ import cn.stylefeng.roses.core.util.ToolUtil;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class VoUtil {
@@ -68,5 +69,9 @@ public class VoUtil {
         String date = "";
         date = String.format("%d天%d小时%d分", days, hours, minutes);
         return date;
+    }
+    public static String getDate(Date date){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(date);
     }
 }

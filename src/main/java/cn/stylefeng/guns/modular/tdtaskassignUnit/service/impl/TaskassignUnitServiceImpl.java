@@ -50,6 +50,7 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
     private Integer taskassignId;
     private Integer count=-1;
     private Taskassign taskassign;
+    private List<TaskassignUnit> taskassignUnits;
 
     @Override
     public ResponseData updateByTaskassignUnit(List<TaskassignUnit> taskassignUnits) {
@@ -76,9 +77,33 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
                     taskassign.setStatus(3);
                     }
             }
+            StringBuilder st=new StringBuilder();
+            st.append(ShiroKit.getUser().getName());
+            st.append("提交了新反馈,");
+            for (TaskassignUnit ts:taskassignUnits
+                 ) {
+                switch (ts.getStatus()) {
+                    case 2:
+                        st.append("反馈单位:");
+                        st.append(companyService.selectById(ts.getUnitid()).getTitle());
+                        st.append("办理时限:");
+                        st.append(VoUtil.getDate(ts.getEndtime()));
+                        st.append("反馈信息:");
+                        st.append(ts.getRequirements());
+                        LogUtil.addLog(taskassign, st.toString());
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                }
+            }
 
-                taskassignService.updateByTaskassign(taskassign);
-                count=-1;
+
+
+            taskassignService.updateByTaskassign(taskassign);
+            count=-1;
+
 
             return ResponseData.success();
         }catch (Exception e){
@@ -112,17 +137,8 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
 
         ts.setUpdatetime(new DateTime());
         updateById(ts);
-        switch (ts.getStatus()) {
-            case 2:
-                LogUtil.addLog(taskassign, ShiroKit.getUser().getName() + "提交了新反馈，反馈状态变为已反馈限期办理中，单位为：" + companyService.selectById(ts.getUnitid()).getTitle());
-                break;
-            case 3:
-                LogUtil.addLog(taskassign, ShiroKit.getUser().getName() + "更新了进度，反馈状态变为超期办理中，单位为：" + companyService.selectById(ts.getUnitid()).getTitle());
-                break;
-            case 4:
-                LogUtil.addLog(taskassign, ShiroKit.getUser().getName() + "更新了进度，反馈状态变为办理完成，单位为：" + companyService.selectById(ts.getUnitid()).getTitle());
-                break;
-        }
+        taskassignUnits.add(ts);
+
 
         return true;
     }
