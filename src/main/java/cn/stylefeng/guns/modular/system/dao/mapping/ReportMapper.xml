@@ -34,7 +34,7 @@
     </select>
     <select id="selectByUnitOnlyCount" resultType="java.util.LinkedHashMap">
 select comp.title,Totalnum,concat(case when Totalnum>0 then cast(DealSuccNum*100.0/Totalnum as decimal(18,2)) else 0.00 end,'%') asbjl
-		,Totalnum-DealSuccNum ,case when DealSuccNum>0 then cast(DealDate*1.0/DealSuccNum as signed) else 0 end bjts
+		,Totalnum-DealSuccNum as notdealnum,case when DealSuccNum>0 then cast(DealDate*1.0/DealSuccNum as signed) else 0 end bjts
 	from
     (
         select com.title,com.id,sum(case when taskunit.status=4 then 1 else 0 end) as DealSuccNum,sum(case when taskunit.id is
