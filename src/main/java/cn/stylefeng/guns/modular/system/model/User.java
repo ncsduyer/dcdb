@@ -83,7 +83,7 @@ public class User extends Model<User> {
      * 保留字段
      */
     private Integer version;
-
+private Integer uorder;
 
     public Integer getId() {
         return id;
@@ -237,5 +237,13 @@ public class User extends Model<User> {
 
     public void setIsagent(Integer isagent) {
         this.isagent = isagent;
+    }
+
+    public Integer getUorder() {
+        return uorder;
+    }
+
+    public void setUorder(Integer uorder) {
+        this.uorder = uorder;
     }
 }

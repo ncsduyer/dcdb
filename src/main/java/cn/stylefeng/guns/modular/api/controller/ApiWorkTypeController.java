@@ -89,7 +89,7 @@ public class ApiWorkTypeController extends BaseController {
     @RequestMapping(value = "/userlist", method = RequestMethod.GET)
     @ResponseBody
     public ResponseData Userlist() {
-        return ResponseData.success(userService.selectList(Condition.create().setSqlSelect("id,name").eq("status", 1).eq("isagent", 1)));
+        return ResponseData.success(userService.selectList(Condition.create().setSqlSelect("id,name").eq("status", 1).eq("isagent", 1).orderBy("uorder", false)));
     }
 
     /**

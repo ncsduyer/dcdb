@@ -124,6 +124,9 @@ public class Excel {
                     }else{
                         cell.setCellValue("");
                     }
+                    if (exportColVo.getCols().get(i).getSetStyle()){
+                        cell.setCellStyle(exportColVo.getCols().get(i).getStyle());
+                    }
                     if(i<exportColVo.getCols().size()){
 
 //                        if(exportColVo.getCols().get(i).getRowspan()>1){

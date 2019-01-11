@@ -66,6 +66,9 @@ public class UserFactory {
             if (ToolUtil.isNotEmpty(newUser.getIsagent())) {
                 oldUser.setIsagent(newUser.getIsagent());
             }
+            if (ToolUtil.isNotEmpty(newUser.getUorder())) {
+                oldUser.setUorder(newUser.getUorder());
+            }
             return oldUser;
         }
     }

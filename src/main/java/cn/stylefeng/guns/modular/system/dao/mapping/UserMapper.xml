@@ -20,20 +20,21 @@
 		<result column="createtime" property="createtime" />
 		<result column="version" property="version" />
 		<result column="isagent" property="isagent" />
+		<result column="uorder" property="uorder" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
 		id, account, name, birthday, sex, email, avatar,
 		phone, roleid,
 		deptid, status,
-		createtime, version,isagent
+		createtime, version,isagent,uorder
 	</sql>
 
 	<sql id="Base_Column_List_With_Pwd">
 		id, account, name, birthday,password, sex, email, avatar,
 		phone, roleid,salt,
 		deptid, status,
-		createtime, version
+		createtime, version,uorder
 	</sql>
 
 	<select id="selectUsers" resultType="map">

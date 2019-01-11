@@ -6,6 +6,7 @@ import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.util.Bettime;
 import cn.stylefeng.guns.core.util.CopyUtils;
 import cn.stylefeng.guns.core.util.ExportUtil;
+import cn.stylefeng.guns.core.util.TypeCastUtil;
 import cn.stylefeng.guns.core.util.vo.ExportColSubVo;
 import cn.stylefeng.guns.core.util.vo.ExportColVo;
 import cn.stylefeng.guns.core.util.vo.ExportRowVo;
@@ -183,7 +184,7 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
             exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get("title"))));
             for (int i=0;i<checkitems.size();i++) {
                 Checkitem ck=checkitems.get(i);
-                exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get(ck.getId().toString()))));
+                exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, TypeCastUtil.toString(TypeCastUtil.toInt(TypeCastUtil.toDouble(map.get(ck.getId().toString())))))));
                 }
             exportRowVos.add(exportRowVo);
         }

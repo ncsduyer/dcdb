@@ -39,9 +39,10 @@ public class DcdbTask {
 
                 //发送短信
                 ObjectNode json = JsonUtils.getMapperInstance().createObjectNode();
-                json.put("code", "温馨提示：请于本周5下午4点前提交工作情况。");
+                json.put("status", "等待提交");
+                json.put("remark", "温馨提示：请于本周5下午4点前提交工作情况。");
                 try {
-                    SmsUtil.sendSms(null, appNotice, "SMS_146809603", JsonUtils.beanToJson(json), null);
+                    SmsUtil.sendSms(null,appNotice,SmsProperties.getAddDcDbtmpCode(), JsonUtils.beanToJson(json), null);
                 } catch (ClientException e) {
                     e.printStackTrace();
                 }

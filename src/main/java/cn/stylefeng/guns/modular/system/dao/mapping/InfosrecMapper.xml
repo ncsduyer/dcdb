@@ -35,7 +35,7 @@
         SELECT c.title title ,c.id unitid,
         <if test="courses != null">
             <foreach collection="courses" item="item" separator=",">
-                MAX(CASE rec.checkitemid WHEN ${item.id} THEN rec.checkvalue ElSE 0 END)  "${item.id}"
+                sum(CASE rec.checkitemid WHEN ${item.id} THEN rec.checkvalue ElSE 0 END)  "${item.id}"
             </foreach>
         </if>
         from t_tb_company c left join td_infosrec rec on c.id=rec.unitid LEFT JOIN td_infos m  ON rec.infosid = m.id
@@ -44,6 +44,6 @@
         <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(sreachDto.creatorid)">and <![CDATA[ m.creatorid = #{sreachDto.creatorid}]]></if>
         <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(sreachDto.title)">and <![CDATA[ m.title like CONCAT('%',#{sreachDto.title},'%') ]]></if>
         <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(sreachDto.status)">and <![CDATA[ m.status = #{sreachDto.status}]]></if>
-        GROUP BY c.id ORDER BY rec.createtime
+        GROUP BY c.id ORDER BY c.id asc, rec.createtime
     </select>
 </mapper>

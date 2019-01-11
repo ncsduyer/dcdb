@@ -45,7 +45,7 @@ public class UserDto {
     private Date createtime;
     private Integer version;
     private String avatar;
-
+    private Integer uorder;
 
     public Integer getId() {
         return id;
@@ -173,5 +173,13 @@ public class UserDto {
 
     public void setIsagent(Integer isagent) {
         this.isagent = isagent;
+    }
+
+    public Integer getUorder() {
+        return uorder;
+    }
+
+    public void setUorder(Integer uorder) {
+        this.uorder = uorder;
     }
 }
