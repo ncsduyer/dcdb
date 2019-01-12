@@ -177,9 +177,6 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
             if (ToolUtil.isNotEmpty(sreachTaskDto.getStatus())){
                 ew.in("ta.status", sreachTaskDto.getStatus());
             }
-            if (ToolUtil.isNotEmpty(sreachTaskDto.getStatus())){
-                ew.in("tu.status", sreachTaskDto.getStatus());
-            }
             if (ToolUtil.isNotEmpty(sreachTaskDto.getAgent())){
                 ew.in("tu.personid", sreachTaskDto.getAgent());
             }else{
@@ -190,6 +187,9 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
             }
             if (sreachTaskDto.getIsExceed()==1){
                 ew.le("tu.endtime",new Date()).isNull("ta.endtime");
+            }
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getStatus())){
+               ew.or();ew.in("tu.status", sreachTaskDto.getStatus());
             }
             if (ToolUtil.isNotEmpty(sreachTaskDto.getOrder())){
                 ew.orderBy(sreachTaskDto.getOrder());
