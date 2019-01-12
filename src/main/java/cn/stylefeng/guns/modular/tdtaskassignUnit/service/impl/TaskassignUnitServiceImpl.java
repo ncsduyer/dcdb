@@ -177,8 +177,13 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
             if (ToolUtil.isNotEmpty(sreachTaskDto.getStatus())){
                 ew.in("ta.status", sreachTaskDto.getStatus());
             }
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getStatus())){
+                ew.in("tu.status", sreachTaskDto.getStatus());
+            }
             if (ToolUtil.isNotEmpty(sreachTaskDto.getAgent())){
                 ew.in("tu.personid", sreachTaskDto.getAgent());
+            }else{
+                ew.eq("tu.personid", ShiroKit.getUser().getId());
             }
             if (ToolUtil.isNotEmpty(sreachTaskDto.getCompanyIds())){
                 ew.in("tu.unitid", sreachTaskDto.getCompanyIds());

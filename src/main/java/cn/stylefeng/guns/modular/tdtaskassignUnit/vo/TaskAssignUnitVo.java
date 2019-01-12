@@ -18,6 +18,7 @@ public class TaskAssignUnitVo implements Serializable {
     private String assigntime;
     private String assignmemo;
     private String step;
+    private String unitStep;
     private Integer status;
     private Integer createrId;
     private String endtime;
@@ -45,6 +46,23 @@ public class TaskAssignUnitVo implements Serializable {
          status=tu.getTaskassign().getStatus();
          usetime=tu.getTaskassign().getUseTime();
          is_exceed=tu.getTaskassign().getIs_exceed();
+         switch (tu.getStatus()){
+             case 1:
+                 unitStep="新建未反馈";
+                 break;
+             case 2:
+                 unitStep="已反馈限期办理中";
+                 break;
+             case 3:
+                 unitStep="已反馈超期办理中";
+                 break;
+             case 4:
+                 unitStep="办理完成";
+                 break;
+             default:
+                 unitStep="新建未反馈";
+                 break;
+         }
     }
 
     public Integer getId() {
@@ -181,5 +199,13 @@ public class TaskAssignUnitVo implements Serializable {
 
     public void setTuid(Integer tuid) {
         this.tuid = tuid;
+    }
+
+    public String getUnitStep() {
+        return unitStep;
+    }
+
+    public void setUnitStep(String unitStep) {
+        this.unitStep = unitStep;
     }
 }
