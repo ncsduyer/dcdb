@@ -11,7 +11,8 @@ public class SreachMeetingDto extends SreachDto {
      */
     @ApiModelProperty("关键词")
     private String title;
-
+    @ApiModelProperty("id")
+    private Integer id;
     @ApiModelProperty("创建人id")
     private Integer creatorid;
 
@@ -53,5 +54,13 @@ public class SreachMeetingDto extends SreachDto {
 
     public void setCompanyIds(Integer[] companyIds) {
         this.companyIds = companyIds;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

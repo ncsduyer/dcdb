@@ -50,7 +50,7 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
     private Integer taskassignId;
     private Integer count=-1;
     private Taskassign taskassign;
-    private List<TaskassignUnit> taskassignUnits;
+    private List<TaskassignUnit> taskassignUnits=new ArrayList<>();
 
     @Override
     public ResponseData updateByTaskassignUnit(List<TaskassignUnit> taskassignUnits) {

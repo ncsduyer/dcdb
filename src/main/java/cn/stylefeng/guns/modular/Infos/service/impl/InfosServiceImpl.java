@@ -75,6 +75,9 @@ public class InfosServiceImpl extends ServiceImpl<InfosMapper, Infos> implements
             if (ToolUtil.isNotEmpty(sreachDto.getAfterTime())){
                 ew.le("m.mtime", sreachDto.getAfterTime());
             }
+            if (ToolUtil.isNotEmpty(sreachDto.getId())){
+                ew.eq("m.id", sreachDto.getId());
+            }
             if (ToolUtil.isNotEmpty(sreachDto.getCreatorid())){
                 ew.eq("m.creatorid", sreachDto.getCreatorid());
             }
