@@ -78,7 +78,7 @@ public class TaskAop {
             StringBuilder st=new StringBuilder();
             st.append(ShiroKit.getUser().getName());
             st.append(",新建了交办事项:(交办时间:");
-            st.append(taskassign.getAssigntime());
+            st.append(VoUtil.getDate(taskassign.getAssigntime()));
             st.append("; 名称:");
             st.append(taskassign.getTask().getTitle());
             st.append(": 责任单位/责任人:");

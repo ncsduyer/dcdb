@@ -76,7 +76,8 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
                 } else if (selectCount(Condition.create().eq("status", 4).eq("tassignid", taskassignId))>0){
                     taskassign.setStatus(3);
                     }
-            }
+            if (taskassignUnits.size()>1){
+
             StringBuilder st=new StringBuilder();
             st.append(ShiroKit.getUser().getName());
             st.append("，反馈了交办事项");
@@ -86,7 +87,7 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
                     case 2:
                         st.append("(责任单位:");
                         st.append(companyService.selectById(ts.getUnitid()).getTitle());
-                        st.append(";办理时限:");
+                        st.append(";办结时限:");
                         st.append(VoUtil.getDate(ts.getEndtime()));
                         st.append(";反馈信息:");
                         st.append(ts.getRequirements());
@@ -100,7 +101,9 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
             }
             st.deleteCharAt(st.length()-1);
             LogUtil.addLog(taskassign, st.toString());
+            }
 
+            }
 
 
             taskassignService.updateByTaskassign(taskassign);

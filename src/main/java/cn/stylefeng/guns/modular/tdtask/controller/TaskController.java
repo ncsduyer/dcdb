@@ -47,6 +47,7 @@ public class TaskController extends BaseController {
     /**
      * 跳转到添加交办事项
      */
+    @ApiOperation(value = "状态统计")
     @RequestMapping(value = "/index",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
     public ResponseData index(@RequestBody Map<String, Integer[]> map) {
