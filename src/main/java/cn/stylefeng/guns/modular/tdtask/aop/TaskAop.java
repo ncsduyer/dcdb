@@ -6,6 +6,7 @@ import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.util.JsonUtils;
 import cn.stylefeng.guns.core.util.SmsUtil;
 import cn.stylefeng.guns.core.util.ValidateUtils;
+import cn.stylefeng.guns.core.util.VoUtil;
 import cn.stylefeng.guns.modular.AppNotice.service.IAppNoticeService;
 import cn.stylefeng.guns.modular.EventStep.service.IEventStepService;
 import cn.stylefeng.guns.modular.system.model.*;
@@ -25,8 +26,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Aspect
 @Component
@@ -73,20 +72,24 @@ public class TaskAop {
                     .eq("tassignid", taskassign.getId()).eq("status", taskassign.getStatus())) != null) {
                 return;
             }
-            Task task=taskService.selectById(taskassign.getTaskid());
+//            Task task=taskService.selectById(taskassign.getTaskid());
             taskassign=taskassignService.selectByManyId(taskassign.getId());
 
             StringBuilder st=new StringBuilder();
             st.append(ShiroKit.getUser().getName());
-            st.append("新建交办事项：<");
-            st.append(task.getTitle());
-            st.append(">分派说明:");
-            st.append(taskassign.getAssignmemo());
-            st.append("相关责任单位:");
+            st.append(",新建了交办事项:(交办时间:");
+            st.append(taskassign.getAssigntime());
+            st.append("; 名称:");
+            st.append(taskassign.getTask().getTitle());
+            st.append(": 责任单位/责任人:");
             for (TaskassignUnit tu:taskassign.getTaskassignUnits()){
                 st.append(tu.getCompany().getTitle());
+                st.append("/");
+                st.append(tu.getPerson().getName());
                 st.append(" ");
             }
+            st.append("; 交办要求:");
+            st.append(taskassign.getAssignmemo());
 
             TaskassignLog taskassignLog = new TaskassignLog();
             taskassignLog.setTaskid(taskassign.getTaskid());
@@ -96,13 +99,13 @@ public class TaskAop {
             taskassignLog.setStatus(taskassign.getStatus());
             taskassignLogService.insert(taskassignLog);
 
-        List<TaskassignUnit> taskassignUnits=taskassignUnitService.selectList(Condition.create().eq("tassignid", taskassign.getId()));
+//        List<TaskassignUnit> taskassignUnits=taskassignUnitService.selectList(Condition.create().eq("tassignid", taskassign.getId()));
         for (TaskassignUnit t :
-                taskassignUnits) {
+                taskassign.getTaskassignUnits()) {
             //获取手机号
             User user = userService.selectById(t.getPersonid());
             AppNotice appNotice = new AppNotice();
-            appNotice.setTitle(task.getTitle());
+            appNotice.setTitle(taskassign.getTask().getTitle());
             appNotice.setContent(taskassign.getAssignmemo());
             appNotice.setCreatetime(new DateTime());
             appNotice.setType(1);
@@ -125,19 +128,17 @@ public class TaskAop {
             return;
         }
         EventStep eventStep=eventStepService.selectOne(Condition.create().eq("event_type",1).eq("status", taskassign.getStatus()));
-        taskassign=taskassignService.selectById(taskassign.getId());
-        Task task=taskService.selectById(taskassign.getTaskid());
-
-
+        taskassign=taskassignService.selectByManyId(taskassign.getId());
         TaskassignLog taskassignLog = new TaskassignLog();
         taskassignLog.setTaskid(taskassign.getTaskid());
         taskassignLog.setTassignid(taskassign.getId());
         taskassignLog.setCreatetime(new DateTime());
         if(taskassign.getStatus()>4){
-            taskassignLog.setLogcontent(ShiroKit.getUser().getName()+"，变更交办事项：<"+task.getTitle()+">状态,当前状态为："+eventStep.getStep()+"归档信息为："+taskassign.getClosememo()+"");
-        }else {
-            taskassignLog.setLogcontent("交办事项："+task.getTitle()+"，自动变更状态为："+eventStep.getStep());
+            taskassignLog.setLogcontent(ShiroKit.getUser().getName()+"，归档了交办事项（归档时间："+ VoUtil.getDate(taskassign.getEndtime())+"；归档状态："+eventStep.getStep()+"；归档总结："+taskassign.getClosememo()+")");
         }
+//        else {
+//            taskassignLog.setLogcontent("交办事项："+task.getTitle()+"，自动变更状态为："+eventStep.getStep());
+//        }
         taskassignLog.setStatus(taskassign.getStatus());
         taskassignLogService.insert(taskassignLog);
     }

@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellRangeAddressList;
 import org.jdom2.*;
@@ -294,8 +295,6 @@ public class Excel {
     // 自适应宽度(中文支持)
     private void setSizeColumn(HSSFSheet sheet) {
             for (int rowNum = 0; rowNum <= sheet.getLastRowNum(); rowNum++) {
-                for (int columnNum = 0; columnNum < sheet.getRow(rowNum).getPhysicalNumberOfCells(); columnNum++) {
-                    int columnWidth = sheet.getColumnWidth(columnNum) / 256;
                 HSSFRow currentRow;
                 //当前行未被使用过
                 if (sheet.getRow(rowNum) == null) {
@@ -303,7 +302,12 @@ public class Excel {
                 } else {
                     currentRow = sheet.getRow(rowNum);
                 }
+                if (rowNum==0){
 
+                currentRow.setHeightInPoints((float) (currentRow.getHeightInPoints()*1.5));
+                }
+                for (int columnNum = 0; columnNum < sheet.getRow(rowNum).getPhysicalNumberOfCells(); columnNum++) {
+                    int columnWidth = sheet.getColumnWidth(columnNum) / 256;
                 if (currentRow.getCell(columnNum) != null) {
                     HSSFCell currentCell = currentRow.getCell(columnNum);
                     if (currentCell.getCellTypeEnum() == CellType.STRING) {
@@ -314,6 +318,7 @@ public class Excel {
                     }
                     HSSFCellStyle cellStyle=hssfWorkbook.createCellStyle();
                     cellStyle.setAlignment(HorizontalAlignment.CENTER);
+                    cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);//垂直居
                     HSSFFont font= hssfWorkbook.createFont();
                     font.setFontName("仿宋_GB2312");
                     font.setBold(true);
@@ -323,6 +328,7 @@ public class Excel {
                 }
             sheet.setColumnWidth(columnNum, columnWidth * 256);
             }
+
         }
     }
 }

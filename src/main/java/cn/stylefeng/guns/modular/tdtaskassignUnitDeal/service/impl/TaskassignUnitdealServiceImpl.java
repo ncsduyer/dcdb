@@ -77,15 +77,51 @@ public class TaskassignUnitdealServiceImpl extends ServiceImpl<TaskassignUnitdea
             }
             if (ToolUtil.isEmpty(taskassignUnitdeal.getId())){
                 insert(taskassignUnitdeal);
-                LogUtil.addLog(taskassign, ShiroKit.getUser().getName()+"进行了督办登记，提交了新进度，单位为："+companyService.selectById(taskassignUnit.getUnitid()).getTitle()+"，处理情况："+taskassignUnitdeal.getDealdesc());
             }else{
                 updateById(taskassignUnitdeal);
-                if (taskassignUnitdeal.getStatus()==1){
-                    LogUtil.addLog(taskassign,ShiroKit.getUser().getName()+"进行了督办登记，设置进度完成，单位为："+companyService.selectById(taskassignUnit.getUnitid()).getTitle()+"，处理情况："+taskassignUnitdeal.getDealdesc());
-                }else {
-                LogUtil.addLog(taskassign,ShiroKit.getUser().getName()+"进行了督办登记，设置了延期，单位为："+companyService.selectById(taskassignUnit.getUnitid()).getTitle()+",延期时间问："+ VoUtil.getDate(taskassignUnitdeal.getDelaytime())+"，处理情况："+taskassignUnitdeal.getDealdesc());
-                }
             }
+            StringBuilder st=new StringBuilder();
+            st.append(ShiroKit.getUser().getName());
+            st.append("，督办了交办事项");
+            st.append("(责任单位:");
+            st.append(companyService.selectById(taskassignUnit.getUnitid()).getTitle());
+            st.append(";督办时间:");
+            if (ToolUtil.isNotEmpty(taskassignUnitdeal.getCreatetime())){
+                st.append(VoUtil.getDate(taskassignUnitdeal.getCreatetime()));
+            }else {
+                st.append(" ");
+            }
+            st.append(";督办描述:");
+            if (ToolUtil.isNotEmpty(taskassignUnitdeal.getDealdesc())){
+                st.append(taskassignUnitdeal.getDealdesc());
+            }else {
+                st.append(" ");
+            }
+            st.append(";完成状态:");
+            if (ToolUtil.isEmpty(taskassignUnitdeal.getStatus())||taskassignUnitdeal.getStatus()==0){
+                st.append("未完成");
+            }else {
+                st.append("完成");
+            }
+            st.append(";完成时间:");
+            if (ToolUtil.isNotEmpty(taskassignUnitdeal.getFinishtime())){
+                st.append(VoUtil.getDate(taskassignUnitdeal.getFinishtime()));
+            }else {
+                st.append(" ");
+            }
+            st.append(";是否延期:");
+            if (ToolUtil.isEmpty(taskassignUnitdeal.getIsdelay())||taskassignUnitdeal.getIsdelay()==0){
+                st.append("否");
+            }else {
+                st.append("是");
+            }
+            st.append(";延期时间:");
+            if (ToolUtil.isNotEmpty(taskassignUnitdeal.getDelaytime())){
+                st.append(VoUtil.getDate(taskassignUnitdeal.getDelaytime()));
+            }else {
+                st.append(" ");
+            }
+            LogUtil.addLog(taskassign, st.toString());
 //            判断是否完成 修改unit状态 1-新建未反馈；2-已反馈限期办理中；3-已反馈超期办理中；4-办理完成；）
             if (oldStatus<taskassignUnit.getStatus()){
                 List<TaskassignUnit> tsus=new ArrayList<>();

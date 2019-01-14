@@ -39,9 +39,14 @@ public class TaskassignServiceImpl extends ServiceImpl<TaskassignMapper, Taskass
             taskassign1.setStatus(taskassign.getStatus());
             taskassign1.setClosememo(taskassign.getClosememo());
             if(taskassign.getStatus()>3){
-                if(ToolUtil.isEmpty(taskassign.getEndtime())&&ToolUtil.isEmpty(taskassign1.getEndtime())){
+//                if(ToolUtil.isEmpty(taskassign.getEndtime())&&ToolUtil.isEmpty(taskassign1.getEndtime())){
+//                taskassign1.setEndtime(new DateTime());
+//                }else if (ToolUtil.isNotEmpty(taskassign.getEndtime())&&ToolUtil.isNotEmpty(taskassign1.getEndtime())&&taskassign.getEndtime().after(taskassign1.getEndtime())){
+//                taskassign1.setEndtime(taskassign.getEndtime());
+//                }
+                if(ToolUtil.isEmpty(taskassign.getEndtime())){
                 taskassign1.setEndtime(new DateTime());
-                }else if (ToolUtil.isNotEmpty(taskassign.getEndtime())&&taskassign.getEndtime().after(taskassign1.getEndtime())){
+                }else{
                 taskassign1.setEndtime(taskassign.getEndtime());
                 }
             }
