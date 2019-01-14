@@ -10,6 +10,7 @@ import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,5 +72,10 @@ public class TaskassignServiceImpl extends ServiceImpl<TaskassignMapper, Taskass
         taskassign.setUseTime(VoUtil.getUseTime(taskassign.getCreatetime(), taskassign.getEndtime()));
         }
         return taskassign;
+    }
+
+    @Override
+    public Integer selectCountByStatus(Wrapper<Taskassign> wrapper) {
+        return taskassignMapper.selectCountByStatus(wrapper);
     }
 }

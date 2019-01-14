@@ -16,4 +16,5 @@ import org.apache.ibatis.annotations.Param;
 public interface TaskassignMapper extends BaseMapper<Taskassign> {
 
     Taskassign selectByManyId(@Param("ew") Wrapper<Taskassign> wrapper);
+    Integer selectCountByStatus(@Param("ew") Wrapper<Taskassign> wrapper);
 }

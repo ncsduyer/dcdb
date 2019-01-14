@@ -53,7 +53,7 @@ public class TaskController extends BaseController {
     public ResponseData index(@RequestBody Map<String, Integer[]> map) {
         Map<String, Integer> ret = new HashMap<>();
         for (Map.Entry<String, Integer[]> entry : map.entrySet()) {
-            ret.put(entry.getKey(), taskassignService.selectCount(Condition.create().in("status", entry.getValue())));
+            ret.put(entry.getKey(), taskassignService.selectCountByStatus(Condition.create().in("ta.status", entry.getValue())));
         }
         return ResponseData.success(ret);
     }

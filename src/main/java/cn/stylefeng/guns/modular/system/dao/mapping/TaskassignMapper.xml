@@ -125,4 +125,10 @@
         ${ew.sqlSegment}
     </where>
     </select>
+    <select id="selectCountByStatus" resultType="java.lang.Integer">
+        SELECT COUNT(tu.id) FROM td_taskassign ta LEFT JOIN td_taskassign_unit tu ON tu.tassignid =  ta.id
+        <where>
+            ${ew.sqlSegment}
+        </where>
+    </select>
 </mapper>

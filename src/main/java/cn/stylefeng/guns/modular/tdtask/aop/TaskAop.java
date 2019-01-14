@@ -135,12 +135,12 @@ public class TaskAop {
         taskassignLog.setCreatetime(new DateTime());
         if(taskassign.getStatus()>4){
             taskassignLog.setLogcontent(ShiroKit.getUser().getName()+"，归档了交办事项（归档时间："+ VoUtil.getDate(taskassign.getEndtime())+"；归档状态："+eventStep.getStep()+"；归档总结："+taskassign.getClosememo()+")");
+        taskassignLogService.insert(taskassignLog);
         }
 //        else {
 //            taskassignLog.setLogcontent("交办事项："+task.getTitle()+"，自动变更状态为："+eventStep.getStep());
 //        }
         taskassignLog.setStatus(taskassign.getStatus());
-        taskassignLogService.insert(taskassignLog);
     }
 
     @AfterReturning("sendSms()")
