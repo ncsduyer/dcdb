@@ -1,14 +1,13 @@
 package cn.stylefeng.guns.core.util;
 
+import cn.stylefeng.guns.core.util.vo.ExportColVo;
 import cn.stylefeng.guns.core.util.vo.ExportRowVo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xwpf.usermodel.*;
-import org.jdom2.Document;
-import org.jdom2.*;
-import org.jdom2.input.SAXBuilder;
+import org.jdom2.Attribute;
+import org.jdom2.Element;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -18,16 +17,10 @@ public class Word {
     private String sheetname;
     private Element root;
     private XWPFDocument xWPFDocument;
+
     public Word(List<ExportRowVo> titles,String template) {
-        SAXBuilder builder = new SAXBuilder();
         try {
-
-            Document parse=builder.build(this.getClass().getResourceAsStream("/excel/"+template));
-            this.root=parse.getRootElement();
-            // 创建document对象
             XWPFDocument document = new XWPFDocument();
-
-            String templateName=root.getAttribute("name").getValue();
             //  创建段落
             XWPFParagraph titleParagraph = document.createParagraph();
             // 设置段落居中
@@ -37,7 +30,7 @@ public class Word {
             if (StringUtils.isNotBlank(this.sheetname)){
                 titleParagraphRun.setText(this.sheetname);
             }else{
-                titleParagraphRun.setText(templateName);
+                titleParagraphRun.setText(template);
             }
             titleParagraphRun.setColor("000000");
             titleParagraphRun.setFontSize(20);
@@ -47,34 +40,8 @@ public class Word {
             setTableWidth(table, "10000");
 
             rownum=0;
-            int colnum=0;
-
-            Element colgroup=root.getChild("colgroup");
-            //设置列宽
-            setColumnWidth(table,colgroup);
-            //设置标题
-            rownum = setTitle(table, rownum);
-            rownum = setThead(table, rownum);
-
-
-            Element tbody=root.getChild("tbody");
-            Element tr=tbody.getChild("tr");
-            int repeat=tr.getAttribute("repeat").getIntValue();
-            List<Element> tds = tr.getChildren("td");
-            for (int i=0;i<repeat;i++){
-                XWPFTableRow row=table.createRow();
-                for (colnum=0;colnum<tds.size();colnum++){
-                    Element td=tds.get(colnum);
-                    XWPFTableCell cell=row.createCell();
-//                    setType(hssfWorkbook,cell,td);
-                }
-            }
-            rownum++;
-
-
-        } catch (JDOMException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+            setContent(titles);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -86,80 +53,45 @@ public class Word {
 
     private void setContent(List<ExportRowVo> exportRowVos) {
         // 自动填充数据
-        XWPFTableRow dataRow = null;
-        XWPFTableCell dataCell = null;
-//        //循环行数
-//        for(int i = 0; i<values.length; i++) {
-//            dataRow = table.getRow(rownum);
-//            for (int j = 0; j < values[i].length; j++) {
-//                //将内容按顺序赋给对应的列对象
-//                dataCell = dataRow.getCell(j);
-//                dataCell.setText(values[i][j]);
-//            }
-//        }
+        XWPFTableRow row = null;
+        XWPFTableCell cell = null;
+        for (ExportRowVo exportRowVo : exportRowVos){
+            for (int i = 0; i < exportRowVo.getTotal(); i++) {
+//                int startRow = rownum;
+                row = table.createRow();
+//                int firstCol = 0;
+                for (int j = 0; j < exportRowVo.getColVos().size(); j++) {
+                    ExportColVo exportColVo = exportRowVo.getColVos().get(j);
+                    cell = row.createCell();
+                    if (i < exportColVo.getCols().size()) {
+                        cell.setText(exportColVo.getCols().get(i).getContent());
+                    } else {
+                        cell.setText("");
+                    }
+//                    if (exportColVo.getCols().get(i).getSetStyle()){
+//                        cell.set().cloneStyleFrom(exportColVo.getCols().get(i).getStyle());
+//                    }
+                    if (i < exportColVo.getCols().size()) {
+
+                        if (exportColVo.getCols().get(i).getRowspan() > 1) {
+//                            if (i>1&&exportColVo.getCols().get(i-1).getRowspan()>1){
+//                                startRow+=exportColVo.getCols().get(i-1).getRowspan()-1;
+//                            }
+                            mergeCellsVertically(table, j, rownum, rownum + exportColVo.getCols().get(i).getRowspan() - 1);
+                        } else if (exportColVo.getCols().get(i).getColspan() > 1) {
+                            mergeCellsHorizontal(table, rownum,j,j+exportColVo.getCols().get(i).getColspan() - 1);
+                        }
+                    }
+                }
+                rownum++;
+            }
+        }
+
+//        this.setTableWidth(table,);
     }
 
     public XWPFDocument getXWPFDocument() {
         return xWPFDocument;
-    }
-
-    private int setThead(XWPFTable table, int rownum) {
-        int colnum;//设置表头
-        Element thead=root.getChild("thead");
-        List<Element> trs=thead.getChildren("tr");
-        for (int i=0;i<trs.size();i++) {
-            Element tr = trs.get(i);
-
-            List<Element> ths = tr.getChildren("th");
-            for (colnum=0;colnum<ths.size();colnum++){
-                Element th=ths.get(colnum);
-                Attribute value=th.getAttribute("value");
-
-                if (value!=null){
-
-                }
-            }
-            rownum++;
-        }
-        return rownum;
-    }
-
-    private int setTitle(XWPFTable table, int rownum) throws DataConversionException {
-        int colnum;Element title=root.getChild("title");
-        List<Element> trs=title.getChildren("tr");
-        for (int i=0;i<trs.size();i++){
-            Element tr=trs.get(i);
-            List<Element> tds=tr.getChildren("td");
-
-            int firstCol=0;
-            for (colnum=0;colnum<tds.size();colnum++){
-                Element td=tds.get(colnum);
-
-                Attribute rowSpan=td.getAttribute("rowspan");
-                Attribute colSpan=td.getAttribute("colspan");
-                Attribute value=td.getAttribute("value");
-                if (value!=null){
-                    int rspan = rowSpan.getIntValue()-1;
-                    int cspan = colSpan.getIntValue();
-                    //设置字体
-
-                    String val=value.getValue();
-
-
-
-                    if (firstCol+cspan-1<=0){
-                        firstCol++;
-                        continue;
-                    }
-
-
-                    firstCol+=cspan;
-                }
-            }
-
-            rownum++;
-        }
-        return rownum;
     }
 
     /**

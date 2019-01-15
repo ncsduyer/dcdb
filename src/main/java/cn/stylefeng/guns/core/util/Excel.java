@@ -20,9 +20,6 @@ public class Excel {
     private int rownum=0;
     private String sheetname;
     private Element root;
-
-
-
     private HSSFWorkbook hssfWorkbook;
 
     public Excel(String template) {
@@ -125,10 +122,10 @@ public class Excel {
                     }else{
                         cell.setCellValue("");
                     }
-                    if (exportColVo.getCols().get(i).getSetStyle()){
-                        cell.getCellStyle().cloneStyleFrom(exportColVo.getCols().get(i).getStyle());
-                    }
                     if(i<exportColVo.getCols().size()){
+                        if (exportColVo.getCols().get(i).getSetStyle()){
+                            cell.getCellStyle().cloneStyleFrom(exportColVo.getCols().get(i).getStyle());
+                        }
 
 //                        if(exportColVo.getCols().get(i).getRowspan()>1){
 ////                            if (i>1&&exportColVo.getCols().get(i-1).getRowspan()>1){

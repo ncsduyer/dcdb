@@ -85,6 +85,9 @@ public class RestApiInteceptor extends HandlerInterceptorAdapter {
         if (!ToolUtil.isEmpty(usernamePasswordToken)) {
             Subject currentUser = ShiroKit.getSubject();
             currentUser.login(usernamePasswordToken);
+            if (currentUser.isAuthenticated()){
+                CacheUtil.put("userInfo", authToken, usernamePasswordToken);
+            }
             ShiroUser shiroUser = ShiroKit.getUser();
             ShiroKit.getSession().setAttribute("shiroUser", shiroUser);
             ShiroKit.getSession().setAttribute("username", shiroUser.getAccount());
