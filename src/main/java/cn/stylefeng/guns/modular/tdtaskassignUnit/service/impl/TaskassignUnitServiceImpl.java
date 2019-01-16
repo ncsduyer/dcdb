@@ -163,12 +163,6 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
             new Bettime(sreachTaskDto);
             EntityWrapper<TaskassignUnit> ew = new EntityWrapper<>();
             ew.setEntity(new TaskassignUnit());
-            if (ToolUtil.isNotEmpty(sreachTaskDto.getBeforeTime())){
-                ew.ge("ta.assigntime", sreachTaskDto.getBeforeTime());
-            }
-            if (ToolUtil.isNotEmpty(sreachTaskDto.getAfterTime())){
-                ew.le("ta.assigntime", sreachTaskDto.getAfterTime());
-            }
             if (ToolUtil.isNotEmpty(sreachTaskDto.getCreatorid())){
                 ew.eq("ta.creatorid", sreachTaskDto.getCreatorid());
             }
@@ -193,8 +187,16 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
             if (sreachTaskDto.getIsExceed()==1){
                 ew.le("tu.endtime",new Date()).isNull("ta.endtime");
             }
-            if (ToolUtil.isNotEmpty(sreachTaskDto.getStatus())){
-               ew.or();ew.in("tu.status", sreachTaskDto.getStatus());
+                if (ToolUtil.isNotEmpty(sreachTaskDto.getStatus())){
+                    if(VoUtil.getMaxNum(sreachTaskDto.getStatus())<5){
+                        ew.in("tu.status", sreachTaskDto.getStatus());
+                    }
+            }
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getBeforeTime())){
+                ew.ge("ta.assigntime", sreachTaskDto.getBeforeTime());
+            }
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getAfterTime())){
+                ew.le("ta.assigntime", sreachTaskDto.getAfterTime());
             }
             if (ToolUtil.isNotEmpty(sreachTaskDto.getOrder())){
                 ew.orderBy(sreachTaskDto.getOrder());

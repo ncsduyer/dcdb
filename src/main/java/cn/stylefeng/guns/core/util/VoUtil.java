@@ -74,4 +74,16 @@ public class VoUtil {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return sdf.format(date);
     }
+    public static int getMaxNum(Integer[] arr) {
+        //将数组的第一个元素赋给max
+        int max=arr[0];
+        for(int i=1;i<arr.length;i++){
+            //从数组的第二个元素开始赋值，依次比较
+            if(arr[i]>max){
+                //如果arr[i]大于最大值，就将arr[i]赋给最大值
+                max=arr[i];
+            }
+        }
+        return max;
+    }
 }

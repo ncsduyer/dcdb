@@ -1,6 +1,7 @@
 package cn.stylefeng.guns.modular.tdtask.controller;
 
 import cn.stylefeng.guns.core.common.annotion.Permission;
+import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.modular.EventStep.service.IEventStepService;
 import cn.stylefeng.guns.modular.system.model.Task;
 import cn.stylefeng.guns.modular.tdtask.dto.AddTaskDto;
@@ -53,7 +54,7 @@ public class TaskController extends BaseController {
     public ResponseData index(@RequestBody Map<String, Integer[]> map) {
         Map<String, Integer> ret = new HashMap<>();
         for (Map.Entry<String, Integer[]> entry : map.entrySet()) {
-            ret.put(entry.getKey(), taskassignService.selectCountByStatus(Condition.create().in("ta.status", entry.getValue())));
+            ret.put(entry.getKey(), taskassignService.selectCountByStatus(Condition.create().in("ta.status", entry.getValue()).eq("tu.personid", ShiroKit.getUser().getId())));
         }
         return ResponseData.success(ret);
     }

@@ -36,7 +36,7 @@ public class Word {
             titleParagraphRun.setFontSize(20);
 
 
-            XWPFTable table = document.createTable();
+            table = document.createTable();
             setTableWidth(table, "10000");
 
             rownum=0;
