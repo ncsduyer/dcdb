@@ -47,7 +47,12 @@ public class TaskassignServiceImpl extends ServiceImpl<TaskassignMapper, Taskass
 //                }
                 if(ToolUtil.isEmpty(taskassign.getEndtime())){
                 taskassign1.setEndtime(new DateTime());
-                }else{
+                }else if(taskassign.getEndtime().before(taskassign1.getCreatetime())){
+                    DateTime dateTime=new DateTime();
+                    dateTime.setTime(taskassign1.getCreatetime().getTime()+3600);
+                taskassign1.setEndtime(dateTime);
+                }
+                else{
                 taskassign1.setEndtime(taskassign.getEndtime());
                 }
             }
