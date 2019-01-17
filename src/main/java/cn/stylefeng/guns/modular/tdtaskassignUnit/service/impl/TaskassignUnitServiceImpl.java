@@ -130,8 +130,10 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
 
         count=selectCount(Condition.create().eq("tassignid", taskassignId));
         }
-        if (ToolUtil.isNotEmpty(taskassignUnit.getEndtime())){
-            ts.setEndtime(taskassignUnit.getEndtime());
+        if (ts.getStatus()<2){
+            if (ToolUtil.isNotEmpty(taskassignUnit.getEndtime())){
+                ts.setEndtime(taskassignUnit.getEndtime());
+            }
         }
         if (ToolUtil.isNotEmpty(taskassignUnit.getRequirements())){
             ts.setRequirements(taskassignUnit.getRequirements());
