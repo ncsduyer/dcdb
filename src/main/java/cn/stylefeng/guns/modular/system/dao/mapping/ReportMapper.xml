@@ -37,12 +37,14 @@ select comp.title,Totalnum,concat(case when Totalnum>0 then cast(DealSuccNum*100
 		,Totalnum-DealSuccNum as notdealnum,case when DealSuccNum>0 then cast(DealDate*1.0/DealSuccNum as signed) else 0 end bjts
 	from
     (
-        select com.title,com.id,sum(case when taskunit.status=4 then 1 else 0 end) as DealSuccNum,sum(case when taskunit.id is
+    select com.title,com.id,sum(case when taskunit.status=4 then 1 else 0 end) as DealSuccNum,sum(case when taskunit.id is
         not null then 1 else 0 end)Totalnum
-        ,sum(case when taskunit.status=4 then cast(timestampdiff(SECOND,taskunit.createtime,taskunit.endtime)/86400 as
+        ,sum(case when taskunit.status=4  and deal.status=1 then cast(timestampdiff(SECOND,assign.assigntime,deal.finishtime)/86400 as
         signed) else 0 end)as DealDate
         from t_tb_company com
         left join td_taskassign_unit taskunit on taskunit.unitid=com.id  and taskunit.createtime between #{beforeTime,jdbcType=TIMESTAMP} and #{afterTime,jdbcType=TIMESTAMP}
+				left join td_taskassign assign on  assign.id=taskunit.tassignid
+				left join td_taskassign_unitdeal deal on deal.taunitid=taskunit.id and deal.status=1
         group by com.id,com.title
 	 ) comp
     </select>
@@ -101,10 +103,12 @@ select comp.title,Totalnum,concat(case when Totalnum>0 then cast(DealSuccNum*100
         from (
         select com.title,sum(case when taskunit.status=4 then 1 else 0 end) as DealSuccNum,sum(case when taskunit.id is
         not null then 1 else 0 end)Totalnum
-        ,sum(case when taskunit.status=4 then cast(timestampdiff(SECOND,taskunit.createtime,taskunit.endtime)/86400 as
+        ,sum(case when taskunit.status=4  and deal.status=1 then cast(timestampdiff(SECOND,assign.assigntime,deal.finishtime)/86400 as
         signed) else 0 end)as DealDate
         from t_tb_company com
         left join td_taskassign_unit taskunit on taskunit.unitid=com.id  and taskunit.createtime between #{beforeTime,jdbcType=TIMESTAMP} and #{afterTime,jdbcType=TIMESTAMP}
+				left join td_taskassign assign on  assign.id=taskunit.tassignid
+				left join td_taskassign_unitdeal deal on deal.taunitid=taskunit.id and deal.status=1
         group by com.id,com.title
         )a
         )b

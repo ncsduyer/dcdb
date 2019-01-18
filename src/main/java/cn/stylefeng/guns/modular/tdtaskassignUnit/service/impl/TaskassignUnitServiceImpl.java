@@ -189,7 +189,7 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
             if (sreachTaskDto.getIsExceed()==1){
                 ew.le("tu.endtime",new Date()).isNull("ta.endtime");
             }
-                if (ToolUtil.isNotEmpty(sreachTaskDto.getStatus())){
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getStatus())){
                     if(VoUtil.getMaxNum(sreachTaskDto.getStatus())<5){
                         ew.in("tu.status", sreachTaskDto.getStatus());
                     }

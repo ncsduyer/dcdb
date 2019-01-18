@@ -2,15 +2,19 @@ package cn.stylefeng.guns.modular.tdtask.controller;
 
 import cn.stylefeng.guns.core.common.annotion.Permission;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
+import cn.stylefeng.guns.core.util.VoUtil;
 import cn.stylefeng.guns.modular.EventStep.service.IEventStepService;
 import cn.stylefeng.guns.modular.system.model.Task;
+import cn.stylefeng.guns.modular.system.model.Taskassign;
 import cn.stylefeng.guns.modular.tdtask.dto.AddTaskDto;
 import cn.stylefeng.guns.modular.tdtask.dto.SreachTaskDto;
 import cn.stylefeng.guns.modular.tdtask.service.ITaskService;
 import cn.stylefeng.guns.modular.tdtaskassign.service.ITaskassignService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
+import cn.stylefeng.roses.core.util.ToolUtil;
 import com.baomidou.mybatisplus.mapper.Condition;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -53,8 +57,19 @@ public class TaskController extends BaseController {
     @ResponseBody
     public ResponseData index(@RequestBody Map<String, Integer[]> map) {
         Map<String, Integer> ret = new HashMap<>();
+
         for (Map.Entry<String, Integer[]> entry : map.entrySet()) {
-            ret.put(entry.getKey(), taskassignService.selectCountByStatus(Condition.create().in("ta.status", entry.getValue()).eq("tu.personid", ShiroKit.getUser().getId())));
+            EntityWrapper<Taskassign> ew = new EntityWrapper<>();
+            ew.setEntity(new Taskassign());
+
+            if (ToolUtil.isNotEmpty(entry.getValue())){
+                ew.in("ta.status",entry.getValue());
+                if(VoUtil.getMaxNum(entry.getValue())<5){
+                    ew.in("tu.status", entry.getValue());
+                }
+            }
+            ew.eq("tu.personid", ShiroKit.getUser().getId());
+            ret.put(entry.getKey(), taskassignService.selectCountByStatus(ew));
         }
         return ResponseData.success(ret);
     }
