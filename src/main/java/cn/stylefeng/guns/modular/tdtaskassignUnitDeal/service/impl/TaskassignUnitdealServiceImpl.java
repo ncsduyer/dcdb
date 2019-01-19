@@ -82,8 +82,8 @@ public class TaskassignUnitdealServiceImpl extends ServiceImpl<TaskassignUnitdea
             }
             StringBuilder st=new StringBuilder();
             st.append(ShiroKit.getUser().getName());
-            st.append("，督办了交办事项");
-            st.append("(责任单位:");
+            st.append("，督办了交办事项，");
+            st.append("责任单位:");
             st.append(companyService.selectById(taskassignUnit.getUnitid()).getTitle());
             st.append(";督办时间:");
             if (ToolUtil.isNotEmpty(taskassignUnitdeal.getCreatetime())){
@@ -91,11 +91,12 @@ public class TaskassignUnitdealServiceImpl extends ServiceImpl<TaskassignUnitdea
             }else {
                 st.append(" ");
             }
-            st.append(";督办描述:");
+            st.append(";督办描述:（");
             if (ToolUtil.isNotEmpty(taskassignUnitdeal.getDealdesc())){
                 st.append(taskassignUnitdeal.getDealdesc());
+                st.append("）");
             }else {
-                st.append(" ");
+                st.append("（ ）");
             }
             st.append(";完成状态:");
             if (ToolUtil.isEmpty(taskassignUnitdeal.getStatus())||taskassignUnitdeal.getStatus()==0){

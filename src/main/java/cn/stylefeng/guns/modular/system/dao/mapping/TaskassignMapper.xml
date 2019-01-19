@@ -56,8 +56,9 @@
             <result column="taclosememo" property="closememo" />
             <result column="taendtime" property="endtime" />
             <result column="is_exceed" property="is_exceed"/>
-            <association property="task" javaType="cn.stylefeng.guns.modular.system.model.Task" column="tataskid"
-                         select="cn.stylefeng.guns.modular.system.dao.TaskMapper.selectById">
+            <association property="task" javaType="cn.stylefeng.guns.modular.system.model.Task">
+                <id column="tid" property="id" />
+                <result column="ttitle" property="title" />
             </association>
             <association property="createuser" javaType="cn.stylefeng.guns.modular.system.model.User">
                 <id column="uid" property="id"/>
@@ -88,8 +89,9 @@
                     <id column="cid" property="id" />
                     <result column="ctitle" property="title"/>
                 </association>
-                <association property="person" javaType="cn.stylefeng.guns.modular.system.model.User" column="tupersonid"
-                             select="cn.stylefeng.guns.modular.system.dao.UserMapper.selectById">
+                <association property="person" javaType="cn.stylefeng.guns.modular.system.model.User">
+                    <id column="pid" property="id"/>
+                    <result column="pname" property="name"/>
                 </association>
                 <collection property="taskassignUnitdeals" ofType="cn.stylefeng.guns.modular.system.model.TaskassignUnitdeal" >
                     <id column="tudid" property="id" />
@@ -111,16 +113,16 @@
         id, taskid, worktype, assigntime, assignmemo, status, creatorid, createtime, closememo,endtime
     </sql>
     <sql id="AS_Column_List1">
-       t.id, t.title,ta.id taid, ta.taskid tataskid, ta.worktype taworktype, ta.assigntime taassigntime, ta.assignmemo taassignmemo, ta.status tastatus, ta.creatorid tacreatorid, ta.createtime tacreatetime, ta.closememo taclosememo,ta.endtime taendtime, CASE when sysdate()>tu.endtime then '已超期' else
-        '未超期' end as is_exceed ,u.id uid,u.name uname,wt.title wtitle,e.step esstep
+       t.id tid, t.title ttitle,ta.id taid, ta.taskid tataskid, ta.worktype taworktype, ta.assigntime taassigntime, ta.assignmemo taassignmemo, ta.status tastatus, ta.creatorid tacreatorid, ta.createtime tacreatetime, ta.closememo taclosememo,ta.endtime taendtime, CASE when sysdate()>tu.endtime then '已超期' else
+        '未超期' end as is_exceed ,u.id uid,u.name uname,p.name pname,wt.title wtitle,e.step esstep
         ,tu.id tuid, tu.tassignid tutassignid, tu.unitid tuunitid,tu.personid tupersonid, tu.endtime tuendtime, tu.requirements turequirements, tu.status tustatus, tu.updatetime tuupdatetime, tu.createtime tucreatetime,c.id cid,c.title ctitle , tud.id tudid, tud.taunitid tudtaunitid, tud.dealdesc tuddealdesc, tud.status tudstatus, tud.isdelay tudisdelay, tud.pretime tudpretime, tud.delaytime tuddelaytime, tud.creatorid tudcreatorid, tud.createtime tudcreatetime, tud.finishtime tudfinishtime
     </sql>
     <select id="selectByManyId" resultMap="ResultMoreMap">
         SELECT <include refid="AS_Column_List1"/>
         FROM
-        td_taskassign ta LEFT JOIN td_task t  ON ta.taskid = t.id LEFT JOIN t_tb_work_type wt ON wt.id =
+        td_taskassign ta INNER JOIN td_task t  ON ta.taskid = t.id INNER JOIN t_tb_work_type wt ON wt.id =
         ta.worktype
-        LEFT JOIN t_tb_event_step e ON e.status=ta.status and e.event_type=1 LEFT JOIN sys_user u ON u.id = ta.creatorid LEFT JOIN td_taskassign_unit tu ON tu.tassignid =  ta.id  LEFT JOIN t_tb_company c ON c.id=tu.unitid LEFT JOIN td_taskassign_unitdeal tud ON tud.taunitid=tu.id
+        INNER JOIN t_tb_event_step e ON e.status=ta.status and e.event_type=1 INNER JOIN sys_user u ON u.id = ta.creatorid INNER JOIN td_taskassign_unit tu ON tu.tassignid =  ta.id  INNER JOIN t_tb_company c ON c.id=tu.unitid LEFT JOIN td_taskassign_unitdeal tud ON tud.taunitid=tu.id INNER JOIN sys_user p ON p.id = tu.personid
         <where>
         ${ew.sqlSegment}
     </where>

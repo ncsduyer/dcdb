@@ -77,7 +77,7 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
                     taskassign.setStatus(3);
                     }
             if (taskassignUnits.size()>1){
-
+            int index=1;
             StringBuilder st=new StringBuilder();
             st.append(ShiroKit.getUser().getName());
             st.append("，反馈了交办事项");
@@ -85,13 +85,16 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
                  ) {
                 switch (ts.getStatus()) {
                     case 2:
-                        st.append("(责任单位:");
+                        st.append("序号:");
+                        st.append(index);
+                        st.append("责任单位:");
                         st.append(companyService.selectById(ts.getUnitid()).getTitle());
                         st.append(";办结时限:");
                         st.append(VoUtil.getDate(ts.getEndtime()));
-                        st.append(";反馈信息:");
+                        st.append(";反馈信息:(");
                         st.append(ts.getRequirements());
                         st.append("),");
+                        index++;
                         break;
                     case 3:
                         break;
@@ -208,11 +211,13 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
 
             ArrayList<TaskassignUnit> arrayList = taskassignUnitMapper.selectAsPage(page,ew.groupBy("tu.id"));
             ArrayList<TaskAssignUnitVo> taskVos=new ArrayList<>();
+            TaskAssignUnitVo taskAssignUnitVo=null;
             for (TaskassignUnit task : arrayList) {
                 task.getTaskassign().setUseTime(VoUtil.getUseTime(task.getTaskassign().getAssigntime(), task.getTaskassign().getEndtime()));
-                TaskAssignUnitVo taskAssignUnitVo=new TaskAssignUnitVo(task);
+                taskAssignUnitVo=new TaskAssignUnitVo(task);
                 taskVos.add(taskAssignUnitVo);
             }
+            taskAssignUnitVo=null;
             page.setRecords(taskVos);
 //            page.setTotal(taskassignUnitMapper.selectAsCount(ew));
             return ResponseData.success(page);

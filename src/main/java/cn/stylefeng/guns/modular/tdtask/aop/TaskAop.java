@@ -77,7 +77,7 @@ public class TaskAop {
 
             StringBuilder st=new StringBuilder();
             st.append(ShiroKit.getUser().getName());
-            st.append(",新建了交办事项:(交办时间:");
+            st.append(",新建了交办事项:交办时间:");
             st.append(VoUtil.getDate(taskassign.getAssigntime()));
             st.append("; 名称:");
             st.append(taskassign.getTask().getTitle());
@@ -88,8 +88,9 @@ public class TaskAop {
                 st.append(tu.getPerson().getName());
                 st.append(" ");
             }
-            st.append("; 交办要求:");
+            st.append("; 交办要求:（");
             st.append(taskassign.getAssignmemo());
+            st.append("）");
 
             TaskassignLog taskassignLog = new TaskassignLog();
             taskassignLog.setTaskid(taskassign.getTaskid());
@@ -134,7 +135,7 @@ public class TaskAop {
         taskassignLog.setTassignid(taskassign.getId());
         taskassignLog.setCreatetime(new DateTime());
         if(taskassign.getStatus()>4){
-            taskassignLog.setLogcontent(ShiroKit.getUser().getName()+"，归档了交办事项（归档时间："+ VoUtil.getDate(taskassign.getEndtime())+"；归档状态："+eventStep.getStep()+"；归档总结："+taskassign.getClosememo()+")");
+            taskassignLog.setLogcontent(ShiroKit.getUser().getName()+"，归档了交办事项，归档时间："+ VoUtil.getDate(taskassign.getEndtime())+"；归档状态："+eventStep.getStep()+"；归档总结:（"+taskassign.getClosememo()+"）");
         taskassignLogService.insert(taskassignLog);
         }
 //        else {

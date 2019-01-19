@@ -16,29 +16,30 @@
 
     </resultMap>
     <resultMap id="ResultSimMap" type="cn.stylefeng.guns.modular.system.model.TaskassignUnit" extends="BaseResultMap">
-        <association property="company" javaType="cn.stylefeng.guns.modular.system.model.Company" column="unitid"
-                     select="cn.stylefeng.guns.modular.system.dao.CompanyMapper.selectById">
+        <association property="company" javaType="cn.stylefeng.guns.modular.system.model.Company">
+            <result column="ctitle" property="title" />
         </association>
         <collection property="taskassignUnitdeals" ofType="cn.stylefeng.guns.modular.system.model.TaskassignUnitdeal">
             <id column="tudid" property="id" />
-            <result column="taunitid" property="taunitid" />
-            <result column="dealdesc" property="dealdesc" />
+            <result column="tudtaunitid" property="taunitid" />
+            <result column="tuddealdesc" property="dealdesc" />
             <result column="tudstatus" property="status" />
-            <result column="isdelay" property="isdelay" />
-            <result column="pretime" property="pretime" />
-            <result column="delaytime" property="delaytime" />
-            <result column="creatorid" property="creatorid" />
-            <result column="createtime" property="createtime" />
-            <result column="finishtime" property="finishtime" />
+            <result column="tudisdelay" property="isdelay" />
+            <result column="tudpretime" property="pretime" />
+            <result column="tuddelaytime" property="delaytime" />
+            <result column="tudcreatorid" property="creatorid" />
+            <result column="tudcreatetime" property="createtime" />
+            <result column="tudfinishtime" property="finishtime" />
         </collection>
     </resultMap>
 
     <resultMap id="ResultMoreMap" type="cn.stylefeng.guns.modular.system.model.TaskassignUnit" extends="BaseResultMap">
-        <association property="person" javaType="cn.stylefeng.guns.modular.system.model.User" column="personid"
-                     select="cn.stylefeng.guns.modular.system.dao.UserMapper.selectById">
+        <association property="person" javaType="cn.stylefeng.guns.modular.system.model.User">
+            <id column="pid" property="id"/>
+            <result column="pname" property="name"/>
         </association>
-        <association property="company" javaType="cn.stylefeng.guns.modular.system.model.Company" column="unitid"
-                     select="cn.stylefeng.guns.modular.system.dao.CompanyMapper.selectById">
+        <association property="company" javaType="cn.stylefeng.guns.modular.system.model.Company">
+            <result column="ctitle" property="title" />
         </association>
         <association property="taskassign" javaType="cn.stylefeng.guns.modular.system.model.Taskassign">
             <id column="taid" property="id" />
@@ -52,8 +53,9 @@
             <result column="taclosememo" property="closememo" />
             <result column="taendtime" property="endtime" />
             <result column="is_exceed" property="is_exceed"/>
-            <association property="task" javaType="cn.stylefeng.guns.modular.system.model.Task" column="taskid"
-                         select="cn.stylefeng.guns.modular.system.dao.TaskMapper.selectById">
+            <association property="task" javaType="cn.stylefeng.guns.modular.system.model.Task">
+                <id column="tid" property="id" />
+                <result column="ttitle" property="title" />
             </association>
             <association property="createuser" javaType="cn.stylefeng.guns.modular.system.model.User">
                 <id column="uid" property="id"/>
@@ -89,21 +91,21 @@
         id, tassignid, unitid, personid, endtime, requirements, status, updatetime, createtime
     </sql>
     <sql id="AS_Column_List1">
-       ta.id taid, ta.taskid, ta.worktype taworktype, ta.assigntime taassigntime, ta.assignmemo taassignmemo, ta.status tastatus, ta.creatorid tacreatorid, ta.createtime tacreatetime, ta.closememo taclosememo,ta.endtime taendtime, CASE when sysdate()>tu.endtime then '已超期' else
-        '未超期' end as is_exceed ,u.name uname,wt.title wtitle,e.step
+      t.id tid, t.title ttitle, ta.id taid, ta.taskid, ta.worktype taworktype, ta.assigntime taassigntime, ta.assignmemo taassignmemo, ta.status tastatus, ta.creatorid tacreatorid, ta.createtime tacreatetime, ta.closememo taclosememo,ta.endtime taendtime, CASE when sysdate()>tu.endtime then '已超期' else
+        '未超期' end as is_exceed ,u.name uname,p.name pname,wt.title wtitle,e.step
         ,tu.id, tu.tassignid, tu.unitid,tu.personid, tu.endtime, tu.requirements, tu.status, tu.updatetime, tu.createtime,c.title ctitle , tud.id tudid, tud.taunitid tudtaunitid, tud.dealdesc tuddealdesc, tud.status tudstatus, tud.isdelay tudisdelay, tud.pretime tudpretime, tud.delaytime tuddelaytime, tud.creatorid tudcreatorid, tud.createtime tudcreatetime, tud.finishtime tudfinishtime
     </sql>
     <select id="selectdealList" resultType="cn.stylefeng.guns.modular.system.model.TaskassignUnitdeal">
         SELECT id, taunitid, dealdesc, status, isdelay, pretime, delaytime, creatorid, createtime, finishtime FROM td_taskassign_unitdeal where taunitid=#{taunitid}
     </select>
     <select id="selectList1" resultMap="ResultSimMap">
-        SELECT tu.*,tud.id tudid,tud.*,tud.status tudstatus FROM td_taskassign_unit tu LEFT JOIN td_taskassign_unitdeal tud ON tud.taunitid=tu.id where tu.tassignid=#{id} AND tu.personid=#{personid}
+        SELECT tu.id, tu.tassignid, tu.unitid,tu.personid, tu.endtime, tu.requirements, tu.status, tu.updatetime, tu.createtime,c.title ctitle , tud.id tudid, tud.taunitid tudtaunitid, tud.dealdesc tuddealdesc, tud.status tudstatus, tud.isdelay tudisdelay, tud.pretime tudpretime, tud.delaytime tuddelaytime, tud.creatorid tudcreatorid, tud.createtime tudcreatetime, tud.finishtime tudfinishtime FROM td_taskassign_unit tu LEFT JOIN td_taskassign_unitdeal tud ON tud.taunitid=tu.id where tu.tassignid=#{id} AND tu.personid=#{personid} LEFT JOIN t_tb_company c ON c.id=tu.unitid
     </select>
 
     <select id="selectAsPage" resultMap="ResultMoreMap">
         SELECT
         <include refid="AS_Column_List1"/> FROM
-        td_taskassign_unit tu   LEFT JOIN td_taskassign ta ON tu.tassignid =  ta.id   LEFT JOIN t_tb_work_type wt ON wt.id = ta.worktype LEFT JOIN t_tb_event_step e ON e.status=ta.status and e.event_type=1 LEFT JOIN sys_user u ON u.id = ta.creatorid LEFT JOIN td_task t ON ta.taskid = t.id LEFT JOIN t_tb_company c ON c.id=tu.unitid LEFT JOIN td_taskassign_unitdeal tud ON tud.taunitid=tu.id
+        td_taskassign_unit tu INNER JOIN td_taskassign ta ON tu.tassignid =  ta.id  INNER JOIN td_task t ON t.id = ta.taskid   INNER JOIN t_tb_work_type wt ON wt.id = ta.worktype INNER JOIN t_tb_event_step e ON e.status=ta.status and e.event_type=1 INNER JOIN sys_user u ON u.id = ta.creatorid INNER JOIN t_tb_company c ON c.id=tu.unitid  INNER JOIN sys_user p ON p.id = tu.personid LEFT JOIN td_taskassign_unitdeal tud ON tud.taunitid=tu.id
         <where>
             ${ew.sqlSegment}
         </where>
