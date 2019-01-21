@@ -114,7 +114,7 @@
     </sql>
     <sql id="AS_Column_List1">
        t.id tid, t.title ttitle,ta.id taid, ta.taskid tataskid, ta.worktype taworktype, ta.assigntime taassigntime, ta.assignmemo taassignmemo, ta.status tastatus, ta.creatorid tacreatorid, ta.createtime tacreatetime, ta.closememo taclosememo,ta.endtime taendtime, CASE when sysdate()>tu.endtime then '已超期' else
-        '未超期' end as is_exceed ,u.id uid,u.name uname,p.name pname,wt.title wtitle,e.step esstep
+        '未超期' end as is_exceed ,u.id uid,u.name uname,p.id pid,p.name pname,wt.title wtitle,e.step esstep
         ,tu.id tuid, tu.tassignid tutassignid, tu.unitid tuunitid,tu.personid tupersonid, tu.endtime tuendtime, tu.requirements turequirements, tu.status tustatus, tu.updatetime tuupdatetime, tu.createtime tucreatetime,c.id cid,c.title ctitle , tud.id tudid, tud.taunitid tudtaunitid, tud.dealdesc tuddealdesc, tud.status tudstatus, tud.isdelay tudisdelay, tud.pretime tudpretime, tud.delaytime tuddelaytime, tud.creatorid tudcreatorid, tud.createtime tudcreatetime, tud.finishtime tudfinishtime
     </sql>
     <select id="selectByManyId" resultMap="ResultMoreMap">

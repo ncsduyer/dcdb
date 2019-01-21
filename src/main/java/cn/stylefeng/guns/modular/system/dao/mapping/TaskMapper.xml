@@ -48,10 +48,12 @@
                 <result column="tuupdatetime" property="updatetime" />
                 <result column="tucreatetime" property="createtime" />
                 <association property="company" javaType="cn.stylefeng.guns.modular.system.model.Company">
+                    <id column="cid" property="id" />
                     <result column="ctitle" property="title"/>
                 </association>
                 <association property="person" javaType="cn.stylefeng.guns.modular.system.model.User">
-                    <result column="personname" property="name"/>
+                    <id column="pid" property="id"/>
+                    <result column="pname" property="name"/>
                 </association>
                 <collection property="taskassignUnitdeals" ofType="cn.stylefeng.guns.modular.system.model.TaskassignUnitdeal" >
                     <id column="tudid" property="id" />
@@ -79,15 +81,15 @@
     </sql>
     <sql id="AS_Column_List1">
        t.id, t.title,ta.id taid, ta.taskid, ta.worktype taworktype, ta.assigntime taassigntime, ta.assignmemo taassignmemo, ta.status tastatus, ta.creatorid tacreatorid, ta.createtime tacreatetime, ta.closememo taclosememo,ta.endtime taendtime, CASE when sysdate()>tu.endtime then '已超期' else
-        '未超期' end as is_exceed ,u.name uname,wt.title wtitle,e.step
-        ,tu.id tuid, tu.tassignid tutassignid, tu.unitid tuunitid,tu.personid tupersonid, tu.endtime tuendtime, tu.requirements turequirements, tu.status tustatus, tu.updatetime tuupdatetime, tu.createtime tucreatetime,c.title ctitle , tud.id tudid, tud.taunitid tudtaunitid, tud.dealdesc tuddealdesc, tud.status tudstatus, tud.isdelay tudisdelay, tud.pretime tudpretime, tud.delaytime tuddelaytime, tud.creatorid tudcreatorid, tud.createtime tudcreatetime, tud.finishtime tudfinishtime
+        '未超期' end as is_exceed ,u.name uname,wt.title wtitle,e.step,p.id pid,p.name pname
+        ,tu.id tuid, tu.tassignid tutassignid, tu.unitid tuunitid,tu.personid tupersonid, tu.endtime tuendtime, tu.requirements turequirements, tu.status tustatus, tu.updatetime tuupdatetime, tu.createtime tucreatetime,c.title ctitle ,c.id cid,tud.id tudid, tud.taunitid tudtaunitid, tud.dealdesc tuddealdesc, tud.status tudstatus, tud.isdelay tudisdelay, tud.pretime tudpretime, tud.delaytime tuddelaytime, tud.creatorid tudcreatorid, tud.createtime tudcreatetime, tud.finishtime tudfinishtime
     </sql>
     <select id="selectWithManyById" resultMap="ResultMoreMap">
        SELECT <include refid="AS_Column_List1"/>
          FROM
         td_task t LEFT JOIN td_taskassign ta ON ta.taskid = t.id LEFT JOIN t_tb_work_type wt ON wt.id =
         ta.worktype
-        LEFT JOIN t_tb_event_step e ON e.status=ta.status and e.event_type=1 LEFT JOIN sys_user u ON u.id = ta.creatorid LEFT JOIN td_taskassign_unit tu ON tu.tassignid =  ta.id  LEFT JOIN t_tb_company c ON c.id=tu.unitid LEFT JOIN td_taskassign_unitdeal tud ON tud.taunitid=tu.id WHERE t.id=#{id}
+        LEFT JOIN t_tb_event_step e ON e.status=ta.status and e.event_type=1 LEFT JOIN sys_user u ON u.id = ta.creatorid LEFT JOIN td_taskassign_unit tu ON tu.tassignid =  ta.id  LEFT JOIN t_tb_company c ON c.id=tu.unitid LEFT JOIN td_taskassign_unitdeal tud ON tud.taunitid=tu.id LEFT JOIN sys_user p ON p.id = tu.personid WHERE t.id=#{id}
     </select>
     <select id="selectCountByUnit" resultType="java.lang.Integer">
         SELECT COUNT(id) FROM td_task t
@@ -129,7 +131,7 @@
         FROM
         td_task t LEFT JOIN td_taskassign ta ON ta.taskid = t.id LEFT JOIN t_tb_work_type wt ON wt.id =
         ta.worktype
-        LEFT JOIN t_tb_event_step e ON e.status=ta.status and e.event_type=1 LEFT JOIN sys_user u ON u.id = ta.creatorid LEFT JOIN td_taskassign_unit tu ON tu.tassignid =  ta.id  LEFT JOIN t_tb_company c ON c.id=tu.unitid LEFT JOIN td_taskassign_unitdeal tud ON tud.taunitid=tu.id LEFT JOIN sys_user person ON person.id = tu.personid
+        LEFT JOIN t_tb_event_step e ON e.status=ta.status and e.event_type=1 LEFT JOIN sys_user u ON u.id = ta.creatorid LEFT JOIN td_taskassign_unit tu ON tu.tassignid =  ta.id  LEFT JOIN t_tb_company c ON c.id=tu.unitid LEFT JOIN td_taskassign_unitdeal tud ON tud.taunitid=tu.id LEFT JOIN sys_user p ON p.id = tu.personid
         <where>
             ${ew.sqlSegment}
         </where>

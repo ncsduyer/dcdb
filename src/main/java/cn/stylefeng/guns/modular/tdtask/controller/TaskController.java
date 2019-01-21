@@ -90,16 +90,16 @@ public class TaskController extends BaseController {
      */
     @ApiOperation(value = "交办事项列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "title", value = "事项名称", required = false, dataType = "String"),
-            @ApiImplicitParam(name = "agent", value = "督办责任人id数组", required = false, dataType = "Long"),
-            @ApiImplicitParam(name = "creatorid", value = "创建人id", required = false, dataType = "Long"),
-            @ApiImplicitParam(name = "beforeTime", value = "开始时间", required = false, dataType = "String"),
-            @ApiImplicitParam(name = "afterTime", value = "结束时间", required = false, dataType = "String"),
-            @ApiImplicitParam(name = "status", value = "事项状态 1-未反馈；2-已反馈办理中；3-部分完成；4-全部完成;5-事项归档；6-人为关闭", required = false, dataType = "Long"),
-            @ApiImplicitParam(name = "companyIds", value = "责任单位数组", required = false, dataType = "Long"),
-            @ApiImplicitParam(name = "isExceed", value = "查询延期 1:延期 ", required = false, dataType = "Long"),
-            @ApiImplicitParam(name = "page", value = "页码", required = false, dataType = "Long"),
-            @ApiImplicitParam(name = "limit", value = "每页条数", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "title", value = "可选参数，事项名称", required = false, dataType = "String"),
+            @ApiImplicitParam(name = "agent", value = "可选参数，督办责任人id数组", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "creatorid", value = "可选参数，创建人id", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "beforeTime", value = "可选参数，开始时间", required = false, dataType = "String"),
+            @ApiImplicitParam(name = "afterTime", value = "可选参数，结束时间", required = false, dataType = "String"),
+            @ApiImplicitParam(name = "status", value = "可选参数，事项状态 1-未反馈；2-已反馈办理中；3-部分完成；4-全部完成;5-事项归档；6-人为关闭", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "companyIds", value = "可选参数，责任单位数组", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "isExceed", value = "可选参数，查询延期 1:延期 ", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "page", value = "可选参数，页码", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "limit", value = "可选参数，每页条数", required = false, dataType = "Long"),
     })
     @RequestMapping(value = "/getTaskList", method = RequestMethod.POST)
     @Permission
@@ -114,6 +114,14 @@ public class TaskController extends BaseController {
      * 新增交办事项
      */
     @ApiOperation(value = "新增交办事项")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "可选参数，督办事项id", required = true, dataType = "Long"),
+            @ApiImplicitParam(name = "title", value = "必选参数，事项名称", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "worktype", value = "必选参数，交办事件类型id", required = true, dataType = "Long"),
+            @ApiImplicitParam(name = "assigntime", value = "必选参数，交办时间", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "assignmemo", value = "必选参数，交办事件要求", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "companyIds", value = "必选参数，[{unitid:责任单位id,personid:对应责任人id}] 数组 ", required = true, dataType = "String"),
+    })
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @Permission
     @ResponseBody
