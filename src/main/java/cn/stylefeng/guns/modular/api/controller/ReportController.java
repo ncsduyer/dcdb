@@ -81,7 +81,7 @@ public class ReportController extends BaseController {
 
     @RequestMapping(value = "/export", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public void export(@RequestBody SreachReportDto sreachReportDto, HttpServletRequest request, HttpServletResponse response) {
+    public void export(@RequestBody SreachReportDto sreachReportDto, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         reportService.export(sreachReportDto,response);
     }

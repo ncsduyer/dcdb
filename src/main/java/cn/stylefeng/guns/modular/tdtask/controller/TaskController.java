@@ -227,7 +227,7 @@ public class TaskController extends BaseController {
     })
     @RequestMapping(value = "/export", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public void export(@RequestBody SreachTaskDto sreachTaskDto, HttpServletRequest request, HttpServletResponse response) {
+    public void export(@RequestBody SreachTaskDto sreachTaskDto, HttpServletRequest request, HttpServletResponse response) throws Exception {
         taskService.export(sreachTaskDto, response);
     }
 

@@ -31,5 +31,5 @@ public interface ITaskService extends IService<Task> {
 
     List<Task> getAll(SreachTaskDto sreachTaskDto);
 
-    void export(SreachTaskDto sreachTaskDto, HttpServletResponse response);
+    void export(SreachTaskDto sreachTaskDto, HttpServletResponse response) throws Exception;
 }

@@ -25,5 +25,5 @@ public interface IReportService extends IService<Report> {
     ResponseData selectByPersionCount(SreachReportDto sreachReportDto);
     ResponseData selectByAffairCount(SreachReportDto sreachReportDto);
 
-    void export(SreachReportDto sreachReportDto, HttpServletResponse response);
+    void export(SreachReportDto sreachReportDto, HttpServletResponse response) throws Exception;
 }

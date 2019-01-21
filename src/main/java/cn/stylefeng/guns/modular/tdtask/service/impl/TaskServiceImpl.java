@@ -183,6 +183,9 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
             ArrayList<ReportsVo> reportsVos=new ArrayList<>();
             for (Map.Entry<String, List<TaskVo>> et: map.entrySet()
                  ) {
+                if (et.getValue().size()<1){
+                    continue;
+                }
                     ReportsVo reportsVo=new ReportsVo(et.getKey(),et.getValue());
                     reportsVos.add(reportsVo);
             }
@@ -372,8 +375,24 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
         return tasks;
     }
     @Override
-    public void export(@RequestBody SreachTaskDto sreachTaskDto, HttpServletResponse response) {
+    public void export(@RequestBody SreachTaskDto sreachTaskDto, HttpServletResponse response) throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            new Bettime(sreachTaskDto);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (ToolUtil.isEmpty(sreachTaskDto.getBeforeTime())){
+            throw new Exception("必须选择开始时间");
+        }
+        if (ToolUtil.isEmpty(sreachTaskDto.getAfterTime())){
+            throw new Exception("必须选择结束时间");
+        }
         List<ExportRowVo> titles=new ArrayList<>();
+        ExportRowVo head=  new ExportRowVo();
+        head.setTotal(1);
+        head.getColVos().add(new ExportColVo(new ExportColSubVo(1,9, "区委主要领导批交办事项督办台账("+sdf.format(sreachTaskDto.getBeforeTime())+"--"+sdf.format(sreachTaskDto.getAfterTime())+")")));
+        titles.add(head);
         ExportRowVo title=  new ExportRowVo();
         title.setTotal(1);
         title.getColVos().add(new ExportColVo(new ExportColSubVo(1,"编号")));
@@ -388,7 +407,6 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
         titles.add(title);
         //sheet名
         String sheetName = "督查督办数据分析表";
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         List<ExportRowVo> exportRowVos = new ArrayList<>();
         //循环次数
         int index = 1;
@@ -398,6 +416,9 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
             sreachTaskDto.setStatus(new Integer[]{et.getStatus()});
             //获取数据
             List<Task> tasks = getAll(sreachTaskDto);
+            if (tasks.size()<1){
+                continue;
+            }
             ExportRowVo exportRowVo1 = new ExportRowVo();
             exportRowVo1.setTotal(1);
             exportRowVo1.getColVos().add(new ExportColVo(new ExportColSubVo(1,9, et.getStep()+"("+tasks.size()+")")));

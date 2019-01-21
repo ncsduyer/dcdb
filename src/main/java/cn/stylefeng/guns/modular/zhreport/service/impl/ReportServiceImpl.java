@@ -200,7 +200,7 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
     }
 
     @Override
-    public void export(SreachReportDto sreachReportDto, HttpServletResponse response) {
+    public void export(SreachReportDto sreachReportDto, HttpServletResponse response) throws Exception {
         switch (QueryType.getQueryType(sreachReportDto.getQueryType())){
             case TASK:
                 SreachTaskDto sreachTaskDto = new SreachTaskDto();
