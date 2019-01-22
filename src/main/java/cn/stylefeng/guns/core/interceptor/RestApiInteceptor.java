@@ -56,6 +56,10 @@ public class RestApiInteceptor extends HandlerInterceptorAdapter {
     }
 
     private boolean check(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod) {
+
+        //获取开始时间
+        long start=System.currentTimeMillis();
+
         if (request.getServletPath().equals(JwtConstants.AUTH_PATH)) {
             return true;
         }
@@ -100,6 +104,10 @@ public class RestApiInteceptor extends HandlerInterceptorAdapter {
             return false;
         }
 
+        //获取结束时间
+        long end=System.currentTimeMillis();
+
+        System.out.println("token认证程序运行时间： "+(end-start)+"ms");
 
         return true;
     }

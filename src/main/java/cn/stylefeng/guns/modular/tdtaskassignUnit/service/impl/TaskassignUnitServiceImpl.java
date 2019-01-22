@@ -26,7 +26,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -168,34 +167,36 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
             new Bettime(sreachTaskDto);
             EntityWrapper<TaskassignUnit> ew = new EntityWrapper<>();
             ew.setEntity(new TaskassignUnit());
-            if (ToolUtil.isNotEmpty(sreachTaskDto.getCreatorid())){
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getCreatorid())) {
                 ew.eq("ta.creatorid", sreachTaskDto.getCreatorid());
             }
-//            拼接查询条件
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getAgent())){
+                ew.in("tu.personid", sreachTaskDto.getAgent());
+            }
+
+//          拼接查询条件
             if (ToolUtil.isNotEmpty(sreachTaskDto.getTitle())){
                 ew.like("t.title", sreachTaskDto.getTitle());
             }
             if (ToolUtil.isNotEmpty(sreachTaskDto.getWorkType())){
                 ew.in("ta.worktype", sreachTaskDto.getWorkType());
             }
-            if (ToolUtil.isNotEmpty(sreachTaskDto.getStatus())){
-                ew.in("ta.status", sreachTaskDto.getStatus());
-            }
-            if (ToolUtil.isNotEmpty(sreachTaskDto.getAgent())){
-                ew.in("tu.personid", sreachTaskDto.getAgent());
-            }else{
-                ew.eq("tu.personid", ShiroKit.getUser().getId());
-            }
             if (ToolUtil.isNotEmpty(sreachTaskDto.getCompanyIds())){
                 ew.in("tu.unitid", sreachTaskDto.getCompanyIds());
             }
-            if (sreachTaskDto.getIsExceed()==1){
-                ew.le("tu.endtime",new Date()).isNull("ta.endtime");
-            }
-            if (ToolUtil.isNotEmpty(sreachTaskDto.getStatus())){
-                    if(VoUtil.getMaxNum(sreachTaskDto.getStatus())<5){
-                        ew.in("tu.status", sreachTaskDto.getStatus());
-                    }
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getIsExceed())&&sreachTaskDto.getIsExceed()==1){
+                //    ew.le("tu.endtime",new Date()).isNull("ta.endtime");
+                ew.eq("tu.status", 3);
+                //    ew.eq("ta.status",3);
+            }else{
+                if (ToolUtil.isNotEmpty(sreachTaskDto.getStatus())){
+                    ew.in("ta.status", sreachTaskDto.getStatus());
+                }
+                if (ToolUtil.isNotEmpty(sreachTaskDto.getStatus())){
+                        if(VoUtil.getMaxNum(sreachTaskDto.getStatus())<5){
+                            ew.in("tu.status", sreachTaskDto.getStatus());
+                        }
+                }
             }
             if (ToolUtil.isNotEmpty(sreachTaskDto.getBeforeTime())){
                 ew.ge("ta.assigntime", sreachTaskDto.getBeforeTime());

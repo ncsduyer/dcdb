@@ -2,9 +2,14 @@ package cn.stylefeng.guns.modular.api.controller;
 
 import cn.stylefeng.guns.core.common.annotion.Permission;
 import cn.stylefeng.guns.core.log.LogObjectHolder;
+import cn.stylefeng.guns.core.util.CopyUtils;
 import cn.stylefeng.guns.modular.DcCompany.service.ICompanyService;
 import cn.stylefeng.guns.modular.DcWorkType.service.IWorkTypeService;
 import cn.stylefeng.guns.modular.EventStep.service.IEventStepService;
+import cn.stylefeng.guns.modular.api.vo.CompanyVo;
+import cn.stylefeng.guns.modular.api.vo.UserVo;
+import cn.stylefeng.guns.modular.system.model.Company;
+import cn.stylefeng.guns.modular.system.model.User;
 import cn.stylefeng.guns.modular.system.model.WorkType;
 import cn.stylefeng.guns.modular.system.service.IUserService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
@@ -18,6 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 交办事项类型管理控制器
@@ -89,7 +97,17 @@ public class ApiWorkTypeController extends BaseController {
     @RequestMapping(value = "/userlist", method = RequestMethod.GET)
     @ResponseBody
     public ResponseData Userlist() {
-        return ResponseData.success(userService.selectList(Condition.create().setSqlSelect("id,name").eq("status", 1).eq("isagent", 1).orderBy("uorder", false)));
+
+        List<UserVo> userVos=new ArrayList<>();
+        UserVo userVo=null;
+        for (User user:(List<User>) userService.selectList(Condition.create().setSqlSelect("id,name").eq("status", 1).eq("isagent", 1).orderBy("uorder", false))) {
+            userVo=new UserVo();
+            CopyUtils.copyProperties(user, userVo);
+            userVos.add(userVo);
+        }
+        userVo=null;
+
+        return ResponseData.success(userVos);
     }
 
     /**
@@ -112,7 +130,17 @@ public class ApiWorkTypeController extends BaseController {
     @RequestMapping(value = "/companylist", method = RequestMethod.GET)
     @ResponseBody
     public ResponseData Companylist() {
-        return ResponseData.success(companyService.selectMoreList(Condition.create().eq("c.status", 1).orderBy("c.`order`", false)));
+
+        List<CompanyVo> companyVos=new ArrayList<>();
+        CompanyVo companyVo=null;
+        for (Company company:(List<Company>) companyService.selectMoreList(Condition.create().eq("c.status", 1).orderBy("c.`order`", false))) {
+            companyVo=new CompanyVo();
+            CopyUtils.copyProperties(company, companyVo);
+            companyVos.add(companyVo);
+        }
+        companyVo=null;
+
+        return ResponseData.success(companyVos);
     }
 
     /**

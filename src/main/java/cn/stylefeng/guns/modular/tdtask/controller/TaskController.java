@@ -192,8 +192,8 @@ public class TaskController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "title", value = "事项名称", required = false, dataType = "String"),
             @ApiImplicitParam(name = "agent", value = "督办责任人id数组", required = false, dataType = "Long"),
-            @ApiImplicitParam(name = "beforeTime", value = "开始时间", required = false, dataType = "String"),
-            @ApiImplicitParam(name = "afterTime", value = "结束时间", required = false, dataType = "String"),
+            @ApiImplicitParam(name = "beforeTime", value = "必选参数，开始时间", required = false, dataType = "String"),
+            @ApiImplicitParam(name = "afterTime", value = "必选参数，结束时间", required = false, dataType = "String"),
             @ApiImplicitParam(name = "status", value = "事项状态 1-未反馈；2-已反馈办理中；3-部分完成；4-全部完成;5-事项归档；6-人为关闭", required = false, dataType = "Long"),
             @ApiImplicitParam(name = "companyIds", value = "责任单位数组", required = false, dataType = "Long"),
             @ApiImplicitParam(name = "isExceed", value = "查询延期 1:延期 ", required = false, dataType = "Long"),
@@ -214,8 +214,8 @@ public class TaskController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "title", value = "事项名称", required = false, dataType = "String"),
             @ApiImplicitParam(name = "agent", value = "督办责任人id数组", required = false, dataType = "Long"),
-            @ApiImplicitParam(name = "beforeTime", value = "开始时间", required = false, dataType = "String"),
-            @ApiImplicitParam(name = "afterTime", value = "结束时间", required = false, dataType = "String"),
+            @ApiImplicitParam(name = "beforeTime", value = "必选参数，开始时间", required = false, dataType = "String"),
+            @ApiImplicitParam(name = "afterTime", value = "必选参数，结束时间", required = false, dataType = "String"),
             @ApiImplicitParam(name = "status", value = "事项状态 1-未反馈；2-已反馈办理中；3-部分完成；4-全部完成;5-事项归档；6-人为关闭", required = false, dataType = "Long"),
             @ApiImplicitParam(name = "companyIds", value = "责任单位数组", required = false, dataType = "Long"),
             @ApiImplicitParam(name = "isExceed", value = "查询延期 1:延期 ", required = false, dataType = "Long"),

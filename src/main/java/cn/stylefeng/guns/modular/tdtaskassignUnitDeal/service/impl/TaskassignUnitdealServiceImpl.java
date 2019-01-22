@@ -45,7 +45,10 @@ public class TaskassignUnitdealServiceImpl extends ServiceImpl<TaskassignUnitdea
     @Override
     public ResponseData updateByTaskassignUnitdeal(TaskassignUnitdeal taskassignUnitdeal) {
         try {
-                TaskassignUnit taskassignUnit=taskassignUnitService.selectById(taskassignUnitdeal.getTaunitid());
+                TaskassignUnit taskassignUnit=taskassignUnitService.selectOne(Condition.create().eq("personid", ShiroKit.getUser().getId()).eq("id", taskassignUnitdeal.getTaunitid()));
+                if (ToolUtil.isEmpty(taskassignUnit)||ToolUtil.isEmpty(taskassignUnit.getStatus())||taskassignUnit.getStatus()<2){
+                    return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), "无权操作");
+                }
                 int oldStatus =taskassignUnit.getStatus();
                 if (selectCount(Condition.create().eq("status", 1).eq("taunitid", taskassignUnitdeal.getTaunitid()))>0||taskassignUnit.getStatus()==4){
                     return new ErrorResponseData(45000, "已经完成不可重复提交！");

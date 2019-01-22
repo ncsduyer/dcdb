@@ -50,6 +50,10 @@ public class PermissionAop {
 
     @Around("cutPermission()")
     public Object doPermission(ProceedingJoinPoint point) throws Throwable {
+
+        //获取开始时间
+        long start=System.currentTimeMillis();
+
         MethodSignature ms = (MethodSignature) point.getSignature();
         Method method = ms.getMethod();
         Permission permission = method.getAnnotation(Permission.class);
@@ -58,6 +62,10 @@ public class PermissionAop {
 
             //检查全体角色
             boolean result = check.checkAll();
+            //获取结束时间
+            long end=System.currentTimeMillis();
+
+            System.out.println("权限验证程序运行时间： "+(end-start)+"ms");
             if (result) {
                 return point.proceed();
             } else {
@@ -74,6 +82,8 @@ public class PermissionAop {
                 throw new NoPermissionException();
             }
         }
+
+
     }
 
 }
