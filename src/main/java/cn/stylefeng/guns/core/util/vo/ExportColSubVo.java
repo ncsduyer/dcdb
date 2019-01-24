@@ -4,6 +4,7 @@ import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 
 public class ExportColSubVo {
     private int rowspan=1;
@@ -12,6 +13,9 @@ public class ExportColSubVo {
     private Boolean isSetStyle=false;
     private HSSFCellStyle style;
 
+    public ExportColSubVo() {
+        initStyle();
+    }
 
     public ExportColSubVo(int rowspan, String content) {
         this.rowspan = rowspan;
@@ -26,15 +30,18 @@ public class ExportColSubVo {
         initStyle();
     }
     private void initStyle(){
-//        this.isSetStyle=true;
+        this.isSetStyle=true;
         HSSFWorkbook  hssfWorkbook=new HSSFWorkbook();
         style=hssfWorkbook.createCellStyle();
         style.setAlignment(HorizontalAlignment.CENTER);
+        //垂直居中
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
         HSSFFont font= hssfWorkbook.createFont();
         font.setFontName("仿宋_GB2312");
         font.setBold(true);
         font.setFontHeightInPoints((short) 12);
         style.setFont(font);
+        style.setWrapText(true);
     }
     public int getRowspan() {
         return rowspan;

@@ -6,13 +6,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellRangeAddressList;
 import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public class Excel {
@@ -304,26 +304,28 @@ public class Excel {
                 currentRow.setHeightInPoints((float) (currentRow.getHeightInPoints()*1.5));
                 }
                 for (int columnNum = 0; columnNum < sheet.getRow(rowNum).getPhysicalNumberOfCells(); columnNum++) {
+                    //获取列宽
                     int columnWidth = sheet.getColumnWidth(columnNum) / 256;
                 if (currentRow.getCell(columnNum) != null) {
                     HSSFCell currentCell = currentRow.getCell(columnNum);
                     if (currentCell.getCellTypeEnum() == CellType.STRING) {
-                        int length = currentCell.getStringCellValue().getBytes().length;
+                        //获取内容长度
+                        int length = 0;
+                        try {
+                            length = currentCell.getStringCellValue().getBytes("UTF-8").length;
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                        if(length>20){
+                            length=20;
+                        }
                         if (columnWidth < length) {
                             columnWidth = length;
                         }
                     }
-                    HSSFCellStyle cellStyle=hssfWorkbook.createCellStyle();
-                    cellStyle.setAlignment(HorizontalAlignment.CENTER);
-                    cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);//垂直居
-                    HSSFFont font= hssfWorkbook.createFont();
-                    font.setFontName("仿宋_GB2312");
-                    font.setBold(true);
-                    font.setFontHeightInPoints((short) 12);
-                    cellStyle.setFont(font);
-                    currentCell.setCellStyle(cellStyle);
                 }
             sheet.setColumnWidth(columnNum, columnWidth * 256);
+
             }
 
         }
