@@ -47,7 +47,6 @@ public class Infosrec extends Model<Infosrec> {
      */
     private Integer unitid;
 
-
     public Integer getId() {
         return id;
     }

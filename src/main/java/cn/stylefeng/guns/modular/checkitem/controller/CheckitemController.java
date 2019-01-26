@@ -1,6 +1,7 @@
 package cn.stylefeng.guns.modular.checkitem.controller;
 
 import cn.stylefeng.guns.core.log.LogObjectHolder;
+import cn.stylefeng.guns.modular.EventType.service.IEventTypeService;
 import cn.stylefeng.guns.modular.checkitem.service.ICheckitemService;
 import cn.stylefeng.guns.modular.system.model.Checkitem;
 import cn.stylefeng.roses.core.base.controller.BaseController;
@@ -26,6 +27,8 @@ public class CheckitemController extends BaseController {
 
     @Autowired
     private ICheckitemService checkitemService;
+    @Autowired
+    private IEventTypeService eventTypeService;
 
     /**
      * 跳转到督查类型首页
@@ -39,7 +42,8 @@ public class CheckitemController extends BaseController {
      * 跳转到添加督查类型
      */
     @RequestMapping("/checkitem_add")
-    public String checkitemAdd() {
+    public String checkitemAdd(Model model) {
+        model.addAttribute("eventtype",eventTypeService.selectList(null));
         return PREFIX + "checkitem_add.html";
     }
 
@@ -50,6 +54,7 @@ public class CheckitemController extends BaseController {
     public String checkitemUpdate(@PathVariable Integer checkitemId, Model model) {
         Checkitem checkitem = checkitemService.selectById(checkitemId);
         model.addAttribute("item",checkitem);
+        model.addAttribute("eventtype",eventTypeService.selectList(null));
         LogObjectHolder.me().set(checkitem);
         return PREFIX + "checkitem_edit.html";
     }
