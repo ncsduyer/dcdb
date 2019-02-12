@@ -10,12 +10,11 @@ import cn.stylefeng.guns.core.util.VoUtil;
 import cn.stylefeng.guns.core.util.vo.ExportColSubVo;
 import cn.stylefeng.guns.core.util.vo.ExportColVo;
 import cn.stylefeng.guns.core.util.vo.ExportRowVo;
+import cn.stylefeng.guns.modular.AppNotice.service.IAppNoticeService;
 import cn.stylefeng.guns.modular.EventStep.service.IEventStepService;
 import cn.stylefeng.guns.modular.system.dao.TaskMapper;
-import cn.stylefeng.guns.modular.system.model.EventStep;
-import cn.stylefeng.guns.modular.system.model.Task;
-import cn.stylefeng.guns.modular.system.model.Taskassign;
-import cn.stylefeng.guns.modular.system.model.TaskassignUnit;
+import cn.stylefeng.guns.modular.system.model.*;
+import cn.stylefeng.guns.modular.system.service.IUserService;
 import cn.stylefeng.guns.modular.tdtask.dto.AddTaskDto;
 import cn.stylefeng.guns.modular.tdtask.dto.SreachTaskDto;
 import cn.stylefeng.guns.modular.tdtask.service.ITaskService;
@@ -23,6 +22,7 @@ import cn.stylefeng.guns.modular.tdtask.vo.ReportsVo;
 import cn.stylefeng.guns.modular.tdtask.vo.TaskVo;
 import cn.stylefeng.guns.modular.tdtask.vo.chart.*;
 import cn.stylefeng.guns.modular.tdtaskassign.service.ITaskassignService;
+import cn.stylefeng.guns.modular.tdtaskassignLog.service.ITaskassignLogService;
 import cn.stylefeng.guns.modular.tdtaskassignUnit.service.ITaskassignUnitService;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
@@ -62,6 +62,14 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
     private ITaskassignUnitService taskassignUnitService;
     @Autowired
     private IEventStepService eventStepService;
+    @Autowired
+    private ITaskService taskService;
+    @Autowired
+    private ITaskassignLogService taskassignLogService;
+    @Autowired
+    private IAppNoticeService appNoticeService;
+    @Autowired
+    private IUserService userService;
     @Override
     public ResponseData SreachPage(SreachTaskDto sreachTaskDto) {
        return taskassignUnitService.selectAsPage(sreachTaskDto);
@@ -101,6 +109,51 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
                     taskassignUnit.setStatus(1);
                     taskassignUnitService.insert(taskassignUnit);
                 }
+
+                taskassign=taskassignService.selectByManyId(taskassign.getId());
+
+                StringBuilder st=new StringBuilder();
+                st.append(ShiroKit.getUser().getName());
+                st.append(",新建了交办事项:交办时间:");
+                st.append(VoUtil.getDate(taskassign.getAssigntime()));
+                st.append("; 名称:");
+                st.append(taskassign.getTask().getTitle());
+                st.append(": 责任单位/责任人:");
+                for (TaskassignUnit tu:taskassign.getTaskassignUnits()){
+                    st.append(tu.getCompany().getTitle());
+                    st.append("/");
+                    st.append(tu.getPerson().getName());
+                    st.append(" ");
+                }
+                st.append("; 交办要求:（");
+                st.append(taskassign.getAssignmemo());
+                st.append("）");
+
+                TaskassignLog taskassignLog = new TaskassignLog();
+                taskassignLog.setTaskid(taskassign.getTaskid());
+                taskassignLog.setTassignid(taskassign.getId());
+                taskassignLog.setCreatetime(new DateTime());
+                taskassignLog.setLogcontent(st.toString());
+                taskassignLog.setStatus(taskassign.getStatus());
+                taskassignLogService.insert(taskassignLog);
+
+//        List<TaskassignUnit> taskassignUnits=taskassignUnitService.selectList(Condition.create().eq("tassignid", taskassign.getId()));
+                for (TaskassignUnit t :
+                        taskassign.getTaskassignUnits()) {
+                    //获取手机号
+                    User user = userService.selectById(t.getPersonid());
+                    AppNotice appNotice = new AppNotice();
+                    appNotice.setTitle(taskassign.getTask().getTitle());
+                    appNotice.setContent(taskassign.getAssignmemo());
+                    appNotice.setCreatetime(new DateTime());
+                    appNotice.setType(1);
+                    appNotice.setSendee(user.getName());
+                    appNotice.setTel(user.getPhone());
+                    appNotice.setSender_id(user.getId());
+                    appNoticeService.insert(appNotice);
+                }
+
+
 
                 return ResponseData.success(taskassign);
             } else {

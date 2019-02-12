@@ -2,7 +2,6 @@ package cn.stylefeng.guns.modular.tdtaskassign.service.impl;
 
 import cn.hutool.core.date.DateTime;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
-import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.util.VoUtil;
 import cn.stylefeng.guns.modular.system.dao.TaskassignMapper;
 import cn.stylefeng.guns.modular.system.model.Taskassign;
@@ -69,9 +68,9 @@ public class TaskassignServiceImpl extends ServiceImpl<TaskassignMapper, Taskass
         EntityWrapper<Taskassign> ew = new EntityWrapper<>();
         ew.setEntity(new Taskassign());
         ew.eq("ta.id", taskassignId);
-        if (ToolUtil.isNotEmpty(ShiroKit.getUser())){
-            ew.eq("tu.personid", ShiroKit.getUser().getId());
-        }
+//        if (ToolUtil.isNotEmpty(ShiroKit.getUser())){
+//            ew.eq("tu.personid", ShiroKit.getUser().getId());
+//        }
        Taskassign taskassign= taskassignMapper.selectByManyId(ew);
         if (ToolUtil.isNotEmpty(taskassign)){
 

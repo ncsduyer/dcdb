@@ -46,7 +46,7 @@ public class TaskAop {
     private IEventStepService eventStepService;
 
 
-    @Pointcut("execution(* cn.stylefeng.guns.modular.tdtask.service.ITaskService.add(..))")
+    @Pointcut("execution(* cn.stylefeng.guns.modular.tdtask.service.ITaskService.add1(..))")
     private void addTaskService() {
 
     }
