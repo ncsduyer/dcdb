@@ -842,11 +842,7 @@ CREATE TABLE `sys_user` (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES ('1', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', 'administrator', '99', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '超级管理员', '2018-10-18 00:00:00', '1', 'sn93@qq.com', '18048955061', '1', '1', '1', '2016-01-29 08:49:53', '25', '1');
-INSERT INTO `sys_user` VALUES ('2', '', '13800000002', '0', 'bc41fe2b6a7ce3800001ee46b51305b4', '3cw43', '督办中心', '2018-10-27 00:00:00', '1', '', '18048955061', '2', '0', '1', '2018-10-27 14:24:58', null, '1');
-INSERT INTO `sys_user` VALUES ('3', '7838a566-c433-46df-ade7-e7b20a796fd2.jpg', '13689069513', '0', '0de46d7ce8863c8b197ed800e14f0b98', 'zrfxv', '督办人员', '2018-11-16 00:00:00', '1', '13689069513@dsa.com', '13689069513', '3', '0', '1', '2018-11-16 14:15:03', null, '1');
-INSERT INTO `sys_user` VALUES ('4', '', '13800000000', '0', 'a36ab27dd118b50524e5dbd20310f984', 'zxje8', '13800000000', '2018-11-30 00:00:00', '1', '13800000000@qq.com', '13800000000', '1', '0', '1', '2018-11-30 15:24:03', null, '1');
-INSERT INTO `sys_user` VALUES ('5', '', '13800000001', '0', '8a960bad1e9fe574548ded7ee9a7e2b1', 'r0ol7', '13800000001', '2018-11-30 00:00:00', '1', '13800000001@qq.com', '13800000001', '1', '0', '1', '2018-11-30 15:24:55', null, '1');
+INSERT INTO `sys_user` VALUES ('1', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', 'administrator', '99', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '超级管理员', '2018-10-18 00:00:00', '1', 'sn93@qq.com', '18048955061', '1', '1', '1', '2016-01-29 08:49:53', '25', '0');
 INSERT INTO `sys_user` VALUES ('6', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '1001', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '任利民', '2019-01-11 00:00:00', '1', null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
 INSERT INTO `sys_user` VALUES ('7', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '1002', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '卢河东', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
 INSERT INTO `sys_user` VALUES ('8', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '1003', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '陈  威', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
