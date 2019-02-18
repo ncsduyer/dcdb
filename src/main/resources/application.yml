@@ -14,8 +14,8 @@ beetl:
 
 spring:
   profiles:
-#    active: produce
-    active: dev
+    active: produce
+#    active: dev
   mvc:
     static-path-pattern: /static/**
     view:
@@ -67,7 +67,7 @@ guns:
 spring:
   profiles: dev
   datasource:
-    url: jdbc:mysql://101.200.165.91:3306/guns?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
+    url: jdbc:mysql://140.246.153.214:3306/guns?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
     username: root
     password: bobo@666
     filters: wall,mergeStat
@@ -89,6 +89,6 @@ spring:
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/guns?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
     username: root
-    password: root
+    password: bobo@666
     filters: wall,mergeStat
 
