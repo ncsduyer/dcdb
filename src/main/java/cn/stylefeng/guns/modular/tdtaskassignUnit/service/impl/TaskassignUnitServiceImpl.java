@@ -64,17 +64,24 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
 
             if (count > 0){
 
-                if (selectCount(Condition.create().gt("status", 1).eq("tassignid", taskassignId))>0){
+                if (selectCount(Condition.create().eq("status", 2).eq("tassignid", taskassignId))==count){
                     if (taskassign.getStatus()<=2){
                         taskassign.setStatus(2);
                     }
-                }
-                if (selectCount(Condition.create().eq("status", 4).eq("tassignid", taskassignId)) == count) {
+                }else if (selectCount(Condition.create().eq("status", 1).eq("tassignid", taskassignId))>0){
+                    if (taskassign.getStatus()<2){
+                        taskassign.setStatus(1);
+                    }
+                }else if (selectCount(Condition.create().eq("status", 4).eq("tassignid", taskassignId)) == count) {
                             taskassign.setStatus(4);
                     taskassign.setEndtime(new DateTime());
                 } else if (selectCount(Condition.create().eq("status", 4).eq("tassignid", taskassignId))>0){
                     taskassign.setStatus(3);
+                    }else{
+                    if (taskassign.getStatus()<2){
+                        taskassign.setStatus(1);
                     }
+                }
             if (taskassignUnits.size()>1){
             int index=1;
             StringBuilder st=new StringBuilder();
