@@ -216,7 +216,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
             if (sreachTaskDto.getIsExceed()==1){
                 ew.le("tu.endtime",new Date()).isNull("ta.endtime");
             }
-            ew.groupBy("t.id");
+            ew.groupBy("t.id,ta.id,tu.id");
             if (ToolUtil.isNotEmpty(sreachTaskDto.getOrder())){
                 ew.orderBy(sreachTaskDto.getOrder());
             }else{

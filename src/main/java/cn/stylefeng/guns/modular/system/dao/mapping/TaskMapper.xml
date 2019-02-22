@@ -118,7 +118,7 @@
     <select id="selectAsCount" resultType="Long">
         SELECT
         count(DISTINCT t.id) FROM
-        td_taskassign ta  LEFT JOIN td_task t ON ta.taskid = t.id LEFT JOIN t_tb_work_type wt ON wt.id =
+        td_task t LEFT JOIN td_taskassign ta ON ta.taskid = t.id LEFT JOIN t_tb_work_type wt ON wt.id =
         ta.worktype
         LEFT JOIN t_tb_event_step e ON e.status=ta.status and e.event_type=1 LEFT JOIN sys_user u ON u.id = ta.creatorid LEFT JOIN td_taskassign_unit tu ON tu.tassignid =  ta.id  LEFT JOIN t_tb_company c ON c.id=tu.unitid LEFT JOIN td_taskassign_unitdeal tud ON tud.taunitid=tu.id LEFT JOIN sys_user p ON p.id = tu.personid
         <where>

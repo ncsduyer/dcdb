@@ -53,7 +53,7 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
                 case TASK:
                     SreachTaskDto sreachTaskDto=new SreachTaskDto();
                     BeanUtils.copyProperties(sreachReportDto, sreachTaskDto);
-                    return taskService.getDcdbReports( sreachTaskDto);
+                    return taskService.getDcdbReports(sreachTaskDto);
                 case UNIT:
                     return selectByUnitCount(sreachReportDto);
                 case PERSION:
