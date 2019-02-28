@@ -80,21 +80,21 @@ public class SmsUtil {
     }
 
 
-    public static QuerySendDetailsResponse querySendDetails(String bizId) throws ClientException {
+    public static QuerySendDetailsResponse querySendDetails(AppNotice appNotice,String bizId) throws ClientException {
 
         //可自助调整超时时间
         System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
         System.setProperty("sun.net.client.defaultReadTimeout", "10000");
 
         //初始化acsClient,暂不支持region化
-        IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", SmsProperties.getAccessKeyId(), SmsProperties.getAccessKeyId());
-        DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", product, domain);
+        IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", SmsProperties.getAccessKeyId(), SmsProperties.getAccessKeySecret());
+        DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", product);
         IAcsClient acsClient = new DefaultAcsClient(profile);
 
         //组装请求对象
         QuerySendDetailsRequest request = new QuerySendDetailsRequest();
         //必填-号码
-        request.setPhoneNumber("15000000000");
+        request.setPhoneNumber(appNotice.getTel());
         //可选-流水号
         request.setBizId(bizId);
         //必填-发送日期 支持30天内记录查询，格式yyyyMMdd
@@ -113,14 +113,16 @@ public class SmsUtil {
 
         public static void main(String[] args) {
             AppNotice appNotice=new AppNotice();
-//            appNotice.setTel("18048955061");
-            appNotice.setTel("15390401964");
+            appNotice.setTel("18048955061");
+//            appNotice.setTel("15390401964");
             appNotice.setTitle("会议精神传达");
             ObjectNode json = JsonUtils.getMapperInstance().createObjectNode();
             json.put("status", "未反馈");
             json.put("remark", appNotice.getTitle());
             try {
-                SmsUtil.sendSms(null,appNotice,SmsProperties.getAddDcDbtmpCode(), JsonUtils.beanToJson(json), null);
+//                SendSmsResponse sendSmsResponse = SmsUtil.sendSms(null,appNotice,SmsProperties.getAddDcDbtmpCode(), JsonUtils.beanToJson(json), null);
+
+                System.out.println(JsonUtils.beanToJson(SmsUtil.querySendDetails(appNotice, "790115451337295180^0")) + "\n" );
             } catch (ClientException e) {
                 e.printStackTrace();
             }

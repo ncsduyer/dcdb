@@ -13,7 +13,7 @@
         <result column="status" property="status" />
         <result column="updatetime" property="updatetime" />
         <result column="createtime" property="createtime" />
-
+        <result column="istimely" property="istimely"/>
     </resultMap>
     <resultMap id="ResultSimMap" type="cn.stylefeng.guns.modular.system.model.TaskassignUnit" extends="BaseResultMap">
         <association property="company" javaType="cn.stylefeng.guns.modular.system.model.Company">
@@ -27,6 +27,8 @@
             <result column="tudisdelay" property="isdelay" />
             <result column="tudpretime" property="pretime" />
             <result column="tuddelaytime" property="delaytime" />
+            <result column="tudpictures" property="pictures" />
+            <result column="tudfiles" property="files" />
             <result column="tudcreatorid" property="creatorid" />
             <result column="tudcreatetime" property="createtime" />
             <result column="tudfinishtime" property="finishtime" />
@@ -54,6 +56,8 @@
             <result column="taclosememo" property="closememo" />
             <result column="taendtime" property="endtime" />
             <result column="is_exceed" property="is_exceed"/>
+            <result column="tacharge" property="charge"/>
+            <result column="taphone" property="phone"/>
             <association property="task" javaType="cn.stylefeng.guns.modular.system.model.Task">
                 <id column="tid" property="id" />
                 <result column="ttitle" property="title" />
@@ -82,6 +86,8 @@
             <result column="tudisdelay" property="isdelay" />
             <result column="tudpretime" property="pretime" />
             <result column="tuddelaytime" property="delaytime" />
+            <result column="tudpictures" property="pictures" />
+            <result column="tudfiles" property="files" />
             <result column="tudcreatorid" property="creatorid" />
             <result column="tudcreatetime" property="createtime" />
             <result column="tudfinishtime" property="finishtime" />
@@ -89,18 +95,18 @@
     </resultMap>
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, tassignid, unitid, personid, endtime, requirements, status, updatetime, createtime
+        id, tassignid, unitid, personid, endtime, requirements, status, updatetime, createtime,istimely
     </sql>
     <sql id="AS_Column_List1">
-      t.id tid, t.title ttitle, ta.id taid, ta.taskid, ta.worktype taworktype, ta.assigntime taassigntime, ta.assignmemo taassignmemo, ta.status tastatus, ta.creatorid tacreatorid, ta.createtime tacreatetime, ta.closememo taclosememo,ta.endtime taendtime, CASE when sysdate()>tu.endtime then '已超期' else
+      t.id tid, t.title ttitle, ta.id taid, ta.taskid, ta.worktype taworktype, ta.assigntime taassigntime, ta.assignmemo taassignmemo, ta.status tastatus,ta.charge tacharge,ta.phone taphone, ta.creatorid tacreatorid, ta.createtime tacreatetime, ta.closememo taclosememo,ta.endtime taendtime, CASE when sysdate()>tu.endtime then '已超期' else
         '未超期' end as is_exceed ,u.name uname,p.id pid,p.name pname,wt.title wtitle,e.step
-        ,tu.id, tu.tassignid, tu.unitid,tu.personid, tu.endtime, tu.requirements, tu.status, tu.updatetime, tu.createtime,c.title ctitle , c.id cid,tud.id tudid, tud.taunitid tudtaunitid, tud.dealdesc tuddealdesc, tud.status tudstatus, tud.isdelay tudisdelay, tud.pretime tudpretime, tud.delaytime tuddelaytime, tud.creatorid tudcreatorid, tud.createtime tudcreatetime, tud.finishtime tudfinishtime
+        ,tu.id, tu.tassignid, tu.unitid,tu.personid, tu.endtime, tu.requirements, tu.status, tu.updatetime, tu.createtime,tu.istimely,c.title ctitle , c.id cid,tud.id tudid, tud.taunitid tudtaunitid, tud.dealdesc tuddealdesc, tud.status tudstatus, tud.isdelay tudisdelay, tud.pretime tudpretime, tud.delaytime tuddelaytime,tud.pictures tudpictures,tud.files tudfiles, tud.creatorid tudcreatorid, tud.createtime tudcreatetime, tud.finishtime tudfinishtime
     </sql>
     <select id="selectdealList" resultType="cn.stylefeng.guns.modular.system.model.TaskassignUnitdeal">
         SELECT id, taunitid, dealdesc, status, isdelay, pretime, delaytime, creatorid, createtime, finishtime FROM td_taskassign_unitdeal where taunitid=#{taunitid}
     </select>
     <select id="selectList1" resultMap="ResultSimMap">
-        SELECT tu.id, tu.tassignid, tu.unitid,tu.personid, tu.endtime, tu.requirements, tu.status, tu.updatetime, tu.createtime,c.title ctitle , tud.id tudid, tud.taunitid tudtaunitid, tud.dealdesc tuddealdesc, tud.status tudstatus, tud.isdelay tudisdelay, tud.pretime tudpretime, tud.delaytime tuddelaytime, tud.creatorid tudcreatorid, tud.createtime tudcreatetime, tud.finishtime tudfinishtime FROM td_taskassign_unit tu LEFT JOIN td_taskassign_unitdeal tud ON tud.taunitid=tu.id where tu.tassignid=#{id} AND tu.personid=#{personid} LEFT JOIN t_tb_company c ON c.id=tu.unitid
+        SELECT tu.id, tu.tassignid, tu.unitid,tu.personid, tu.endtime, tu.requirements, tu.status, tu.updatetime, tu.createtime,c.title ctitle , tud.id tudid, tud.taunitid tudtaunitid, tud.dealdesc tuddealdesc, tud.status tudstatus, tud.isdelay tudisdelay,tud.pictures tudpictures,tud.files tudfiles, tud.creatorid tudcreatorid, tud.pretime tudpretime, tud.delaytime tuddelaytime, tud.creatorid tudcreatorid, tud.createtime tudcreatetime, tud.finishtime tudfinishtime FROM td_taskassign_unit tu LEFT JOIN td_taskassign_unitdeal tud ON tud.taunitid=tu.id where tu.tassignid=#{id} AND tu.personid=#{personid} LEFT JOIN t_tb_company c ON c.id=tu.unitid
     </select>
 
     <select id="selectAsPage" resultMap="ResultMoreMap">

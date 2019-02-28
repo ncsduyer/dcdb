@@ -38,6 +38,10 @@ public class TaskassignUnitdeal extends Model<TaskassignUnitdeal> {
      */
     @ApiModelProperty("处理情况描述")
     private String dealdesc;
+    @ApiModelProperty("图片列表")
+    private String pictures;
+    @ApiModelProperty("文件列表")
+    private String files;
     /**
      * 状态（0-未完成；1-完成）
      */
@@ -178,5 +182,21 @@ public class TaskassignUnitdeal extends Model<TaskassignUnitdeal> {
         ", createtime=" + createtime +
         ", finishTime=" + finishtime +
         "}";
+    }
+
+    public String getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(String pictures) {
+        this.pictures = pictures;
+    }
+
+    public String getFiles() {
+        return files;
+    }
+
+    public void setFiles(String files) {
+        this.files = files;
     }
 }

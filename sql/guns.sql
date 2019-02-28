@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50724
 File Encoding         : 65001
 
-Date: 2019-02-19 10:24:29
+Date: 2019-02-23 10:45:09
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -104,8 +104,6 @@ CREATE TABLE `sys_login_log` (
   `ip` varchar(255) DEFAULT NULL COMMENT '登录ip',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='登录记录';
-
-
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -846,37 +844,37 @@ CREATE TABLE `sys_user` (
 -- Records of sys_user
 -- ----------------------------
 INSERT INTO `sys_user` VALUES ('1', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', 'administrator', '99', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '超级管理员', '2018-10-18 00:00:00', '1', 'sn93@qq.com', '18048955061', '1', '1', '1', '2016-01-29 08:49:53', '25', '0');
-INSERT INTO `sys_user` VALUES ('6', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13118288333', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '任利民', '2019-01-11 00:00:00', '1', null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('7', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13696212676', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '卢河东', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('8', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13890781203', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '陈  威', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('9', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '1004', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '彭志成', null, null, null, null, '1', '1', '0', '2018-12-24 11:14:37', null, '0');
-INSERT INTO `sys_user` VALUES ('10', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '15183566913', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '王晓林', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('11', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13228267753', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '王雪兰', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('12', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13980315177', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '伍海波', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('13', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '15983754356', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '罗喜郎', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('14', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '15228111067', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '宋智博', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('15', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13350641307', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '蒲  忠', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('16', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13550596371', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '刘  明', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('17', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '15882690875', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '曾坤林', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('18', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '15082773633', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '姚诗怡', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('19', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '18990731412', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '陈  东', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('6', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13118288333', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '任利民', '2019-01-11 00:00:00', '1', null, '13118288333', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('7', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13696212676', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '卢河东', null, null, null, '13696212676', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('8', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13890781203', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '陈  威', null, null, null, '13890781203', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('9', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '1004', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '彭志成', null, null, null, '', '1', '1', '0', '2018-12-24 11:14:37', null, '0');
+INSERT INTO `sys_user` VALUES ('10', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '15183566913', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '王晓林', null, null, null, '15183566913', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('11', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13228267753', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '王雪兰', null, null, null, '13228267753', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('12', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13980315177', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '伍海波', null, null, null, '13980315177', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('13', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '15983754356', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '罗喜郎', null, null, null, '15983754356', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('14', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '15228111067', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '宋智博', null, null, null, '15228111067', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('15', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13350641307', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '蒲  忠', null, null, null, '13350641307', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('16', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13550596371', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '刘  明', null, null, null, '13550596371', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('17', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '15882690875', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '曾坤林', null, null, null, '15882690875', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('18', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '15082773633', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '姚诗怡', null, null, null, '15082773633', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('19', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '18990731412', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '陈  东', null, null, null, '18990731412', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
 INSERT INTO `sys_user` VALUES ('20', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '1015', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '王海朋', null, null, null, null, '1', '1', '0', '2018-12-24 11:14:37', null, '0');
-INSERT INTO `sys_user` VALUES ('21', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13551688845', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '张泸瑞', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('22', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13890778216', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '郭  靖', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('23', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '15281746041', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '李小冲', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('24', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13438758899', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '杨忠斌', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('25', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '18284173038', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '曹荣春', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('26', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13990801913', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '赵文基', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('27', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '15298204304', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '杨  波', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('21', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13551688845', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '张泸瑞', null, null, null, '13551688845', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('22', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13890778216', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '郭  靖', null, null, null, '13890778216', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('23', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '15281746041', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '李小冲', null, null, null, '15281746041', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('24', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13438758899', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '杨忠斌', null, null, null, '13438758899', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('25', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '18284173038', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '曹荣春', null, null, null, '18284173038', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('26', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13990801913', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '赵文基', null, null, null, '13990801913', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('27', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '15298204304', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '杨  波', null, null, null, '15298204304', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
 INSERT INTO `sys_user` VALUES ('28', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '1023', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '刘  彦', null, null, null, null, '1', '1', '0', '2018-12-24 11:14:37', null, '0');
-INSERT INTO `sys_user` VALUES ('29', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '17790518578', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '张曼菱', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('30', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13990707055', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '杨有敏', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('31', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13696206183', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '宋欣然', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('32', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '18280837159', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '祝杨丁', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('29', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '17790518578', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '张曼菱', null, null, null, '17790518578', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('30', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13990707055', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '杨有敏', null, null, null, '13990707055', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('31', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13696206183', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '宋欣然', null, null, null, '13696206183', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('32', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '18280837159', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '祝杨丁', null, null, null, '18280837159', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
 INSERT INTO `sys_user` VALUES ('33', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '1028', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '景红军', null, null, null, null, '1', '1', '0', '2018-12-24 11:14:37', null, '0');
-INSERT INTO `sys_user` VALUES ('34', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '15082783478', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '董  娟', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('35', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '18227396122', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '曹  威', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('36', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '18181115791', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '何雅馨', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('34', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '15082783478', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '董  娟', null, null, null, '15082783478', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('35', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '18227396122', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '曹  威', null, null, null, '18227396122', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('36', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '18181115791', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '何雅馨', null, null, null, '18181115791', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
 INSERT INTO `sys_user` VALUES ('37', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '1032', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '李晓君', null, null, null, null, '1', '1', '0', '2018-12-24 11:14:37', null, '0');
 INSERT INTO `sys_user` VALUES ('38', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '1033', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '徐  瑞', null, null, null, null, '1', '1', '0', '2018-12-24 11:14:37', null, '0');
 INSERT INTO `sys_user` VALUES ('39', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '1034', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '任顺年', null, null, null, null, '1', '1', '0', '2018-12-24 11:14:37', null, '0');
@@ -884,14 +882,14 @@ INSERT INTO `sys_user` VALUES ('40', '6af28819-e925-4b76-9fda-79adf0c21e5b.file'
 INSERT INTO `sys_user` VALUES ('41', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '1036', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '贾庆伟', null, null, null, null, '1', '1', '0', '2018-12-24 11:14:37', null, '0');
 INSERT INTO `sys_user` VALUES ('42', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '1037', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '秦吉伟', null, null, null, null, '1', '1', '0', '2018-12-24 11:14:37', null, '0');
 INSERT INTO `sys_user` VALUES ('43', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '1038', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '任  俊', null, null, null, null, '1', '1', '0', '2018-12-24 11:14:37', null, '0');
-INSERT INTO `sys_user` VALUES ('44', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '15281767089', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '周刚平', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('45', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '18380200723', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '沈  婷', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('46', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '18780334390', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '张艳红', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('47', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13668037860', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '杨  颖', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('48', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '18314493639', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '罗亚平', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('49', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '18782948296', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '陈波羽', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('50', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '18381663220', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '陈一帆', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
-INSERT INTO `sys_user` VALUES ('51', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '18882314036', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '林思潞', null, null, null, null, '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('44', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '15281767089', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '周刚平', null, null, null, '15281767089', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('45', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '18380200723', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '沈  婷', null, null, null, '18380200723', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('46', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '18780334390', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '张艳红', null, null, null, '18780334390', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('47', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '13668037860', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '杨  颖', null, null, null, '13668037860', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('48', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '18314493639', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '罗亚平', null, null, null, '18314493639', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('49', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '18782948296', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '陈波羽', null, null, null, '18782948296', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('50', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '18381663220', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '陈一帆', null, null, null, '18381663220', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
+INSERT INTO `sys_user` VALUES ('51', '6af28819-e925-4b76-9fda-79adf0c21e5b.file', '18882314036', '0', 'ecfadcde9305f8891bcfe5a1e28c253e', '8pgby', '林思潞', null, null, null, '18882314036', '1', '1', '1', '2018-12-24 11:14:37', null, '1');
 
 -- ----------------------------
 -- Table structure for td_checkitem
@@ -982,11 +980,8 @@ CREATE TABLE `td_docassignrec` (
   `createtime` datetime DEFAULT NULL COMMENT '创建时间',
   `unitid` int(11) DEFAULT NULL COMMENT '部门id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='公文运转记录';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='公文运转记录';
 
--- ----------------------------
--- Records of td_docassignrec
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for td_docassign_attr
@@ -1058,11 +1053,7 @@ CREATE TABLE `td_docs` (
   `status` smallint(6) DEFAULT NULL COMMENT '信息状态(0-停用；1-启用)',
   `memo` varchar(255) DEFAULT NULL COMMENT '信息备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='公文运转';
-
--- ----------------------------
--- Records of td_docs
--- ----------------------------
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='公文运转';
 
 -- ----------------------------
 -- Table structure for td_infos
@@ -1076,11 +1067,7 @@ CREATE TABLE `td_infos` (
   `status` smallint(6) DEFAULT NULL COMMENT '信息状态(0-停用；1-启用)',
   `memo` varchar(255) DEFAULT NULL COMMENT '信息备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='区委信息';
-
--- ----------------------------
--- Records of td_infos
--- ----------------------------
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='区委信息';
 
 -- ----------------------------
 -- Table structure for td_infosrec
@@ -1094,11 +1081,8 @@ CREATE TABLE `td_infosrec` (
   `createtime` datetime DEFAULT NULL COMMENT '创建时间',
   `unitid` int(11) DEFAULT NULL COMMENT '部门id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='区委信息督查表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='区委信息督查表';
 
--- ----------------------------
--- Records of td_infosrec
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for td_meeting
@@ -1112,11 +1096,7 @@ CREATE TABLE `td_meeting` (
   `status` smallint(6) DEFAULT '1' COMMENT '会议状态(0-停用；1-启用)',
   `memo` varchar(255) DEFAULT NULL COMMENT '会议备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='区委会议';
-
--- ----------------------------
--- Records of td_meeting
--- ----------------------------
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='区委会议';
 
 -- ----------------------------
 -- Table structure for td_meetingrec
@@ -1130,11 +1110,7 @@ CREATE TABLE `td_meetingrec` (
   `createtime` datetime DEFAULT NULL COMMENT '创建时间',
   `unitid` int(11) DEFAULT NULL COMMENT '部门id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会议督查记录';
-
--- ----------------------------
--- Records of td_meetingrec
--- ----------------------------
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='会议督查记录';
 
 -- ----------------------------
 -- Table structure for td_task
@@ -1146,9 +1122,7 @@ CREATE TABLE `td_task` (
   `title` varchar(255) NOT NULL COMMENT '交办事项名称',
   `endstatus` smallint(255) NOT NULL DEFAULT '1' COMMENT '状态(启动停用)',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='交办事项表';
-
-
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='交办事项表';
 
 -- ----------------------------
 -- Table structure for td_taskassign
@@ -1166,7 +1140,7 @@ CREATE TABLE `td_taskassign` (
   `closememo` varchar(255) NOT NULL DEFAULT '' COMMENT '归档说明',
   `endtime` datetime DEFAULT NULL COMMENT '完成时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='交办事项时间表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='交办事项时间表';
 
 
 -- ----------------------------
@@ -1181,8 +1155,7 @@ CREATE TABLE `td_taskassign_log` (
   `createtime` datetime DEFAULT NULL COMMENT '流程流转时间',
   `status` smallint(6) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='督察督办流程记录';
-
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='督察督办流程记录';
 
 -- ----------------------------
 -- Table structure for td_taskassign_unit
@@ -1199,7 +1172,7 @@ CREATE TABLE `td_taskassign_unit` (
   `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
   `createtime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='交办事项时间-责任单位责任人表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='交办事项时间-责任单位责任人表';
 
 
 -- ----------------------------
@@ -1218,7 +1191,7 @@ CREATE TABLE `td_taskassign_unitdeal` (
   `createtime` datetime DEFAULT NULL COMMENT '创建时间',
   `finishtime` datetime DEFAULT NULL COMMENT '完成时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='交办事项时间-责任单位责任人-处理登记表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='交办事项时间-责任单位责任人-处理登记表';
 
 -- ----------------------------
 -- Table structure for test
@@ -1258,15 +1231,15 @@ CREATE TABLE `t_tb_app_menu` (
 -- ----------------------------
 -- Records of t_tb_app_menu
 -- ----------------------------
-INSERT INTO `t_tb_app_menu` VALUES ('1', '1065491422498635793', '1', '1', 'http://101.200.165.91:888/Supervision_list.html', 'http://101.200.165.91:888/Supervision_list.html', 'http://101.200.165.91:888/img/icon/Group10@3x.png', 'http://101.200.165.91:888/img/icon/Group10@3x.png', '9');
-INSERT INTO `t_tb_app_menu` VALUES ('2', '1065491422498635783', '1', '1', 'http://101.200.165.91:888/meet_index.html', 'http://101.200.165.91:888/meet_index.html', 'http://101.200.165.91:888/img/icon/Group11@3x.png', 'http://101.200.165.91:888/img/icon/Group11@3x.png', '8');
-INSERT INTO `t_tb_app_menu` VALUES ('4', '1062589527937323015', '2', '1', 'http://101.200.165.91:888/tongji.html', 'http://101.200.165.91:888/tongji.html', 'http://101.200.165.91:888/img/icon/Group9@3x.png', 'http://101.200.165.91:888/img/icon/Group9@3x.png', '7');
-INSERT INTO `t_tb_app_menu` VALUES ('5', '1065491422498635777', '2', '1', 'http://101.200.165.91:888/news.html', 'http://101.200.165.91:888/news.html', 'http://101.200.165.91:888/img/dbsx.png', 'http://101.200.165.91:888/img/report.png', '6');
-INSERT INTO `t_tb_app_menu` VALUES ('6', '1065491422498635784', '1', '1', 'http://101.200.165.91:888/doc_index.html', 'http://101.200.165.91:888/doc_index.html', 'http://101.200.165.91:888/img/icon/Group12@3x.png', 'http://101.200.165.91:888/img/icon/Group12@3x.png', '5');
-INSERT INTO `t_tb_app_menu` VALUES ('7', '1065491422498635785', '1', '1', 'http://101.200.165.91:888/infos_index.html', 'http://101.200.165.91:888/infos_index.html', 'http://101.200.165.91:888/img/icon/Group14@3x.png', 'http://101.200.165.91:888/img/icon/Group14@3x.png', '4');
-INSERT INTO `t_tb_app_menu` VALUES ('8', '1065491422498635786', '1', '1', 'http://101.200.165.91:888/meet_add.html', 'http://101.200.165.91:888/404.html', 'http://101.200.165.91:888/img/icon/Group13@3x.png', 'http://101.200.165.91:888/img/icon/Group13@3x.png', '3');
-INSERT INTO `t_tb_app_menu` VALUES ('9', '1065491422498635791', '1', '1', 'http://101.200.165.91:888/Supervision_addhis.html', 'http://101.200.165.91:888/Supervision_addhis.html', 'http://101.200.165.91:888/img/icon/Group15@3x.png', 'http://101.200.165.91:888/img/icon/Group15@3x.png', '11');
-INSERT INTO `t_tb_app_menu` VALUES ('10', '1065491422498635792', '1', '1', 'http://101.200.165.91:888/Supervision_undeal.html', 'http://101.200.165.91:888/Supervision_undeal.html', 'http://101.200.165.91:888/img/icon/Group16@3x.png', 'http://101.200.165.91:888/img/icon/Group16@3x.png', '10');
+INSERT INTO `t_tb_app_menu` VALUES ('1', '1065491422498635793', '1', '1', 'http://do.scncry.com:888/Supervision_list.html', 'http://do.scncry.com:888/Supervision_list.html', 'http://do.scncry.com:888/img/icon/Group10@3x.png', 'http://do.scncry.com:888/img/icon/Group10@3x.png', '9');
+INSERT INTO `t_tb_app_menu` VALUES ('2', '1065491422498635783', '1', '1', 'http://do.scncry.com:888/meet_index.html', 'http://do.scncry.com:888/meet_index.html', 'http://do.scncry.com:888/img/icon/Group11@3x.png', 'http://do.scncry.com:888/img/icon/Group11@3x.png', '8');
+INSERT INTO `t_tb_app_menu` VALUES ('4', '1062589527937323015', '2', '1', 'http://do.scncry.com:888/tongji.html', 'http://do.scncry.com:888/tongji.html', 'http://do.scncry.com:888/img/icon/Group9@3x.png', 'http://do.scncry.com:888/img/icon/Group9@3x.png', '7');
+INSERT INTO `t_tb_app_menu` VALUES ('5', '1065491422498635777', '2', '1', 'http://do.scncry.com:888/news.html', 'http://do.scncry.com:888/news.html', 'http://do.scncry.com:888/img/dbsx.png', 'http://do.scncry.com:888/img/report.png', '6');
+INSERT INTO `t_tb_app_menu` VALUES ('6', '1065491422498635784', '1', '1', 'http://do.scncry.com:888/doc_index.html', 'http://do.scncry.com:888/doc_index.html', 'http://do.scncry.com:888/img/icon/Group12@3x.png', 'http://do.scncry.com:888/img/icon/Group12@3x.png', '5');
+INSERT INTO `t_tb_app_menu` VALUES ('7', '1065491422498635785', '1', '1', 'http://do.scncry.com:888/infos_index.html', 'http://do.scncry.com:888/infos_index.html', 'http://do.scncry.com:888/img/icon/Group14@3x.png', 'http://do.scncry.com:888/img/icon/Group14@3x.png', '4');
+INSERT INTO `t_tb_app_menu` VALUES ('8', '1065491422498635786', '1', '1', 'http://do.scncry.com:888/meet_add.html', 'http://do.scncry.com:888/404.html', 'http://do.scncry.com:888/img/icon/Group13@3x.png', 'http://do.scncry.com:888/img/icon/Group13@3x.png', '3');
+INSERT INTO `t_tb_app_menu` VALUES ('9', '1065491422498635791', '1', '1', 'http://do.scncry.com:888/Supervision_addhis.html', 'http://do.scncry.com:888/Supervision_addhis.html', 'http://do.scncry.com:888/img/icon/Group15@3x.png', 'http://do.scncry.com:888/img/icon/Group15@3x.png', '11');
+INSERT INTO `t_tb_app_menu` VALUES ('10', '1065491422498635792', '1', '1', 'http://do.scncry.com:888/Supervision_undeal.html', 'http://do.scncry.com:888/Supervision_undeal.html', 'http://do.scncry.com:888/img/icon/Group16@3x.png', 'http://do.scncry.com:888/img/icon/Group16@3x.png', '10');
 
 -- ----------------------------
 -- Table structure for t_tb_app_notice
@@ -1282,7 +1255,7 @@ CREATE TABLE `t_tb_app_notice` (
   `sendee` varchar(255) DEFAULT NULL COMMENT '接收人',
   `sender_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='消息通知表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='消息通知表';
 
 -- ----------------------------
 -- Table structure for t_tb_assign_work

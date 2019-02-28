@@ -74,6 +74,10 @@ public class Taskassign extends Model<Taskassign> {
      */
     @ApiModelProperty("归档说明")
     private String closememo;
+    @ApiModelProperty("总负责人")
+    private String charge;
+    @ApiModelProperty("总负责人电话")
+    private String phone;
     @ApiModelProperty("归档时间")
     private Date endtime;
     @TableField(exist = false)
@@ -242,4 +246,19 @@ public class Taskassign extends Model<Taskassign> {
     }
 
 
+    public String getCharge() {
+        return charge;
+    }
+
+    public void setCharge(String charge) {
+        this.charge = charge;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 }

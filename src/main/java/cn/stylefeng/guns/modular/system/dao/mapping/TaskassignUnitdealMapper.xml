@@ -11,6 +11,8 @@
         <result column="isdelay" property="isdelay" />
         <result column="pretime" property="pretime" />
         <result column="delaytime" property="delaytime" />
+        <result column="pictures" property="pictures" />
+        <result column="files" property="files" />
         <result column="creatorid" property="creatorid" />
         <result column="createtime" property="createtime" />
         <result column="finishtime" property="finishtime" />
@@ -18,7 +20,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, taunitid, dealdesc, status, isdelay, pretime, delaytime, creatorid, createtime, finishtime
+        id, taunitid, dealdesc, status, isdelay, pretime, delaytime,pictures,files, creatorid, createtime, finishtime
     </sql>
 
 </mapper>

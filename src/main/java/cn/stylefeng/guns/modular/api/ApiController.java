@@ -16,6 +16,7 @@
 package cn.stylefeng.guns.modular.api;
 
 import cn.stylefeng.guns.config.properties.GunsProperties;
+import cn.stylefeng.guns.core.common.annotion.Permission;
 import cn.stylefeng.guns.core.common.constant.JwtConstants;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.log.LogManager;
@@ -53,11 +54,13 @@ import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -425,6 +428,94 @@ public class ApiController extends BaseController {
         int user_id = ShiroKit.getUser().getId();
 
         return ResponseData.success(appNoticeService.selectOne(Condition.create().eq("sender_id", user_id).eq("id", id)));
+    }
+    /**
+     * 上传文件
+     */
+    @ApiOperation(value = "上传文件")
+    @RequestMapping(value = "/upload", method = {RequestMethod.POST})
+//    @ResponseBody
+    @Permission
+    public String upload(@RequestParam(value="files") List<MultipartFile> files) throws FileNotFoundException {
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String time = sdf.format(date);
+        String path = ResourceUtils.getURL("classpath:").getPath() + "/static/"+time ;
+        if(files.isEmpty()){
+            return "false";
+        }
+        for (MultipartFile file:files
+             ) {
+
+
+        String fileName = UUID.randomUUID().toString() + "." + ToolUtil.getFileSuffix(file.getOriginalFilename());
+            int size = (int) file.getSize();
+            if(file.isEmpty()){
+                return "false";
+            }else{
+                File dest = new File(path + "/" + fileName);
+                if(!dest.getParentFile().exists()){ //判断文件父目录是否存在
+                    dest.getParentFile().mkdir();
+                }
+                try {
+                    file.transferTo(dest);
+                }catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                    return "false";
+                }
+            }
+        }
+        return "true";
+//       判断文件类型
+        //存放文件
+
+//返回文件路径
+        }
+    }
+    @ApiOperation(value = "下载文件")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "文件id", required = true, dataType = "Long"),
+    })
+    @RequestMapping("/download/{id}")
+    @Permission
+    public String downLoad(HttpServletResponse response){
+        String filename="2.jpg";
+        String filePath = "F:/test" ;
+        File file = new File(filePath + "/" + filename);
+        if(file.exists()){ //判断文件父目录是否存在
+            response.setContentType("application/force-download");
+            response.setHeader("Content-Disposition", "attachment;fileName=" + filename);
+
+            byte[] buffer = new byte[1024];
+            FileInputStream fis = null; //文件输入流
+            BufferedInputStream bis = null;
+
+            OutputStream os = null; //输出流
+            try {
+                os = response.getOutputStream();
+                fis = new FileInputStream(file);
+                bis = new BufferedInputStream(fis);
+                int i = bis.read(buffer);
+                while(i != -1){
+                    os.write(buffer);
+                    i = bis.read(buffer);
+                }
+
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            System.out.println("----------file download" + filename);
+            try {
+                bis.close();
+                fis.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 }
 

@@ -58,6 +58,8 @@ public class TaskassignUnit extends Model<TaskassignUnit> {
      */
     @ApiModelProperty("状态")
     private Integer status;
+    @ApiModelProperty("是否及时上报")
+    private Integer istimely;
     /**
      * 更新时间
      */
@@ -201,5 +203,13 @@ public class TaskassignUnit extends Model<TaskassignUnit> {
         ", updatetime=" + updatetime +
         ", createTime=" + createtime +
         "}";
+    }
+
+    public Integer getIstimely() {
+        return istimely;
+    }
+
+    public void setIstimely(Integer istimely) {
+        this.istimely = istimely;
     }
 }
