@@ -38,6 +38,7 @@ public class AppNotice extends Model<AppNotice> {
      * 内容
      */
     private String content;
+    private String step;
     /**
      * 创建时间
      */
@@ -132,5 +133,13 @@ public class AppNotice extends Model<AppNotice> {
 
     public void setSender_id(Integer sender_id) {
         this.sender_id = sender_id;
+    }
+
+    public String getStep() {
+        return step;
+    }
+
+    public void setStep(String step) {
+        this.step = step;
     }
 }

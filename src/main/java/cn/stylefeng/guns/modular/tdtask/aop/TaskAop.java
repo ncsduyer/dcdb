@@ -152,7 +152,7 @@ public class TaskAop {
         }
         //发送短信
         ObjectNode json = JsonUtils.getMapperInstance().createObjectNode();
-        json.put("status", "已下发未反馈");
+        json.put("status", appNotice.getStep());
         json.put("remark", appNotice.getTitle());
         SmsUtil.sendSms(null,appNotice,SmsProperties.getAddDcDbtmpCode(), JsonUtils.beanToJson(json), null);
     }

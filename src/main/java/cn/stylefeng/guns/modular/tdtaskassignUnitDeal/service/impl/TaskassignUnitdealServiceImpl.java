@@ -5,11 +5,14 @@ import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.util.LogUtil;
 import cn.stylefeng.guns.core.util.VoUtil;
+import cn.stylefeng.guns.modular.AppNotice.service.IAppNoticeService;
 import cn.stylefeng.guns.modular.DcCompany.service.ICompanyService;
 import cn.stylefeng.guns.modular.system.dao.TaskassignUnitdealMapper;
+import cn.stylefeng.guns.modular.system.model.AppNotice;
 import cn.stylefeng.guns.modular.system.model.Taskassign;
 import cn.stylefeng.guns.modular.system.model.TaskassignUnit;
 import cn.stylefeng.guns.modular.system.model.TaskassignUnitdeal;
+import cn.stylefeng.guns.modular.system.service.IUserService;
 import cn.stylefeng.guns.modular.tdtaskassign.service.ITaskassignService;
 import cn.stylefeng.guns.modular.tdtaskassignUnit.service.ITaskassignUnitService;
 import cn.stylefeng.guns.modular.tdtaskassignUnitDeal.service.ITaskassignUnitdealService;
@@ -42,6 +45,10 @@ public class TaskassignUnitdealServiceImpl extends ServiceImpl<TaskassignUnitdea
     private ITaskassignUnitService taskassignUnitService;
     @Autowired
     private ICompanyService companyService;
+    @Autowired
+    private IAppNoticeService appNoticeService;
+    @Autowired
+    private IUserService userService;
     @Override
     public ResponseData updateByTaskassignUnitdeal(TaskassignUnitdeal taskassignUnitdeal) {
         try {
@@ -54,7 +61,7 @@ public class TaskassignUnitdealServiceImpl extends ServiceImpl<TaskassignUnitdea
                     return new ErrorResponseData(45000, "已经完成不可重复提交！");
                 }
 
-                Taskassign taskassign=taskassignService.selectById(taskassignUnit.getTassignid());
+                Taskassign taskassign=taskassignService.selectByManyId(taskassignUnit.getTassignid());
             if (taskassignUnitdeal.getStatus()==1){
                 if (ToolUtil.isEmpty(taskassignUnitdeal.getFinishtime())){
                   taskassignUnitdeal.setFinishtime(new DateTime());
@@ -126,6 +133,18 @@ public class TaskassignUnitdealServiceImpl extends ServiceImpl<TaskassignUnitdea
                 st.append(" ");
             }
             LogUtil.addLog(taskassign, st.toString());
+                //获取手机号
+                AppNotice appNotice = new AppNotice();
+                appNotice.setTitle(taskassign.getTask().getTitle());
+                appNotice.setContent(st.toString());
+//                    appNotice.setContent(taskassign.getAssignmemo());
+                appNotice.setCreatetime(new DateTime());
+                appNotice.setType(1);
+                appNotice.setSendee(taskassign.getCharge());
+                appNotice.setTel(taskassign.getPhone());
+                appNotice.setSender_id(0);
+                appNotice.setStep(taskassign.getEventStep().getStep());
+                appNoticeService.insert(appNotice);
 //            判断是否完成 修改unit状态 1-新建未反馈；2-已反馈限期办理中；3-已反馈超期办理中；4-办理完成；）
             if (oldStatus<taskassignUnit.getStatus()){
                 List<TaskassignUnit> tsus=new ArrayList<>();

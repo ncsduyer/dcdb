@@ -436,13 +436,16 @@ public class ApiController extends BaseController {
      */
     @ApiOperation(value = "上传文件")
     @RequestMapping(value = "/upload", method = {RequestMethod.POST})
-    public String upload(@RequestParam(value="files") List<MultipartFile> files) throws FileNotFoundException {
+    public ResponseData upload(@RequestParam(value="files") List<MultipartFile> files) throws FileNotFoundException {
+        String suffixList = "jpg,gif,png,ico,bmp,jpeg";
+        List<Integer> imgids=new ArrayList<>();
+        List<Integer> fileids=new ArrayList<>();
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String time = sdf.format(date);
-        String path = gunsProperties.getFileUploadPath()+"/../"+time ;
+        String path = gunsProperties.getFileUploadPath()+"/../" ;
         if(files.isEmpty()){
-            return "";
+            return ResponseData.error("上传文件不能为空");
         }
         Asset asset=null;
         for (MultipartFile file:files
@@ -456,10 +459,10 @@ public class ApiController extends BaseController {
             int size = (int) file.getSize();
 
 
-            String fileName = UUID.randomUUID().toString() + "." + ToolUtil.getFileSuffix(file.getOriginalFilename());
+            String fileName = time+"/"+UUID.randomUUID().toString() + "." + ToolUtil.getFileSuffix(file.getOriginalFilename());
 
             if(file.isEmpty()){
-                return "false";
+                return ResponseData.error("上传文件不能为空");
             }else{
                 File dest = new File(path + "/" + fileName);
                 //判断文件父目录是否存在
@@ -478,18 +481,22 @@ public class ApiController extends BaseController {
                     asset.setCreateTime(date);
                     asset.setSuffix(extensionName);
                     assetService.insert(asset);
+                    if (suffixList.contains(extensionName.trim().toLowerCase())){
+                        imgids.add(asset.getId());
+                    }else{
+                        fileids.add(asset.getId());
+                    }
                 }catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
-                    return "false";
+                    return ResponseData.error("上传失败");
                 }
             }
         }
-        return "true";
-//       判断文件类型
-        //存放文件
-
-//返回文件路径
+        Map<String,List<Integer>> map=new HashMap<>();
+        map.put("photos",imgids);
+        map.put("files",fileids);
+        return ResponseData.success(map);
         }
     @ApiOperation(value = "下载文件")
     @ApiImplicitParams({
@@ -497,8 +504,8 @@ public class ApiController extends BaseController {
     })
     @RequestMapping("/download/{id}")
     public void download(@PathVariable("id") Integer id,HttpServletResponse response){
-        String filename="2.jpg";
-        String filePath = "F:/test" ;
+        String filename=assetService.selectById(id).getFilePath();
+        String filePath = gunsProperties.getFileUploadPath()+"/../";
         File file = new File(filePath + "/" + filename);
         //判断文件父目录是否存在
         if(file.exists()){
@@ -525,7 +532,7 @@ public class ApiController extends BaseController {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            System.out.println("----------file download" + filename);
+//            System.out.println("----------file download" + filename);
             try {
                 bis.close();
                 fis.close();

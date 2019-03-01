@@ -8,6 +8,7 @@
         <result column="title" property="title"/>
         <result column="type" property="type"/>
         <result column="content" property="content"/>
+        <result column="step" property="step"/>
         <result column="createtime" property="createtime"/>
         <result column="tel" property="tel"/>
         <result column="sendee" property="sendee"/>
@@ -16,7 +17,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, title, type, content, createtime, tel, sendee,sender_id
+        id, title, type, content,step, createtime, tel, sendee,sender_id
     </sql>
 
 </mapper>
