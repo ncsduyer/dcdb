@@ -1,0 +1,38 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <#input id="id" name="" value="${item.id}" underline="true"/>
+                            <#input id="userId" name="用户id" value="${item.userId}" underline="true"/>
+                            <#input id="fileSize" name="文件大小,单位B" value="${item.fileSize}" underline="true"/>
+                            <#input id="createTime" name="上传时间" value="${item.createTime}" underline="true"/>
+                            <#input id="status" name="状态;1:可用,0:不可用" value="${item.status}" underline="true"/>
+                            <#input id="downloadTimes" name="下载次数" value="${item.downloadTimes}" underline="true"/>
+                            <#input id="fileKey" name="文件惟一码" value="${item.fileKey}" />
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="filename" name="文件名" value="${item.filename}" underline="true"/>
+                            <#input id="filePath" name="文件路径,相对于根目录,可以为url" value="${item.filePath}" underline="true"/>
+                            <#input id="fileMd5" name="文件md5值" value="${item.fileMd5}" underline="true"/>
+                            <#input id="fileSha1" name="" value="${item.fileSha1}" underline="true"/>
+                            <#input id="suffix" name="文件后缀名,不包括点" value="${item.suffix}" underline="true"/>
+                            <#input id="more" name="其它详细信息,JSON格式" value="${item.more}" />
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="AssetInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="AssetInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/resources/asset/asset_info.js"></script>
+@}

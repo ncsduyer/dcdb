@@ -18,7 +18,6 @@ package cn.stylefeng.guns.config.properties;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -41,7 +40,7 @@ public class GunsProperties {
 
     private Boolean swaggerOpen = false;
 
-    private String fileUploadPath = ResourceUtils.getURL("classpath:").getPath() + "/static/avatar";
+    private String fileUploadPath = System.getProperty("user.dir") + "/webapps/static/admin/avatar";
 
     private Boolean haveCreatePath = false;
 

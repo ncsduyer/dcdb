@@ -1,6 +1,5 @@
 server:
   port: 8080
-
 guns:
   swagger-open: true              #是否开启swagger (true/false)
   kaptcha-open: false             #是否开启登录时验证码 (true/false)

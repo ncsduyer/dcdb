@@ -16,7 +16,6 @@
 package cn.stylefeng.guns.modular.api;
 
 import cn.stylefeng.guns.config.properties.GunsProperties;
-import cn.stylefeng.guns.core.common.annotion.Permission;
 import cn.stylefeng.guns.core.common.constant.JwtConstants;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.log.LogManager;
@@ -30,8 +29,10 @@ import cn.stylefeng.guns.modular.AppMenu.service.IAppMenuService;
 import cn.stylefeng.guns.modular.AppNotice.service.IAppNoticeService;
 import cn.stylefeng.guns.modular.VersionUpgrade.service.IVersionUpgradeService;
 import cn.stylefeng.guns.modular.api.vo.AppMenusVo;
+import cn.stylefeng.guns.modular.resources.service.IAssetService;
 import cn.stylefeng.guns.modular.system.dao.UserMapper;
 import cn.stylefeng.guns.modular.system.model.AppMenu;
+import cn.stylefeng.guns.modular.system.model.Asset;
 import cn.stylefeng.guns.modular.system.model.Menu;
 import cn.stylefeng.guns.modular.system.model.User;
 import cn.stylefeng.guns.modular.system.service.IMenuService;
@@ -54,7 +55,6 @@ import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -87,6 +87,8 @@ public class ApiController extends BaseController {
     private IMenuService menuService;
     @Autowired
     private IVersionUpgradeService versionUpgradeService;
+    @Autowired
+    private IAssetService assetService;
     @Autowired
     GunsProperties gunsProperties;
 
@@ -434,31 +436,48 @@ public class ApiController extends BaseController {
      */
     @ApiOperation(value = "上传文件")
     @RequestMapping(value = "/upload", method = {RequestMethod.POST})
-//    @ResponseBody
-    @Permission
     public String upload(@RequestParam(value="files") List<MultipartFile> files) throws FileNotFoundException {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String time = sdf.format(date);
-        String path = ResourceUtils.getURL("classpath:").getPath() + "/static/"+time ;
+        String path = gunsProperties.getFileUploadPath()+"/../"+time ;
         if(files.isEmpty()){
-            return "false";
+            return "";
         }
+        Asset asset=null;
         for (MultipartFile file:files
              ) {
-
-
-        String fileName = UUID.randomUUID().toString() + "." + ToolUtil.getFileSuffix(file.getOriginalFilename());
+            // 获取图片的原文件名
+            String fileOldName = file.getOriginalFilename();
+            // 获取图片的扩展名
+            String extensionName = fileOldName
+                    .substring(fileOldName.lastIndexOf(".") + 1);
+            // 文件大小
             int size = (int) file.getSize();
+
+
+            String fileName = UUID.randomUUID().toString() + "." + ToolUtil.getFileSuffix(file.getOriginalFilename());
+
             if(file.isEmpty()){
                 return "false";
             }else{
                 File dest = new File(path + "/" + fileName);
-                if(!dest.getParentFile().exists()){ //判断文件父目录是否存在
+                //判断文件父目录是否存在
+                if(!dest.getParentFile().exists()){
                     dest.getParentFile().mkdir();
                 }
                 try {
                     file.transferTo(dest);
+                    //插入资源记录
+                    asset.setUserId(ShiroKit.getUser().getId());
+                    asset.setStatus(1);
+                    asset.setFileSize((long) size);
+                    asset.setFileKey(fileName);
+                    asset.setFilename(fileOldName);
+                    asset.setFilePath(fileName);
+                    asset.setCreateTime(date);
+                    asset.setSuffix(extensionName);
+                    assetService.insert(asset);
                 }catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -472,26 +491,26 @@ public class ApiController extends BaseController {
 
 //返回文件路径
         }
-    }
     @ApiOperation(value = "下载文件")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "文件id", required = true, dataType = "Long"),
     })
     @RequestMapping("/download/{id}")
-    @Permission
-    public String downLoad(HttpServletResponse response){
+    public void download(@PathVariable("id") Integer id,HttpServletResponse response){
         String filename="2.jpg";
         String filePath = "F:/test" ;
         File file = new File(filePath + "/" + filename);
-        if(file.exists()){ //判断文件父目录是否存在
+        //判断文件父目录是否存在
+        if(file.exists()){
             response.setContentType("application/force-download");
             response.setHeader("Content-Disposition", "attachment;fileName=" + filename);
 
             byte[] buffer = new byte[1024];
-            FileInputStream fis = null; //文件输入流
+            //文件输入流
+            FileInputStream fis = null;
             BufferedInputStream bis = null;
-
-            OutputStream os = null; //输出流
+            //输出流
+            OutputStream os = null;
             try {
                 os = response.getOutputStream();
                 fis = new FileInputStream(file);
@@ -515,7 +534,12 @@ public class ApiController extends BaseController {
                 e.printStackTrace();
             }
         }
-        return null;
+    }
+
+    public static void main(String[] args) {
+
+            System.out.println(System.getProperty("user.dir"));
+
     }
 }
 
