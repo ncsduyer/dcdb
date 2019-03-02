@@ -116,11 +116,12 @@ public class SmsUtil {
             appNotice.setTel("18048955061");
 //            appNotice.setTel("15390401964");
             appNotice.setTitle("会议精神传达");
+            appNotice.setContent("陈  威，督办了交办事项:测试数据，责任单位:区机关事务管理局;督办时间:2019-02-22;督办描述:（的热若）;完成状态:未完成;完成时间: ;是否延期:否;延期时间: ");
             ObjectNode json = JsonUtils.getMapperInstance().createObjectNode();
             json.put("status", "未反馈");
-            json.put("remark", appNotice.getTitle());
+            json.put("remark", appNotice.getContent().substring(0,17)+"...");
             try {
-//                SendSmsResponse sendSmsResponse = SmsUtil.sendSms(null,appNotice,SmsProperties.getAddDcDbtmpCode(), JsonUtils.beanToJson(json), null);
+                SendSmsResponse sendSmsResponse = SmsUtil.sendSms(null,appNotice,SmsProperties.getAddDcDbtmpCode(), JsonUtils.beanToJson(json), null);
 
                 System.out.println(JsonUtils.beanToJson(SmsUtil.querySendDetails(appNotice, "790115451337295180^0")) + "\n" );
             } catch (ClientException e) {

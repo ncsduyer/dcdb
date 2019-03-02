@@ -92,7 +92,8 @@ public class TaskassignUnitdealServiceImpl extends ServiceImpl<TaskassignUnitdea
             }
             StringBuilder st=new StringBuilder();
             st.append(ShiroKit.getUser().getName());
-            st.append("，督办了交办事项，");
+            st.append("，督办了交办事项:"+taskassign.getTask().getTitle()+"，");
+
             st.append("责任单位:");
             st.append(companyService.selectById(taskassignUnit.getUnitid()).getTitle());
             st.append(";督办时间:");

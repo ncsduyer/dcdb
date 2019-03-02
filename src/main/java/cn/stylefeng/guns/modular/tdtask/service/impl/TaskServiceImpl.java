@@ -144,8 +144,8 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
                     User user = userService.selectById(t.getPersonid());
                     AppNotice appNotice = new AppNotice();
                     appNotice.setTitle(taskassign.getTask().getTitle());
-                    appNotice.setContent(taskassignLog.getLogcontent());
-//                    appNotice.setContent(taskassign.getAssignmemo());
+//                    appNotice.setContent(taskassignLog.getLogcontent());
+                    appNotice.setContent(taskassign.getAssignmemo());
                     appNotice.setCreatetime(new DateTime());
                     appNotice.setType(1);
                     appNotice.setSendee(user.getName());
