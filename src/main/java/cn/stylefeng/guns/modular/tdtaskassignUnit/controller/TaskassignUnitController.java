@@ -1,9 +1,11 @@
 package cn.stylefeng.guns.modular.tdtaskassignUnit.controller;
 
 import cn.stylefeng.guns.core.common.annotion.Permission;
+import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.modular.system.model.TaskassignUnit;
 import cn.stylefeng.guns.modular.tdtaskassignUnit.service.ITaskassignUnitService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
+import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -81,6 +83,26 @@ public class TaskassignUnitController extends BaseController {
     @ResponseBody
     public ResponseData update(@RequestBody List<TaskassignUnit> taskassignUnit) {
        return taskassignUnitService.updateByTaskassignUnit(taskassignUnit);
+    }
+     /**
+     * 修改单位督办记录
+     */
+    @ApiOperation(value = "标记单位延期")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "单位督办记录id", required = true, dataType = "Long"),
+            @ApiImplicitParam(name = "status", value = "未及时上报状态", required = true, dataType = "Long"),
+    })
+    @Permission
+    @RequestMapping(value = "/updateIsTimeLy/{id}/{status}",method = {RequestMethod.GET,RequestMethod.POST})
+    @ResponseBody
+    public ResponseData updateIsTimeLy(@PathVariable("id") Integer id,@PathVariable("status") Integer status) {
+        TaskassignUnit tu=new TaskassignUnit();
+        tu.setId(id);
+        tu.setIstimely(status);
+        if (taskassignUnitService.updateById(tu)) {
+            return ResponseData.success();
+        }
+       return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
     }
 
     /**

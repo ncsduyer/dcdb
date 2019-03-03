@@ -9,12 +9,21 @@ public class SreachReportDto extends SreachDto {
 
     @ApiModelProperty("查询类型，1督察督办数据，2责任单位数据，3人员数据，4事务相关统计")
     private Integer queryType=1;
-
+    @ApiModelProperty("当前状态数组")
+    private Integer[] status;
     public Integer getQueryType() {
         return queryType;
     }
 
     public void setQueryType(Integer queryType) {
         this.queryType = queryType;
+    }
+
+    public Integer[] getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer[] status) {
+        this.status = status;
     }
 }

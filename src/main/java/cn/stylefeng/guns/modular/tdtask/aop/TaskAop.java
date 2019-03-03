@@ -153,7 +153,11 @@ public class TaskAop {
         //发送短信
         ObjectNode json = JsonUtils.getMapperInstance().createObjectNode();
         json.put("status", appNotice.getStep());
+        if (appNotice.getContent().length()<20){
+        json.put("remark", appNotice.getContent());
+        }else {
         json.put("remark", appNotice.getContent().substring(0,20)+"...");
+        }
         SmsUtil.sendSms(null,appNotice,SmsProperties.getAddDcDbtmpCode(), JsonUtils.beanToJson(json), null);
     }
 }

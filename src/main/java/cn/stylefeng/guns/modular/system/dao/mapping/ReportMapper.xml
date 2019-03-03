@@ -68,7 +68,10 @@ select comp.title,Totalnum,concat(case when Totalnum>0 then cast(DealSuccNum*100
         from (
         select '督办事项'as titlename,td.name,sum(if(tak.id is null,0,1)) as num,1 as colsort
         from t_td_date td
-        left join td_taskassign tak on td.name=month(tak.createtime) and year(tak.createtime)=year(#{beforeTime,jdbcType=TIMESTAMP})
+        left join td_taskassign tak on td.name=month(tak.createtime) and year(tak.createtime)=year(#{beforeTime,jdbcType=TIMESTAMP}) and status in
+        <foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+        #{id}
+    </foreach>
         group by td.name
         union all
 

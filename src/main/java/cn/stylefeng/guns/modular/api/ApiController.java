@@ -40,6 +40,7 @@ import cn.stylefeng.guns.modular.system.service.IUserService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
+import cn.stylefeng.roses.core.util.FileUtil;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import cn.stylefeng.roses.kernel.model.exception.ServiceException;
 import com.baomidou.mybatisplus.mapper.Condition;
@@ -62,6 +63,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.math.BigInteger;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -436,7 +438,8 @@ public class ApiController extends BaseController {
      */
     @ApiOperation(value = "上传文件")
     @RequestMapping(value = "/upload", method = {RequestMethod.POST})
-    public ResponseData upload(@RequestParam(value="files") List<MultipartFile> files) throws FileNotFoundException {
+    @ResponseBody
+    public ResponseData upload(@RequestPart(value="files") List<MultipartFile> files) {
         String suffixList = "jpg,gif,png,ico,bmp,jpeg";
         List<Integer> imgids=new ArrayList<>();
         List<Integer> fileids=new ArrayList<>();
@@ -472,6 +475,7 @@ public class ApiController extends BaseController {
                 try {
                     file.transferTo(dest);
                     //插入资源记录
+                    asset=new Asset();
                     asset.setUserId(ShiroKit.getUser().getId());
                     asset.setStatus(1);
                     asset.setFileSize((long) size);
@@ -504,13 +508,21 @@ public class ApiController extends BaseController {
     })
     @RequestMapping("/download/{id}")
     public void download(@PathVariable("id") Integer id,HttpServletResponse response){
-        String filename=assetService.selectById(id).getFilePath();
+        Asset asset=assetService.selectById(id);
+        String filename=asset.getFilePath();
         String filePath = gunsProperties.getFileUploadPath()+"/../";
         File file = new File(filePath + "/" + filename);
         //判断文件父目录是否存在
         if(file.exists()){
-            response.setContentType("application/force-download");
-            response.setHeader("Content-Disposition", "attachment;fileName=" + filename);
+            // 配置文件下载
+            response.setHeader("content-type", "application/octet-stream");
+            response.setContentType("application/octet-stream");
+            // 下载文件能正常显示中文
+            try {
+                response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(asset.getFilename(), "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
 
             byte[] buffer = new byte[1024];
             //文件输入流
@@ -542,11 +554,26 @@ public class ApiController extends BaseController {
             }
         }
     }
-
-    public static void main(String[] args) {
-
-            System.out.println(System.getProperty("user.dir"));
-
+    /**
+     * 返回图片
+     *
+     * @author stylefeng
+     * @Date 2017/5/24 23:00
+     */
+    @ApiOperation(value = "返回图片")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "文件id", required = true, dataType = "Long"),
+    })
+    @RequestMapping("/renderPicture/{id}")
+    public void renderPicture(@PathVariable("id") Integer id, HttpServletResponse response) {
+        String filename=assetService.selectById(id).getFilePath();
+        String path = gunsProperties.getFileUploadPath()+"/../"+ filename;
+        byte[] bytes = FileUtil.toByteArray(path);
+        try {
+            response.getOutputStream().write(bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 
