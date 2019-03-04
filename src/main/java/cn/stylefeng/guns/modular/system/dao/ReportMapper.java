@@ -1,7 +1,6 @@
 package cn.stylefeng.guns.modular.system.dao;
 
 import cn.stylefeng.guns.modular.system.model.Report;
-import cn.stylefeng.guns.modular.zhreport.dto.SreachReportDto;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import org.apache.ibatis.annotations.Param;
@@ -22,7 +21,7 @@ import java.util.List;
 public interface ReportMapper extends BaseMapper<Report> {
     List<java.util.LinkedHashMap<String,Object>> selectByUnitCount(@Param("ew") Wrapper<T> wrapper, @Param("afterTime") Date afterTime, @Param("beforeTime") Date beforeTime);
     List<HashMap<String,Object>> selectByPersionCount(@Param("ew") Wrapper<T> wrapper,@Param("afterTime") Date afterTime, @Param("beforeTime") Date beforeTime);
-    List<HashMap<String,Object>> selectByAffairCount(@Param("ew") Wrapper<T> wrapper, @Param("beforeTime") Date beforeTime, SreachReportDto sreachReportDto);
+    List<HashMap<String,Object>> selectByAffairCount(@Param("ew") Wrapper<T> wrapper, @Param("beforeTime") Date beforeTime,@Param("list") Integer[]  list);
 
     List<HashMap<String,Object>> selectByUnitChartCount(@Param("ew") Wrapper<T> wrapper, @Param("afterTime") Date afterTime, @Param("beforeTime") Date beforeTime);
     List<HashMap<String,Object>> selectByMeetChartCount(@Param("ew") Wrapper<T> wrapper, @Param("afterTime") Date afterTime, @Param("beforeTime") Date beforeTime);

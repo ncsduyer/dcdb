@@ -17,6 +17,7 @@ import cn.stylefeng.guns.modular.tdtaskassignLog.service.ITaskassignLogService;
 import cn.stylefeng.guns.modular.tdtaskassignUnit.service.ITaskassignUnitService;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.exceptions.ClientException;
 import com.baomidou.mybatisplus.mapper.Condition;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -150,14 +151,32 @@ public class TaskAop {
         if(!ValidateUtils.isMobile(appNotice.getTel())) {
             return ;
         }
-        //发送短信
-        ObjectNode json = JsonUtils.getMapperInstance().createObjectNode();
-        json.put("status", appNotice.getStep());
-        if (appNotice.getContent().length()<20){
-        json.put("remark", appNotice.getContent());
-        }else {
-        json.put("remark", appNotice.getContent().substring(0,20)+"...");
+        if(appNotice.getNow_status()>1){
+            //发送短信
+            ObjectNode json = JsonUtils.getMapperInstance().createObjectNode();
+            JSONObject map= JSONObject.parseObject(appNotice.getContent());
+            json.put("title", appNotice.getTitle());
+            json.put("pople", (String) map.get("name")+(String) map.get("phone"));
+            json.put("unit", (String) map.get("unit"));
+            json.put("status", appNotice.getStep());
+            if (((String)map.get("make")).length()<20){
+                json.put("remark", (String)map.get("make"));
+            }else {
+                json.put("remark", ((String)map.get("make")).substring(0,20)+"...");
+            }
+            SmsUtil.sendSms(null,appNotice,SmsProperties.getDealDcDbtmpCode(), JsonUtils.beanToJson(json), null);
+        }else{
+            //发送短信
+            ObjectNode json = JsonUtils.getMapperInstance().createObjectNode();
+            json.put("title", appNotice.getTitle());
+            json.put("status", appNotice.getStep());
+            if (appNotice.getContent().length()<20){
+                json.put("remark", appNotice.getContent());
+            }else {
+                json.put("remark", appNotice.getContent().substring(0,20)+"...");
+            }
+            SmsUtil.sendSms(null,appNotice,SmsProperties.getAddDcDbtmpCode(), JsonUtils.beanToJson(json), null);
         }
-        SmsUtil.sendSms(null,appNotice,SmsProperties.getAddDcDbtmpCode(), JsonUtils.beanToJson(json), null);
+
     }
 }

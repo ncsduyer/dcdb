@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -72,6 +73,18 @@ public class TaskassignUnitdeal extends Model<TaskassignUnitdeal> {
      */
     @ApiModelProperty("创建时间")
     private Date createtime;
+    /**
+     * 图片列表
+     */
+    @ApiModelProperty("图片列表")
+    @TableField(exist = false)
+    private List<Asset> pictureList;
+    /**
+     * 附件列表
+     */
+    @ApiModelProperty("附件列表")
+    @TableField(exist = false)
+    private List<Asset> fileList;
 
     public Date getFinishtime() {
         return finishtime;
@@ -198,5 +211,21 @@ public class TaskassignUnitdeal extends Model<TaskassignUnitdeal> {
 
     public void setFiles(String files) {
         this.files = files;
+    }
+
+    public List<Asset> getPictureList() {
+        return pictureList;
+    }
+
+    public void setPictureList(List<Asset> pictureList) {
+        this.pictureList = pictureList;
+    }
+
+    public List<Asset> getFileList() {
+        return fileList;
+    }
+
+    public void setFileList(List<Asset> fileList) {
+        this.fileList = fileList;
     }
 }

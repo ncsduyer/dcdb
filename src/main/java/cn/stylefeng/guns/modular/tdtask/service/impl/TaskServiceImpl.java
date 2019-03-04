@@ -152,6 +152,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
                     appNotice.setSendee(user.getName());
                     appNotice.setTel(user.getPhone());
                     appNotice.setSender_id(user.getId());
+                    appNotice.setNow_status(taskassign.getStatus());
                     appNotice.setStep(taskassign.getEventStep().getStep());
                     appNoticeService.insert(appNotice);
                 }

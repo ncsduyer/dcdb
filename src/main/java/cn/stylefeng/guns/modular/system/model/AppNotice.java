@@ -53,6 +53,7 @@ public class AppNotice extends Model<AppNotice> {
     private String sendee;
     //    接收人id
     private Integer sender_id;
+    private Integer now_status;
     public Integer getId() {
         return id;
     }
@@ -141,5 +142,13 @@ public class AppNotice extends Model<AppNotice> {
 
     public void setStep(String step) {
         this.step = step;
+    }
+
+    public Integer getNow_status() {
+        return now_status;
+    }
+
+    public void setNow_status(Integer now_status) {
+        this.now_status = now_status;
     }
 }

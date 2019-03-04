@@ -30,5 +30,6 @@ public interface JwtConstants {
     Long EXPIRATION = 604800L;
 
     String AUTH_PATH = "/api/login";
+    String[] ANON_PATH = {"/api/download","/api/renderPicture"};
 
 }

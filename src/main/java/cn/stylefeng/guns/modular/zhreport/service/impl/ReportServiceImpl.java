@@ -196,7 +196,7 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
 
     @Override
     public ResponseData selectByAffairCount(SreachReportDto sreachReportDto) {
-        return ResponseData.success(reportMapper.selectByAffairCount(null,sreachReportDto.getBeforeTime(),sreachReportDto));
+        return ResponseData.success(reportMapper.selectByAffairCount(null,sreachReportDto.getBeforeTime(),sreachReportDto.getStatus()));
     }
 
     @Override

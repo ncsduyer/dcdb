@@ -8,10 +8,7 @@ import cn.stylefeng.guns.core.util.VoUtil;
 import cn.stylefeng.guns.modular.AppNotice.service.IAppNoticeService;
 import cn.stylefeng.guns.modular.DcCompany.service.ICompanyService;
 import cn.stylefeng.guns.modular.system.dao.TaskassignUnitdealMapper;
-import cn.stylefeng.guns.modular.system.model.AppNotice;
-import cn.stylefeng.guns.modular.system.model.Taskassign;
-import cn.stylefeng.guns.modular.system.model.TaskassignUnit;
-import cn.stylefeng.guns.modular.system.model.TaskassignUnitdeal;
+import cn.stylefeng.guns.modular.system.model.*;
 import cn.stylefeng.guns.modular.system.service.IUserService;
 import cn.stylefeng.guns.modular.tdtaskassign.service.ITaskassignService;
 import cn.stylefeng.guns.modular.tdtaskassignUnit.service.ITaskassignUnitService;
@@ -19,6 +16,7 @@ import cn.stylefeng.guns.modular.tdtaskassignUnitDeal.service.ITaskassignUnitdea
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.Condition;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +25,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -138,13 +138,20 @@ public class TaskassignUnitdealServiceImpl extends ServiceImpl<TaskassignUnitdea
                 //获取手机号
                 AppNotice appNotice = new AppNotice();
                 appNotice.setTitle(taskassign.getTask().getTitle());
-                appNotice.setContent(st.toString());
+                Map<String,String> map=new HashMap<>();
+                User user = userService.selectById(taskassignUnit.getPersonid());
+                map.put("name",user.getName());
+                map.put("phone",user.getPhone());
+                map.put("unit",companyService.selectById(taskassignUnit.getUnitid()).getTitle());
+                map.put("make",taskassignUnitdeal.getDealdesc());
+                appNotice.setContent(JSONObject.toJSONString(map));
 //                    appNotice.setContent(taskassign.getAssignmemo());
                 appNotice.setCreatetime(new DateTime());
                 appNotice.setType(1);
                 appNotice.setSendee(taskassign.getCharge());
                 appNotice.setTel(taskassign.getPhone());
                 appNotice.setSender_id(0);
+                appNotice.setNow_status(taskassign.getStatus());
                 appNotice.setStep(taskassign.getEventStep().getStep());
                 appNoticeService.insert(appNotice);
 //            判断是否完成 修改unit状态 1-新建未反馈；2-已反馈限期办理中；3-已反馈超期办理中；4-办理完成；）

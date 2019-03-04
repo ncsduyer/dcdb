@@ -184,7 +184,9 @@ public class ShiroConfig {
         Map<String, String> hashMap = new LinkedHashMap<>();
         hashMap.put("/static/**", "anon");
         hashMap.put("/api/**", "anon");
-//        hashMap.put("/api*/**", "anon");
+        hashMap.put("/file/**", "anon");
+////        下载文件
+//        hashMap.put("/api/download*", "anon");
         hashMap.put("/gunsApi/**", "anon");
         hashMap.put("/login", "anon");
         hashMap.put("/global/sessionError", "anon");

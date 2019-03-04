@@ -21,6 +21,12 @@ public class SmsProperties {
     static final String accessKeySecret = "riZoozIWNzMKGwNY8VbQjzlJ7cl4gK";
     static final String AddDcDbtmpCode = "SMS_152207559";
 
+    public static String getDealDcDbtmpCode() {
+        return DealDcDbtmpCode;
+    }
+
+    static final String DealDcDbtmpCode = "SMS_152207559";
+
     public static String getAddDcDbtmpCode() {
         return AddDcDbtmpCode;
     }

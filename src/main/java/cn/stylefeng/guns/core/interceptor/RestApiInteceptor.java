@@ -59,10 +59,15 @@ public class RestApiInteceptor extends HandlerInterceptorAdapter {
 
         //获取开始时间
         long start=System.currentTimeMillis();
-
+//        String url=request.getServletPath();
         if (request.getServletPath().equals(JwtConstants.AUTH_PATH)) {
             return true;
         }
+//        System.out.println(url.substring(0, ValidateUtils.getFromIndex(url,"/",3)));
+
+//        if (Arrays.asList(JwtConstants.ANON_PATH).contains(url.substring(0,ValidateUtils.getFromIndex(url,"/",3)))) {
+//            return true;
+//        }
         final String requestHeader = request.getHeader(JwtConstants.AUTH_HEADER);
         String authToken;
         if (requestHeader != null && requestHeader.startsWith("Bearer ")) {

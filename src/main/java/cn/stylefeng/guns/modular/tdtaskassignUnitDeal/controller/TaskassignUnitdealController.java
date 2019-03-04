@@ -2,6 +2,7 @@ package cn.stylefeng.guns.modular.tdtaskassignUnitDeal.controller;
 
 import cn.stylefeng.guns.core.common.annotion.Permission;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
+import cn.stylefeng.guns.modular.resources.service.IAssetService;
 import cn.stylefeng.guns.modular.system.model.TaskassignUnitdeal;
 import cn.stylefeng.guns.modular.tdtaskassignUnitDeal.service.ITaskassignUnitdealService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
@@ -30,7 +31,8 @@ public class TaskassignUnitdealController extends BaseController {
 
     @Autowired
     private ITaskassignUnitdealService taskassignUnitdealService;
-
+    @Autowired
+    private IAssetService assetService;
 
 
     /**
@@ -94,6 +96,9 @@ public class TaskassignUnitdealController extends BaseController {
     @RequestMapping(value = "/detail/{id}",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
     public ResponseData detail(@PathVariable("id") Integer id) {
-        return ResponseData.success(taskassignUnitdealService.selectById(id));
+       TaskassignUnitdeal taskassignUnitdeal= taskassignUnitdealService.selectById(id);
+       taskassignUnitdeal.setPictureList(assetService.selectList(Condition.create().in("id", taskassignUnitdeal.getPictures()).eq("status", 1)));
+       taskassignUnitdeal.setFileList(assetService.selectList(Condition.create().in("id", taskassignUnitdeal.getFiles()).eq("status", 1)));
+        return ResponseData.success(taskassignUnitdeal);
     }
 }
