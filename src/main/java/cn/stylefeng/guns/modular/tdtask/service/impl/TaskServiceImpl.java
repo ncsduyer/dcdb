@@ -94,6 +94,8 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
                 taskassign.setWorktype(addTaskDto.getWorktype());
                 taskassign.setAssigntime(addTaskDto.getAssigntime());
                 taskassign.setAssignmemo(addTaskDto.getAssignmemo());
+                taskassign.setCharge(addTaskDto.getCharge());
+                taskassign.setPhone(addTaskDto.getPhone());
                 taskassign.setCreatetime(new DateTime());
                 taskassign.setCreatorid(ShiroKit.getUser().getId());
                 taskassign.setStatus(1);

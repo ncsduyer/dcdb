@@ -19,13 +19,13 @@ public class SmsProperties {
     static final String SIGN_NAME = "顺庆区委办信息化办公系统";
     static final String accessKeyId = "LTAIF8Z66n5HFs0B";
     static final String accessKeySecret = "riZoozIWNzMKGwNY8VbQjzlJ7cl4gK";
-    static final String AddDcDbtmpCode = "SMS_152207559";
+    static final String AddDcDbtmpCode = "SMS_159490087";
+    static final String DealDcDbtmpCode = "SMS_159490091";
 
     public static String getDealDcDbtmpCode() {
         return DealDcDbtmpCode;
     }
 
-    static final String DealDcDbtmpCode = "SMS_152207559";
 
     public static String getAddDcDbtmpCode() {
         return AddDcDbtmpCode;

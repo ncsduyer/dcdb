@@ -39,6 +39,26 @@ public class AddTaskDto{
     @JSONField(format = "yyyy-MM-dd HH:mm")
     @NotNull(message = "交办时间不能为空")
     private Date assigntime;
+    @ApiModelProperty("总负责人")
+    private String charge;
+    @ApiModelProperty("总负责人电话")
+    private String phone;
+
+    public String getCharge() {
+        return charge;
+    }
+
+    public void setCharge(String charge) {
+        this.charge = charge;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public Date getCreatetime() {
         return createtime;

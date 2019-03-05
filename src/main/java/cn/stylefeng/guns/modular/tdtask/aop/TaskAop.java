@@ -162,7 +162,7 @@ public class TaskAop {
             if (((String)map.get("make")).length()<20){
                 json.put("remark", (String)map.get("make"));
             }else {
-                json.put("remark", ((String)map.get("make")).substring(0,20)+"...");
+                json.put("remark", ((String)map.get("make")).substring(0,16)+"...");
             }
             SmsUtil.sendSms(null,appNotice,SmsProperties.getDealDcDbtmpCode(), JsonUtils.beanToJson(json), null);
         }else{
