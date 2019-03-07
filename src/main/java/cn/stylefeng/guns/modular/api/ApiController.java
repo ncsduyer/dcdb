@@ -31,10 +31,7 @@ import cn.stylefeng.guns.modular.VersionUpgrade.service.IVersionUpgradeService;
 import cn.stylefeng.guns.modular.api.vo.AppMenusVo;
 import cn.stylefeng.guns.modular.resources.service.IAssetService;
 import cn.stylefeng.guns.modular.system.dao.UserMapper;
-import cn.stylefeng.guns.modular.system.model.AppMenu;
-import cn.stylefeng.guns.modular.system.model.Asset;
-import cn.stylefeng.guns.modular.system.model.Menu;
-import cn.stylefeng.guns.modular.system.model.User;
+import cn.stylefeng.guns.modular.system.model.*;
 import cn.stylefeng.guns.modular.system.service.IMenuService;
 import cn.stylefeng.guns.modular.system.service.IUserService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
@@ -299,13 +296,14 @@ public class ApiController extends BaseController {
      * 获取最新app版本
      */
     @ApiOperation(value = "获取最新app版本")
-    @RequestMapping(value = "/version", method = RequestMethod.GET)
+    @RequestMapping(value = "/version/{version}", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseData version() {
+    public String version(@PathVariable("version") String version) {
 //        app版本信息
-
-        return ResponseData.success(versionUpgradeService.selectOne(Condition.create().eq("status", 1)
-                .orderBy("id", false)));
+        VersionUpgrade versionUpgrade=versionUpgradeService.selectOne(Condition.create().eq("status", 1)
+                .orderBy("id", false));
+        if (versionUpgrade.)
+        return "";
     }
 
     /**

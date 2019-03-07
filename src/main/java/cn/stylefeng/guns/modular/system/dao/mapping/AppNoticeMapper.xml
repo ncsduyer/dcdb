@@ -14,11 +14,12 @@
         <result column="sendee" property="sendee"/>
         <result column="sender_id" property="sender_id"/>
         <result column="now_status" property="now_status"/>
+        <result column="send_status" property="send_status"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, title, type, content,step, createtime, tel, sendee,sender_id,now_status
+        id, title, type, content,step, createtime, tel, sendee,sender_id,now_status,send_status
     </sql>
 
 </mapper>

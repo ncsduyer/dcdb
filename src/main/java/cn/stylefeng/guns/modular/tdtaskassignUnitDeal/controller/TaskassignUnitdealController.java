@@ -97,8 +97,12 @@ public class TaskassignUnitdealController extends BaseController {
     @ResponseBody
     public ResponseData detail(@PathVariable("id") Integer id) {
        TaskassignUnitdeal taskassignUnitdeal= taskassignUnitdealService.selectById(id);
-       taskassignUnitdeal.setPictureList(assetService.selectList(Condition.create().in("id", taskassignUnitdeal.getPictures()).eq("status", 1)));
-       taskassignUnitdeal.setFileList(assetService.selectList(Condition.create().in("id", taskassignUnitdeal.getFiles()).eq("status", 1)));
+       if(ToolUtil.isNotEmpty(taskassignUnitdeal.getPictures())){
+        taskassignUnitdeal.setPictureList(assetService.selectList(Condition.create().in("id", taskassignUnitdeal.getPictures()).eq("status", 1)));
+       }
+        if(ToolUtil.isNotEmpty(taskassignUnitdeal.getFiles())) {
+            taskassignUnitdeal.setFileList(assetService.selectList(Condition.create().in("id", taskassignUnitdeal.getFiles()).eq("status", 1)));
+        }
         return ResponseData.success(taskassignUnitdeal);
     }
 }

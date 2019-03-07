@@ -151,6 +151,7 @@ public class TaskAop {
         if(!ValidateUtils.isMobile(appNotice.getTel())) {
             return ;
         }
+//        Boolean isSend_status=false;
         if(appNotice.getNow_status()>1){
             //发送短信
             ObjectNode json = JsonUtils.getMapperInstance().createObjectNode();

@@ -73,8 +73,8 @@ public class SmsUtil {
 
         //hint 此处可能会抛出异常，注意catch
         SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
-        System.out.println("\n " + request.getPhoneNumbers() + ":" + request.getTemplateParam());
-        System.out.println(JsonUtils.beanToJson(sendSmsResponse) + "\n" );
+//        System.out.println("\n " + request.getPhoneNumbers() + ":" + request.getTemplateParam());
+//        System.out.println(JsonUtils.beanToJson(sendSmsResponse) + "\n" );
 
         return sendSmsResponse;
     }

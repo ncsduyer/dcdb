@@ -51,9 +51,12 @@ public class AppNotice extends Model<AppNotice> {
      * 接收人
      */
     private String sendee;
-    //    接收人id
+    /**
+    *接收人id
+     */
     private Integer sender_id;
     private Integer now_status;
+    private Integer send_status;
     public Integer getId() {
         return id;
     }
@@ -150,5 +153,13 @@ public class AppNotice extends Model<AppNotice> {
 
     public void setNow_status(Integer now_status) {
         this.now_status = now_status;
+    }
+
+    public Integer getSend_status() {
+        return send_status;
+    }
+
+    public void setSend_status(Integer send_status) {
+        this.send_status = send_status;
     }
 }
