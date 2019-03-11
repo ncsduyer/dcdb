@@ -15,11 +15,12 @@
         <result column="status" property="status"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
+        <result column="content" property="content"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, app_type, version_id, version_mini, version_code, type, apk_url, upgrade_point, status, create_time, update_time
+        id, app_type, version_id, version_mini, version_code, type, apk_url, upgrade_point, status, create_time, update_time,content
     </sql>
 
 </mapper>

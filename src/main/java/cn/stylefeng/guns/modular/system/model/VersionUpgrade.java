@@ -50,6 +50,7 @@ public class VersionUpgrade extends Model<VersionUpgrade> {
     private Integer type;
     @TableField("apk_url")
     private String apkUrl;
+    private String content;
     /**
      * 升级提示
      */
@@ -170,5 +171,13 @@ public class VersionUpgrade extends Model<VersionUpgrade> {
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 "}";
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

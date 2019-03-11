@@ -298,12 +298,15 @@ public class ApiController extends BaseController {
     @ApiOperation(value = "获取最新app版本")
     @RequestMapping(value = "/version/{version}", method = RequestMethod.GET)
     @ResponseBody
-    public String version(@PathVariable("version") String version) {
+    public ResponseData version(@PathVariable("version") String version) {
 //        app版本信息
         VersionUpgrade versionUpgrade=versionUpgradeService.selectOne(Condition.create().eq("status", 1)
                 .orderBy("id", false));
-        if (versionUpgrade.)
-        return "";
+        if (!versionUpgrade.getVersionCode().equals(version)){
+            versionUpgrade.setApkUrl("/file/download/"+versionUpgrade.getApkUrl());
+            return ResponseData.success(versionUpgrade);
+        }
+        return ResponseData.success();
     }
 
     /**
