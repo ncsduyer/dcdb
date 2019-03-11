@@ -1,26 +1,30 @@
 @layout("/common/_container.html"){
+<link rel="stylesheet" href="${ctxPath}/static/css/fileinput.css" />
 <div class="ibox float-e-margins">
     <div class="ibox-content">
         <div class="form-horizontal">
 
             <div class="row">
-                <div class="col-sm-6 b-r">
-                            <#input id="id" name="" underline="true"/>
-                            <#input id="appType" name="客户端设备id 1安卓pad 2安卓手机 3ios手机 4iospad" underline="true"/>
-                            <#input id="versionId" name="大版本号id" underline="true"/>
-                            <#input id="versionMini" name="小版本号" underline="true"/>
-                            <#input id="versionCode" name="版本标识 1.2" underline="true"/>
-                            <#input id="type" name="是否升级  1升级，0不升级，2强制升级"/>
+                <div class="col-sm-12 b-r">
+                            <#input id="versionCode" name="版本标识" underline="true"/>
+                            <#input id="appType" name="客户端设备id 1安卓手机 2ios手机 3安卓pad 4iospad" underline="true" value="2"/>
+                            <#input id="type" name="是否升级  1升级，0不升级，2强制升级" value="2"/>
                 </div>
 
-                <div class="col-sm-6">
-                            <#input id="apkUrl" name="" underline="true"/>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">上传文件</label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="file" id="apk" value="" name="files" multiple="multiple" >
+                            <input type="hidden" name="apkUrl" id="apkUrl" value=""   />
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+
                             <#input id="content" name="app更新内容" underline="true"/>
                             <#input id="upgradePoint" name="升级提示" underline="true"/>
-                            <#input id="status" name="" underline="true"/>
-                            <#input id="createTime" name="" underline="true"/>
-                            <#input id="updateTime" name="" underline="true"/>
-                </div>
+                            <#input id="status" name="状态" underline="true"/>
+
             </div>
 
             <div class="row btn-group-m-t">
@@ -34,4 +38,37 @@
     </div>
 </div>
 <script src="${ctxPath}/static/modular/VersionUpgrade/tTbVersionUpgrade/tTbVersionUpgrade_info.js"></script>
+<script type="text/javascript" src="${ctxPath}/static/js/fileinput.js"></script>
+<script type="text/javascript" src="${ctxPath}/static/js/locales/zh.js"></script>
+<script>
+    var uploadUrl=${ctxPath}+"/file/upload";
+    $("#apk").fileinput({
+        language : 'zh',//设置文中文
+        uploadUrl : "/file/upload",//图片上传的url，我这里对应的是后台struts配置好的的action方法
+        allowedFileExtensions: ['apk'],//接收的文件后缀
+        maxFileCount: 1, //表示允许同时上传的最大文件个数
+        // enctype : 'multipart/form-data',
+        showCaption : true,//显示标题
+        showRemove : true, //显示移除按钮
+        uploadAsync : true,//默认异步上传
+        showPreview : false,//是否显示预览
+        textEncoding : "UTF-8",//文本编码
+        autoReplaceBoolean : false,//选择图片时不清空原图片
+    });
+
+
+    $("#apk").on('fileuploaded', function(event, data, previewId, index) {//异步上传成功结果处理
+        // var img= JSON.parse(data.response);//接收后台传过来的json数据
+        alert(1);
+        console.log(data.response);
+        $("#apkUrl").val(data.data.response.files[0]);
+    });
+
+
+
+
+    $("#apk").on('fileerror', function(event, data, msg) {//异步上传失败结果处理
+        alert("uploadError");
+    });
+</script>
 @}

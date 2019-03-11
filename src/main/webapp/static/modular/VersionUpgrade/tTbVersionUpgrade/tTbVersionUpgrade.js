@@ -14,18 +14,18 @@ var TTbVersionUpgrade = {
 TTbVersionUpgrade.initColumn = function () {
     return [
         {field: 'selectItem', radio: true},
-            {title: '', field: 'id', visible: true, align: 'center', valign: 'middle'},
-            {title: '客户端设备id 1安卓pad 2安卓手机 3ios手机 4iospad', field: 'appType', visible: true, align: 'center', valign: 'middle'},
-            {title: '大版本号id', field: 'versionId', visible: true, align: 'center', valign: 'middle'},
-            {title: '小版本号', field: 'versionMini', visible: true, align: 'center', valign: 'middle'},
+            {title: 'id', field: 'id', visible: true, align: 'center', valign: 'middle'},
+            {title: '客户端设备id 1安卓手机 2ios手机 3安卓pad 4iospad', field: 'appType', visible: true, align: 'center', valign: 'middle'},
+            // {title: '大版本号id', field: 'versionId', visible: true, align: 'center', valign: 'middle'},
+            // {title: '小版本号', field: 'versionMini', visible: true, align: 'center', valign: 'middle'},
             {title: '版本标识 1.2', field: 'versionCode', visible: true, align: 'center', valign: 'middle'},
             {title: '是否升级  1升级，0不升级，2强制升级', field: 'type', visible: true, align: 'center', valign: 'middle'},
-            {title: '', field: 'apkUrl', visible: true, align: 'center', valign: 'middle'},
+            {title: '资源id', field: 'apkUrl', visible: true, align: 'center', valign: 'middle'},
             {title: 'app更新内容', field: 'content', visible: true, align: 'center', valign: 'middle'},
             {title: '升级提示', field: 'upgradePoint', visible: true, align: 'center', valign: 'middle'},
-            {title: '', field: 'status', visible: true, align: 'center', valign: 'middle'},
-            {title: '', field: 'createTime', visible: true, align: 'center', valign: 'middle'},
-            {title: '', field: 'updateTime', visible: true, align: 'center', valign: 'middle'}
+            {title: '状态', field: 'status', visible: true, align: 'center', valign: 'middle'},
+            // {title: '', field: 'createTime', visible: true, align: 'center', valign: 'middle'},
+            // {title: '', field: 'updateTime', visible: true, align: 'center', valign: 'middle'}
     ];
 };
 
@@ -53,7 +53,7 @@ TTbVersionUpgrade.openAddTTbVersionUpgrade = function () {
         area: ['800px', '420px'], //宽高
         fix: false, //不固定
         maxmin: true,
-        content: Feng.ctxPath + '/tTbVersionUpgrade/tTbVersionUpgrade_add'
+        content: Feng.ctxPath + '/versionUpgrade/tTbVersionUpgrade_add'
     });
     this.layerIndex = index;
 };
@@ -69,7 +69,7 @@ TTbVersionUpgrade.openTTbVersionUpgradeDetail = function () {
             area: ['800px', '420px'], //宽高
             fix: false, //不固定
             maxmin: true,
-            content: Feng.ctxPath + '/tTbVersionUpgrade/tTbVersionUpgrade_update/' + TTbVersionUpgrade.seItem.id
+            content: Feng.ctxPath + '/versionUpgrade/tTbVersionUpgrade_update/' + TTbVersionUpgrade.seItem.id
         });
         this.layerIndex = index;
     }
@@ -80,7 +80,7 @@ TTbVersionUpgrade.openTTbVersionUpgradeDetail = function () {
  */
 TTbVersionUpgrade.delete = function () {
     if (this.check()) {
-        var ajax = new $ax(Feng.ctxPath + "/tTbVersionUpgrade/delete", function (data) {
+        var ajax = new $ax(Feng.ctxPath + "/versionUpgrade/delete", function (data) {
             Feng.success("删除成功!");
             TTbVersionUpgrade.table.refresh();
         }, function (data) {
@@ -102,7 +102,7 @@ TTbVersionUpgrade.search = function () {
 
 $(function () {
     var defaultColunms = TTbVersionUpgrade.initColumn();
-    var table = new BSTable(TTbVersionUpgrade.id, "/tTbVersionUpgrade/list", defaultColunms);
+    var table = new BSTable(TTbVersionUpgrade.id, "/versionUpgrade/list", defaultColunms);
     table.setPaginationType("client");
     TTbVersionUpgrade.table = table.init();
 });

@@ -23,12 +23,14 @@ import cn.stylefeng.guns.core.log.factory.LogTaskFactory;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.shiro.ShiroUser;
 import cn.stylefeng.guns.core.util.CacheUtil;
+import cn.stylefeng.guns.core.util.CopyUtils;
 import cn.stylefeng.guns.core.util.JwtTokenUtil;
 import cn.stylefeng.guns.core.util.KaptchaUtil;
 import cn.stylefeng.guns.modular.AppMenu.service.IAppMenuService;
 import cn.stylefeng.guns.modular.AppNotice.service.IAppNoticeService;
 import cn.stylefeng.guns.modular.VersionUpgrade.service.IVersionUpgradeService;
 import cn.stylefeng.guns.modular.api.vo.AppMenusVo;
+import cn.stylefeng.guns.modular.api.vo.VersionVo;
 import cn.stylefeng.guns.modular.resources.service.IAssetService;
 import cn.stylefeng.guns.modular.system.dao.UserMapper;
 import cn.stylefeng.guns.modular.system.model.*;
@@ -296,15 +298,26 @@ public class ApiController extends BaseController {
      * 获取最新app版本
      */
     @ApiOperation(value = "获取最新app版本")
-    @RequestMapping(value = "/version/{version}", method = RequestMethod.GET)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "type", value = "客户端设备id 1安卓手机 2ios手机 3安卓pad 4iospad", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "version", value = "客户端版本号", required = true, dataType = "String"),
+    })
+    @RequestMapping(value = {"/version/{version}","/version/{version}/{type}"}, method = RequestMethod.GET)
     @ResponseBody
-    public ResponseData version(@PathVariable("version") String version) {
+    public ResponseData version(@PathVariable("version") String version,@PathVariable(value = "type",required = false) String type) {
 //        app版本信息
-        VersionUpgrade versionUpgrade=versionUpgradeService.selectOne(Condition.create().eq("status", 1)
-                .orderBy("id", false));
-        if (!versionUpgrade.getVersionCode().equals(version)){
+        VersionUpgrade versionUpgrade=null;
+        if (ToolUtil.isNotEmpty(type)){
+             versionUpgrade=versionUpgradeService.selectOne(Condition.create().eq("status", 1).eq("app_type", type).orderBy("id", false));
+        }else {
+             versionUpgrade=versionUpgradeService.selectOne(Condition.create().eq("status", 1).orderBy("id", false));
+        }
+
+        if (ToolUtil.isNotEmpty(versionUpgrade)&& !versionUpgrade.getVersionCode().equals(version)){
             versionUpgrade.setApkUrl("/file/download/"+versionUpgrade.getApkUrl());
-            return ResponseData.success(versionUpgrade);
+            VersionVo versionVo=new VersionVo();
+            CopyUtils.copyProperties(versionUpgrade, versionVo);
+            return ResponseData.success(versionVo);
         }
         return ResponseData.success();
     }

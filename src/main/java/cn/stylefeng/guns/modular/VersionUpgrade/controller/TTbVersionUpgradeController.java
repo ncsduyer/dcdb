@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @Date 2019-03-07 21:35:02
  */
 @Controller
-@RequestMapping("/tTbVersionUpgrade")
+@RequestMapping("/versionUpgrade")
 public class TTbVersionUpgradeController extends BaseController {
 
     private String PREFIX = "/VersionUpgrade/tTbVersionUpgrade/";

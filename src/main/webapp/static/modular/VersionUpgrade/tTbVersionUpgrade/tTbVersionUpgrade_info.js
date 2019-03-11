@@ -47,16 +47,16 @@ TTbVersionUpgradeInfoDlg.collectData = function() {
     this
     .set('id')
     .set('appType')
-    .set('versionId')
-    .set('versionMini')
+    // .set('versionId')
+    // .set('versionMini')
     .set('versionCode')
     .set('type')
     .set('apkUrl')
     .set('content')
     .set('upgradePoint')
-    .set('status')
-    .set('createTime')
-    .set('updateTime');
+    .set('status');
+    // .set('createTime')
+    // .set('updateTime');
 }
 
 /**
@@ -68,7 +68,7 @@ TTbVersionUpgradeInfoDlg.addSubmit = function() {
     this.collectData();
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/tTbVersionUpgrade/add", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/versionUpgrade/add", function(data){
         Feng.success("添加成功!");
         window.parent.TTbVersionUpgrade.table.refresh();
         TTbVersionUpgradeInfoDlg.close();
@@ -88,7 +88,7 @@ TTbVersionUpgradeInfoDlg.editSubmit = function() {
     this.collectData();
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/tTbVersionUpgrade/update", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/versionUpgrade/update", function(data){
         Feng.success("修改成功!");
         window.parent.TTbVersionUpgrade.table.refresh();
         TTbVersionUpgradeInfoDlg.close();
