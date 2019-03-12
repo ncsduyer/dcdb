@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = FileProperties.PREFIX)
 public class FileProperties {
     public static final String PREFIX = "file";
-    static final String URL = "http://do.scncry.com:8081";
+    static final String URL = "/admin";
 
     public static String getURL() {
         return URL;

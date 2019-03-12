@@ -305,7 +305,7 @@ public class ApiController extends BaseController {
     })
     @RequestMapping(value = {"/version/{version}","/version/{version}/{type}"}, method = RequestMethod.GET)
     @ResponseBody
-    public ResponseData version(@PathVariable("version") String version,@PathVariable(value = "type",required = false) String type) {
+    public ResponseData version(@PathVariable("version") String version,@PathVariable(value = "type",required = false) String type,HttpServletRequest request) {
 //        app版本信息
         VersionUpgrade versionUpgrade=null;
         if (ToolUtil.isNotEmpty(type)){
@@ -313,9 +313,8 @@ public class ApiController extends BaseController {
         }else {
              versionUpgrade=versionUpgradeService.selectOne(Condition.create().eq("status", 1).orderBy("id", false));
         }
-
         if (ToolUtil.isNotEmpty(versionUpgrade)&& !versionUpgrade.getVersionCode().equals(version)){
-            versionUpgrade.setApkUrl(FileProperties.getURL()+"/file/download/"+versionUpgrade.getApkUrl());
+            versionUpgrade.setApkUrl(request.getScheme() +"://" + request.getServerName() + ":" +request.getServerPort() + FileProperties.getURL() +"/file/download/"+versionUpgrade.getApkUrl());
             VersionVo versionVo=new VersionVo();
             CopyUtils.copyProperties(versionUpgrade, versionVo);
             return ResponseData.success(versionVo);
