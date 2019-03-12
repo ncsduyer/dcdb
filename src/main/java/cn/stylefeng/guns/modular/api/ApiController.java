@@ -15,7 +15,6 @@
  */
 package cn.stylefeng.guns.modular.api;
 
-import cn.stylefeng.guns.config.properties.FileProperties;
 import cn.stylefeng.guns.config.properties.GunsProperties;
 import cn.stylefeng.guns.core.common.constant.JwtConstants;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
@@ -314,7 +313,8 @@ public class ApiController extends BaseController {
              versionUpgrade=versionUpgradeService.selectOne(Condition.create().eq("status", 1).orderBy("id", false));
         }
         if (ToolUtil.isNotEmpty(versionUpgrade)&& !versionUpgrade.getVersionCode().equals(version)){
-            versionUpgrade.setApkUrl(request.getScheme() +"://" + request.getServerName() + ":" +request.getServerPort() + FileProperties.getURL() +"/file/download/"+versionUpgrade.getApkUrl());
+            Asset asset=assetService.selectById(versionUpgrade.getApkUrl());
+            versionUpgrade.setApkUrl(request.getScheme() +"://" + request.getServerName() + ":" +request.getServerPort() + "/static/admin/"+asset.getFilePath());
             VersionVo versionVo=new VersionVo();
             CopyUtils.copyProperties(versionUpgrade, versionVo);
             return ResponseData.success(versionVo);
