@@ -50,9 +50,9 @@ public class ReportController extends BaseController {
 
     }
     /**
-     * 获取报表统计列表
+     * 获取报表统计图表
      */
-    @ApiOperation(value = "获取报表统计列表")
+    @ApiOperation(value = "获取报表统计图表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "beforeTime", value = "开始时间", required = false, dataType = "String"),
             @ApiImplicitParam(name = "afterTime", value = "结束时间", required = false, dataType = "Long"),
@@ -72,7 +72,7 @@ public class ReportController extends BaseController {
      *
      * @return
      */
-    @ApiOperation(value = "获取报表统计列表")
+    @ApiOperation(value = "导出报表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "beforeTime", value = "开始时间", required = false, dataType = "String"),
             @ApiImplicitParam(name = "afterTime", value = "结束时间", required = false, dataType = "Long"),
