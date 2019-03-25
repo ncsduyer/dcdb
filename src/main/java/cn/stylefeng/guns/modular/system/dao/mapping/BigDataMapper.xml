@@ -1,4 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.stylefeng.guns.modular.system.dao.BigDataMapper">
+    <select id="countUnitStar" resultType="java.util.HashMap">
+        SELECT c.title ctitle ,c.id id,count(DISTINCT ta.id) dcdb,count(DISTINCT mrec.id) qwhy,count(DISTINCT drec.id) qwgw,count(DISTINCT irec.id) qwxx
+        from t_tb_company c
+        LEFT join td_taskassign_unit tu ON  c.id=tu.unitid
+        left join td_taskassign ta ON tu.tassignid = ta.id
+        left join td_meetingrec mrec on c.id=mrec.unitid
+        left join td_infosrec irec on c.id=irec.unitid
+        left join td_docassignrec drec on c.id=drec.unitid
+        GROUP BY c.title,c.id
+       ORDER BY dcdb DESC,qwhy DESC ,qwgw DESC ,qwxx DESC
+        LIMIT 0,6
+    </select>
+    <select id="countAssignStatus" resultType="java.util.HashMap">
+        SELECT
+	a.id as id,
+	a.title as title,
+	Totalnum as total,
+	DealSuccNum AS wc,
+	Totalnum - DealSuccNum AS zzbl,
+	CASE
+WHEN DealSuccNum > 0 THEN
+	cast(
+		DealDate * 1.0 / DealSuccNum AS signed
+	)
+ELSE
+	0
+END pjsj
+FROM
+	(
+		SELECT
+			com.title,
+			com.id,
+			sum(
+				CASE
+				WHEN taskunit.`status` = 4 THEN
+					1
+				ELSE
+					0
+				END
+			) AS DealSuccNum,
+			sum(
+				CASE
+				WHEN taskunit.id IS NOT NULL THEN
+					1
+				ELSE
+					0
+				END
+			) Totalnum,
+			sum(
+				CASE
+				WHEN taskunit.`status` = 4 THEN
+					cast(
+						timestampdiff(
+							SECOND,
+							assign.assigntime,
+							deal.finishtime
+						) / 86400 AS signed
+					)
+				ELSE
+					0
+				END
+			) AS DealDate
+		FROM
+			t_tb_company com
+		LEFT JOIN td_taskassign_unit taskunit ON taskunit.unitid = com.id
+		LEFT JOIN td_taskassign assign ON assign.id = taskunit.tassignid
+		LEFT JOIN td_taskassign_unitdeal deal ON deal.taunitid = taskunit.id
+		AND deal. STATUS = 1
+		GROUP BY
+			com.id,
+			com.title
+	) a ORDER BY total DESC
+    LIMIT 0,7
+    </select>
 </mapper>

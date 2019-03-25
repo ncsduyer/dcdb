@@ -156,7 +156,7 @@ public class TaskAop {
             //发送短信
             ObjectNode json = JsonUtils.getMapperInstance().createObjectNode();
             JSONObject map= JSONObject.parseObject(appNotice.getContent());
-            json.put("title", appNotice.getTitle());
+            json.put("title", appNotice.getTitle().substring(0,20));
             json.put("pople", (String) map.get("name")+(String) map.get("phone"));
             json.put("unit", (String) map.get("unit"));
             json.put("status", appNotice.getStep());
@@ -169,7 +169,7 @@ public class TaskAop {
         }else{
             //发送短信
             ObjectNode json = JsonUtils.getMapperInstance().createObjectNode();
-            json.put("title", appNotice.getTitle());
+            json.put("title", appNotice.getTitle().substring(0,20));
             json.put("status", appNotice.getStep());
             if (appNotice.getContent().length()<20){
                 json.put("remark", appNotice.getContent());

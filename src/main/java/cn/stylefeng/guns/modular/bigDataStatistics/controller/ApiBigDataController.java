@@ -1,16 +1,35 @@
 package cn.stylefeng.guns.modular.bigDataStatistics.controller;
 
-import cn.stylefeng.guns.core.log.LogObjectHolder;
-import cn.stylefeng.guns.modular.AppNotice.service.IAppNoticeService;
-import cn.stylefeng.guns.modular.system.model.AppNotice;
+import cn.stylefeng.guns.core.util.CopyUtils;
+import cn.stylefeng.guns.modular.DocAssignRec.service.IDocassignrecService;
+import cn.stylefeng.guns.modular.Docs.service.IDocsService;
+import cn.stylefeng.guns.modular.EventStep.service.IEventStepService;
+import cn.stylefeng.guns.modular.Infos.service.IInfosService;
+import cn.stylefeng.guns.modular.Infosrec.service.IInfosrecService;
+import cn.stylefeng.guns.modular.MeetingRec.service.IMeetingrecService;
+import cn.stylefeng.guns.modular.bigDataStatistics.service.IBigDataServiceImpl;
+import cn.stylefeng.guns.modular.bigDataStatistics.vo.CheckItemVo;
+import cn.stylefeng.guns.modular.checkitem.service.ICheckitemService;
+import cn.stylefeng.guns.modular.meeting.service.IMeetingService;
+import cn.stylefeng.guns.modular.system.model.Checkitem;
+import cn.stylefeng.guns.modular.system.model.EventStep;
+import cn.stylefeng.guns.modular.system.model.Taskassign;
+import cn.stylefeng.guns.modular.tdtaskassign.service.ITaskassignService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
+import cn.stylefeng.roses.core.reqres.response.ResponseData;
+import com.baomidou.mybatisplus.mapper.Condition;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * app消息通知控制器
@@ -18,87 +37,156 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author fengshuonan
  * @Date 2018-11-22 14:25:25
  */
-@Controller
-@RequestMapping("/appNotice")
+@RestController
+@RequestMapping("/api/BigData")
+@Api(value = "大数据api集合", tags = "大数据 api集合")
 public class ApiBigDataController extends BaseController {
 
-    private String PREFIX = "/AppNotice/appNotice/";
+    @Autowired
+    private IBigDataServiceImpl bigDataService;
+    @Autowired
+    private ITaskassignService taskassignService;
 
     @Autowired
-    private IAppNoticeService appNoticeService;
+    private IMeetingService meetingService;
 
+    @Autowired
+    private IDocsService docsService;
+
+    @Autowired
+    private IInfosService iInfosService;
+    @Autowired
+    private IMeetingrecService meetingrecService;
+
+    @Autowired
+    private IDocassignrecService docassignrecService;
+
+    @Autowired
+    private IInfosrecService iInfosrecService;
+    @Autowired
+    private IEventStepService eventStepService;
+    @Autowired
+    private ICheckitemService checkitemService;
     /**
-     * 跳转到app消息通知首页
+     * 获取督察督办数据
      */
-    @RequestMapping("")
-    public String index() {
-        return PREFIX + "appNotice.html";
+    @ApiOperation(value = "获取督察督办数据")
+    @RequestMapping(value = "/count", method = {RequestMethod.GET})
+    public ResponseData count() {
+        HashMap<String,Integer> map=new HashMap<>(5);
+        Integer dcdb=taskassignService.selectCount(Condition.create().gt("id", 0));
+        Integer meet=meetingrecService.selectCount(Condition.create().gt("id", 0));
+        Integer doc=docassignrecService.selectCount(Condition.create().gt("id", 0));
+        Integer info= iInfosrecService.selectCount(Condition.create().gt("id", 0));
+        map.put("total", dcdb+meet+doc+info);
+        map.put("dcdb", dcdb);
+        map.put("meet",meet );
+        map.put("doc", doc);
+        map.put("info",info);
+        return ResponseData.success(map);
     }
-
     /**
-     * 跳转到添加app消息通知
+     * 获取督办事项部门统计
      */
-    @RequestMapping("/appNotice_add")
-    public String appNoticeAdd() {
-        return PREFIX + "appNotice_add.html";
+    @ApiOperation(value = "获取督办事项部门统计")
+    @RequestMapping(value = "/countUnit", method = {RequestMethod.GET})
+    public ResponseData countUnit() {
+        List<EventStep> eventSteps=eventStepService.selectList(Condition.create().eq("event_type", 1));
+        HashMap<String,Integer> map=new HashMap<>();
+        for (EventStep et:eventSteps){
+            EntityWrapper<Taskassign> ew = new EntityWrapper<>();
+            ew.setEntity(new Taskassign());
+            ew.eq("status", et.getStatus());
+            map.put(et.getStep(),taskassignService.selectCount(ew));
+        }
+        return ResponseData.success(map);
+
     }
-
     /**
-     * 跳转到修改app消息通知
+     * 获取督办事项部门问题统计
      */
-    @RequestMapping("/appNotice_update/{appNoticeId}")
-    public String appNoticeUpdate(@PathVariable Integer appNoticeId, Model model) {
-        AppNotice appNotice = appNoticeService.selectById(appNoticeId);
-        model.addAttribute("item", appNotice);
-        LogObjectHolder.me().set(appNotice);
-        return PREFIX + "appNotice_edit.html";
+    @ApiOperation(value = "获取督办事项部门问题统计")
+    @RequestMapping(value = "/countUnitStar", method = {RequestMethod.GET})
+    public ResponseData countUnitStar() {
+        return ResponseData.success(bigDataService.countUnitStar());
+
     }
-
     /**
-     * 获取app消息通知列表
+     * 获取督办事项相关统计
      */
-    @RequestMapping(value = "/list")
-    @ResponseBody
-    public Object list(String condition) {
-        return appNoticeService.selectList(null);
+    @ApiOperation(value = "获取督办事项相关统计")
+    @RequestMapping(value = "/countAssignStatus", method = {RequestMethod.GET})
+    public ResponseData countAssignStatus() {
+
+        return ResponseData.success(bigDataService.countAssignStatus());
+
     }
-
     /**
-     * 新增app消息通知
+     * 获取区委办管理事务统计
      */
-    @RequestMapping(value = "/add")
-    @ResponseBody
-    public Object add(AppNotice appNotice) {
-        appNoticeService.insert(appNotice);
-        return SUCCESS_TIP;
+    @ApiOperation(value = "获取区委办管理事务统计")
+    @RequestMapping(value = "/countManagementServicesStatistics", method = {RequestMethod.GET})
+    public ResponseData countManagementServicesStatistics() {
+        Map<String,Integer> map=new HashMap<>();
+        map.put("督办事项", taskassignService.selectCount(null));
+        map.put("区委会议", meetingrecService.selectCount(null));
+        map.put("区委公文", docassignrecService.selectCount(null));
+        map.put("区委信息", iInfosrecService.selectCount(null));
+        return ResponseData.success(map);
+
     }
-
     /**
-     * 删除app消息通知
+     * 获取区委会议统计
      */
-    @RequestMapping(value = "/delete")
-    @ResponseBody
-    public Object delete(@RequestParam Integer appNoticeId) {
-        appNoticeService.deleteById(appNoticeId);
-        return SUCCESS_TIP;
+    @ApiOperation(value = "获取区委会议统计")
+    @RequestMapping(value = "/countMeeting", method = {RequestMethod.GET})
+    public ResponseData countMeeting() {
+        List<Checkitem> checkitems=checkitemService.selectList(Condition.create().eq("itemclass", 2).eq("status", 1));
+        List<CheckItemVo> checkItemVos=new ArrayList<>();
+        CheckItemVo checkItemVo=null;
+        for (Checkitem checkitem : checkitems){
+            checkItemVo=new CheckItemVo();
+            CopyUtils.copyProperties(checkitem, checkItemVo);
+            checkItemVo.setCount(meetingrecService.selectCount(Condition.create().eq("checkitemid", checkitem.getId())));
+            checkItemVos.add(checkItemVo);
+        }
+        return ResponseData.success(checkItemVos);
+
     }
-
     /**
-     * 修改app消息通知
+     * 获取区委公文统计
      */
-    @RequestMapping(value = "/update")
-    @ResponseBody
-    public Object update(AppNotice appNotice) {
-        appNoticeService.updateById(appNotice);
-        return SUCCESS_TIP;
+    @ApiOperation(value = "获取区委公文统计")
+    @RequestMapping(value = "/countDocs", method = {RequestMethod.GET})
+    public ResponseData countDocs() {
+        List<Checkitem> checkitems=checkitemService.selectList(Condition.create().eq("itemclass", 3).eq("status", 1));
+        List<CheckItemVo> checkItemVos=new ArrayList<>();
+        CheckItemVo checkItemVo=null;
+        for (Checkitem checkitem : checkitems){
+            checkItemVo=new CheckItemVo();
+            CopyUtils.copyProperties(checkitem, checkItemVo);
+            checkItemVo.setCount(docassignrecService.selectCount(Condition.create().eq("checkitemid", checkitem.getId())));
+            checkItemVos.add(checkItemVo);
+        }
+        return ResponseData.success(checkItemVos);
+
     }
-
     /**
-     * app消息通知详情
+     * 获取区委信息统计
      */
-    @RequestMapping(value = "/detail/{appNoticeId}")
-    @ResponseBody
-    public Object detail(@PathVariable("appNoticeId") Integer appNoticeId) {
-        return appNoticeService.selectById(appNoticeId);
+    @ApiOperation(value = "获取区委信息统计")
+    @RequestMapping(value = "/countInfos", method = {RequestMethod.GET})
+    public ResponseData countInfos() {
+        List<Checkitem> checkitems=checkitemService.selectList(Condition.create().eq("itemclass", 4).eq("status", 1));
+        List<CheckItemVo> checkItemVos=new ArrayList<>();
+        CheckItemVo checkItemVo=null;
+        for (Checkitem checkitem : checkitems){
+            checkItemVo=new CheckItemVo();
+            CopyUtils.copyProperties(checkitem, checkItemVo);
+            checkItemVo.setCount(iInfosrecService.selectCount(Condition.create().eq("checkitemid", checkitem.getId())));
+            checkItemVos.add(checkItemVo);
+        }
+        return ResponseData.success(checkItemVos);
+
     }
 }
