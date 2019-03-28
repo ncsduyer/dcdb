@@ -426,7 +426,7 @@ public class ApiController extends BaseController {
 
             afterTime = DateUtils.addSeconds(afterTime, 24 * 60 * 60 - 1);
         }
-        return ResponseData.success(appNoticeService.selectList(Condition.create().eq("sender_id", user_id).between("createtime", beforeTime, afterTime).orderBy("createtime", false)));
+        return ResponseData.success(appNoticeService.selectList(Condition.create().eq("sender_id", user_id).between("createtime", beforeTime, afterTime).eq("now_status",1).orderBy("createtime", false)));
     }
 
     /**

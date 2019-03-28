@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.system.dao.CopyRecordNoticeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.system.model.CopyRecordNotice">
+        <id column="id" property="id" />
+        <result column="type" property="type" />
+        <result column="join_id" property="joinId" />
+        <result column="content" property="content" />
+        <result column="now_status" property="nowStatus" />
+        <result column="createtime" property="createtime" />
+        <result column="tel" property="tel" />
+        <result column="sendee" property="sendee" />
+        <result column="sender_id" property="senderId" />
+        <result column="send_status" property="sendStatus" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, type, join_id, content, now_status, createtime, tel, sendee, sender_id, send_status
+    </sql>
+
+</mapper>

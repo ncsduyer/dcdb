@@ -11,7 +11,6 @@
         left join td_docassignrec drec on c.id=drec.unitid
         GROUP BY c.title,c.id
        ORDER BY dcdb DESC,qwhy DESC ,qwgw DESC ,qwxx DESC
-        LIMIT 0,6
     </select>
     <select id="countAssignStatus" resultType="java.util.HashMap">
         SELECT
@@ -73,6 +72,5 @@ FROM
 			com.id,
 			com.title
 	) a ORDER BY total DESC
-    LIMIT 0,7
     </select>
 </mapper>

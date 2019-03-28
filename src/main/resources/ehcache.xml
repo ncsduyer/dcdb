@@ -57,6 +57,20 @@
            memoryStoreEvictionPolicy="FIFO"
            transactionalMode="off">
     </cache>
+    <cache name="bigdata"
+           maxElementsInMemory="10000"
+           eternal="false"
+           timeToIdleSeconds="60"
+           timeToLiveSeconds="60"
+           clearOnFlush="false"
+           overflowToDisk="true"
+           diskSpoolBufferSizeMB="1024"
+           maxElementsOnDisk="100000"
+           diskPersistent="false"
+           diskExpiryThreadIntervalSeconds="120"
+           memoryStoreEvictionPolicy="FIFO"
+           transactionalMode="off">
+    </cache>
 
 </ehcache>
 
