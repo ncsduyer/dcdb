@@ -10,6 +10,7 @@ import cn.stylefeng.guns.core.util.TypeCastUtil;
 import cn.stylefeng.guns.core.util.vo.ExportColSubVo;
 import cn.stylefeng.guns.core.util.vo.ExportColVo;
 import cn.stylefeng.guns.core.util.vo.ExportRowVo;
+import cn.stylefeng.guns.modular.CopyRecordNotice.service.ICopyRecordNoticeService;
 import cn.stylefeng.guns.modular.DocAssignRec.service.IDocassignrecService;
 import cn.stylefeng.guns.modular.Docs.dto.AddDocDto;
 import cn.stylefeng.guns.modular.Docs.dto.SreachDocDto;
@@ -20,11 +21,13 @@ import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
 import cn.stylefeng.guns.modular.system.dao.DocassignrecMapper;
 import cn.stylefeng.guns.modular.system.dao.DocsMapper;
 import cn.stylefeng.guns.modular.system.model.Checkitem;
+import cn.stylefeng.guns.modular.system.model.CopyRecordNotice;
 import cn.stylefeng.guns.modular.system.model.Docassignrec;
 import cn.stylefeng.guns.modular.system.model.Docs;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.Condition;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -34,9 +37,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * <p>
@@ -58,7 +60,8 @@ public class DocsServiceImpl extends ServiceImpl<DocsMapper, Docs> implements ID
     private IEventStepService eventStepService;
     @Autowired
     private IDocassignrecService docassignrecService;
-
+    @Autowired
+    private ICopyRecordNoticeService copyRecordNoticeService;
     @Override
     public ResponseData SreachPage(SreachMeetingDto sreachDto) {
         try {
@@ -132,6 +135,23 @@ public class DocsServiceImpl extends ServiceImpl<DocsMapper, Docs> implements ID
                         meetingrec.setCreatetime(new DateTime());
                     }
                     docassignrecMapper.insert(meetingrec);
+                }
+            }
+
+            Map<String,String> map=new HashMap<>();
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy年MM月dd日");
+            map.put("title",docs.getTitle());
+            map.put("date",sdf.format(docs.getMtime()));
+            map.put("datetime",sdf.format(Calendar.getInstance().getTime()));
+            if (ToolUtil.isNotEmpty(addDto.getCopyRecordNotices())) {
+                for (CopyRecordNotice copyRecordNotice : addDto.getCopyRecordNotices()) {
+                    map.put("check", copyRecordNotice.getContent());
+                    copyRecordNotice.setType(3);
+                    copyRecordNotice.setJoinId(docs.getId());
+                    copyRecordNotice.setCreatetime(Calendar.getInstance().getTime());
+                    copyRecordNotice.setSenderId(docs.getCreatorid());
+                    copyRecordNotice.setJsonContent(JSONObject.toJSONString(map));
+                    copyRecordNoticeService.insert(copyRecordNotice);
                 }
             }
             return ResponseData.success();

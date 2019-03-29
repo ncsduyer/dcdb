@@ -10,6 +10,7 @@ import cn.stylefeng.guns.core.util.TypeCastUtil;
 import cn.stylefeng.guns.core.util.vo.ExportColSubVo;
 import cn.stylefeng.guns.core.util.vo.ExportColVo;
 import cn.stylefeng.guns.core.util.vo.ExportRowVo;
+import cn.stylefeng.guns.modular.CopyRecordNotice.service.ICopyRecordNoticeService;
 import cn.stylefeng.guns.modular.EventStep.service.IEventStepService;
 import cn.stylefeng.guns.modular.MeetingRec.service.IMeetingrecService;
 import cn.stylefeng.guns.modular.checkitem.service.ICheckitemService;
@@ -19,11 +20,13 @@ import cn.stylefeng.guns.modular.meeting.service.IMeetingService;
 import cn.stylefeng.guns.modular.system.dao.MeetingMapper;
 import cn.stylefeng.guns.modular.system.dao.MeetingrecMapper;
 import cn.stylefeng.guns.modular.system.model.Checkitem;
+import cn.stylefeng.guns.modular.system.model.CopyRecordNotice;
 import cn.stylefeng.guns.modular.system.model.Meeting;
 import cn.stylefeng.guns.modular.system.model.Meetingrec;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.Condition;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -34,9 +37,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * <p>
@@ -58,7 +60,8 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
     private IMeetingrecService meetingrecService;
     @Autowired
     private IEventStepService eventStepService;
-
+    @Autowired
+    private ICopyRecordNoticeService copyRecordNoticeService;
     @Override
     public ResponseData SreachPage(SreachMeetingDto sreachDto) {
         try {
@@ -122,7 +125,6 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
                     meeting.setCreatorid(ShiroKit.getUser().getId());
                 }
                 insert(meeting);
-
                    Meetingrec meetingrec= new Meetingrec();
             if (ToolUtil.isNotEmpty(addDto.getResc())) {
 //                循环插入交办单位
@@ -135,7 +137,23 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
                     meetingrecMapper.insert(meetingrec);
                 }
             }
-                return ResponseData.success();
+            Map<String,String> map=new HashMap<>();
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy年MM月dd日");
+            map.put("title",meeting.getTitle());
+            map.put("date",sdf.format(meeting.getMtime()));
+            map.put("datetime",sdf.format(Calendar.getInstance().getTime()));
+            if (ToolUtil.isNotEmpty(addDto.getCopyRecordNotices())) {
+                for (CopyRecordNotice copyRecordNotice : addDto.getCopyRecordNotices()) {
+                    map.put("check", copyRecordNotice.getContent());
+                    copyRecordNotice.setType(2);
+                    copyRecordNotice.setJoinId(meeting.getId());
+                    copyRecordNotice.setCreatetime(Calendar.getInstance().getTime());
+                    copyRecordNotice.setSenderId(meeting.getCreatorid());
+                    copyRecordNotice.setJsonContent(JSONObject.toJSONString(map));
+                    copyRecordNoticeService.insert(copyRecordNotice);
+                }
+            }
+            return ResponseData.success();
 
         }catch (Exception e){
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();

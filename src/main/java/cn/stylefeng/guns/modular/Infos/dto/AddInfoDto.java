@@ -1,5 +1,6 @@
 package cn.stylefeng.guns.modular.Infos.dto;
 
+import cn.stylefeng.guns.modular.system.model.CopyRecordNotice;
 import cn.stylefeng.guns.modular.system.model.Infosrec;
 import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModel;
@@ -28,7 +29,15 @@ public class AddInfoDto  {
     private Integer status;
     @ApiModelProperty("上报信息数组")
     private List<Infosrec> resc;
+    private List<CopyRecordNotice> copyRecordNotices;
 
+    public List<CopyRecordNotice> getCopyRecordNotices() {
+        return copyRecordNotices;
+    }
+
+    public void setCopyRecordNotices(List<CopyRecordNotice> copyRecordNotices) {
+        this.copyRecordNotices = copyRecordNotices;
+    }
     public Integer getId() {
         return id;
     }

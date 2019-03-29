@@ -4,6 +4,7 @@ import cn.stylefeng.guns.core.common.annotion.Permission;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.modular.resources.service.IAssetService;
 import cn.stylefeng.guns.modular.system.model.TaskassignUnitdeal;
+import cn.stylefeng.guns.modular.tdtaskassignUnitDeal.dto.TaskassignUnitdealDto;
 import cn.stylefeng.guns.modular.tdtaskassignUnitDeal.service.ITaskassignUnitdealService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
@@ -56,7 +57,7 @@ public class TaskassignUnitdealController extends BaseController {
     @Permission
     @RequestMapping(value = "/add",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public ResponseData add(@RequestBody TaskassignUnitdeal taskassignUnitdeal) {
+    public ResponseData add(@RequestBody TaskassignUnitdealDto taskassignUnitdeal) {
         if (ToolUtil.isEmpty(taskassignUnitdeal.getCreatorid())){
             taskassignUnitdeal.setCreatorid(ShiroKit.getUser().getId());
         }
@@ -80,7 +81,7 @@ public class TaskassignUnitdealController extends BaseController {
     @Permission
     @RequestMapping(value = "/update",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public ResponseData update(@RequestBody TaskassignUnitdeal taskassignUnitdeal) {
+    public ResponseData update(@RequestBody TaskassignUnitdealDto taskassignUnitdeal) {
        return taskassignUnitdealService.updateByTaskassignUnitdeal(taskassignUnitdeal);
 
     }

@@ -6,12 +6,14 @@ import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.util.LogUtil;
 import cn.stylefeng.guns.core.util.VoUtil;
 import cn.stylefeng.guns.modular.AppNotice.service.IAppNoticeService;
+import cn.stylefeng.guns.modular.CopyRecordNotice.service.ICopyRecordNoticeService;
 import cn.stylefeng.guns.modular.DcCompany.service.ICompanyService;
 import cn.stylefeng.guns.modular.system.dao.TaskassignUnitdealMapper;
 import cn.stylefeng.guns.modular.system.model.*;
 import cn.stylefeng.guns.modular.system.service.IUserService;
 import cn.stylefeng.guns.modular.tdtaskassign.service.ITaskassignService;
 import cn.stylefeng.guns.modular.tdtaskassignUnit.service.ITaskassignUnitService;
+import cn.stylefeng.guns.modular.tdtaskassignUnitDeal.dto.TaskassignUnitdealDto;
 import cn.stylefeng.guns.modular.tdtaskassignUnitDeal.service.ITaskassignUnitdealService;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
@@ -24,10 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -50,8 +49,10 @@ public class TaskassignUnitdealServiceImpl extends ServiceImpl<TaskassignUnitdea
     private IAppNoticeService appNoticeService;
     @Autowired
     private IUserService userService;
+    @Autowired
+    private ICopyRecordNoticeService copyRecordNoticeService;
     @Override
-    public ResponseData updateByTaskassignUnitdeal(TaskassignUnitdeal taskassignUnitdeal) {
+    public ResponseData updateByTaskassignUnitdeal(TaskassignUnitdealDto taskassignUnitdeal) {
         try {
                 TaskassignUnit taskassignUnit=taskassignUnitService.selectOne(Condition.create().eq("personid", ShiroKit.getUser().getId()).eq("id", taskassignUnitdeal.getTaunitid()));
                 if (ToolUtil.isEmpty(taskassignUnit)||ToolUtil.isEmpty(taskassignUnit.getStatus())||taskassignUnit.getStatus()<2){
@@ -140,6 +141,8 @@ public class TaskassignUnitdealServiceImpl extends ServiceImpl<TaskassignUnitdea
                 appNotice.setTitle(taskassign.getTask().getTitle());
                 Map<String,String> map=new HashMap<>();
                 User user = userService.selectById(taskassignUnit.getPersonid());
+                map.put("title",appNotice.getTitle());
+                map.put("status",taskassign.getEventStep().getStep());
                 map.put("name",user.getName());
                 map.put("phone",user.getPhone());
                 map.put("unit",companyService.selectById(taskassignUnit.getUnitid()).getTitle());
@@ -154,6 +157,20 @@ public class TaskassignUnitdealServiceImpl extends ServiceImpl<TaskassignUnitdea
                 appNotice.setNow_status(taskassign.getStatus());
                 appNotice.setStep(taskassign.getEventStep().getStep());
                 appNoticeService.insert(appNotice);
+//                循环抄送
+            if (ToolUtil.isNotEmpty(taskassignUnitdeal.getCopyRecordNotices())){
+                for (CopyRecordNotice copyRecordNotice:taskassignUnitdeal.getCopyRecordNotices()){
+                    copyRecordNotice.setType(1);
+                    copyRecordNotice.setJoinId(taskassignUnitdeal.getId());
+                    copyRecordNotice.setCreatetime(Calendar.getInstance().getTime());
+                    copyRecordNotice.setSenderId(appNotice.getSender_id());
+                    copyRecordNotice.setJsonContent(appNotice.getContent());
+                    copyRecordNoticeService.insert(copyRecordNotice);
+                }
+            }
+
+
+
 //            判断是否完成 修改unit状态 1-新建未反馈；2-已反馈限期办理中；3-已反馈超期办理中；4-办理完成；）
             if (oldStatus<taskassignUnit.getStatus()){
                 List<TaskassignUnit> tsus=new ArrayList<>();

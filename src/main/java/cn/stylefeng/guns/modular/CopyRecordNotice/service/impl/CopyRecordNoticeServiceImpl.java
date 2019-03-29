@@ -16,5 +16,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CopyRecordNoticeServiceImpl extends ServiceImpl<CopyRecordNoticeMapper, CopyRecordNotice> implements ICopyRecordNoticeService {
-
+    @Override
+    public boolean insert(CopyRecordNotice entity) {
+        return super.insert(entity);
+    }
 }

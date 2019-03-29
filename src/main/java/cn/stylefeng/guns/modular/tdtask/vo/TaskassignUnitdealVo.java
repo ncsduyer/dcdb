@@ -3,7 +3,7 @@ package cn.stylefeng.guns.modular.tdtask.vo;
 import cn.stylefeng.guns.modular.system.model.TaskassignUnitdeal;
 
 public class TaskassignUnitdealVo extends TaskassignUnitdeal {
-        private String delaydesc;
+    private String delaydesc;
 
     public String getDelaydesc() {
         return delaydesc;

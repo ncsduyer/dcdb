@@ -1,6 +1,7 @@
 package cn.stylefeng.guns.modular.tdtaskassignUnitDeal.service;
 
 import cn.stylefeng.guns.modular.system.model.TaskassignUnitdeal;
+import cn.stylefeng.guns.modular.tdtaskassignUnitDeal.dto.TaskassignUnitdealDto;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import com.baomidou.mybatisplus.service.IService;
 
@@ -14,5 +15,5 @@ import com.baomidou.mybatisplus.service.IService;
  */
 public interface ITaskassignUnitdealService extends IService<TaskassignUnitdeal> {
 
-    ResponseData updateByTaskassignUnitdeal(TaskassignUnitdeal taskassignUnitdeal);
+    ResponseData updateByTaskassignUnitdeal(TaskassignUnitdealDto taskassignUnitdeal);
 }

@@ -36,6 +36,10 @@ public class CopyRecordNotice extends Model<CopyRecordNotice> {
      */
     @TableField("join_id")
     private Integer joinId;
+
+
+    @TableField("json_content")
+    private String jsonContent;
     /**
      * 内容
      */
@@ -56,7 +60,7 @@ public class CopyRecordNotice extends Model<CopyRecordNotice> {
     /**
      * 接收人
      */
-    private String sendee;
+    private String sender;
     /**
      * 触发人id
      */
@@ -93,6 +97,13 @@ public class CopyRecordNotice extends Model<CopyRecordNotice> {
         this.joinId = joinId;
     }
 
+    public String getJsonContent() {
+        return jsonContent;
+    }
+
+    public void setJsonContent(String jsonContent) {
+        this.jsonContent = jsonContent;
+    }
     public String getContent() {
         return content;
     }
@@ -125,12 +136,12 @@ public class CopyRecordNotice extends Model<CopyRecordNotice> {
         this.tel = tel;
     }
 
-    public String getSendee() {
-        return sendee;
+    public String getSender() {
+        return sender;
     }
 
-    public void setSendee(String sendee) {
-        this.sendee = sendee;
+    public void setSender(String sender) {
+        this.sender = sender;
     }
 
     public Integer getSenderId() {
@@ -164,7 +175,7 @@ public class CopyRecordNotice extends Model<CopyRecordNotice> {
         ", nowStatus=" + nowStatus +
         ", createtime=" + createtime +
         ", tel=" + tel +
-        ", sendee=" + sendee +
+        ", sendee=" + sender +
         ", senderId=" + senderId +
         ", sendStatus=" + sendStatus +
         "}";

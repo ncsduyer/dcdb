@@ -40,7 +40,7 @@ public class SmsUtil {
 
 
 
-    public static SendSmsResponse sendSms(String signName,AppNotice appNotice,String templateCode,String templateParam,String outId) throws ClientException {
+    public static SendSmsResponse sendSms(String signName,String tel,String templateCode,String templateParam,String outId) throws ClientException {
 
         //可自助调整超时时间
         System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
@@ -54,7 +54,7 @@ public class SmsUtil {
         //组装请求对象-具体描述见控制台-文档部分内容
         SendSmsRequest request = new SendSmsRequest();
         //必填:待发送手机号
-        request.setPhoneNumbers(appNotice.getTel());
+        request.setPhoneNumbers(tel);
         //必填:短信签名-可在短信控制台中找到
         if (ToolUtil.isNotEmpty(signName)){
             request.setSignName(signName);
@@ -121,7 +121,7 @@ public class SmsUtil {
             json.put("status", "未反馈");
             json.put("remark", appNotice.getContent().substring(0,17)+"...");
             try {
-                SendSmsResponse sendSmsResponse = SmsUtil.sendSms(null,appNotice,SmsProperties.getAddDcDbtmpCode(), JsonUtils.beanToJson(json), null);
+                SendSmsResponse sendSmsResponse = SmsUtil.sendSms(null,appNotice.getTel(),SmsProperties.getAddDcDbtmpCode(), JsonUtils.beanToJson(json), null);
 
                 System.out.println(JsonUtils.beanToJson(SmsUtil.querySendDetails(appNotice, "790115451337295180^0")) + "\n" );
             } catch (ClientException e) {

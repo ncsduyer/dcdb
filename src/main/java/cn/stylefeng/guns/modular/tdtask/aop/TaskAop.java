@@ -61,6 +61,10 @@ public class TaskAop {
     private void sendSms() {
 
     }
+    @Pointcut("execution(* cn.stylefeng.guns.modular.CopyRecordNotice.service.ICopyRecordNoticeService.insert*(..))")
+    private void copySendSms() {
+
+    }
     //插入时记录
     @AfterReturning(value = "addTaskService()", returning = "responseData")
 
@@ -156,7 +160,7 @@ public class TaskAop {
             //发送短信
             ObjectNode json = JsonUtils.getMapperInstance().createObjectNode();
             JSONObject map= JSONObject.parseObject(appNotice.getContent());
-            json.put("title", appNotice.getTitle().substring(0,20));
+            json.put("title", appNotice.getTitle().length()>20?appNotice.getTitle().substring(0,20):appNotice.getTitle());
             json.put("pople", (String) map.get("name")+(String) map.get("phone"));
             json.put("unit", (String) map.get("unit"));
             json.put("status", appNotice.getStep());
@@ -165,18 +169,76 @@ public class TaskAop {
             }else {
                 json.put("remark", ((String)map.get("make")).substring(0,16)+"...");
             }
-            SmsUtil.sendSms(null,appNotice,SmsProperties.getDealDcDbtmpCode(), JsonUtils.beanToJson(json), null);
+            SmsUtil.sendSms(null,appNotice.getTel(),SmsProperties.getDealDcDbtmpCode(), JsonUtils.beanToJson(json), null);
         }else{
             //发送短信
             ObjectNode json = JsonUtils.getMapperInstance().createObjectNode();
-            json.put("title", appNotice.getTitle().substring(0,20));
+            json.put("title", appNotice.getTitle().length()>20?appNotice.getTitle().substring(0,20):appNotice.getTitle());
             json.put("status", appNotice.getStep());
             if (appNotice.getContent().length()<20){
                 json.put("remark", appNotice.getContent());
             }else {
                 json.put("remark", appNotice.getContent().substring(0,20)+"...");
             }
-            SmsUtil.sendSms(null,appNotice,SmsProperties.getAddDcDbtmpCode(), JsonUtils.beanToJson(json), null);
+            SmsUtil.sendSms(null,appNotice.getTel(),SmsProperties.getAddDcDbtmpCode(), JsonUtils.beanToJson(json), null);
+        }
+
+    }
+    @AfterReturning("copySendSms()")
+    public void copySendSms(JoinPoint joinPoint) throws ClientException {
+        CopyRecordNotice copyRecordNotice=(CopyRecordNotice) joinPoint.getArgs()[0];
+        if(!ValidateUtils.isMobile(copyRecordNotice.getTel())) {
+            return ;
+        }
+        ObjectNode json = null;
+        JSONObject map = null;
+        String title=null;
+        switch (copyRecordNotice.getType()){
+            case 1:
+                json = JsonUtils.getMapperInstance().createObjectNode();
+                map= JSONObject.parseObject(copyRecordNotice.getJsonContent());
+                title=(String) map.get("title");
+                json.put("title",title.length()>20?title.substring(0,20):title);
+                json.put("pople", (String) map.get("name")+(String) map.get("phone"));
+                json.put("unit", (String) map.get("unit"));
+                json.put("status", (String) map.get("status"));
+                if (((String)map.get("make")).length()<20){
+                    json.put("remark", (String)map.get("make"));
+                }else {
+                    json.put("remark", ((String)map.get("make")).substring(0,16)+"...");
+                }
+                SmsUtil.sendSms(null,copyRecordNotice.getTel(),SmsProperties.getDealDcDbtmpCode(), JsonUtils.beanToJson(json), null);
+                break;
+            case 2:
+                json = JsonUtils.getMapperInstance().createObjectNode();
+                map= JSONObject.parseObject(copyRecordNotice.getJsonContent());
+                title=(String) map.get("title");
+                json.put("title",title.length()>20?title.substring(0,20):title);
+                json.put("date", (String) map.get("date"));
+                json.put("datetime", (String) map.get("datetime"));
+                json.put("check", (String) map.get("check"));
+                SmsUtil.sendSms(null,copyRecordNotice.getTel(),SmsProperties.getMeetingtmpCode(), JsonUtils.beanToJson(json), null);
+                break;
+            case 3:
+                json = JsonUtils.getMapperInstance().createObjectNode();
+                map= JSONObject.parseObject(copyRecordNotice.getJsonContent());
+                title=(String) map.get("title");
+                json.put("title",title.length()>20?title.substring(0,20):title);
+                json.put("date", (String) map.get("date"));
+                json.put("datetime", (String) map.get("datetime"));
+                json.put("check", (String) map.get("check"));
+                SmsUtil.sendSms(null,copyRecordNotice.getTel(),SmsProperties.getDoctmpCode(), JsonUtils.beanToJson(json), null);
+                break;
+            case 4:
+                json = JsonUtils.getMapperInstance().createObjectNode();
+                map= JSONObject.parseObject(copyRecordNotice.getJsonContent());
+                title=(String) map.get("title");
+                json.put("title",title.length()>20?title.substring(0,20):title);
+                json.put("date", (String) map.get("date"));
+                json.put("datetime", (String) map.get("datetime"));
+                json.put("check", (String) map.get("check"));
+                SmsUtil.sendSms(null,copyRecordNotice.getTel(),SmsProperties.getInfotmpCode(), JsonUtils.beanToJson(json), null);
+                break;
         }
 
     }

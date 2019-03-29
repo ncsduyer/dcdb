@@ -1,5 +1,6 @@
 package cn.stylefeng.guns.modular.meeting.dto;
 
+import cn.stylefeng.guns.modular.system.model.CopyRecordNotice;
 import cn.stylefeng.guns.modular.system.model.Meetingrec;
 import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModel;
@@ -29,6 +30,16 @@ public class AddMeetingDto {
     private Integer status;
     @ApiModelProperty("上报信息数组")
     private List<Meetingrec> resc;
+
+    private List<CopyRecordNotice> copyRecordNotices;
+
+    public List<CopyRecordNotice> getCopyRecordNotices() {
+        return copyRecordNotices;
+    }
+
+    public void setCopyRecordNotices(List<CopyRecordNotice> copyRecordNotices) {
+        this.copyRecordNotices = copyRecordNotices;
+    }
 
     public Integer getId() {
         return id;
@@ -85,4 +96,5 @@ public class AddMeetingDto {
     public void setCreatorid(Integer creatorid) {
         this.creatorid = creatorid;
     }
+
 }

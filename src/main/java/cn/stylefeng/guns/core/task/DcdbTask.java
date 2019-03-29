@@ -36,17 +36,17 @@ public class DcdbTask {
             for (User user : users) {
                 appNotice.setTel(user.getPhone());
 //                appNotice.setTel("18048955061");
-
+                appNotice.setSender_id(user.getId());
+                appNotice.setSendee(user.getName());
                 //发送短信
                 ObjectNode json = JsonUtils.getMapperInstance().createObjectNode();
-                json.put("status", "等待提交");
-                json.put("remark", "温馨提示：请于本周5下午4点前提交工作情况。");
+                json.put("remark", "请于本周5下午4点前提交工作情况。");
                 try {
-                    SmsUtil.sendSms(null,appNotice,SmsProperties.getAddDcDbtmpCode(), JsonUtils.beanToJson(json), null);
+                    SmsUtil.sendSms(null,appNotice.getTel(),SmsProperties.getAddDcDbtmpCode(), JsonUtils.beanToJson(json), null);
                 } catch (ClientException e) {
                     e.printStackTrace();
                 }
-                System.out.println("发送短信"+user.getName());
+//                System.out.println("发送短信"+user.getName());
             }
         }
     }
