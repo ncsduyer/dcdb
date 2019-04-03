@@ -3,8 +3,8 @@ package cn.stylefeng.guns.modular.tdtask.aop;
 import cn.hutool.core.date.DateTime;
 import cn.stylefeng.guns.config.properties.SmsProperties;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
+import cn.stylefeng.guns.core.task.SmsTask;
 import cn.stylefeng.guns.core.util.JsonUtils;
-import cn.stylefeng.guns.core.util.SmsUtil;
 import cn.stylefeng.guns.core.util.ValidateUtils;
 import cn.stylefeng.guns.core.util.VoUtil;
 import cn.stylefeng.guns.modular.AppNotice.service.IAppNoticeService;
@@ -45,7 +45,8 @@ public class TaskAop {
     private IUserService userService;
     @Autowired
     private IEventStepService eventStepService;
-
+    @Autowired
+    private SmsTask smsTask;
 
     @Pointcut("execution(* cn.stylefeng.guns.modular.tdtask.service.ITaskService.add1(..))")
     private void addTaskService() {
@@ -169,7 +170,7 @@ public class TaskAop {
             }else {
                 json.put("remark", ((String)map.get("make")).substring(0,16)+"...");
             }
-            SmsUtil.sendSms(null,appNotice.getTel(),SmsProperties.getDealDcDbtmpCode(), JsonUtils.beanToJson(json), null);
+            smsTask.sendSms(null,appNotice.getTel(),SmsProperties.getDealDcDbtmpCode(), JsonUtils.beanToJson(json), null);
         }else{
             //发送短信
             ObjectNode json = JsonUtils.getMapperInstance().createObjectNode();
@@ -180,7 +181,7 @@ public class TaskAop {
             }else {
                 json.put("remark", appNotice.getContent().substring(0,20)+"...");
             }
-            SmsUtil.sendSms(null,appNotice.getTel(),SmsProperties.getAddDcDbtmpCode(), JsonUtils.beanToJson(json), null);
+            smsTask.sendSms(null,appNotice.getTel(),SmsProperties.getAddDcDbtmpCode(), JsonUtils.beanToJson(json), null);
         }
 
     }
@@ -207,7 +208,7 @@ public class TaskAop {
                 }else {
                     json.put("remark", ((String)map.get("make")).substring(0,16)+"...");
                 }
-                SmsUtil.sendSms(null,copyRecordNotice.getTel(),SmsProperties.getDealDcDbtmpCode(), JsonUtils.beanToJson(json), null);
+                smsTask.sendSms(null,copyRecordNotice.getTel(),SmsProperties.getDealDcDbtmpCode(), JsonUtils.beanToJson(json), null);
                 break;
             case 2:
                 json = JsonUtils.getMapperInstance().createObjectNode();
@@ -217,7 +218,7 @@ public class TaskAop {
                 json.put("date", (String) map.get("date"));
                 json.put("datetime", (String) map.get("datetime"));
                 json.put("check", (String) map.get("check"));
-                SmsUtil.sendSms(null,copyRecordNotice.getTel(),SmsProperties.getMeetingtmpCode(), JsonUtils.beanToJson(json), null);
+                smsTask.sendSms(null,copyRecordNotice.getTel(),SmsProperties.getMeetingtmpCode(), JsonUtils.beanToJson(json), null);
                 break;
             case 3:
                 json = JsonUtils.getMapperInstance().createObjectNode();
@@ -227,7 +228,7 @@ public class TaskAop {
                 json.put("date", (String) map.get("date"));
                 json.put("datetime", (String) map.get("datetime"));
                 json.put("check", (String) map.get("check"));
-                SmsUtil.sendSms(null,copyRecordNotice.getTel(),SmsProperties.getDoctmpCode(), JsonUtils.beanToJson(json), null);
+                smsTask.sendSms(null,copyRecordNotice.getTel(),SmsProperties.getDoctmpCode(), JsonUtils.beanToJson(json), null);
                 break;
             case 4:
                 json = JsonUtils.getMapperInstance().createObjectNode();
@@ -237,9 +238,8 @@ public class TaskAop {
                 json.put("date", (String) map.get("date"));
                 json.put("datetime", (String) map.get("datetime"));
                 json.put("check", (String) map.get("check"));
-                SmsUtil.sendSms(null,copyRecordNotice.getTel(),SmsProperties.getInfotmpCode(), JsonUtils.beanToJson(json), null);
+                smsTask.sendSms(null,copyRecordNotice.getTel(),SmsProperties.getInfotmpCode(), JsonUtils.beanToJson(json), null);
                 break;
         }
-
     }
 }
