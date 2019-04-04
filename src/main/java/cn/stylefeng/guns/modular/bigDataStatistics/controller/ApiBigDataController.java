@@ -8,6 +8,7 @@ import cn.stylefeng.guns.modular.EventStep.service.IEventStepService;
 import cn.stylefeng.guns.modular.Infos.service.IInfosService;
 import cn.stylefeng.guns.modular.Infosrec.service.IInfosrecService;
 import cn.stylefeng.guns.modular.MeetingRec.service.IMeetingrecService;
+import cn.stylefeng.guns.modular.bigDataStatistics.BigResponseData;
 import cn.stylefeng.guns.modular.bigDataStatistics.service.IBigDataServiceImpl;
 import cn.stylefeng.guns.modular.bigDataStatistics.vo.CheckItemVo;
 import cn.stylefeng.guns.modular.checkitem.service.ICheckitemService;
@@ -85,7 +86,7 @@ public class ApiBigDataController extends BaseController {
         map.put("meet",meet );
         map.put("doc", doc);
         map.put("info",info);
-        return ResponseData.success(map);
+        return BigResponseData.success(map);
     }
     /**
      * 获取督办事项部门统计
@@ -103,7 +104,7 @@ public class ApiBigDataController extends BaseController {
             ew.eq("status", et.getStatus());
             map.put(et.getStep(),taskassignService.selectCount(ew));
         }
-        return ResponseData.success(map);
+        return BigResponseData.success(map);
 
     }
     /**
@@ -114,7 +115,7 @@ public class ApiBigDataController extends BaseController {
     @ResponseBody
     @Cacheable(value = "bigdata",key = "#root.targetClass+'#'+#root.method")
     public ResponseData countUnitStar() {
-        return ResponseData.success(bigDataService.countUnitStar());
+        return BigResponseData.success(bigDataService.countUnitStar());
 
     }
     /**
@@ -126,7 +127,7 @@ public class ApiBigDataController extends BaseController {
     @Cacheable(value = "bigdata",key = "#root.targetClass+'#'+#root.method")
     public ResponseData countAssignStatus() {
 
-        return ResponseData.success(bigDataService.countAssignStatus());
+        return BigResponseData.success(bigDataService.countAssignStatus());
 
     }
     /**
@@ -152,7 +153,7 @@ public class ApiBigDataController extends BaseController {
             map.put("区委信息", iInfosrecService.selectCount(Condition.create().between("createtime", start, end)));
             mapHashMap.put(date[integer-1],map);
         }
-        return ResponseData.success(mapHashMap);
+        return BigResponseData.success(mapHashMap);
 
     }
 
@@ -173,7 +174,7 @@ public class ApiBigDataController extends BaseController {
             checkItemVo.setCount(meetingrecService.selectCount(Condition.create().eq("checkitemid", checkitem.getId())));
             checkItemVos.add(checkItemVo);
         }
-        return ResponseData.success(checkItemVos);
+        return BigResponseData.success(checkItemVos);
 
     }
     /**
@@ -193,7 +194,7 @@ public class ApiBigDataController extends BaseController {
             checkItemVo.setCount(docassignrecService.selectCount(Condition.create().eq("checkitemid", checkitem.getId())));
             checkItemVos.add(checkItemVo);
         }
-        return ResponseData.success(checkItemVos);
+        return BigResponseData.success(checkItemVos);
 
     }
     /**
@@ -213,7 +214,7 @@ public class ApiBigDataController extends BaseController {
             checkItemVo.setCount(iInfosrecService.selectCount(Condition.create().eq("checkitemid", checkitem.getId())));
             checkItemVos.add(checkItemVo);
         }
-        return ResponseData.success(checkItemVos);
+        return BigResponseData.success(checkItemVos);
 
     }
 }

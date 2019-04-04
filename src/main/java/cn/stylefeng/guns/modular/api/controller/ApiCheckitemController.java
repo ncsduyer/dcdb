@@ -79,7 +79,7 @@ public class ApiCheckitemController extends BaseController {
 //    @ApiOperation(value = "获取督查类型管理列表")
 //    @RequestMapping(value = "/detail/{id}")
 //    @ResponseBody
-//    public ResponseData detail(@PathVariable("id") Integer id) {
-//        return ResponseData.success(checkitemService.selectById(id));
+//    public BigResponseData detail(@PathVariable("id") Integer id) {
+//        return BigResponseData.success(checkitemService.selectById(id));
 //    }
 }

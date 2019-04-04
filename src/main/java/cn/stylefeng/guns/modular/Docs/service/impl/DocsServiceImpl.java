@@ -266,7 +266,7 @@ public class DocsServiceImpl extends ServiceImpl<DocsMapper, Docs> implements ID
 //                }
 //                //填充数据到map
 //
-//                return ResponseData.success(new ChartVo(seriess,legend));
+//                return BigResponseData.success(new ChartVo(seriess,legend));
 //            default:
 //                //拆分时间
 //                Axis axis=new Axis();
@@ -319,7 +319,7 @@ public class DocsServiceImpl extends ServiceImpl<DocsMapper, Docs> implements ID
 //
 //
 //
-//                return ResponseData.success(new ChartVo(seriess,legend,axis));
+//                return BigResponseData.success(new ChartVo(seriess,legend,axis));
         return ResponseData.success(null);
 
     }

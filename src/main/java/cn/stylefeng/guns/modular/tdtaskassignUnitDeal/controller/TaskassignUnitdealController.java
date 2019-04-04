@@ -69,7 +69,7 @@ public class TaskassignUnitdealController extends BaseController {
 //     */
 //    @RequestMapping(value = "/delete")
 //    @ResponseBody
-//    public ResponseData delete(@RequestParam Integer taskassignUnitdealId) {
+//    public BigResponseData delete(@RequestParam Integer taskassignUnitdealId) {
 //        taskassignUnitdealService.deleteById(taskassignUnitdealId);
 //        return SUCCESS_TIP;
 //    }

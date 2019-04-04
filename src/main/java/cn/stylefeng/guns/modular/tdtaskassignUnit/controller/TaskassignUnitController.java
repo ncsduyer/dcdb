@@ -56,7 +56,7 @@ public class TaskassignUnitController extends BaseController {
 //    @Permission
 //    @RequestMapping(value = "/add")
 //    @ResponseBody
-//    public ResponseData add(TaskassignUnit taskassignUnit) {
+//    public BigResponseData add(TaskassignUnit taskassignUnit) {
 //        taskassignUnitService.insert(taskassignUnit);
 //        return SUCCESS_TIP;
 //    }
@@ -66,7 +66,7 @@ public class TaskassignUnitController extends BaseController {
 //     */
 //    @RequestMapping(value = "/delete")
 //    @ResponseBody
-//    public ResponseData delete(@RequestParam Integer taskassignUnitId) {
+//    public BigResponseData delete(@RequestParam Integer taskassignUnitId) {
 //        taskassignUnitService.deleteById(taskassignUnitId);
 //        return SUCCESS_TIP;
 //    }

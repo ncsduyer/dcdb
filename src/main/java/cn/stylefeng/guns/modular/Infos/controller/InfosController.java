@@ -117,7 +117,7 @@ public class InfosController extends BaseController {
 ////    @RequestMapping(value = "/delete/{assignWorkId}",method = RequestMethod.GET)
 ////    @Permission
 ////    @ResponseBody
-////    public ResponseData delete(@PathVariable("assignWorkId") Integer assignWorkId) {
+////    public BigResponseData delete(@PathVariable("assignWorkId") Integer assignWorkId) {
 ////        infosService.deleteById(assignWorkId);
 ////        return SUCCESS_TIP;
 ////    }
