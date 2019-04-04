@@ -11,7 +11,6 @@ public class SmsTask {
     @Async
     public SendSmsResponse sendSms(String signName, String tel, String templateCode, String templateParam, String outId) throws ClientException {
         return SmsUtil.sendSms(signName,tel, templateCode, templateParam, outId);
-
     }
 
 }
