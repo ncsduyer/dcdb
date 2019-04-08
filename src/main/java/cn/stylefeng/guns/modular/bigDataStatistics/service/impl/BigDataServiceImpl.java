@@ -1,5 +1,6 @@
 package cn.stylefeng.guns.modular.bigDataStatistics.service.impl;
 
+import cn.stylefeng.guns.modular.DcCompany.service.ICompanyService;
 import cn.stylefeng.guns.modular.bigDataStatistics.service.IBigDataServiceImpl;
 import cn.stylefeng.guns.modular.system.dao.BigDataMapper;
 import cn.stylefeng.guns.modular.system.model.BigData;
@@ -22,6 +23,8 @@ import java.util.List;
 public class BigDataServiceImpl extends ServiceImpl<BigDataMapper, BigData> implements IBigDataServiceImpl{
     @Autowired
     private BigDataMapper bigDataMapper;
+    @Autowired
+    private ICompanyService companyService;
     @Override
     public List<HashMap<String, Integer>> countUnitStar() {
         return bigDataMapper.countUnitStar();

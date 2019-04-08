@@ -58,14 +58,14 @@
            transactionalMode="off">
     </cache>
     <cache name="bigdata"
-           maxElementsInMemory="10000"
+           maxElementsInMemory="100"
            eternal="false"
            timeToIdleSeconds="60"
            timeToLiveSeconds="60"
            clearOnFlush="false"
            overflowToDisk="true"
            diskSpoolBufferSizeMB="1024"
-           maxElementsOnDisk="100000"
+           maxElementsOnDisk="100"
            diskPersistent="false"
            diskExpiryThreadIntervalSeconds="120"
            memoryStoreEvictionPolicy="FIFO"

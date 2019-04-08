@@ -30,7 +30,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.Serializable;
 import java.util.*;
+
+import static cn.stylefeng.roses.core.reqres.response.ResponseData.DEFAULT_SUCCESS_CODE;
 
 /**
  * app消息通知控制器
@@ -41,7 +44,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/BigData")
 @Api(value = "大数据api集合", tags = "大数据 api集合")
-public class ApiBigDataController extends BaseController {
+public class ApiBigDataController extends BaseController implements Serializable {
 
     @Autowired
     private IBigDataServiceImpl bigDataService;
@@ -86,7 +89,7 @@ public class ApiBigDataController extends BaseController {
         map.put("meet",meet );
         map.put("doc", doc);
         map.put("info",info);
-        return BigResponseData.success(map);
+        return new BigResponseData(true, DEFAULT_SUCCESS_CODE, "请求成功", map);
     }
     /**
      * 获取督办事项部门统计
@@ -104,7 +107,7 @@ public class ApiBigDataController extends BaseController {
             ew.eq("status", et.getStatus());
             map.put(et.getStep(),taskassignService.selectCount(ew));
         }
-        return BigResponseData.success(map);
+        return new BigResponseData(true, DEFAULT_SUCCESS_CODE, "请求成功", map);
 
     }
     /**
@@ -115,7 +118,7 @@ public class ApiBigDataController extends BaseController {
     @ResponseBody
     @Cacheable(value = "bigdata",key = "#root.targetClass+'#'+#root.method")
     public ResponseData countUnitStar() {
-        return BigResponseData.success(bigDataService.countUnitStar());
+        return new BigResponseData(true, DEFAULT_SUCCESS_CODE, "请求成功", bigDataService.countUnitStar());
 
     }
     /**
@@ -127,7 +130,7 @@ public class ApiBigDataController extends BaseController {
     @Cacheable(value = "bigdata",key = "#root.targetClass+'#'+#root.method")
     public ResponseData countAssignStatus() {
 
-        return BigResponseData.success(bigDataService.countAssignStatus());
+        return new BigResponseData(true, DEFAULT_SUCCESS_CODE, "请求成功",bigDataService.countAssignStatus());
 
     }
     /**
@@ -153,7 +156,7 @@ public class ApiBigDataController extends BaseController {
             map.put("区委信息", iInfosrecService.selectCount(Condition.create().between("createtime", start, end)));
             mapHashMap.put(date[integer-1],map);
         }
-        return BigResponseData.success(mapHashMap);
+        return new BigResponseData(true, DEFAULT_SUCCESS_CODE, "请求成功",mapHashMap);
 
     }
 
@@ -174,7 +177,7 @@ public class ApiBigDataController extends BaseController {
             checkItemVo.setCount(meetingrecService.selectCount(Condition.create().eq("checkitemid", checkitem.getId())));
             checkItemVos.add(checkItemVo);
         }
-        return BigResponseData.success(checkItemVos);
+        return new BigResponseData(true, DEFAULT_SUCCESS_CODE, "请求成功",checkItemVos);
 
     }
     /**
@@ -194,7 +197,7 @@ public class ApiBigDataController extends BaseController {
             checkItemVo.setCount(docassignrecService.selectCount(Condition.create().eq("checkitemid", checkitem.getId())));
             checkItemVos.add(checkItemVo);
         }
-        return BigResponseData.success(checkItemVos);
+        return new BigResponseData(true, DEFAULT_SUCCESS_CODE, "请求成功",checkItemVos);
 
     }
     /**
@@ -214,7 +217,7 @@ public class ApiBigDataController extends BaseController {
             checkItemVo.setCount(iInfosrecService.selectCount(Condition.create().eq("checkitemid", checkitem.getId())));
             checkItemVos.add(checkItemVo);
         }
-        return BigResponseData.success(checkItemVos);
+        return new BigResponseData(true, DEFAULT_SUCCESS_CODE, "请求成功", checkItemVos);
 
     }
 }
