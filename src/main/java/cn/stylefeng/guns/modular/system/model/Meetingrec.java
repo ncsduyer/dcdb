@@ -46,7 +46,7 @@ public class Meetingrec extends Model<Meetingrec> {
      * 部门id
      */
     private Integer unitid;
-
+    private String name;
 
     public Integer getId() {
         return id;
@@ -111,5 +111,13 @@ public class Meetingrec extends Model<Meetingrec> {
         ", createtime=" + createtime +
         ", unitid=" + unitid +
         "}";
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
