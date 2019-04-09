@@ -4,13 +4,13 @@ Navicat MySQL Data Transfer
 Source Server         : 140.246.153.214
 Source Server Version : 50724
 Source Host           : 140.246.153.214:3306
-Source Database       : guns
+Source Database       : dcdb
 
 Target Server Type    : MYSQL
 Target Server Version : 50724
 File Encoding         : 65001
 
-Date: 2019-04-09 15:29:29
+Date: 2019-04-09 17:38:22
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -30,7 +30,7 @@ CREATE TABLE `code_dbinfo` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='数据库链接信息';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT COMMENT='数据库链接信息';
 
 -- ----------------------------
 -- Records of code_dbinfo
@@ -53,9 +53,11 @@ CREATE TABLE `copy_record_notice` (
   `sender_id` int(11) DEFAULT NULL COMMENT '触发人id',
   `send_status` int(11) DEFAULT '0' COMMENT '接收状态',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='抄送记录表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='抄送记录表';
 
-
+-- ----------------------------
+-- Records of copy_record_notice
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for sys_dept
@@ -71,7 +73,7 @@ CREATE TABLE `sys_dept` (
   `tips` varchar(255) DEFAULT NULL COMMENT '提示',
   `version` int(11) DEFAULT NULL COMMENT '版本（乐观锁保留字段）',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='部门表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COMMENT='部门表';
 
 -- ----------------------------
 -- Records of sys_dept
@@ -92,7 +94,7 @@ CREATE TABLE `sys_dict` (
   `tips` varchar(255) DEFAULT NULL COMMENT '提示',
   `code` varchar(255) DEFAULT NULL COMMENT '值',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='字典表';
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='字典表';
 
 -- ----------------------------
 -- Records of sys_dict
@@ -121,7 +123,11 @@ CREATE TABLE `sys_login_log` (
   `message` text COMMENT '具体消息',
   `ip` varchar(255) DEFAULT NULL COMMENT '登录ip',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='登录记录';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='登录记录';
+
+-- ----------------------------
+-- Records of sys_login_log
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -143,7 +149,7 @@ CREATE TABLE `sys_menu` (
   `isopen` int(11) DEFAULT NULL COMMENT '是否打开:    1:打开   0:不打开',
   `menutype` int(10) DEFAULT '1' COMMENT '菜单所属端',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1101321546003185673 DEFAULT CHARSET=utf8 COMMENT='菜单表';
+) ENGINE=InnoDB AUTO_INCREMENT=1101321546003185673 DEFAULT CHARSET=utf8mb4 COMMENT='菜单表';
 
 -- ----------------------------
 -- Records of sys_menu
@@ -356,7 +362,7 @@ CREATE TABLE `sys_notice` (
   `createtime` datetime DEFAULT NULL COMMENT '创建时间',
   `creater` int(11) DEFAULT NULL COMMENT '创建人',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='通知表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='通知表';
 
 -- ----------------------------
 -- Records of sys_notice
@@ -377,7 +383,7 @@ CREATE TABLE `sys_operation_log` (
   `succeed` varchar(255) DEFAULT NULL COMMENT '是否成功',
   `message` text COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='操作日志';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='操作日志';
 
 -- ----------------------------
 -- Records of sys_operation_log
@@ -392,7 +398,7 @@ CREATE TABLE `sys_relation` (
   `menuid` bigint(11) DEFAULT NULL COMMENT '菜单id',
   `roleid` int(11) DEFAULT NULL COMMENT '角色id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5483 DEFAULT CHARSET=utf8 COMMENT='角色和菜单关联表';
+) ENGINE=InnoDB AUTO_INCREMENT=5483 DEFAULT CHARSET=utf8mb4 COMMENT='角色和菜单关联表';
 
 -- ----------------------------
 -- Records of sys_relation
@@ -834,7 +840,7 @@ CREATE TABLE `sys_role` (
   `tips` varchar(255) DEFAULT NULL COMMENT '提示',
   `version` int(11) DEFAULT NULL COMMENT '保留字段(暂时没用）',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='角色表';
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COMMENT='角色表';
 
 -- ----------------------------
 -- Records of sys_role
@@ -871,7 +877,7 @@ CREATE TABLE `sys_user` (
   `version` int(11) DEFAULT NULL COMMENT '保留字段',
   `isagent` int(11) DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8 COMMENT='管理员表';
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COMMENT='管理员表';
 
 -- ----------------------------
 -- Records of sys_user
@@ -934,7 +940,7 @@ CREATE TABLE `td_checkitem` (
   `itemdesc` varchar(255) DEFAULT NULL COMMENT '项描述',
   `status` smallint(6) NOT NULL DEFAULT '1' COMMENT '状态（0-停用；1-启用）',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COMMENT='督查类型';
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COMMENT='督查类型';
 
 -- ----------------------------
 -- Records of td_checkitem
@@ -966,7 +972,6 @@ INSERT INTO `td_checkitem` VALUES ('24', '4', '逾期上报数(次)', '1');
 INSERT INTO `td_checkitem` VALUES ('25', '4', '未上报数(次)', '1');
 INSERT INTO `td_checkitem` VALUES ('26', '4', '得分数(分)', '1');
 
-
 -- ----------------------------
 -- Table structure for td_doc
 -- ----------------------------
@@ -983,20 +988,35 @@ CREATE TABLE `td_doc` (
   `closememo` varchar(255) NOT NULL DEFAULT '' COMMENT '归档关闭说明',
   `assign_time` datetime DEFAULT NULL COMMENT '来文时间',
   `end_time` datetime DEFAULT NULL COMMENT '完结时间',
-  `status` smallint NOT NULL COMMENT '状态(启动停用)',
+  `status` smallint(6) NOT NULL COMMENT '状态(启动停用)',
   PRIMARY KEY (`id`),
   KEY `unitid` (`unitid`),
   KEY `assign_time` (`assign_time`),
   KEY `end_time` (`end_time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='交办公文表';
-
-
--- ----------------------------
--- Records of td_docassign
--- ----------------------------
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='交办公文表';
 
 -- ----------------------------
--- Table structure for td_docassignrec
+-- Records of td_doc
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for td_doc_attr
+-- ----------------------------
+DROP TABLE IF EXISTS `td_doc_attr`;
+CREATE TABLE `td_doc_attr` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `dassignid` int(11) DEFAULT NULL COMMENT '公文id',
+  `attr_asset_id` varchar(20) DEFAULT NULL COMMENT '公文附件资源id',
+  `createdtime` datetime DEFAULT NULL COMMENT '公文附件时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='交办公文附件表';
+
+-- ----------------------------
+-- Records of td_doc_attr
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for td_doc_rec
 -- ----------------------------
 DROP TABLE IF EXISTS `td_doc_rec`;
 CREATE TABLE `td_doc_rec` (
@@ -1010,19 +1030,11 @@ CREATE TABLE `td_doc_rec` (
   KEY `unitid` (`unitid`),
   KEY `checkitemid` (`checkitemid`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='公文督查记录';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='公文督查记录';
 
 -- ----------------------------
--- Table structure for td_docassign_attr
+-- Records of td_doc_rec
 -- ----------------------------
-DROP TABLE IF EXISTS `td_doc_attr`;
-CREATE TABLE `td_doc_attr` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
-  `dassignid` int(11) DEFAULT NULL COMMENT '公文id',
-  `attr_asset_id` varchar(20) DEFAULT NULL COMMENT '公文附件资源id',
-  `createdtime` datetime DEFAULT NULL COMMENT '公文附件时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='交办公文附件表';
 
 -- ----------------------------
 -- Table structure for td_infos
@@ -1036,9 +1048,11 @@ CREATE TABLE `td_infos` (
   `status` smallint(6) DEFAULT '1' COMMENT '信息状态(0-停用；1-启用)',
   `memo` varchar(255) DEFAULT NULL COMMENT '信息备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='区委信息';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='区委信息';
 
-
+-- ----------------------------
+-- Records of td_infos
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for td_infosrec
@@ -1054,7 +1068,11 @@ CREATE TABLE `td_infosrec` (
   PRIMARY KEY (`id`),
   KEY `unitid` (`unitid`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='区委信息督查表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='区委信息督查表';
+
+-- ----------------------------
+-- Records of td_infosrec
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for td_meeting
@@ -1069,8 +1087,11 @@ CREATE TABLE `td_meeting` (
   `status` smallint(6) DEFAULT '1' COMMENT '会议状态(0-停用；1-启用)',
   `memo` varchar(255) DEFAULT NULL COMMENT '会议备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='区委会议';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='区委会议';
 
+-- ----------------------------
+-- Records of td_meeting
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for td_meetingrec
@@ -1088,7 +1109,11 @@ CREATE TABLE `td_meetingrec` (
   KEY `unitid` (`unitid`),
   KEY `name` (`name`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='会议督查记录';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='会议督查记录';
+
+-- ----------------------------
+-- Records of td_meetingrec
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for td_task
@@ -1100,9 +1125,15 @@ CREATE TABLE `td_task` (
   `title` varchar(255) NOT NULL COMMENT '交办事项名称',
   `endstatus` smallint(255) NOT NULL DEFAULT '1' COMMENT '状态(启动停用)',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='交办事项表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='交办事项表';
 
+-- ----------------------------
+-- Records of td_task
+-- ----------------------------
 
+-- ----------------------------
+-- Table structure for td_taskassign
+-- ----------------------------
 DROP TABLE IF EXISTS `td_taskassign`;
 CREATE TABLE `td_taskassign` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1119,7 +1150,11 @@ CREATE TABLE `td_taskassign` (
   `charge` varchar(255) DEFAULT NULL COMMENT '总负责人',
   PRIMARY KEY (`id`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='交办事项时间表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='交办事项时间表';
+
+-- ----------------------------
+-- Records of td_taskassign
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for td_taskassign_log
@@ -1133,7 +1168,11 @@ CREATE TABLE `td_taskassign_log` (
   `createtime` datetime DEFAULT NULL COMMENT '流程流转时间',
   `status` smallint(6) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='督察督办流程记录';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='督察督办流程记录';
+
+-- ----------------------------
+-- Records of td_taskassign_log
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for td_taskassign_unit
@@ -1154,8 +1193,11 @@ CREATE TABLE `td_taskassign_unit` (
   KEY `unitid` (`unitid`),
   KEY `tassignid` (`tassignid`),
   KEY `personid` (`personid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='交办事项时间-责任单位责任人表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='交办事项时间-责任单位责任人表';
 
+-- ----------------------------
+-- Records of td_taskassign_unit
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for td_taskassign_unitdeal
@@ -1176,8 +1218,11 @@ CREATE TABLE `td_taskassign_unitdeal` (
   `finishtime` datetime DEFAULT NULL COMMENT '完成时间',
   PRIMARY KEY (`id`),
   KEY `taunitid` (`taunitid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='交办事项时间-责任单位责任人-处理登记表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='交办事项时间-责任单位责任人-处理登记表';
 
+-- ----------------------------
+-- Records of td_taskassign_unitdeal
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for test
@@ -1187,7 +1232,7 @@ CREATE TABLE `test` (
   `aaa` int(11) NOT NULL AUTO_INCREMENT,
   `bbb` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`aaa`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of test
@@ -1212,7 +1257,7 @@ CREATE TABLE `t_tb_app_menu` (
   `wap_icon` varchar(255) DEFAULT NULL,
   `order` int(255) DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='app菜单表';
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COMMENT='app菜单表';
 
 -- ----------------------------
 -- Records of t_tb_app_menu
@@ -1244,7 +1289,11 @@ CREATE TABLE `t_tb_app_notice` (
   `sender_id` int(11) DEFAULT NULL,
   `send_status` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='消息通知表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='消息通知表';
+
+-- ----------------------------
+-- Records of t_tb_app_notice
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for t_tb_asset
@@ -1257,19 +1306,20 @@ CREATE TABLE `t_tb_asset` (
   `create_time` datetime DEFAULT NULL COMMENT '上传时间',
   `status` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '状态;1:可用,0:不可用',
   `download_times` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '下载次数',
-  `file_key` varchar(64) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '文件惟一码',
+  `file_key` varchar(64) NOT NULL DEFAULT '' COMMENT '文件惟一码',
   `filename` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '文件名',
-  `file_path` varchar(100) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '文件路径,相对于根目录,可以为url',
-  `file_md5` varchar(32) CHARACTER SET utf8 NOT NULL DEFAULT '' COMMENT '文件md5值',
-  `file_sha1` varchar(40) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `file_path` varchar(100) NOT NULL DEFAULT '' COMMENT '文件路径,相对于根目录,可以为url',
+  `file_md5` varchar(32) NOT NULL DEFAULT '' COMMENT '文件md5值',
+  `file_sha1` varchar(40) NOT NULL DEFAULT '',
   `suffix` varchar(10) NOT NULL DEFAULT '' COMMENT '文件后缀名,不包括点',
   `more` text COMMENT '其它详细信息,JSON格式',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT COMMENT='资源表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT COMMENT='资源表';
 
+-- ----------------------------
+-- Records of t_tb_asset
+-- ----------------------------
 INSERT INTO `t_tb_asset` VALUES ('1', '1', '10916680', '2019-04-08 14:59:57', '1', '0', '20190408/605b6f26-cd90-406c-b760-da1aeb899802.apk', 'app-release.apk', '20190408/605b6f26-cd90-406c-b760-da1aeb899802.apk', '', '', 'apk', null);
-
-
 
 -- ----------------------------
 -- Table structure for t_tb_company
@@ -1290,7 +1340,7 @@ CREATE TABLE `t_tb_company` (
   PRIMARY KEY (`id`),
   KEY `title` (`title`),
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=97 DEFAULT CHARSET=utf8 COMMENT='责任单位';
+) ENGINE=InnoDB AUTO_INCREMENT=97 DEFAULT CHARSET=utf8mb4 COMMENT='责任单位';
 
 -- ----------------------------
 -- Records of t_tb_company
@@ -1403,7 +1453,7 @@ CREATE TABLE `t_tb_event_step` (
   `event_type` int(10) DEFAULT NULL COMMENT '事务类型id',
   `step` varchar(255) DEFAULT NULL COMMENT '步骤说明',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='事务类型步骤管理';
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COMMENT='事务类型步骤管理';
 
 -- ----------------------------
 -- Records of t_tb_event_step
@@ -1430,7 +1480,7 @@ CREATE TABLE `t_tb_event_type` (
   `event_type` varchar(255) DEFAULT NULL COMMENT '事务类型',
   `report_alias` varchar(255) DEFAULT NULL COMMENT '报表别名',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='事件类型';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COMMENT='事件类型';
 
 -- ----------------------------
 -- Records of t_tb_event_type
@@ -1452,16 +1502,10 @@ CREATE TABLE `t_tb_leadership` (
   `phone` varchar(255) DEFAULT NULL COMMENT '电话',
   `email` varchar(255) DEFAULT NULL COMMENT '邮箱',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='领导列表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='领导列表';
 
 -- ----------------------------
 -- Records of t_tb_leadership
--- ----------------------------
-
-
-
--- ----------------------------
--- Records of t_tb_official_document
 -- ----------------------------
 
 -- ----------------------------
@@ -1470,7 +1514,7 @@ CREATE TABLE `t_tb_leadership` (
 DROP TABLE IF EXISTS `t_tb_unit_type`;
 CREATE TABLE `t_tb_unit_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `title` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '类型名称',
+  `title` varchar(255) DEFAULT NULL COMMENT '类型名称',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COMMENT='单位类型';
@@ -1505,7 +1549,7 @@ CREATE TABLE `t_tb_version_upgrade` (
   `create_time` datetime DEFAULT NULL,
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='app版本信息';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='app版本信息';
 
 -- ----------------------------
 -- Records of t_tb_version_upgrade
@@ -1520,7 +1564,7 @@ CREATE TABLE `t_tb_work_type` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `title` varchar(255) DEFAULT NULL COMMENT '交办事件类型名称',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='交办事件类型名称管理';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COMMENT='交办事件类型名称管理';
 
 -- ----------------------------
 -- Records of t_tb_work_type
@@ -1530,8 +1574,6 @@ INSERT INTO `t_tb_work_type` VALUES ('2', '常委会议定事项');
 INSERT INTO `t_tb_work_type` VALUES ('3', '全区重大项目');
 INSERT INTO `t_tb_work_type` VALUES ('4', '重要工作');
 INSERT INTO `t_tb_work_type` VALUES ('5', '临时工作限时办结');
-
-
 
 -- ----------------------------
 -- Procedure structure for AnalysisReport
@@ -1545,7 +1587,7 @@ begin
 	declare var_param varchar(8000);-- 动态SQL语句
 	declare var_col varchar(8000);
   -- 获取动态列
-	SELECT
+	SELECT 
     GROUP_CONCAT('Max(case itemdesc when \'',
         itemdesc,
         '\' then num else null end )as \'$',
@@ -1556,13 +1598,13 @@ begin
 INTO var_param FROM
     td_checkitem
 WHERE
-    itemclass IN (2 , 3, 4);
-
+    itemclass IN (2 , 3, 4); 
+	
 	--  SQL语句
 	set var_sql=CONCAT("select comp.title as '$0单位',Totalnum as '$1交办事项总数',concat(case when Totalnum>0 then cast(DealSuccNum*100.0/Totalnum as decimal(18,2)) else 0.00 end,'%') '$1交办事项办结率(%)'
 		,Totalnum-DealSuccNum as '$1未办结数',wjssb as '$1未及时上报数',case when DealSuccNum>0 then cast(DealDate*1.0/DealSuccNum as signed) else 0 end '$1办结平均时长(天数)',tab.*
-	from
-    (
+	from 
+    ( 
         select com.title,com.id,sum(case when taskunit.status=4 then 1 else 0 end) as DealSuccNum,sum(case when taskunit.id is
         not null then 1 else 0 end)Totalnum
         ,sum(case when taskunit.status=4 then cast(timestampdiff(SECOND,assign.assigntime,deal.finishtime)/86400 as
@@ -1622,7 +1664,7 @@ DELIMITER ;
 -- ----------------------------
 DROP FUNCTION IF EXISTS `fn_Gettimediff`;
 DELIMITER ;;
-CREATE DEFINER=`root`@`%` FUNCTION `fn_Gettimediff`(`beginTime` datetime,`endTime` datetime) RETURNS varchar(50) CHARSET utf8
+CREATE DEFINER=`root`@`%` FUNCTION `fn_Gettimediff`(`beginTime` datetime,`endTime` datetime) RETURNS varchar(50) CHARSET utf8mb4
 BEGIN
 	declare days int;
 	declare SumSeconds  int;
