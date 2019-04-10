@@ -4,6 +4,7 @@ import cn.stylefeng.guns.modular.MeetingRec.dto.SreachMeetingRecDto;
 import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
 import cn.stylefeng.guns.modular.system.model.Meetingrec;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.IService;
 
 import java.util.HashMap;
@@ -22,4 +23,6 @@ public interface IMeetingrecService extends IService<Meetingrec> {
     ResponseData selectListByDto(SreachMeetingRecDto sreachDto);
 
     List<HashMap<String, Object>> export(SreachMeetingDto sreachMeetingDto);
+
+    List<HashMap<String, Object>> getInfoByUnitid(Wrapper eq);
 }

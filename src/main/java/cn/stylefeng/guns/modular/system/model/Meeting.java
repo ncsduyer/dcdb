@@ -46,6 +46,7 @@ public class Meeting extends Model<Meeting> {
      * 会议备注
      */
     private String memo;
+    private String host;
     @TableField(exist = false)
     private Integer count;
     @TableField(exist = false)
@@ -150,5 +151,13 @@ public class Meeting extends Model<Meeting> {
         ", status=" + status +
         ", memo=" + memo +
         "}";
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
     }
 }

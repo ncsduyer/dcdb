@@ -10,32 +10,44 @@
         <result column="checkvalue" property="checkvalue" />
         <result column="createtime" property="createtime" />
         <result column="unitid" property="unitid" />
+        <result column="name" property="name" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, meetingid, checkitemid, checkvalue, createtime, unitid
+        id, meetingid, checkitemid, checkvalue, createtime, unitid,`name`
     </sql>
     <select id="getInfoByPid" resultType="java.util.HashMap">
         SELECT c.title ctitle ,rec.unitid unitid,
         <if test="courses != null">
             <foreach collection="courses" item="item" separator=",">
-                MAX(CASE rec.checkitemid WHEN ${item.id} THEN rec.checkvalue ElSE 0 END)  "${item.id}"
+                SUM (CASE rec.checkitemid WHEN ${item.id} THEN 1 ElSE 0 END)  "${item.id}"
             </foreach>
         </if>
-        from td_meetingrec rec
+        from (select
+        <include refid="Base_Column_List"/> from td_meetingrec
+         <where>
+        ${ew.sqlSegment}
+        </where>) rec
         left join t_tb_company c on c.id=rec.unitid
-
+        GROUP BY rec.unitid
+    </select>
+    <select id="getInfoByUnitid" resultType="java.util.HashMap">
+        SELECT rec.id id,rec.meetingid meetingid , rec.checkitemid checkitemid, rec.checkvalue checkvalue, rec.createtime createtime, rec.unitid  unitid,rec.`name` `name`,c.title ctitle,ch.itemdesc itemdesc
+        from (select
+        <include refid="Base_Column_List"/> from td_meetingrec
         <where>
             ${ew.sqlSegment}
-        </where>
-        GROUP BY rec.unitid
+        </where>) rec
+        left join t_tb_company c on c.id=rec.unitid
+        left join td_checkitem ch on ch.id=rec.checkitemid
+        group by `name`
     </select>
     <select id="export" resultType="java.util.HashMap">
         SELECT c.title title ,c.id unitid,
         <if test="courses != null">
             <foreach collection="courses" item="item" separator=",">
-                SUM(CASE rec.checkitemid WHEN ${item.id} THEN rec.checkvalue ElSE 0 END)  "${item.id}"
+                SUM(CASE rec.checkitemid WHEN ${item.id} THEN 1 ElSE 0 END)  "${item.id}"
             </foreach>
         </if>
         from t_tb_company c left join td_meetingrec rec on c.id=rec.unitid LEFT JOIN td_meeting m  ON rec.meetingid = m.id

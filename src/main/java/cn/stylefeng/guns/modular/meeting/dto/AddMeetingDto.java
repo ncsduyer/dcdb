@@ -19,6 +19,8 @@ public class AddMeetingDto {
     @ApiModelProperty("会议备注")
     private String memo;
 
+    @ApiModelProperty("会议主持人")
+    private Integer host;
     @ApiModelProperty("起草人ID")
     private Integer creatorid;
 
@@ -97,4 +99,11 @@ public class AddMeetingDto {
         this.creatorid = creatorid;
     }
 
+    public Integer getHost() {
+        return host;
+    }
+
+    public void setHost(Integer host) {
+        this.host = host;
+    }
 }

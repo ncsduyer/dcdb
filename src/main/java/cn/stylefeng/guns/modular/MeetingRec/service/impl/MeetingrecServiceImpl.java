@@ -13,6 +13,7 @@ import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import com.baomidou.mybatisplus.mapper.Condition;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,5 +66,10 @@ public class MeetingrecServiceImpl extends ServiceImpl<MeetingrecMapper, Meeting
             e.printStackTrace();
         }
         return meetingrecMapper.export(sreachDto,checkitemService.selectList(Condition.create().eq("itemclass", 2).eq("status", 1)));
+    }
+
+    @Override
+    public List<HashMap<String, Object>> getInfoByUnitid(Wrapper eq) {
+        return meetingrecMapper.getInfoByUnitid(eq);
     }
 }

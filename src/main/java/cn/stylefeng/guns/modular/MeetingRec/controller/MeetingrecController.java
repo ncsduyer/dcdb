@@ -6,7 +6,6 @@ import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.modular.DcCompany.service.ICompanyService;
 import cn.stylefeng.guns.modular.MeetingRec.dto.SreachMeetingRecDto;
 import cn.stylefeng.guns.modular.MeetingRec.service.IMeetingrecService;
-import cn.stylefeng.guns.modular.MeetingRec.vo.MeetingrecVo;
 import cn.stylefeng.guns.modular.system.model.Meetingrec;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
@@ -17,7 +16,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -26,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -134,17 +131,7 @@ public class MeetingrecController extends BaseController {
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
         }
         try {
-            List<MeetingrecVo> meetingrecVos=new ArrayList<>();
-            MeetingrecVo meetingrecVo=null;
-            for (Meetingrec i: (List<Meetingrec>) meetingrecService.selectList(Condition.create().eq("meetingid", meetingrec.getMeetingid()).eq("unitid", meetingrec.getUnitid()))) {
-                meetingrecVo=new MeetingrecVo();
-                BeanUtils.copyProperties(i, meetingrecVo);
-                meetingrecVo.setUnitname(companyService.selectById(meetingrecVo.getUnitid()).getTitle());
-                meetingrecVos.add(meetingrecVo);
-            }
-            meetingrecVo=null;
-
-            return ResponseData.success(meetingrecVos);
+            return ResponseData.success(meetingrecService.getInfoByUnitid(Condition.create().eq("meetingid", meetingrec.getMeetingid()).eq("unitid", meetingrec.getUnitid())));
         }catch (Exception e){
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
         }

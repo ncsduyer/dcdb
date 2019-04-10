@@ -10,6 +10,7 @@
         <result column="creatorid" property="creatorid" />
         <result column="status" property="status" />
         <result column="memo" property="memo" />
+        <result column="host" property="host" />
     </resultMap>
     <resultMap id="BaseMoreMap" type="cn.stylefeng.guns.modular.system.model.Meeting">
         <id column="mid" property="id" />
@@ -18,6 +19,7 @@
         <result column="mcreatorid" property="creatorid" />
         <result column="mstatus" property="status" />
         <result column="mmemo" property="memo" />
+        <result column="mhost" property="host" />
         <result column="mcount" property="count"/>
         <association property="createuser" javaType="cn.stylefeng.guns.modular.system.model.User">
             <id column="uid" property="id"/>
@@ -33,10 +35,10 @@
     </resultMap>
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, mtime, title, creatorid, status, memo
+        id, mtime, title, creatorid, status, memo,host
     </sql>
     <sql id="AS_Column_List">
-        m.id mid, m.mtime mmtime, m.title mtitle, m.creatorid mcreatorid, m.status mstatus, m.memo mmemo,count(distinct mr.unitid) mcount,u.id uid, u.name uname,es.id esid,es.pid espid,es.status esstatus,es.event_type esevent_type,es.step esstep
+        m.id mid, m.mtime mmtime, m.title mtitle, m.creatorid mcreatorid, m.status mstatus, m.memo mmemo,m.host mhost,count(distinct mr.unitid) mcount,u.id uid, u.name uname,es.id esid,es.pid espid,es.status esstatus,es.event_type esevent_type,es.step esstep
     </sql>
     <sql id="base_with">
         FROM

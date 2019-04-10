@@ -42,7 +42,7 @@ public class MeetingController extends BaseController {
     @RequestMapping(value = "/getList", method = RequestMethod.POST)
     @ResponseBody
     public ResponseData getList() {
-        return ResponseData.success(meetingService.selectList(Condition.create().orderBy("id", false)));
+        return ResponseData.success(meetingService.selectList(Condition.create().eq("status",1).orderBy("id", false)));
     }
 
     /**

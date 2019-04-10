@@ -102,6 +102,25 @@ public class Meetingrec extends Model<Meetingrec> {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if(obj==null){
+            return false;
+        }
+        if(this==obj){
+            return true;
+        }
+        if(obj instanceof Meetingrec){
+            Meetingrec meetingrec=(Meetingrec)obj;
+            if(meetingrec.id.equals(this.id)){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public String toString() {
         return "Meetingrec{" +
         ", id=" + id +

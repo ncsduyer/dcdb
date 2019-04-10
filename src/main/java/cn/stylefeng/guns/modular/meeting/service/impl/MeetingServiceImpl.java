@@ -118,17 +118,17 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
     @Override
     public ResponseData add(AddMeetingDto addDto) {
         try{
-
                 Meeting meeting = new Meeting();
                 BeanUtils.copyProperties(addDto, meeting);
                 if(ToolUtil.isEmpty(meeting.getCreatorid())){
                     meeting.setCreatorid(ShiroKit.getUser().getId());
                 }
                 insert(meeting);
-                   Meetingrec meetingrec= new Meetingrec();
+                Meetingrec meetingrec=null;
             if (ToolUtil.isNotEmpty(addDto.getResc())) {
 //                循环插入交办单位
                 for (Meetingrec map : addDto.getResc()) {
+                    meetingrec= new Meetingrec();
                     BeanUtils.copyProperties(map, meetingrec);
                    meetingrec.setMeetingid(meeting.getId());
                     if (ToolUtil.isEmpty(meetingrec.getCreatetime())) {
@@ -167,16 +167,19 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
             Meeting meeting = new Meeting();
             BeanUtils.copyProperties(addDto, meeting);
             updateById(meeting);
-            Meetingrec meetingrec= new Meetingrec();
+            Meetingrec meetingrec= null;
             if (ToolUtil.isNotEmpty(addDto.getResc())) {
+                List<Meetingrec> old=selectList(Condition.create().eq("meetingid", meeting.getId()));
+                old.removeAll(addDto.getResc());
+                deleteBatchIds(old);
 //                循环修改交办单位
                 for (Meetingrec map : addDto.getResc()) {
+                    meetingrec=new Meetingrec();
                     CopyUtils.copyProperties(map, meetingrec);
                     meetingrecMapper.updateById(meetingrec);
                 }
             }
             return ResponseData.success();
-
         }catch (Exception e){
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
