@@ -6,6 +6,7 @@ import cn.stylefeng.guns.modular.UnitType.service.IUnitTypeService;
 import cn.stylefeng.guns.modular.system.model.Company;
 import cn.stylefeng.guns.modular.system.model.UnitType;
 import cn.stylefeng.roses.core.base.controller.BaseController;
+import com.baomidou.mybatisplus.mapper.Condition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -70,7 +71,7 @@ public class CompanyController extends BaseController {
     @RequestMapping(value = "/list")
     @ResponseBody
     public Object list(String condition) {
-        return companyService.selectList(null);
+        return companyService.selectList(Condition.create().orderBy("id", false));
     }
 
     /**
