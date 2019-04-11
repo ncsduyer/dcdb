@@ -133,7 +133,7 @@ public class ApiWorkTypeController extends BaseController {
 
         List<CompanyVo> companyVos=new ArrayList<>();
         CompanyVo companyVo=null;
-        for (Company company:(List<Company>) companyService.selectMoreList(Condition.create().eq("c.status", 1).orderBy("c.`order`", false))) {
+        for (Company company:(List<Company>) companyService.selectMoreList(Condition.create().eq("c.status", 1).orderBy("c.`order`", false).orderBy("id", true))) {
             companyVo=new CompanyVo();
             CopyUtils.copyProperties(company, companyVo);
             companyVos.add(companyVo);
