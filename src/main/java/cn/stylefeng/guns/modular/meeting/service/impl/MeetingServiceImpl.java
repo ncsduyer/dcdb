@@ -34,6 +34,7 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.servlet.http.HttpServletResponse;
@@ -49,6 +50,7 @@ import java.util.*;
  * @since 2018-12-23
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> implements IMeetingService {
     @Autowired
     private MeetingMapper meetingMapper;
@@ -225,7 +227,12 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
         meeting.setCompanys(meetingrecMapper.getInfoByPid(Condition.create().eq("rec.meetingid",  id),checkitemService.selectList(Condition.create().eq("itemclass", 2).eq("status", 1))));
         return ResponseData.success(meeting);
     }
-
+    @Override
+    public Boolean deleteMoreById(Integer id) {
+        meetingrecMapper.delete(Condition.create().eq("meetingid", id));
+        boolean sucess=deleteById(id);
+        return sucess;
+    }
     @Override
     public ResponseData getReports(SreachMeetingDto sreachDto) {
         return SreachPage(sreachDto);

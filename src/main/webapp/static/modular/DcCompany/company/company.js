@@ -14,8 +14,8 @@ var Company = {
 Company.initColumn = function () {
     return [
         {field: 'selectItem', radio: true},
-        {title: '主键id', field: 'id', visible: true, align: 'center', valign: 'middle'},
-        {title: '排序', field: 'order', visible: true, align: 'center', valign: 'middle'},
+        {title: '主键id', field: 'id', align: 'center', valign: 'middle', sortable: true},
+        {title: '排序', field: 'order', align: 'center', valign: 'middle', sortable: true},
         {title: '单位名称', field: 'title', visible: true, align: 'center', valign: 'middle'},
         {title: '简称', field: 'abbTitle', visible: true, align: 'center', valign: 'middle'},
         {title: '地址', field: 'adress', visible: true, align: 'center', valign: 'middle'},

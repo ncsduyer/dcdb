@@ -110,17 +110,17 @@ public class MeetingController extends BaseController {
     /**
      * 删除会议
      */
-////    @ApiOperation(value = "删除会议")
-////    @ApiImplicitParams({
-////            @ApiImplicitParam(name = "assignWorkId", value = "id", required = true, dataType = "Long"),
-////    })
-////    @RequestMapping(value = "/delete/{assignWorkId}",method = RequestMethod.GET)
-////    @Permission
-////    @ResponseBody
-////    public BigResponseData delete(@PathVariable("assignWorkId") Integer assignWorkId) {
-////        meetingService.deleteById(assignWorkId);
-////        return SUCCESS_TIP;
-////    }
+    @ApiOperation(value = "删除会议")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "id", required = true, dataType = "Long"),
+    })
+    @RequestMapping(value = "/delete/{id}",method = RequestMethod.GET)
+    @Permission
+    @ResponseBody
+    public ResponseData delete(@PathVariable("id") Integer id) {
+        meetingService.deleteMoreById(id);
+        return SUCCESS_TIP;
+    }
     /**
      * 会议报表图表
      */

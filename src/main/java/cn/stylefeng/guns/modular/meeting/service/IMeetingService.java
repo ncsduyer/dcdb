@@ -31,4 +31,6 @@ public interface IMeetingService extends IService<Meeting> {
     ResponseData edit(AddMeetingDto meeting);
 
     void export(SreachMeetingDto sreachMeetingDto, HttpServletResponse response);
+
+    Boolean deleteMoreById(Integer assignWorkId);
 }
