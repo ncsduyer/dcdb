@@ -65,11 +65,13 @@ public class MeetingrecController extends BaseController {
      */
     @RequestMapping(value = "/add")
     @ResponseBody
-    public ResponseData add(Meetingrec meetingrec) {
-        if (ToolUtil.isEmpty(meetingrec.getCreatetime())){
-            meetingrec.setCreatetime(new DateTime());
+    public ResponseData add(List<Meetingrec> meetingrecs) {
+        for (Meetingrec meetingrec:meetingrecs){
+            if (ToolUtil.isEmpty(meetingrec.getCreatetime())){
+                meetingrec.setCreatetime(new DateTime());
+            }
         }
-        if (meetingrecService.insert(meetingrec)){
+        if (meetingrecService.insertBatch(meetingrecs)){
         return SUCCESS_TIP;
         }
         return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
