@@ -14,13 +14,15 @@ import cn.stylefeng.guns.modular.CopyRecordNotice.service.ICopyRecordNoticeServi
 import cn.stylefeng.guns.modular.DocAssignRec.service.IDocassignrecService;
 import cn.stylefeng.guns.modular.Docs.dto.AddDocDto;
 import cn.stylefeng.guns.modular.Docs.dto.SreachDocDto;
-import cn.stylefeng.guns.modular.Docs.service.IDocsService;
-import cn.stylefeng.guns.modular.EventStep.service.IEventStepService;
+import cn.stylefeng.guns.modular.Docs.service.IDocService;
 import cn.stylefeng.guns.modular.checkitem.service.ICheckitemService;
 import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
-import cn.stylefeng.guns.modular.system.dao.DocassignrecMapper;
-import cn.stylefeng.guns.modular.system.dao.DocsMapper;
-import cn.stylefeng.guns.modular.system.model.*;
+import cn.stylefeng.guns.modular.system.dao.DocMapper;
+import cn.stylefeng.guns.modular.system.dao.DocRecMapper;
+import cn.stylefeng.guns.modular.system.model.Checkitem;
+import cn.stylefeng.guns.modular.system.model.CopyRecordNotice;
+import cn.stylefeng.guns.modular.system.model.Doc;
+import cn.stylefeng.guns.modular.system.model.DocRec;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
@@ -32,6 +34,8 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
@@ -39,22 +43,21 @@ import java.util.*;
 
 /**
  * <p>
- * 公文运转 服务实现类
+ * 交办公文表 服务实现类
  * </p>
  *
  * @author 三千霜
- * @since 2018-12-23
+ * @since 2019-04-12
  */
 @Service
-public class DocsServiceImpl extends ServiceImpl<DocsMapper, Docs> implements IDocsService {
+@Transactional(rollbackFor = Exception.class)
+public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocService {
     @Autowired
-    private DocsMapper docsMapper;
+    private DocMapper docsMapper;
     @Autowired
-    private DocassignrecMapper docassignrecMapper;
+    private DocRecMapper docassignrecMapper;
     @Autowired
     private ICheckitemService checkitemService;
-    @Autowired
-    private IEventStepService eventStepService;
     @Autowired
     private IDocassignrecService docassignrecService;
     @Autowired
@@ -65,15 +68,15 @@ public class DocsServiceImpl extends ServiceImpl<DocsMapper, Docs> implements ID
             if (ToolUtil.isEmpty(sreachDto)) {
                 sreachDto = new SreachDocDto();
             }
-            Page<Docs> page = new Page<>(sreachDto.getPage(), sreachDto.getLimit());
+            Page<HashMap<String,Object>> page = new Page<>(sreachDto.getPage(), sreachDto.getLimit());
             new Bettime(sreachDto);
-            EntityWrapper<Docs> ew = new EntityWrapper<>();
-            ew.setEntity(new Docs());
+            EntityWrapper<DocRec> ew = new EntityWrapper<>();
+            ew.setEntity(new DocRec());
             if (ToolUtil.isNotEmpty(sreachDto.getBeforeTime())){
-                ew.ge("m.mtime", sreachDto.getBeforeTime());
+                ew.ge("m.assign_time", sreachDto.getBeforeTime());
             }
             if (ToolUtil.isNotEmpty(sreachDto.getAfterTime())){
-                ew.le("m.mtime", sreachDto.getAfterTime());
+                ew.le("m.assign_time", sreachDto.getAfterTime());
             }
             if (ToolUtil.isNotEmpty(sreachDto.getId())){
                 ew.eq("m.id", sreachDto.getId());
@@ -98,13 +101,8 @@ public class DocsServiceImpl extends ServiceImpl<DocsMapper, Docs> implements ID
                 ew.orderBy("m.id",false);
             }
 
-            ArrayList<Docs> arrayList = docsMapper.selectAsPage(page,ew);
-            for (Docs meeting: arrayList
-            ) {
-                meeting.setCompanys(docassignrecMapper.getInfoByPid(Condition.create().eq("rec.docassignid",  meeting.getId()).in("rec.unitid", sreachDto.getCompanyIds()),checkitemService.selectList(Condition.create().eq("itemclass", 3).eq("status", 1))));
-            }
+            ArrayList<HashMap<String,Object>> arrayList = docassignrecMapper.getInfoByPidPage(page,ew,checkitemService.selectList(Condition.create().eq("itemclass", 3).eq("status", 1)));
             page.setRecords(arrayList);
-//            page.setTotal(docsMapper.selectAsCount(ew));
             return ResponseData.success(page);
         }catch (Exception e){
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
@@ -114,20 +112,21 @@ public class DocsServiceImpl extends ServiceImpl<DocsMapper, Docs> implements ID
     @Override
     public ResponseData add(AddDocDto addDto) {
         try{
-
-            Docs docs = new Docs();
+            addDto.setId(null);
+            Doc docs = new Doc();
             BeanUtils.copyProperties(addDto, docs);
             if(ToolUtil.isEmpty(docs.getCreatorid())){
                 docs.setCreatorid(ShiroKit.getUser().getId());
             }
             insert(docs);
 
-            Docassignrec meetingrec= new Docassignrec();
+            DocRec meetingrec= null;
             if (ToolUtil.isNotEmpty(addDto.getResc())) {
 //                循环插入交办单位
                 for (DocRec map : addDto.getResc()) {
+                    meetingrec= new DocRec();
                     BeanUtils.copyProperties(map, meetingrec);
-            meetingrec.setDocassignid(docs.getId());
+                    meetingrec.setDocassignid(docs.getId());
                     if (ToolUtil.isEmpty(meetingrec.getCreatetime())) {
                         meetingrec.setCreatetime(new DateTime());
                     }
@@ -138,7 +137,7 @@ public class DocsServiceImpl extends ServiceImpl<DocsMapper, Docs> implements ID
             Map<String,String> map=new HashMap<>();
             SimpleDateFormat sdf=new SimpleDateFormat("yyyy年MM月dd日");
             map.put("title",docs.getTitle());
-            map.put("date",sdf.format(docs.getMtime()));
+            map.put("date",sdf.format(docs.getAssignTime()));
             map.put("datetime",sdf.format(Calendar.getInstance().getTime()));
             if (ToolUtil.isNotEmpty(addDto.getCopyRecordNotices())) {
                 for (CopyRecordNotice copyRecordNotice : addDto.getCopyRecordNotices()) {
@@ -154,20 +153,28 @@ public class DocsServiceImpl extends ServiceImpl<DocsMapper, Docs> implements ID
             return ResponseData.success();
 
         }catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
         }
     }
 
     @Override
     public ResponseData edit(AddDocDto addDto) {
+        if(ToolUtil.isEmpty(addDto.getId())){
+            return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
+        }
         try{
-            Docs meeting = new Docs();
+            Doc meeting = new Doc();
             BeanUtils.copyProperties(addDto, meeting);
             updateById(meeting);
-            Docassignrec meetingrec= new Docassignrec();
+            DocRec meetingrec= null;
             if (ToolUtil.isNotEmpty(addDto.getResc())) {
+                List<DocRec> old=selectList(Condition.create().eq("docassignid", meeting.getId()));
+                old.removeAll(addDto.getResc());
+                deleteBatchIds(old);
 //                循环修改交办单位
                 for (DocRec map : addDto.getResc()) {
+                    meetingrec= new DocRec();
                     CopyUtils.copyProperties(map, meetingrec);
                     docassignrecMapper.updateById(meetingrec);
                 }
@@ -175,6 +182,7 @@ public class DocsServiceImpl extends ServiceImpl<DocsMapper, Docs> implements ID
             return ResponseData.success();
 
         }catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
         }
     }
@@ -213,9 +221,62 @@ public class DocsServiceImpl extends ServiceImpl<DocsMapper, Docs> implements ID
     }
 
     @Override
+    public Boolean deleteMoreById(Integer id) {
+        docassignrecMapper.delete(Condition.create().eq("docassignid", id));
+        boolean sucess=deleteById(id);
+        return sucess;
+    }
+
+    @Override
+    public ResponseData selectAsMore(SreachMeetingDto sreachDto) {
+        try {
+            if (ToolUtil.isEmpty(sreachDto)) {
+                sreachDto = new SreachDocDto();
+            }
+            Page<Doc> page = new Page<>(sreachDto.getPage(), sreachDto.getLimit());
+            new Bettime(sreachDto);
+            EntityWrapper<Doc> ew = new EntityWrapper<>();
+            ew.setEntity(new Doc());
+            if (ToolUtil.isNotEmpty(sreachDto.getBeforeTime())){
+                ew.ge("m.assign_time", sreachDto.getBeforeTime());
+            }
+            if (ToolUtil.isNotEmpty(sreachDto.getAfterTime())){
+                ew.le("m.assign_time", sreachDto.getAfterTime());
+            }
+            if (ToolUtil.isNotEmpty(sreachDto.getId())){
+                ew.eq("m.id", sreachDto.getId());
+            }
+            if (ToolUtil.isNotEmpty(sreachDto.getCreatorid())){
+                ew.eq("m.creatorid", sreachDto.getCreatorid());
+            }
+//            拼接查询条件
+            if (ToolUtil.isNotEmpty(sreachDto.getTitle())){
+                ew.like("m.title", sreachDto.getTitle());
+            }
+            if (ToolUtil.isNotEmpty(sreachDto.getStatus())){
+                ew.in("m.status", sreachDto.getStatus());
+            }
+            if (ToolUtil.isNotEmpty(sreachDto.getCompanyIds())){
+                ew.in("mr.unitid", sreachDto.getCompanyIds());
+            }
+            ew.groupBy("m.id");
+            if (ToolUtil.isNotEmpty(sreachDto.getOrder())){
+                ew.orderBy(sreachDto.getOrder());
+            }else{
+                ew.orderBy("m.id",false);
+            }
+
+            List<Doc> arrayList = docsMapper.selectAsMore(ew);
+            page.setRecords(arrayList);
+            return ResponseData.success(page);
+        }catch (Exception e){
+            return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
+        }
+    }
+
+    @Override
     public ResponseData selectWithManyById(Integer id) {
-        Docs meeting = docsMapper.selectWithManyById(id);
-        meeting.setCompanys(docassignrecMapper.getInfoByPid(Condition.create().eq("rec.docassignid",  id),checkitemService.selectList(Condition.create().eq("itemclass", 3).eq("status", 1))));
+        Doc meeting = docsMapper.selectWithManyById(id);
         return ResponseData.success(meeting);
     }
 
@@ -321,5 +382,3 @@ public class DocsServiceImpl extends ServiceImpl<DocsMapper, Docs> implements ID
 
     }
 }
-
-

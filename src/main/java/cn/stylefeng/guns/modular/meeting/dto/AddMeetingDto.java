@@ -106,4 +106,29 @@ public class AddMeetingDto {
     public void setHost(Integer host) {
         this.host = host;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("\"id\":")
+                .append(id);
+        sb.append(",\"title\":\"")
+                .append(title).append('\"');
+        sb.append(",\"memo\":\"")
+                .append(memo).append('\"');
+        sb.append(",\"host\":")
+                .append(host);
+        sb.append(",\"creatorid\":")
+                .append(creatorid);
+        sb.append(",\"mtime\":\"")
+                .append(mtime).append('\"');
+        sb.append(",\"status\":")
+                .append(status);
+        sb.append(",\"resc\":")
+                .append(resc);
+        sb.append(",\"copyRecordNotices\":")
+                .append(copyRecordNotices);
+        sb.append('}');
+        return sb.toString();
+    }
 }

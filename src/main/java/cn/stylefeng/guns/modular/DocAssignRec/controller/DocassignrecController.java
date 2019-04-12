@@ -3,9 +3,10 @@ package cn.stylefeng.guns.modular.DocAssignRec.controller;
 import cn.hutool.core.date.DateTime;
 import cn.stylefeng.guns.core.common.annotion.Permission;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
-import cn.stylefeng.guns.modular.DocAssignRec.service.IDocassignrecService;
-import cn.stylefeng.guns.modular.MeetingRec.dto.SreachMeetingRecDto;
-import cn.stylefeng.guns.modular.system.model.Docassignrec;
+import cn.stylefeng.guns.modular.Docs.service.IDocRecService;
+import cn.stylefeng.guns.modular.Docs.service.IDocService;
+import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
+import cn.stylefeng.guns.modular.system.model.DocRec;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
@@ -18,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 公文运转上报管理控制器
@@ -33,7 +36,9 @@ public class DocassignrecController extends BaseController {
     private String PREFIX = "/DocAssignRec/docassignrec/";
 
     @Autowired
-    private IDocassignrecService docassignrecService;
+    private IDocRecService docassignrecService;
+    @Autowired
+    private IDocService docService;
 
 
 
@@ -42,16 +47,21 @@ public class DocassignrecController extends BaseController {
      */
     @ApiOperation(value = "公文运转上报列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "checkitemid", value = "检查项ID数组", required = false, dataType = "String"),
+            @ApiImplicitParam(name = "title", value = "关键词", required = false, dataType = "String"),
             @ApiImplicitParam(name = "creatorid", value = "创建人id", required = false, dataType = "Long"),
-            @ApiImplicitParam(name = "companyIds", value = "部门id数组", required = false, dataType = "String"),
-            @ApiImplicitParam(name = "pid", value = "所属事项id", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "beforeTime", value = "开始时间", required = false, dataType = "String"),
+            @ApiImplicitParam(name = "afterTime", value = "结束时间", required = false, dataType = "String"),
+            @ApiImplicitParam(name = "status", value = "状态 (0-未归档；1-已归档)", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "companyIds", value = "相关单位数组", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "page", value = "页码", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "limit", value = "每页条数", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "order", value = "排序条件", required = false, dataType = "Long"),
     })
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @Permission
     @ResponseBody
-    public ResponseData list(@Validated @RequestBody SreachMeetingRecDto sreachMeetingRecDto) {
-        return docassignrecService.selectListByDto(sreachMeetingRecDto);
+    public ResponseData list(@Validated @RequestBody SreachMeetingDto sreachMeetingRecDto) {
+        return docService.selectAsMore(sreachMeetingRecDto);
     }
 
     /**
@@ -59,11 +69,14 @@ public class DocassignrecController extends BaseController {
      */
     @RequestMapping(value = "/add")
     @ResponseBody
-    public ResponseData add(Docassignrec docassignrec) {
-        if (ToolUtil.isEmpty(docassignrec.getCreatetime())){
-            docassignrec.setCreatetime(new DateTime());
+    public ResponseData add(List<DocRec> recs) {
+        for (DocRec rec:recs){
+            if (ToolUtil.isEmpty(rec.getCreatetime())){
+                rec.setCreatetime(new DateTime());
+            }
         }
-        if (docassignrecService.insert(docassignrec)){
+
+        if (docassignrecService.insertBatch(recs)){
             return SUCCESS_TIP;
         }
         return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
@@ -86,7 +99,7 @@ public class DocassignrecController extends BaseController {
      */
     @RequestMapping(value = "/update")
     @ResponseBody
-    public ResponseData update(Docassignrec docassignrec) {
+    public ResponseData update(DocRec docassignrec) {
 
         if (docassignrecService.updateById(docassignrec)){
             return SUCCESS_TIP;

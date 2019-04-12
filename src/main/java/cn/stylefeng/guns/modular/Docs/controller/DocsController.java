@@ -3,7 +3,7 @@ package cn.stylefeng.guns.modular.Docs.controller;
 import cn.stylefeng.guns.core.common.annotion.Permission;
 import cn.stylefeng.guns.modular.Docs.dto.AddDocDto;
 import cn.stylefeng.guns.modular.Docs.dto.SreachDocDto;
-import cn.stylefeng.guns.modular.Docs.service.IDocsService;
+import cn.stylefeng.guns.modular.Docs.service.IDocService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import com.baomidou.mybatisplus.mapper.Condition;
@@ -33,7 +33,7 @@ public class DocsController extends BaseController {
     private String PREFIX = "/Docs/docs/";
 
     @Autowired
-    private IDocsService docsService;
+    private IDocService docsService;
 
 
 
@@ -55,7 +55,7 @@ public class DocsController extends BaseController {
             @ApiImplicitParam(name = "creatorid", value = "创建人id", required = false, dataType = "Long"),
             @ApiImplicitParam(name = "beforeTime", value = "开始时间", required = false, dataType = "String"),
             @ApiImplicitParam(name = "afterTime", value = "结束时间", required = false, dataType = "String"),
-            @ApiImplicitParam(name = "status", value = "状态 (0-停用；1-启用)", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "status", value = "状态 (0-未归档；1-已归档)", required = false, dataType = "Long"),
             @ApiImplicitParam(name = "companyIds", value = "相关单位数组", required = false, dataType = "Long"),
             @ApiImplicitParam(name = "page", value = "页码", required = false, dataType = "Long"),
             @ApiImplicitParam(name = "limit", value = "每页条数", required = false, dataType = "Long"),
@@ -111,17 +111,17 @@ public class DocsController extends BaseController {
     /**
      * 删除公文运转
      */
-////    @ApiOperation(value = "删除公文运转")
-////    @ApiImplicitParams({
-////            @ApiImplicitParam(name = "assignWorkId", value = "id", required = true, dataType = "Long"),
-////    })
-////    @RequestMapping(value = "/delete/{assignWorkId}",method = RequestMethod.GET)
-////    @Permission
-////    @ResponseBody
-////    public BigResponseData delete(@PathVariable("assignWorkId") Integer assignWorkId) {
-////        docsService.deleteById(assignWorkId);
-////        return SUCCESS_TIP;
-////    }
+    @ApiOperation(value = "删除公文运转")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "id", required = true, dataType = "Long"),
+    })
+    @RequestMapping(value = "/delete/{id}",method = RequestMethod.GET)
+    @Permission
+    @ResponseBody
+    public ResponseData delete(@PathVariable("id") Integer id) {
+        docsService.deleteMoreById(id);
+        return SUCCESS_TIP;
+    }
     /**
      * 公文运转报表图表
      */
@@ -145,7 +145,7 @@ public class DocsController extends BaseController {
             @ApiImplicitParam(name = "creatorid", value = "创建人id", required = false, dataType = "Long"),
             @ApiImplicitParam(name = "beforeTime", value = "开始时间", required = false, dataType = "String"),
             @ApiImplicitParam(name = "afterTime", value = "结束时间", required = false, dataType = "String"),
-            @ApiImplicitParam(name = "status", value = "状态 (0-停用；1-启用)", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "status", value = "状态 (0-未归档；1-已归档)", required = false, dataType = "Long"),
             @ApiImplicitParam(name = "companyIds", value = "相关单位数组", required = false, dataType = "Long"),
             @ApiImplicitParam(name = "page", value = "页码", required = false, dataType = "Long"),
             @ApiImplicitParam(name = "limit", value = "每页条数", required = false, dataType = "Long"),
