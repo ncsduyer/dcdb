@@ -65,7 +65,7 @@ public class DocassignrecController extends BaseController {
     }
 
     /**
-     * 新增公文运转上报管理
+     * 新增公文运转上报督查记录
      */
     @RequestMapping(value = "/add")
     @ResponseBody
@@ -83,7 +83,7 @@ public class DocassignrecController extends BaseController {
     }
 
     /**
-     * 删除公文运转上报管理
+     * 删除公文运转上报督查记录
      */
     @RequestMapping(value = "/delete")
     @ResponseBody
@@ -95,7 +95,7 @@ public class DocassignrecController extends BaseController {
     }
 
     /**
-     * 修改公文运转上报管理
+     * 修改公文运转上报督查记录
      */
     @RequestMapping(value = "/update")
     @ResponseBody
@@ -108,7 +108,7 @@ public class DocassignrecController extends BaseController {
     }
 
     /**
-     * 公文运转上报管理详情
+     * 公文运转上报督查记录详情
      */
     @RequestMapping(value = "/detail/{id}")
     @ResponseBody

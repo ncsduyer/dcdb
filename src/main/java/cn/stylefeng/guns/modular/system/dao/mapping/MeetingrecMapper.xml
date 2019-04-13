@@ -21,7 +21,7 @@
         SELECT c.title ctitle ,rec.unitid unitid,
         <if test="courses != null">
             <foreach collection="courses" item="item" separator=",">
-                SUM (CASE rec.checkitemid WHEN ${item.id} THEN 1 ElSE 0 END)  "${item.id}"
+                SUM(CASE rec.checkitemid WHEN ${item.id} THEN 1 ElSE 0 END)  "${item.id}"
             </foreach>
         </if>
         from (select

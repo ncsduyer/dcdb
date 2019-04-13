@@ -49,7 +49,7 @@ public class DocsController extends BaseController {
     /**
      * 获取公文运转列表
      */
-    @ApiOperation(value = "公文运转列表")
+    @ApiOperation(value = "公文运转单位统计列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "title", value = "关键词", required = false, dataType = "String"),
             @ApiImplicitParam(name = "creatorid", value = "创建人id", required = false, dataType = "Long"),
@@ -72,7 +72,7 @@ public class DocsController extends BaseController {
     /**
      * 新增公文运转
      */
-    @ApiOperation(value = "新增公文运转")
+    @ApiOperation(value = "新增公文")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @Permission
     @ResponseBody
@@ -85,7 +85,7 @@ public class DocsController extends BaseController {
     /**
      * 修改公文运转
      */
-    @ApiOperation(value = "修改公文运转")
+    @ApiOperation(value = "修改公文")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @Permission
     @ResponseBody
@@ -111,7 +111,7 @@ public class DocsController extends BaseController {
     /**
      * 删除公文运转
      */
-    @ApiOperation(value = "删除公文运转")
+    @ApiOperation(value = "删除公文")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "id", required = true, dataType = "Long"),
     })

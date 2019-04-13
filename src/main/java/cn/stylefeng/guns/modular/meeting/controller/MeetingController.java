@@ -97,7 +97,7 @@ public class MeetingController extends BaseController {
     /**
      * 会议详情
      */
-    @ApiOperation(value = "会议单条详情")
+    @ApiOperation(value = "会议单位统计详情")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "会议事项id", required = true, dataType = "Long"),
     })

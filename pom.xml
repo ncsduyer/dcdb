@@ -283,7 +283,7 @@
                 </includes>
             </resource>
         </resources>
-        <finalName>admin</finalName>
+        <finalName>dcdb</finalName>
     </build>
 
     <profiles>

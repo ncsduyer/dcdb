@@ -2,7 +2,6 @@ package cn.stylefeng.guns.modular.system.dao;
 
 import cn.stylefeng.guns.modular.system.model.Doc;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import org.apache.ibatis.annotations.Param;
@@ -22,5 +21,5 @@ public interface DocMapper extends BaseMapper<Doc> {
     Doc selectWithManyById(Integer id);
     ArrayList<Doc> selectAsPage(Pagination page, @Param("ew") Wrapper<Doc> wrapper);
     Long selectAsCount(@Param("ew") Wrapper<Doc> wrapper);
-    List<Doc> selectAsMore(EntityWrapper<Doc> ew);
+    List<Doc> selectAsMore(@Param("ew") Wrapper<Doc> wrapper);
 }

@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -17,6 +19,7 @@ import java.util.Date;
  * @author 三千霜
  * @since 2019-03-28
  */
+@ApiModel("CopyRecordNotice")
 @TableName("copy_record_notice")
 public class CopyRecordNotice extends Model<CopyRecordNotice> {
 
@@ -43,6 +46,7 @@ public class CopyRecordNotice extends Model<CopyRecordNotice> {
     /**
      * 内容
      */
+    @ApiModelProperty("内容")
     private String content;
     /**
      * 当前状态
@@ -56,10 +60,12 @@ public class CopyRecordNotice extends Model<CopyRecordNotice> {
     /**
      * 电话
      */
+    @ApiModelProperty("电话")
     private String tel;
     /**
      * 接收人
      */
+    @ApiModelProperty("接收人")
     private String sender;
     /**
      * 触发人id

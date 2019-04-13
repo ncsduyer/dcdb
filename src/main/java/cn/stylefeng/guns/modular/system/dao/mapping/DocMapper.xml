@@ -17,18 +17,22 @@
         <result column="end_time" property="endTime" />
         <result column="status" property="status" />
     </resultMap>
-    <resultMap id="BaseMoreMap" type="cn.stylefeng.guns.modular.system.model.Doc" extends="BaseResultMap">
+    <resultMap id="BaseMoreMap" type="cn.stylefeng.guns.modular.system.model.Doc">
+        <id column="mid" property="id" />
+        <result column="mtitle" property="title" />
+        <result column="munitid" property="unitid" />
+        <result column="mdoctype" property="doctype" />
+        <result column="massignmemo" property="assignmemo" />
+        <result column="mcurrecvid" property="currecvid" />
+        <result column="mcurrecv" property="currecv" />
+        <result column="mcreatorid" property="creatorid" />
+        <result column="mclosememo" property="closememo" />
+        <result column="massign_time" property="assignTime" />
+        <result column="mend_time" property="endTime" />
+        <result column="mstatus" property="status" />
         <association property="createuser" javaType="cn.stylefeng.guns.modular.system.model.User">
             <id column="uid" property="id"/>
             <result column="uname" property="name"/>
-        </association>
-        <association property="docRecs" javaType="cn.stylefeng.guns.modular.system.model.DocRec">
-            <id column="mrid" property="id" />
-            <result column="mrdocassignid" property="docassignid" />
-            <result column="mrcheckitemid" property="checkitemid" />
-            <result column="mrcheckvalue" property="checkvalue" />
-            <result column="mrcreatetime" property="createtime" />
-            <result column="mrunitid" property="unitid" />
         </association>
         <association property="eventStep" javaType="cn.stylefeng.guns.modular.system.model.EventStep">
             <id column="esid" property="id"/>
@@ -37,13 +41,21 @@
             <result column="esevent_type" property="eventType"/>
             <result column="esstep" property="step"/>
         </association>
+        <collection property="docRecs" ofType="cn.stylefeng.guns.modular.system.model.DocRec">
+            <id column="mrid" property="id" />
+            <result column="mrdocassignid" property="docassignid" />
+            <result column="mrcheckitemid" property="checkitemid" />
+            <result column="mrcheckvalue" property="checkvalue" />
+            <result column="mrcreatetime" property="createtime" />
+            <result column="mrunitid" property="unitid" />
+        </collection>
     </resultMap>
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, title, unitid, doctype, assignmemo, currecvid, currecv, creatorid, closememo, assign_time, end_time, status
     </sql>
     <sql id="AS_Column_List">
-        m.id id, m.title title, m.unitid unitid, m.doctype doctype, m.assignmemo assignmemo, m.currecvid currecvid, m.currecv currecv, m.creatorid creatorid, m.closememo closememo, m.assign_time assign_time, m.end_time end_time, m.status status,u.id uid, u.name uname,es.id esid,es.pid espid,es.status esstatus,es.event_type esevent_type,es.step esstep,mr.id mrid, mr.docassignid mrdocassignid, mr.checkitemid mrcheckitemid, mr.checkvalue mrcheckvalue, mr.createtime mrcreatetime, mr.unitid mrunitid
+        m.id mid, m.title mtitle, m.unitid munitid, m.doctype mdoctype, m.assignmemo massignmemo, m.currecvid mcurrecvid, m.currecv mcurrecv, m.creatorid mcreatorid, m.closememo mclosememo, m.assign_time massign_time, m.end_time mend_time, m.status mstatus,u.id uid, u.name uname,es.id esid,es.pid espid,es.status esstatus,es.event_type esevent_type,es.step esstep ,mr.id mrid, mr.docassignid mrdocassignid, mr.checkitemid mrcheckitemid, mr.checkvalue mrcheckvalue, mr.createtime mrcreatetime, mr.unitid mrunitid
     </sql>
     <sql id="base_with">
         FROM

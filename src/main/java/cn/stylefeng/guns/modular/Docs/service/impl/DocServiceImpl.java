@@ -11,9 +11,9 @@ import cn.stylefeng.guns.core.util.vo.ExportColSubVo;
 import cn.stylefeng.guns.core.util.vo.ExportColVo;
 import cn.stylefeng.guns.core.util.vo.ExportRowVo;
 import cn.stylefeng.guns.modular.CopyRecordNotice.service.ICopyRecordNoticeService;
-import cn.stylefeng.guns.modular.DocAssignRec.service.IDocassignrecService;
 import cn.stylefeng.guns.modular.Docs.dto.AddDocDto;
 import cn.stylefeng.guns.modular.Docs.dto.SreachDocDto;
+import cn.stylefeng.guns.modular.Docs.service.IDocRecService;
 import cn.stylefeng.guns.modular.Docs.service.IDocService;
 import cn.stylefeng.guns.modular.checkitem.service.ICheckitemService;
 import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
@@ -55,11 +55,11 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
     @Autowired
     private DocMapper docsMapper;
     @Autowired
-    private DocRecMapper docassignrecMapper;
+    private DocRecMapper docRecMapper;
     @Autowired
     private ICheckitemService checkitemService;
     @Autowired
-    private IDocassignrecService docassignrecService;
+    private IDocRecService docRecService;
     @Autowired
     private ICopyRecordNoticeService copyRecordNoticeService;
     @Override
@@ -94,14 +94,14 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
             if (ToolUtil.isNotEmpty(sreachDto.getCompanyIds())){
                 ew.in("mr.unitid", sreachDto.getCompanyIds());
             }
-            ew.groupBy("m.id");
+            ew.groupBy("mr.unitid");
             if (ToolUtil.isNotEmpty(sreachDto.getOrder())){
                 ew.orderBy(sreachDto.getOrder());
             }else{
                 ew.orderBy("m.id",false);
             }
 
-            ArrayList<HashMap<String,Object>> arrayList = docassignrecMapper.getInfoByPidPage(page,ew,checkitemService.selectList(Condition.create().eq("itemclass", 3).eq("status", 1)));
+            ArrayList<HashMap<String,Object>> arrayList = docRecMapper.getInfoByPidPage(page,ew,checkitemService.selectList(Condition.create().eq("itemclass", 3).eq("status", 1)));
             page.setRecords(arrayList);
             return ResponseData.success(page);
         }catch (Exception e){
@@ -127,10 +127,11 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
                     meetingrec= new DocRec();
                     BeanUtils.copyProperties(map, meetingrec);
                     meetingrec.setDocassignid(docs.getId());
+                    meetingrec.setCheckvalue(1);
                     if (ToolUtil.isEmpty(meetingrec.getCreatetime())) {
                         meetingrec.setCreatetime(new DateTime());
                     }
-                    docassignrecMapper.insert(meetingrec);
+                    docRecMapper.insert(meetingrec);
                 }
             }
 
@@ -169,14 +170,17 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
             updateById(meeting);
             DocRec meetingrec= null;
             if (ToolUtil.isNotEmpty(addDto.getResc())) {
-                List<DocRec> old=selectList(Condition.create().eq("docassignid", meeting.getId()));
-                old.removeAll(addDto.getResc());
-                deleteBatchIds(old);
+//                List<DocRec> old=docRecService.selectList(Condition.create().eq("docassignid", meeting.getId()));
+//                old.removeAll(addDto.getResc());
+//                if(ToolUtil.isNotEmpty(old)){
+//                    docRecService.deleteBatchIds(old);
+//                }
 //                循环修改交办单位
                 for (DocRec map : addDto.getResc()) {
                     meetingrec= new DocRec();
                     CopyUtils.copyProperties(map, meetingrec);
-                    docassignrecMapper.updateById(meetingrec);
+                    meetingrec.setCheckvalue(1);
+                    docRecMapper.updateById(meetingrec);
                 }
             }
             return ResponseData.success();
@@ -192,7 +196,7 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
 //sheet名
         String sheetName = "区委公文数据分析表";
         List<ExportRowVo> exportRowVos = new ArrayList<>();
-        List<HashMap<String,Object>> maps = docassignrecService.export(sreachDocDto);
+        List<HashMap<String,Object>> maps = docRecService.export(sreachDocDto);
         List<ExportRowVo> titles=new ArrayList<>();
         ExportRowVo title=  new ExportRowVo();
         title.setTotal(1);
@@ -203,6 +207,8 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
             title.getColVos().add(new ExportColVo(new ExportColSubVo(1,ck.getItemdesc())));
             //获取数据
         }
+        title.getColVos().add(new ExportColVo(new ExportColSubVo(1,"平均处理时长")));
+        title.getColVos().add(new ExportColVo(new ExportColSubVo(1,"总数")));
         titles.add(title);
 
         for (HashMap<String,Object> map : maps) {
@@ -214,6 +220,8 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
                 Checkitem ck=checkitems.get(i);
                 exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, TypeCastUtil.toString(TypeCastUtil.toInt(TypeCastUtil.toDouble(map.get(ck.getId().toString())))))));
             }
+            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, (String) map.get("pjsj"))));
+            exportRowVo.getColVos().add(new ExportColVo(new ExportColSubVo(1, TypeCastUtil.toString(TypeCastUtil.toInt(map.get("total"))))));
             exportRowVos.add(exportRowVo);
         }
 
@@ -222,7 +230,7 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
 
     @Override
     public Boolean deleteMoreById(Integer id) {
-        docassignrecMapper.delete(Condition.create().eq("docassignid", id));
+        docRecMapper.delete(Condition.create().eq("docassignid", id));
         boolean sucess=deleteById(id);
         return sucess;
     }

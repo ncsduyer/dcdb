@@ -46,12 +46,11 @@ public class MeetingrecController extends BaseController {
     /**
      * 获取会议督查记录管理列表
      */
-    @ApiOperation(value = "会议督查记录列表")
+    @ApiOperation(value = "会议督查单位统计记录列表")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "checkitemid", value = "检查项ID数组", required = false, dataType = "String"),
-            @ApiImplicitParam(name = "creatorid", value = "创建人id", required = false, dataType = "Long"),
-            @ApiImplicitParam(name = "companyIds", value = "部门id数组", required = false, dataType = "String"),
-            @ApiImplicitParam(name = "pid", value = "所属事项id", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "pid", value = "必填:会议ID", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "checkitemid", value = "检查项ID", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "companyIds", value = "必填:单位id数组", required = true, dataType = "String"),
     })
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @Permission
@@ -100,18 +99,33 @@ public class MeetingrecController extends BaseController {
     /**
      * 修改会议督查记录管理
      */
-    @ApiOperation(value = "修改区委信息单个单位")
+    @ApiOperation(value = "修改区委信息单位个人记录")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "必填:id", required = true, dataType = "String"),
 //            @ApiImplicitParam(name = "meetingid", value = "可选:会议ID", required = true, dataType = "String"),
 //            @ApiImplicitParam(name = "unitid", value = "可选:部门id", required = true, dataType = "String"),
-//            @ApiImplicitParam(name = "checkitemid", value = "可选:检查项ID", required = false, dataType = "String"),
-            @ApiImplicitParam(name = "checkvalue", value = "必填:检查项值", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "checkitemid", value = "可选:检查项ID", required = false, dataType = "String")
+
     })
     @RequestMapping(value = "/update",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public ResponseData update(@RequestBody List<Meetingrec> meetingrecs) {
-
+    public ResponseData update(@RequestBody Meetingrec meetingrec) {
+        meetingrec.setCheckvalue("1");
+        if (meetingrecService.updateById(meetingrec)){
+            return SUCCESS_TIP;
+        }
+        return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
+    }
+    /**
+     * 修改会议督查记录管理
+     */
+    @ApiOperation(value = "批量修改区委信息单位个人记录")
+    @RequestMapping(value = "/updateList",method = {RequestMethod.GET,RequestMethod.POST})
+    @ResponseBody
+    public ResponseData updateList(@RequestBody List<Meetingrec> meetingrecs) {
+        for (Meetingrec meetingrec:meetingrecs){
+            meetingrec.setCheckvalue("1");
+        }
         if (meetingrecService.updateBatchById(meetingrecs)){
             return SUCCESS_TIP;
         }
@@ -121,7 +135,7 @@ public class MeetingrecController extends BaseController {
     /**
      * 会议督查记录管理详情
      */
-    @ApiOperation(value = "区委信息单个单位详情")
+    @ApiOperation(value = "区委信息单个单位人员详情列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "meetingid", value = "必填:会议ID", required = true, dataType = "String"),
             @ApiImplicitParam(name = "unitid", value = "必填:部门id", required = true, dataType = "String"),

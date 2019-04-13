@@ -106,7 +106,7 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
             ArrayList<Meeting> arrayList = meetingMapper.selectAsPage(page,ew);
             for (Meeting meeting: arrayList
                  ) {
-                List<HashMap<String,Object>> compangys= meetingrecMapper.getInfoByPid(Condition.create().eq("rec.meetingid",  meeting.getId()).in("rec.unitid", sreachDto.getCompanyIds()),checkitemService.selectList(Condition.create().eq("itemclass", 2).eq("status", 1)));
+                List<HashMap<String,Object>> compangys= meetingrecMapper.getInfoByPid(Condition.create().eq("meetingid",  meeting.getId()).in("unitid", sreachDto.getCompanyIds()),checkitemService.selectList(Condition.create().eq("itemclass", 2).eq("status", 1)));
                 meeting.setCompanys(compangys);
             }
             page.setRecords(arrayList);
@@ -133,6 +133,7 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
                     meetingrec= new Meetingrec();
                     BeanUtils.copyProperties(map, meetingrec);
                    meetingrec.setMeetingid(meeting.getId());
+                   meetingrec.setCheckvalue("1");
                     if (ToolUtil.isEmpty(meetingrec.getCreatetime())) {
                         meetingrec.setCreatetime(new DateTime());
                     }
@@ -171,13 +172,16 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
             updateById(meeting);
             Meetingrec meetingrec= null;
             if (ToolUtil.isNotEmpty(addDto.getResc())) {
-                List<Meetingrec> old=selectList(Condition.create().eq("meetingid", meeting.getId()));
-                old.removeAll(addDto.getResc());
-                deleteBatchIds(old);
+//                List<Meetingrec> old=meetingrecService.selectList(Condition.create().eq("meetingid", meeting.getId()));
+//                old.removeAll(addDto.getResc());
+//                if(ToolUtil.isNotEmpty(old)){
+//                    meetingrecService.deleteBatchIds(old);
+//                }
 //                循环修改交办单位
                 for (Meetingrec map : addDto.getResc()) {
                     meetingrec=new Meetingrec();
                     CopyUtils.copyProperties(map, meetingrec);
+                    meetingrec.setCheckvalue("1");
                     meetingrecMapper.updateById(meetingrec);
                 }
             }
@@ -224,7 +228,7 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
     @Override
     public ResponseData selectWithManyById(Integer id) {
         Meeting meeting = meetingMapper.selectWithManyById(id);
-        meeting.setCompanys(meetingrecMapper.getInfoByPid(Condition.create().eq("rec.meetingid",  id),checkitemService.selectList(Condition.create().eq("itemclass", 2).eq("status", 1))));
+        meeting.setCompanys(meetingrecMapper.getInfoByPid(Condition.create().eq("meetingid",  id),checkitemService.selectList(Condition.create().eq("itemclass", 2).eq("status", 1))));
         return ResponseData.success(meeting);
     }
     @Override
