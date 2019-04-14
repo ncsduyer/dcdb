@@ -19,10 +19,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -79,18 +76,33 @@ public class MeetingrecController extends BaseController {
     /**
      * 删除会议督查记录管理
      */
-    @ApiOperation(value = "删除区委信息单个单位")
+    @ApiOperation(value = "删除单个单位信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "meetingid", value = "必填:会议ID", required = true, dataType = "String"),
             @ApiImplicitParam(name = "unitid", value = "必填:部门id", required = true, dataType = "String"),
     })
-    @RequestMapping(value = "/delete",method = {RequestMethod.GET,RequestMethod.POST})
+    @RequestMapping(value = "/deleteByunit",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public ResponseData delete(@RequestBody Meetingrec meetingrec) {
+    public ResponseData deleteByunit(@RequestBody Meetingrec meetingrec) {
         if (ToolUtil.isEmpty(meetingrec.getMeetingid())||ToolUtil.isEmpty(meetingrec.getUnitid())){
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
         }
         if (meetingrecService.delete(Condition.create().eq("meetingid", meetingrec.getMeetingid()).eq("unitid", meetingrec.getUnitid()))){
+            return SUCCESS_TIP;
+        }
+        return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
+    }
+    /**
+     * 删除会议督查记录管理
+     */
+    @ApiOperation(value = "删除单个信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "必填:D", required = true, dataType = "String"),
+    })
+    @RequestMapping(value = "/delete/{id}",method = {RequestMethod.GET,RequestMethod.POST})
+    @ResponseBody
+    public ResponseData delete(@RequestParam(value = "id") Integer id) {
+        if (meetingrecService.deleteById(id)){
             return SUCCESS_TIP;
         }
         return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
