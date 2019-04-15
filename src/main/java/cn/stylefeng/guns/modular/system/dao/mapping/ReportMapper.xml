@@ -172,7 +172,7 @@ select comp.title,Totalnum,concat(case when Totalnum>0 then cast(DealSuccNum*100
         select Tab.itemdesc,Tab.title,sum(if(doc.id is null,0,doc.checkvalue)) as num,comid
         from (select item.id,item.itemdesc,com.title,com.id as comid from td_checkitem item,t_tb_company com  where item.itemclass=3)Tab
         left join td_doc_rec doc on doc.checkitemid=Tab.id and Tab.comid=doc.unitid
-        and doc.assign_time between #{beforeTime,jdbcType=TIMESTAMP} and #{afterTime,jdbcType=TIMESTAMP}
+        and doc.createtime between #{beforeTime,jdbcType=TIMESTAMP} and #{afterTime,jdbcType=TIMESTAMP}
         group by Tab.itemdesc,Tab.title,comid
         )a
         group by itemdesc
