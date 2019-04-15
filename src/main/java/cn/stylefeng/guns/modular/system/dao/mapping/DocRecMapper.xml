@@ -17,7 +17,7 @@
         id, docassignid, checkitemid, checkvalue, createtime, unitid
     </sql>
     <select id="getInfoByPid" resultType="java.util.HashMap">
-        SELECT c.title ctitle ,mr.unitid unitid,
+        SELECT c.title ctitle ,mr.unitid unitid,m.id mid
         fn_getdhis(AVG(TIMESTAMPDIFF(SECOND,m.assign_time,ifnull(m.end_time,sysdate())))) pjsj,
         count(m.id) total,
         <if test="courses != null">
@@ -31,7 +31,7 @@
         </where>
     </select>
     <select id="getInfoByPidPage" resultType="java.util.HashMap">
-        SELECT c.title ctitle ,mr.unitid unitid,
+        SELECT c.title ctitle ,mr.unitid unitid,,m.id mid
         fn_getdhis(AVG(TIMESTAMPDIFF(SECOND,m.assign_time,ifnull(m.end_time,sysdate())))) pjsj,
         count(m.id) total,
         <if test="courses != null">
@@ -46,7 +46,7 @@
         </where>
     </select>
     <select id="export" resultType="java.util.HashMap">
-        SELECT c.title title ,c.id unitid,
+        SELECT c.title title ,c.id unitid,,m.id mid
         fn_getdhis(AVG(TIMESTAMPDIFF(SECOND,m.assign_time,ifnull(m.end_time,sysdate())))) pjsj,
         count(m.id) total,
         <if test="courses != null">
