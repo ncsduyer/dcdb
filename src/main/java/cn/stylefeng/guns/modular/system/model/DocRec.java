@@ -1,6 +1,7 @@
 package cn.stylefeng.guns.modular.system.model;
 
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
@@ -50,6 +51,16 @@ public class DocRec extends Model<DocRec> {
      */
     @ApiModelProperty("部门id")
     private Integer unitid;
+
+    @TableField(exist = false)
+    private Checkitem checkitem;
+    public Checkitem getCheckitem() {
+        return checkitem;
+    }
+
+    public void setCheckitem(Checkitem checkitem) {
+        this.checkitem = checkitem;
+    }
 
 
     public Integer getId() {

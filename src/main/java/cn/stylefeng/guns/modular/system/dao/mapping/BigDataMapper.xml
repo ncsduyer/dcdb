@@ -24,7 +24,7 @@ FROM
 		SELECT
 	count(DISTINCT drec.id)
 FROM
-	td_docassignrec drec WHERE c.id = drec.unitid
+	td_doc_rec drec WHERE c.id = drec.unitid
 	) AS qwgw
 FROM
 	t_tb_company c
@@ -101,4 +101,7 @@ FROM
 			com.title
 	) a ORDER BY total DESC
     </select>
+    <select id="selectDcdbInfos" resultType="java.util.HashMap">
+
+	</select>
 </mapper>

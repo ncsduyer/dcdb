@@ -48,6 +48,9 @@
             <result column="mrcheckvalue" property="checkvalue" />
             <result column="mrcreatetime" property="createtime" />
             <result column="mrunitid" property="unitid" />
+            <association property="checkitem" javaType="cn.stylefeng.guns.modular.system.model.Checkitem">
+                <result column="chitemdesc" property="itemdesc" />
+            </association>
         </collection>
     </resultMap>
     <!-- 通用查询结果列 -->
@@ -63,18 +66,19 @@
         LEFT JOIN t_tb_event_step es ON es.status=m.status and es.event_type=3 LEFT JOIN sys_user u ON u.id = m.creatorid
     </sql>
     <select id="selectWithManyById" resultMap="BaseMoreMap">
-        SELECT <include refid="AS_Column_List"/>
-        <include refid="base_with"/>  WHERE m.id=#{id}
+        SELECT <include refid="AS_Column_List"/>,(select itemdesc from  td_checkitem ch where id=mr.checkitemid) chitemdesc
+        <include refid="base_with"/>
+          WHERE m.id=#{id}
     </select>
     <select id="selectAsPage" resultMap="BaseMoreMap">
-        SELECT <include refid="AS_Column_List"/>
+        SELECT <include refid="AS_Column_List"/>,(select itemdesc from  td_checkitem ch where id=mr.checkitemid) chitemdesc
         <include refid="base_with"/>
         <where>
             ${ew.sqlSegment}
         </where>
     </select>
     <select id="selectAsMore" resultMap="BaseMoreMap">
-        SELECT <include refid="AS_Column_List"/>
+        SELECT <include refid="AS_Column_List"/> ,(select itemdesc from  td_checkitem ch where id=mr.checkitemid) chitemdesc
         <include refid="base_with"/>
         <where>
             ${ew.sqlSegment}

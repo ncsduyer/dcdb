@@ -104,11 +104,11 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
             }
 
             ArrayList<Meeting> arrayList = meetingMapper.selectAsPage(page,ew);
-            for (Meeting meeting: arrayList
-                 ) {
-                List<HashMap<String,Object>> compangys= meetingrecMapper.getInfoByPid(Condition.create().eq("meetingid",  meeting.getId()).in("unitid", sreachDto.getCompanyIds()),checkitemService.selectList(Condition.create().eq("itemclass", 2).eq("status", 1)));
-                meeting.setCompanys(compangys);
-            }
+//            for (Meeting meeting: arrayList
+//                 ) {
+//                List<HashMap<String,Object>> compangys= meetingrecMapper.getInfoByPid(Condition.create().eq("meetingid",  meeting.getId()).in("unitid", sreachDto.getCompanyIds()),checkitemService.selectList(Condition.create().eq("itemclass", 2).eq("status", 1)));
+//                meeting.setCompanys(compangys);
+//            }
             page.setRecords(arrayList);
 //            page.setTotal(meetingMapper.selectAsCount(ew));
             return ResponseData.success(page);

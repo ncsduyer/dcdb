@@ -101,7 +101,7 @@ public class MeetingrecController extends BaseController {
     })
     @RequestMapping(value = "/delete/{id}",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public ResponseData delete(@RequestParam(value = "id") Integer id) {
+    public ResponseData delete(@PathVariable(value = "id") Integer id) {
         if (meetingrecService.deleteById(id)){
             return SUCCESS_TIP;
         }
@@ -111,7 +111,7 @@ public class MeetingrecController extends BaseController {
     /**
      * 修改会议督查记录管理
      */
-    @ApiOperation(value = "修改区委信息单位个人记录")
+    @ApiOperation(value = "修改区委会议单位个人记录")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "必填:id", required = true, dataType = "String"),
 //            @ApiImplicitParam(name = "meetingid", value = "可选:会议ID", required = true, dataType = "String"),
@@ -131,7 +131,7 @@ public class MeetingrecController extends BaseController {
     /**
      * 修改会议督查记录管理
      */
-    @ApiOperation(value = "批量修改区委信息单位个人记录")
+    @ApiOperation(value = "批量修改区委会议单位个人记录")
     @RequestMapping(value = "/updateList",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
     public ResponseData updateList(@RequestBody List<Meetingrec> meetingrecs) {

@@ -1,14 +1,16 @@
 package cn.stylefeng.guns.modular.bigDataStatistics.controller;
 
+import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.util.Bettime;
 import cn.stylefeng.guns.core.util.CopyUtils;
-import cn.stylefeng.guns.modular.DocAssignRec.service.IDocassignrecService;
-import cn.stylefeng.guns.modular.Docs.service.IDocsService;
+import cn.stylefeng.guns.modular.Docs.service.IDocRecService;
+import cn.stylefeng.guns.modular.Docs.service.IDocService;
 import cn.stylefeng.guns.modular.EventStep.service.IEventStepService;
 import cn.stylefeng.guns.modular.Infos.service.IInfosService;
 import cn.stylefeng.guns.modular.Infosrec.service.IInfosrecService;
 import cn.stylefeng.guns.modular.MeetingRec.service.IMeetingrecService;
 import cn.stylefeng.guns.modular.bigDataStatistics.BigResponseData;
+import cn.stylefeng.guns.modular.bigDataStatistics.dto.SreachBigDateDto;
 import cn.stylefeng.guns.modular.bigDataStatistics.service.IBigDataServiceImpl;
 import cn.stylefeng.guns.modular.bigDataStatistics.vo.CheckItemVo;
 import cn.stylefeng.guns.modular.checkitem.service.ICheckitemService;
@@ -18,6 +20,7 @@ import cn.stylefeng.guns.modular.system.model.EventStep;
 import cn.stylefeng.guns.modular.system.model.Taskassign;
 import cn.stylefeng.guns.modular.tdtaskassign.service.ITaskassignService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
+import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import com.baomidou.mybatisplus.mapper.Condition;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -25,10 +28,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
 import java.util.*;
@@ -55,7 +55,7 @@ public class ApiBigDataController extends BaseController implements Serializable
     private IMeetingService meetingService;
 
     @Autowired
-    private IDocsService docsService;
+    private IDocService docsService;
 
     @Autowired
     private IInfosService iInfosService;
@@ -63,7 +63,7 @@ public class ApiBigDataController extends BaseController implements Serializable
     private IMeetingrecService meetingrecService;
 
     @Autowired
-    private IDocassignrecService docassignrecService;
+    private IDocRecService docassignrecService;
 
     @Autowired
     private IInfosrecService iInfosrecService;
@@ -220,4 +220,19 @@ public class ApiBigDataController extends BaseController implements Serializable
         return new BigResponseData(true, DEFAULT_SUCCESS_CODE, "请求成功", checkItemVos);
 
     }
+    /**
+     * 获取详情信息
+     */
+    @ApiOperation(value = "获取详情信息")
+    @RequestMapping(value = "/infos", method = {RequestMethod.GET,RequestMethod.POST})
+    @ResponseBody
+    @Cacheable(value = "bigdata",key = "#root.targetClass+'#'+#root.method")
+    public ResponseData infos(@RequestBody SreachBigDateDto sreachBigDateDto) {
+        try{
+        return new BigResponseData(true, DEFAULT_SUCCESS_CODE, "请求成功", bigDataService.infos(sreachBigDateDto));
+    } catch (Exception e) {
+        return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
+    }
+    }
+
 }
