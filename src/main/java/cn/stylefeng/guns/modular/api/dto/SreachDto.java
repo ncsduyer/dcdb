@@ -1,11 +1,13 @@
 package cn.stylefeng.guns.modular.api.dto;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
 import java.util.Date;
-
-public abstract class SreachDto {
+@ApiModel
+public abstract class SreachDto  implements Serializable {
     @ApiModelProperty("开始时间")
     @JSONField(format = "yyyy-MM-dd")
     private Date beforeTime;

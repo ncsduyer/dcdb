@@ -16,5 +16,11 @@ public interface BigDataMapper extends BaseMapper<BigData> {
 
     List<HashMap<String, Integer>> countAssignStatus();
 
-    ArrayList<HashMap<String, Object>> selectDcdbInfos(Pagination page, @Param("ew")Condition ew);
+    ArrayList<HashMap<String, Object>> selectDcdbInfos(Pagination page, @Param("ew") Condition ew);
+
+    ArrayList<HashMap<String, Object>> selectMeetInfos(Pagination page, @Param("ew") Condition ew);
+
+    ArrayList<HashMap<String, Object>> selectDocInfos(Pagination page, @Param("ew") Condition ew);
+
+    ArrayList<HashMap<String, Object>> selectInfoInfos(Pagination page, @Param("ew") Condition ew);
 }

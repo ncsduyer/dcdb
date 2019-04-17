@@ -1,13 +1,13 @@
 package cn.stylefeng.guns.modular.bigDataStatistics.vo;
 
 import com.baomidou.mybatisplus.plugins.Page;
-import org.apache.poi.ss.formula.functions.T;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class InfoVo {
-    private ArrayList<TitleVo> titles=new ArrayList<>();
+public class InfoVo<T> implements Serializable {
+    private ArrayList<TitleVo> titles;
     private Page<T> content;
 
     public ArrayList<TitleVo> getTitles() {
@@ -22,7 +22,7 @@ public class InfoVo {
         return content;
     }
 
-    public <T> void  setContent(Page<org.apache.poi.ss.formula.functions.T> content) {
+    public void  setContent(Page<T> content) {
         this.content = content;
     }
 

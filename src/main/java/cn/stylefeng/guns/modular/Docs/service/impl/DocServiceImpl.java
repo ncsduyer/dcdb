@@ -238,6 +238,9 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
     @Override
     public ResponseData selectAsMore(SreachMeetingDto sreachDto) {
         try {
+            if (ToolUtil.isEmpty(sreachDto.getCompanyIds())){
+                return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
+            }
             if (ToolUtil.isEmpty(sreachDto)) {
                 sreachDto = new SreachDocDto();
             }

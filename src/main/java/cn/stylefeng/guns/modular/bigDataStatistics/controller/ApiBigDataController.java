@@ -226,10 +226,10 @@ public class ApiBigDataController extends BaseController implements Serializable
     @ApiOperation(value = "获取详情信息")
     @RequestMapping(value = "/infos", method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    @Cacheable(value = "bigdata",key = "#root.targetClass+'#'+#root.method")
+//    @Cacheable(value = "bigdata",key = "#root.targetClass+'#'+#root.method")
     public ResponseData infos(@RequestBody SreachBigDateDto sreachBigDateDto) {
-        try{
-        return new BigResponseData(true, DEFAULT_SUCCESS_CODE, "请求成功", bigDataService.infos(sreachBigDateDto));
+        try{ ;
+        return new BigResponseData(true, DEFAULT_SUCCESS_CODE, "请求成功",  bigDataService.infos(sreachBigDateDto));
     } catch (Exception e) {
         return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
     }
