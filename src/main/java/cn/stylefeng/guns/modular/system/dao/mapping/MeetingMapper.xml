@@ -42,12 +42,17 @@
         id, mtime, title, creatorid, status, memo,hostid
     </sql>
     <sql id="AS_Column_List">
-        m.id mid, m.mtime mmtime, m.title mtitle, m.creatorid mcreatorid, m.status mstatus, m.memo mmemo,m.hostid mhostid,count(distinct mr.unitid) mcount,u.id uid, u.name uname,hu.id huid, hu.name huname,es.id esid,es.pid espid,es.status esstatus,es.event_type esevent_type,es.step esstep
+        m.id mid, m.mtime mmtime, m.title mtitle, m.creatorid mcreatorid, m.status mstatus, m.memo mmemo,m.hostid mhostid,count(distinct mr.unitid) mcount,u.id uid, u.name uname,es.id esid,es.pid espid,es.status esstatus,es.event_type esevent_type,es.step esstep,(
+		SELECT
+			hu. NAME huname
+		FROM
+			sys_user hu where hu.id = m.hostid
+	) huname
     </sql>
     <sql id="base_with">
         FROM
         td_meeting m LEFT JOIN td_meetingrec mr ON mr.meetingid = m.id
-        LEFT JOIN t_tb_event_step es ON es.status=m.status and es.event_type=2 LEFT JOIN sys_user u ON u.id = m.creatorid LEFT JOIN sys_user hu ON hu.id = m.hostid
+        LEFT JOIN t_tb_event_step es ON es.status=m.status and es.event_type=2 LEFT JOIN sys_user u ON u.id = m.creatorid
     </sql>
     <select id="selectWithManyById" resultMap="BaseMoreMap">
         SELECT <include refid="AS_Column_List"/>

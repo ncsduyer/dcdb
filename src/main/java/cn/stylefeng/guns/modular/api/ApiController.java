@@ -29,6 +29,7 @@ import cn.stylefeng.guns.core.util.KaptchaUtil;
 import cn.stylefeng.guns.modular.AppMenu.service.IAppMenuService;
 import cn.stylefeng.guns.modular.AppNotice.service.IAppNoticeService;
 import cn.stylefeng.guns.modular.VersionUpgrade.service.IVersionUpgradeService;
+import cn.stylefeng.guns.modular.api.service.FileService;
 import cn.stylefeng.guns.modular.api.vo.AppMenusVo;
 import cn.stylefeng.guns.modular.api.vo.VersionVo;
 import cn.stylefeng.guns.modular.resources.service.IAssetService;
@@ -454,67 +455,7 @@ public class ApiController extends BaseController {
     @RequestMapping(value = "/upload", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData upload(@RequestPart(value="files") List<MultipartFile> files) {
-        String suffixList = "jpg,gif,png,ico,bmp,jpeg";
-        List<Integer> imgids=new ArrayList<>();
-        List<Integer> fileids=new ArrayList<>();
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        String time = sdf.format(date);
-        String path = gunsProperties.getFileUploadPath()+"/../" ;
-        if(files.isEmpty()){
-            return ResponseData.error("上传文件不能为空");
-        }
-        Asset asset=null;
-        for (MultipartFile file:files
-             ) {
-            // 获取图片的原文件名
-            String fileOldName = file.getOriginalFilename();
-            // 获取图片的扩展名
-            String extensionName = fileOldName
-                    .substring(fileOldName.lastIndexOf(".") + 1);
-            // 文件大小
-            int size = (int) file.getSize();
-
-
-            String fileName = time+"/"+UUID.randomUUID().toString() + "." + ToolUtil.getFileSuffix(file.getOriginalFilename());
-
-            if(file.isEmpty()){
-                return ResponseData.error("上传文件不能为空");
-            }else{
-                File dest = new File(path + "/" + fileName);
-                //判断文件父目录是否存在
-                if(!dest.getParentFile().exists()){
-                    dest.getParentFile().mkdir();
-                }
-                try {
-                    file.transferTo(dest);
-                    //插入资源记录
-                    asset=new Asset();
-                    asset.setUserId(ShiroKit.getUser().getId());
-                    asset.setStatus(1);
-                    asset.setFileSize((long) size);
-                    asset.setFileKey(fileName);
-                    asset.setFilename(fileOldName);
-                    asset.setFilePath(fileName);
-                    asset.setCreateTime(date);
-                    asset.setSuffix(extensionName);
-                    assetService.insert(asset);
-                    if (suffixList.contains(extensionName.trim().toLowerCase())){
-                        imgids.add(asset.getId());
-                    }else{
-                        fileids.add(asset.getId());
-                    }
-                }catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                    return ResponseData.error("上传失败");
-                }
-            }
-        }
-        Map<String,List<Integer>> map=new HashMap<>();
-        map.put("photos",imgids);
-        map.put("files",fileids);
-        return ResponseData.success(map);
+        return FileService.upload(files, gunsProperties, assetService);
         }
 
 }
