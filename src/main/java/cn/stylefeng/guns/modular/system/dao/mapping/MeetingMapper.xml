@@ -10,7 +10,7 @@
         <result column="creatorid" property="creatorid" />
         <result column="status" property="status" />
         <result column="memo" property="memo" />
-        <result column="host" property="host" />
+        <result column="hostid" property="hostid" />
     </resultMap>
     <resultMap id="BaseMoreMap" type="cn.stylefeng.guns.modular.system.model.Meeting">
         <id column="mid" property="id" />
@@ -19,11 +19,15 @@
         <result column="mcreatorid" property="creatorid" />
         <result column="mstatus" property="status" />
         <result column="mmemo" property="memo" />
-        <result column="mhost" property="host" />
+        <result column="mhostid" property="hostid" />
         <result column="mcount" property="count"/>
         <association property="createuser" javaType="cn.stylefeng.guns.modular.system.model.User">
             <id column="uid" property="id"/>
             <result column="uname" property="name"/>
+        </association>
+        <association property="hostuser" javaType="cn.stylefeng.guns.modular.system.model.User">
+            <id column="huid" property="id"/>
+            <result column="huname" property="name"/>
         </association>
         <association property="eventStep" javaType="cn.stylefeng.guns.modular.system.model.EventStep">
             <id column="esid" property="id"/>
@@ -35,15 +39,15 @@
     </resultMap>
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, mtime, title, creatorid, status, memo,host
+        id, mtime, title, creatorid, status, memo,hostid
     </sql>
     <sql id="AS_Column_List">
-        m.id mid, m.mtime mmtime, m.title mtitle, m.creatorid mcreatorid, m.status mstatus, m.memo mmemo,m.host mhost,count(distinct mr.unitid) mcount,u.id uid, u.name uname,es.id esid,es.pid espid,es.status esstatus,es.event_type esevent_type,es.step esstep
+        m.id mid, m.mtime mmtime, m.title mtitle, m.creatorid mcreatorid, m.status mstatus, m.memo mmemo,m.hostid mhostid,count(distinct mr.unitid) mcount,u.id uid, u.name uname,hu.id huid, hu.name huname,es.id esid,es.pid espid,es.status esstatus,es.event_type esevent_type,es.step esstep
     </sql>
     <sql id="base_with">
         FROM
         td_meeting m LEFT JOIN td_meetingrec mr ON mr.meetingid = m.id
-        LEFT JOIN t_tb_event_step es ON es.status=m.status and es.event_type=2 LEFT JOIN sys_user u ON u.id = m.creatorid
+        LEFT JOIN t_tb_event_step es ON es.status=m.status and es.event_type=2 LEFT JOIN sys_user u ON u.id = m.creatorid LEFT JOIN sys_user hu ON hu.id = m.hostid
     </sql>
     <select id="selectWithManyById" resultMap="BaseMoreMap">
         SELECT <include refid="AS_Column_List"/>

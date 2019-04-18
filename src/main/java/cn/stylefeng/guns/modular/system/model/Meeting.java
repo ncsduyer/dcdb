@@ -46,11 +46,13 @@ public class Meeting extends Model<Meeting> {
      * 会议备注
      */
     private String memo;
-    private String host;
+    private Integer hostid;
     @TableField(exist = false)
     private Integer count;
     @TableField(exist = false)
     private User createuser;
+    @TableField(exist = false)
+    private User hostuser;
     @TableField(exist = false)
     private EventStep eventStep;
 
@@ -153,11 +155,21 @@ public class Meeting extends Model<Meeting> {
         "}";
     }
 
-    public String getHost() {
-        return host;
+
+
+    public Integer getHostid() {
+        return hostid;
     }
 
-    public void setHost(String host) {
-        this.host = host;
+    public void setHostid(Integer hostid) {
+        this.hostid = hostid;
+    }
+
+    public User getHostuser() {
+        return hostuser;
+    }
+
+    public void setHostuser(User hostuser) {
+        this.hostuser = hostuser;
     }
 }

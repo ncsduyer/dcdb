@@ -20,8 +20,8 @@ public class AddMeetingDto {
     private String memo;
 
     @ApiModelProperty("会议主持人")
-    private Integer host;
-    @ApiModelProperty("起草人ID")
+    private Integer hostid;
+    @ApiModelProperty("会风会纪督查人")
     private Integer creatorid;
 
     @ApiModelProperty("会议时间")
@@ -99,13 +99,7 @@ public class AddMeetingDto {
         this.creatorid = creatorid;
     }
 
-    public Integer getHost() {
-        return host;
-    }
 
-    public void setHost(Integer host) {
-        this.host = host;
-    }
 
     @Override
     public String toString() {
@@ -117,7 +111,7 @@ public class AddMeetingDto {
         sb.append(",\"memo\":\"")
                 .append(memo).append('\"');
         sb.append(",\"host\":")
-                .append(host);
+                .append(hostid);
         sb.append(",\"creatorid\":")
                 .append(creatorid);
         sb.append(",\"mtime\":\"")
@@ -130,5 +124,13 @@ public class AddMeetingDto {
                 .append(copyRecordNotices);
         sb.append('}');
         return sb.toString();
+    }
+
+    public Integer getHostid() {
+        return hostid;
+    }
+
+    public void setHostid(Integer hostid) {
+        this.hostid = hostid;
     }
 }
