@@ -15,17 +15,18 @@ import java.io.Serializable;
  * @author 三千霜
  * @since 2019-04-20
  */
-@TableName("td_doc_attr")
-public class DocAttr extends Model<DocAttr> {
+@TableName("td_info_rec_attr")
+public class InfoRecAttr extends Model<InfoRecAttr> {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
+    private Integer unitid;
     /**
      * 关联外表id
      */
-    private Integer pid;
+    private Integer infoid;
     /**
      * 资源id
      */
@@ -48,12 +49,20 @@ public class DocAttr extends Model<DocAttr> {
         this.id = id;
     }
 
-    public Integer getPid() {
-        return pid;
+    public Integer getUnitid() {
+        return unitid;
     }
 
-    public void setPid(Integer pid) {
-        this.pid = pid;
+    public void setUnitid(Integer unitid) {
+        this.unitid = unitid;
+    }
+
+    public Integer getInfoid() {
+        return infoid;
+    }
+
+    public void setInfoid(Integer infoid) {
+        this.infoid = infoid;
     }
 
     public Integer getAssetid() {
@@ -87,9 +96,10 @@ public class DocAttr extends Model<DocAttr> {
 
     @Override
     public String toString() {
-        return "DocAttr{" +
+        return "InfoRecAttr{" +
         ", id=" + id +
-        ", pid=" + pid +
+        ", unitid=" + unitid +
+        ", infoid=" + infoid +
         ", assetid=" + assetid +
         ", type=" + type +
         ", order=" + order +

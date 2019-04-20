@@ -66,20 +66,20 @@
         LEFT JOIN t_tb_event_step es ON es.status=m.status and es.event_type=3 LEFT JOIN sys_user u ON u.id = m.creatorid
     </sql>
     <select id="selectWithManyById" resultMap="BaseMoreMap">
-        SELECT <include refid="AS_Column_List"/>,(select itemdesc from  td_checkitem ch where id=mr.checkitemid) chitemdesc
-        <include refid="base_with"/>
-          WHERE m.id=#{id}
+        SELECT <include refid="AS_Column_List"/>,ch.itemdesc chitemdesc
+        <include refid="base_with"/> LEFT JOIN td_checkitem ch ON ch.id=mr.checkitemid
+          WHERE m.id=#{id} group By m.id,mr.id
     </select>
     <select id="selectAsPage" resultMap="BaseMoreMap">
-        SELECT <include refid="AS_Column_List"/>,(select itemdesc from  td_checkitem ch where id=mr.checkitemid) chitemdesc
-        <include refid="base_with"/>
+        SELECT <include refid="AS_Column_List"/>,ch.itemdesc chitemdesc
+        <include refid="base_with"/> LEFT JOIN td_checkitem ch ON ch.id=mr.checkitemid
         <where>
             ${ew.sqlSegment}
         </where>
     </select>
     <select id="selectAsMore" resultMap="BaseMoreMap">
-        SELECT <include refid="AS_Column_List"/> ,(select itemdesc from  td_checkitem ch where id=mr.checkitemid) chitemdesc
-        <include refid="base_with"/>
+        SELECT <include refid="AS_Column_List"/> ,ch.itemdesc chitemdesc
+        <include refid="base_with"/> LEFT JOIN td_checkitem ch ON ch.id=mr.checkitemid
         <where>
             ${ew.sqlSegment}
         </where>

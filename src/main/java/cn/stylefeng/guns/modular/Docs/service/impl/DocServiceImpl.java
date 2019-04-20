@@ -122,7 +122,7 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
 
             DocRec meetingrec= null;
             if (ToolUtil.isNotEmpty(addDto.getResc())) {
-//                循环插入交办单位
+            //循环插入交办单位
                 for (DocRec map : addDto.getResc()) {
                     meetingrec= new DocRec();
                     BeanUtils.copyProperties(map, meetingrec);
@@ -270,7 +270,7 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
             if (ToolUtil.isNotEmpty(sreachDto.getCompanyIds())){
                 ew.in("mr.unitid", sreachDto.getCompanyIds());
             }
-            ew.groupBy("m.id");
+            ew.groupBy("m.id,mr.id");
             if (ToolUtil.isNotEmpty(sreachDto.getOrder())){
                 ew.orderBy(sreachDto.getOrder());
             }else{

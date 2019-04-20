@@ -1,15 +1,15 @@
-package cn.stylefeng.guns.modular.Docs.service;
+package cn.stylefeng.guns.modular.attrs.service;
 
 import cn.stylefeng.guns.modular.system.model.DocAttr;
 import com.baomidou.mybatisplus.service.IService;
 
 /**
  * <p>
- * 交办公文附件表 服务类
+ *  服务类
  * </p>
  *
  * @author 三千霜
- * @since 2019-04-12
+ * @since 2019-04-20
  */
 public interface IDocAttrService extends IService<DocAttr> {
 

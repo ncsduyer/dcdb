@@ -16,17 +16,23 @@ public class AddInfoDto  {
     @ApiModelProperty("名称")
     @NotNull(message = "名称不能为空")
     private String title;
-    @ApiModelProperty("会议备注")
+    @ApiModelProperty("信息备注")
     private String memo;
     @ApiModelProperty("起草人ID")
     private Integer creatorid;
 
-    @ApiModelProperty("会议时间")
+    @ApiModelProperty("信息时间")
     @JSONField(format = "yyyy-MM-dd HH:mm")
-    @NotNull(message = "会议时间不能为空")
+    @NotNull(message = "信息时间不能为空")
     private Date mtime;
-    @ApiModelProperty("会议状态(0-停用；1-启用)")
+    @ApiModelProperty("信息状态(0-停用；1-启用)")
     private Integer status;
+    @ApiModelProperty("图片列表")
+    private List<Integer> pictures;
+    @ApiModelProperty("文件列表")
+    private List<Integer> files;
+//    @ApiModelProperty("单位附件列表")
+//    private List<InfoRecAttr> infoRecAttrs;
     @ApiModelProperty("上报信息数组")
     private List<Infosrec> resc;
     private List<CopyRecordNotice> copyRecordNotices;

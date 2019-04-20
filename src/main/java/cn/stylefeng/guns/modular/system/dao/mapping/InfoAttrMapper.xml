@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.stylefeng.guns.modular.system.dao.DocAttrMapper">
+<mapper namespace="cn.stylefeng.guns.modular.system.dao.InfoAttrMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.system.model.DocAttr">
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.system.model.InfoAttr">
         <id column="id" property="id" />
         <result column="pid" property="pid" />
         <result column="assetid" property="assetid" />

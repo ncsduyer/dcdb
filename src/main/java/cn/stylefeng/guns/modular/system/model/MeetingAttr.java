@@ -15,8 +15,8 @@ import java.io.Serializable;
  * @author 三千霜
  * @since 2019-04-20
  */
-@TableName("td_doc_attr")
-public class DocAttr extends Model<DocAttr> {
+@TableName("td_meeting_attr")
+public class MeetingAttr extends Model<MeetingAttr> {
 
     private static final long serialVersionUID = 1L;
 
@@ -87,7 +87,7 @@ public class DocAttr extends Model<DocAttr> {
 
     @Override
     public String toString() {
-        return "DocAttr{" +
+        return "MeetingAttr{" +
         ", id=" + id +
         ", pid=" + pid +
         ", assetid=" + assetid +

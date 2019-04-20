@@ -32,12 +32,15 @@ public class AddDocDto {
 
     @ApiModelProperty("归档关闭说明")
     private String closememo;
+    @ApiModelProperty("图片列表")
+    private List<Integer> pictures;
+    @ApiModelProperty("文件列表")
+    private List<Integer> files;
 
     @ApiModelProperty("来文时间")
     @JSONField(format = "yyyy-MM-dd HH:mm")
     @NotNull(message = "来文时间不能为空")
     private Date assignTime;
-
     @ApiModelProperty("完结时间")
     @JSONField(format = "yyyy-MM-dd HH:mm")
     private Date endTime;
@@ -157,5 +160,21 @@ public class AddDocDto {
 
     public void setCopyRecordNotices(List<CopyRecordNotice> copyRecordNotices) {
         this.copyRecordNotices = copyRecordNotices;
+    }
+
+    public List<Integer> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(List<Integer> pictures) {
+        this.pictures = pictures;
+    }
+
+    public List<Integer> getFiles() {
+        return files;
+    }
+
+    public void setFiles(List<Integer> files) {
+        this.files = files;
     }
 }

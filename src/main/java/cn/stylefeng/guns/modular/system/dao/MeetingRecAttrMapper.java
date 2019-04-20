@@ -1,6 +1,6 @@
 package cn.stylefeng.guns.modular.system.dao;
 
-import cn.stylefeng.guns.modular.system.model.DocAttr;
+import cn.stylefeng.guns.modular.system.model.MeetingRecAttr;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * @author 三千霜
  * @since 2019-04-20
  */
-public interface DocAttrMapper extends BaseMapper<DocAttr> {
+public interface MeetingRecAttrMapper extends BaseMapper<MeetingRecAttr> {
 
 }

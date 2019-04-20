@@ -1,7 +1,6 @@
 package cn.stylefeng.guns.modular.meeting.dto;
 
 import cn.stylefeng.guns.modular.system.model.CopyRecordNotice;
-import cn.stylefeng.guns.modular.system.model.Meetingrec;
 import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -30,8 +29,12 @@ public class AddMeetingDto {
     private Date mtime;
     @ApiModelProperty("会议状态(0-停用；1-启用)")
     private Integer status;
+    @ApiModelProperty("图片列表")
+    private List<Integer> pictures;
+    @ApiModelProperty("文件列表")
+    private List<Integer> files;
     @ApiModelProperty("上报信息数组")
-    private List<Meetingrec> resc;
+    private List<MeetingrecDto> resc;
 
     private List<CopyRecordNotice> copyRecordNotices;
 
@@ -83,11 +86,27 @@ public class AddMeetingDto {
         this.status = status;
     }
 
-    public List<Meetingrec> getResc() {
+    public List<Integer> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(List<Integer> pictures) {
+        this.pictures = pictures;
+    }
+
+    public List<Integer> getFiles() {
+        return files;
+    }
+
+    public void setFiles(List<Integer> files) {
+        this.files = files;
+    }
+
+    public List<MeetingrecDto> getResc() {
         return resc;
     }
 
-    public void setResc(List<Meetingrec> resc) {
+    public void setResc(List<MeetingrecDto> resc) {
         this.resc = resc;
     }
 
