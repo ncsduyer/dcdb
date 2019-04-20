@@ -2,6 +2,7 @@ package cn.stylefeng.guns.modular.api.service;
 
 import cn.stylefeng.guns.config.properties.GunsProperties;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
+import cn.stylefeng.guns.core.task.ImgTask;
 import cn.stylefeng.guns.modular.resources.service.IAssetService;
 import cn.stylefeng.guns.modular.system.model.Asset;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
@@ -15,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class FileService {
+
     @NotNull
     public static ResponseData upload(@RequestPart("files") List<MultipartFile> files, GunsProperties gunsProperties, IAssetService assetService) {
         String suffixList = "jpg,gif,png,ico,bmp,jpeg";
@@ -36,7 +38,7 @@ public class FileService {
             String extensionName = fileOldName
                     .substring(fileOldName.lastIndexOf(".") + 1);
             // 文件大小
-            int size = (int) file.getSize();
+
 
 
             String fileName = time+"/"+ UUID.randomUUID().toString() + "." + ToolUtil.getFileSuffix(file.getOriginalFilename());
@@ -53,18 +55,24 @@ public class FileService {
                     file.transferTo(dest);
                     //插入资源记录
                     asset=new Asset();
-                    asset.setUserId(ShiroKit.getUser().getId());
+                    if (ToolUtil.isNotEmpty(ShiroKit.getUser())){
+                        asset.setUserId(ShiroKit.getUser().getId());
+                    }
                     asset.setStatus(1);
-                    asset.setFileSize((long) size);
                     asset.setFileKey(fileName);
                     asset.setFilename(fileOldName);
                     asset.setFilePath(fileName);
                     asset.setCreateTime(date);
                     asset.setSuffix(extensionName);
-                    assetService.insert(asset);
                     if (suffixList.contains(extensionName.trim().toLowerCase())){
+                        //压缩图片
+                        ImgTask.CompressPictures(dest);
+                        asset.setFileSize((long)(int) dest.length());
+                        assetService.insert(asset);
                         imgids.add(asset.getId());
                     }else{
+                        asset.setFileSize((long)(int) file.getSize());
+                        assetService.insert(asset);
                         fileids.add(asset.getId());
                     }
                 }catch (Exception e) {

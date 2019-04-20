@@ -15,14 +15,12 @@ import cn.stylefeng.guns.modular.EventStep.service.IEventStepService;
 import cn.stylefeng.guns.modular.MeetingRec.service.IMeetingrecService;
 import cn.stylefeng.guns.modular.checkitem.service.ICheckitemService;
 import cn.stylefeng.guns.modular.meeting.dto.AddMeetingDto;
+import cn.stylefeng.guns.modular.meeting.dto.MeetingrecDto;
 import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
 import cn.stylefeng.guns.modular.meeting.service.IMeetingService;
 import cn.stylefeng.guns.modular.system.dao.MeetingMapper;
 import cn.stylefeng.guns.modular.system.dao.MeetingrecMapper;
-import cn.stylefeng.guns.modular.system.model.Checkitem;
-import cn.stylefeng.guns.modular.system.model.CopyRecordNotice;
-import cn.stylefeng.guns.modular.system.model.Meeting;
-import cn.stylefeng.guns.modular.system.model.Meetingrec;
+import cn.stylefeng.guns.modular.system.model.*;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
@@ -126,10 +124,18 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
                     meeting.setCreatorid(ShiroKit.getUser().getId());
                 }
                 insert(meeting);
+                List<MeetingAttr> meetingAttrs=null;
+                if(ToolUtil.isNotEmpty(addDto.getFiles())){
+
+                }
+                if(ToolUtil.isNotEmpty(addDto.getPictures())){
+
+                }
+
                 Meetingrec meetingrec=null;
             if (ToolUtil.isNotEmpty(addDto.getResc())) {
 //                循环插入交办单位
-                for (Meetingrec map : addDto.getResc()) {
+                for (MeetingrecDto map : addDto.getResc()) {
                     meetingrec= new Meetingrec();
                     BeanUtils.copyProperties(map, meetingrec);
                    meetingrec.setMeetingid(meeting.getId());
@@ -138,6 +144,12 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
                         meetingrec.setCreatetime(new DateTime());
                     }
                     meetingrecMapper.insert(meetingrec);
+                    if(ToolUtil.isNotEmpty(map.getFiles())){
+
+                    }
+                    if(ToolUtil.isNotEmpty(map.getPictures())){
+
+                    }
                 }
             }
             Map<String,String> map=new HashMap<>();
