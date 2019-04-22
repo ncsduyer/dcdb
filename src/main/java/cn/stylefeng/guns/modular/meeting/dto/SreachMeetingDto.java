@@ -13,7 +13,9 @@ public class SreachMeetingDto extends SreachDto {
     private String title;
     @ApiModelProperty("id")
     private Integer id;
-    @ApiModelProperty("创建人id")
+    @ApiModelProperty("会议主持人")
+    private Integer hostid;
+    @ApiModelProperty("会风会纪督查id")
     private Integer creatorid;
 
     /**
@@ -62,5 +64,13 @@ public class SreachMeetingDto extends SreachDto {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getHostid() {
+        return hostid;
+    }
+
+    public void setHostid(Integer hostid) {
+        this.hostid = hostid;
     }
 }

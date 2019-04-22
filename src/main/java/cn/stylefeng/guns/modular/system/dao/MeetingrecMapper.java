@@ -23,4 +23,6 @@ public interface MeetingrecMapper extends BaseMapper<Meetingrec> {
     List<HashMap<String,Object>> getInfoByPid(@Param(value = "ew") Wrapper<Meetingrec> ew, @Param(value = "courses") List<Checkitem> courses);
     List<HashMap<String,Object>> getInfoByUnitid(@Param(value = "ew") Wrapper<Meetingrec> ew);
     List<HashMap<String, Object>> export(@Param(value = "sreachDto") SreachMeetingDto sreachDto, @Param(value = "courses") List<Checkitem> courses);
+
+    Meetingrec getInfoById(Integer id);
 }

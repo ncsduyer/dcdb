@@ -11,14 +11,24 @@
         <result column="createtime" property="createtime" />
         <result column="unitid" property="unitid" />
         <result column="name" property="name" />
+        <collection property="meetingRecAttrs" ofType="cn.stylefeng.guns.modular.system.model.MeetingRecAttr">
+            <id column="mraid" property="id" />
+            <result column="mrapid" property="pid" />
+            <result column="mraassetid" property="assetid" />
+            <result column="mratype" property="type" />
+            <result column="mraorder" property="order" />
+        </collection>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, meetingid, checkitemid, checkvalue, createtime, unitid,`name`
     </sql>
+    <sql id="Base_More_List">
+        id, meetingid, checkitemid, checkvalue, createtime, unitid,`name`,mra.id mraid, mra.pid mrapid, mra.assetid mraassetid, mra.type mratype, mra.order mraorder
+    </sql>
     <select id="getInfoByPid" resultType="java.util.HashMap">
-        SELECT c.title ctitle ,rec.unitid unitid,
+        SELECT c.title ctitle ,rec.unitid unitid
         <if test="courses != null">
             <foreach collection="courses" item="item" separator=",">
                 SUM(CASE rec.checkitemid WHEN ${item.id} THEN 1 ElSE 0 END)  "${item.id}"
@@ -57,5 +67,8 @@
         <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(sreachDto.title)">and <![CDATA[ m.title like CONCAT('%',#{sreachDto.title},'%') ]]></if>
         <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(sreachDto.status)">and <![CDATA[ m.status = #{sreachDto.status}]]></if>
       GROUP BY c.id ORDER BY c.id asc,rec.createtime
+    </select>
+    <select id="getInfoById" resultMap="BaseResultMap">
+        SELECT <include refid="Base_More_List"/> FROM td_meetingrec rec LEFT JOIN td_meeting_rec_attr mra ON mra.pid=rec.id AND rec.id=#{id}
     </select>
 </mapper>

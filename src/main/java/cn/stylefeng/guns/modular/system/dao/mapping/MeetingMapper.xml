@@ -36,6 +36,13 @@
             <result column="esevent_type" property="eventType"/>
             <result column="esstep" property="step"/>
         </association>
+        <collection property="meetingAttrs" ofType="cn.stylefeng.guns.modular.system.model.MeetingAttr">
+            <id column="maid" property="id" />
+            <result column="mapid" property="pid" />
+            <result column="maassetid" property="assetid" />
+            <result column="matype" property="type" />
+            <result column="maorder" property="order" />
+        </collection>
     </resultMap>
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
@@ -47,12 +54,12 @@
 			hu. NAME huname
 		FROM
 			sys_user hu where hu.id = m.hostid
-	) huname
+	) huname,ma.id maid, ma.pid mapid, ma.assetid maassetid, ma.type matype, ma.order maorder
     </sql>
     <sql id="base_with">
         FROM
         td_meeting m LEFT JOIN td_meetingrec mr ON mr.meetingid = m.id
-        LEFT JOIN t_tb_event_step es ON es.status=m.status and es.event_type=2 LEFT JOIN sys_user u ON u.id = m.creatorid
+        LEFT JOIN t_tb_event_step es ON es.status=m.status and es.event_type=2 LEFT JOIN sys_user u ON u.id = m.creatorid LEFT JOIN td_meeting_attr ma ON ma.pid=m.id
     </sql>
     <select id="selectWithManyById" resultMap="BaseMoreMap">
         SELECT <include refid="AS_Column_List"/>

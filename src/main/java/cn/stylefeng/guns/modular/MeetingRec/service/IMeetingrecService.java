@@ -1,6 +1,7 @@
 package cn.stylefeng.guns.modular.MeetingRec.service;
 
 import cn.stylefeng.guns.modular.MeetingRec.dto.SreachMeetingRecDto;
+import cn.stylefeng.guns.modular.meeting.dto.MeetingrecDto;
 import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
 import cn.stylefeng.guns.modular.system.model.Meetingrec;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
@@ -25,4 +26,12 @@ public interface IMeetingrecService extends IService<Meetingrec> {
     List<HashMap<String, Object>> export(SreachMeetingDto sreachMeetingDto);
 
     List<HashMap<String, Object>> getInfoByUnitid(Wrapper eq);
+
+    boolean add(List<MeetingrecDto> meetingrecs);
+
+    boolean edit(MeetingrecDto meetingrec);
+
+    boolean editBatch(List<MeetingrecDto> meetingrecs);
+
+    Meetingrec getInfoById(Integer id);
 }

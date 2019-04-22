@@ -57,6 +57,8 @@ public class Meeting extends Model<Meeting> {
     private EventStep eventStep;
 
     @TableField(exist = false)
+    private List<MeetingAttr> meetingAttrs;
+    @TableField(exist = false)
     private   List<HashMap<String,Object>> companys;
     public List<HashMap<String, Object>> getCompanys() {
         return companys;
@@ -64,6 +66,14 @@ public class Meeting extends Model<Meeting> {
 
     public void setCompanys(List<HashMap<String, Object>> companys) {
         this.companys = companys;
+    }
+
+    public List<MeetingAttr> getMeetingAttrs() {
+        return meetingAttrs;
+    }
+
+    public void setMeetingAttrs(List<MeetingAttr> meetingAttrs) {
+        this.meetingAttrs = meetingAttrs;
     }
 
     public Integer getId() {

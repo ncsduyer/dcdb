@@ -95,4 +95,22 @@ public class MeetingRecAttr extends Model<MeetingRecAttr> {
         ", order=" + order +
         "}";
     }
+    @Override
+    public boolean equals(Object obj) {
+        if(obj==null){
+            return false;
+        }
+        if(this==obj){
+            return true;
+        }
+        if(obj instanceof MeetingRecAttr){
+            MeetingRecAttr meetingrec=(MeetingRecAttr)obj;
+            if(meetingrec.id.equals(this.id)){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        return false;
+    }
 }

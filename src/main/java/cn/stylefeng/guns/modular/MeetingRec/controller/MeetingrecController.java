@@ -1,11 +1,12 @@
 package cn.stylefeng.guns.modular.MeetingRec.controller;
 
-import cn.hutool.core.date.DateTime;
 import cn.stylefeng.guns.core.common.annotion.Permission;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.modular.DcCompany.service.ICompanyService;
 import cn.stylefeng.guns.modular.MeetingRec.dto.SreachMeetingRecDto;
 import cn.stylefeng.guns.modular.MeetingRec.service.IMeetingrecService;
+import cn.stylefeng.guns.modular.attrs.service.IMeetingRecAttrService;
+import cn.stylefeng.guns.modular.meeting.dto.MeetingrecDto;
 import cn.stylefeng.guns.modular.system.model.Meetingrec;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
@@ -39,6 +40,8 @@ public class MeetingrecController extends BaseController {
     @Autowired
     private IMeetingrecService meetingrecService;
     @Autowired
+    private IMeetingRecAttrService meetingRecAttrService;
+    @Autowired
     private ICompanyService companyService;
     /**
      * 获取会议督查记录管理列表
@@ -61,13 +64,8 @@ public class MeetingrecController extends BaseController {
      */
     @RequestMapping(value = "/add")
     @ResponseBody
-    public ResponseData add(List<Meetingrec> meetingrecs) {
-        for (Meetingrec meetingrec:meetingrecs){
-            if (ToolUtil.isEmpty(meetingrec.getCreatetime())){
-                meetingrec.setCreatetime(new DateTime());
-            }
-        }
-        if (meetingrecService.insertBatch(meetingrecs)){
+    public ResponseData add(List<MeetingrecDto> meetingrecs) {
+        if (meetingrecService.add(meetingrecs)){
         return SUCCESS_TIP;
         }
         return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
@@ -121,9 +119,8 @@ public class MeetingrecController extends BaseController {
     })
     @RequestMapping(value = "/update",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public ResponseData update(@RequestBody Meetingrec meetingrec) {
-        meetingrec.setCheckvalue("1");
-        if (meetingrecService.updateById(meetingrec)){
+    public ResponseData update(@RequestBody MeetingrecDto meetingrec) {
+        if (meetingrecService.edit(meetingrec)){
             return SUCCESS_TIP;
         }
         return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
@@ -134,11 +131,8 @@ public class MeetingrecController extends BaseController {
     @ApiOperation(value = "批量修改区委会议单位个人记录")
     @RequestMapping(value = "/updateList",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public ResponseData updateList(@RequestBody List<Meetingrec> meetingrecs) {
-        for (Meetingrec meetingrec:meetingrecs){
-            meetingrec.setCheckvalue("1");
-        }
-        if (meetingrecService.updateBatchById(meetingrecs)){
+    public ResponseData updateList(@RequestBody List<MeetingrecDto> meetingrecs) {
+        if (meetingrecService.editBatch(meetingrecs)){
             return SUCCESS_TIP;
         }
         return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
@@ -152,14 +146,31 @@ public class MeetingrecController extends BaseController {
             @ApiImplicitParam(name = "meetingid", value = "必填:会议ID", required = true, dataType = "String"),
             @ApiImplicitParam(name = "unitid", value = "必填:部门id", required = true, dataType = "String"),
     })
-    @RequestMapping(value = "/detail",method = {RequestMethod.GET,RequestMethod.POST})
+    @RequestMapping(value = "/detailList",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public ResponseData detail(@RequestBody Meetingrec meetingrec) {
+    public ResponseData detailList(@RequestBody Meetingrec meetingrec) {
         if (ToolUtil.isEmpty(meetingrec.getMeetingid())||ToolUtil.isEmpty(meetingrec.getUnitid())){
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
         }
         try {
             return ResponseData.success(meetingrecService.getInfoByUnitid(Condition.create().eq("meetingid", meetingrec.getMeetingid()).eq("unitid", meetingrec.getUnitid())));
+        }catch (Exception e){
+            return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
+        }
+
+    }
+    /**
+     * 区委信息单个单位人员详情
+     */
+    @ApiOperation(value = "区委信息单个单位人员详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "id", required = true, dataType = "Long"),
+    })
+    @RequestMapping(value = "/delete/{id}",method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseData detail(@PathVariable("id") Integer id) {
+        try {
+            return ResponseData.success(meetingrecService.getInfoById(id));
         }catch (Exception e){
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
         }
