@@ -46,7 +46,8 @@ public class Infos extends Model<Infos> {
      * 信息备注
      */
     private String memo;
-
+    private String pictures;
+    private String files;
     @TableField(exist = false)
     private Integer count;
     @TableField(exist = false)
@@ -56,6 +57,10 @@ public class Infos extends Model<Infos> {
 
     @TableField(exist = false)
     private List<HashMap<String,Object>> companys;
+    @TableField(exist = false)
+    private List<InfoAttr> infoAttrs;
+//    @TableField(exist = false)
+//    private List<InfoUnitAttr> infoUnitAttrs;
 
     public Integer getCount() {
         return count;
@@ -137,6 +142,29 @@ public class Infos extends Model<Infos> {
         this.memo = memo;
     }
 
+    public String getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(String pictures) {
+        this.pictures = pictures;
+    }
+
+    public String getFiles() {
+        return files;
+    }
+
+    public void setFiles(String files) {
+        this.files = files;
+    }
+//    public List<InfoUnitAttr> getInfoUnitAttrs() {
+//        return infoUnitAttrs;
+//    }
+//
+//    public void setInfoUnitAttrs(List<InfoUnitAttr> infoUnitAttrs) {
+//        this.infoUnitAttrs = infoUnitAttrs;
+//    }
+
     @Override
     protected Serializable pkVal() {
         return this.id;
@@ -152,5 +180,13 @@ public class Infos extends Model<Infos> {
         ", status=" + status +
         ", memo=" + memo +
         "}";
+    }
+
+    public List<InfoAttr> getInfoAttrs() {
+        return infoAttrs;
+    }
+
+    public void setInfoAttrs(List<InfoAttr> infoAttrs) {
+        this.infoAttrs = infoAttrs;
     }
 }

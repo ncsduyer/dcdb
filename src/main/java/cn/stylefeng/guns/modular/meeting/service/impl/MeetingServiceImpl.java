@@ -15,7 +15,6 @@ import cn.stylefeng.guns.modular.EventStep.service.IEventStepService;
 import cn.stylefeng.guns.modular.MeetingRec.service.IMeetingrecService;
 import cn.stylefeng.guns.modular.attrs.service.IMeetingAttrService;
 import cn.stylefeng.guns.modular.attrs.service.IMeetingRecAttrService;
-import cn.stylefeng.guns.modular.attrs.unit.AttrUnit;
 import cn.stylefeng.guns.modular.checkitem.service.ICheckitemService;
 import cn.stylefeng.guns.modular.meeting.dto.AddMeetingDto;
 import cn.stylefeng.guns.modular.meeting.dto.MeetingrecDto;
@@ -23,7 +22,10 @@ import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
 import cn.stylefeng.guns.modular.meeting.service.IMeetingService;
 import cn.stylefeng.guns.modular.system.dao.MeetingMapper;
 import cn.stylefeng.guns.modular.system.dao.MeetingrecMapper;
-import cn.stylefeng.guns.modular.system.model.*;
+import cn.stylefeng.guns.modular.system.model.Checkitem;
+import cn.stylefeng.guns.modular.system.model.CopyRecordNotice;
+import cn.stylefeng.guns.modular.system.model.Meeting;
+import cn.stylefeng.guns.modular.system.model.Meetingrec;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
@@ -135,15 +137,15 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
                     meeting.setCreatorid(ShiroKit.getUser().getId());
                 }
                 insert(meeting);
-                List<MeetingAttr> meetingAttrs=null;
-                if(ToolUtil.isNotEmpty(addDto.getFiles())){
-                    meetingAttrs = AttrUnit.getMeetingAttrs(meeting.getId(), addDto.getFiles(), 2,meetingAttrs, null);
-                    meetingAttrService.insertOrUpdateBatch(meetingAttrs);
-                }
-                if(ToolUtil.isNotEmpty(addDto.getPictures())){
-                    meetingAttrs = AttrUnit.getMeetingAttrs(meeting.getId(), addDto.getPictures(), 1,meetingAttrs, null);
-                    meetingAttrService.insertOrUpdateBatch(meetingAttrs);
-                }
+//                List<MeetingAttr> meetingAttrs=null;
+//                if(ToolUtil.isNotEmpty(addDto.getFiles())){
+//                    meetingAttrs = AttrUnit.getMeetingAttrs(meeting.getId(), addDto.getFiles(), 2,meetingAttrs, null,meetingAttrService);
+//                    meetingAttrService.insertOrUpdateBatch(meetingAttrs);
+//                }
+//                if(ToolUtil.isNotEmpty(addDto.getPictures())){
+//                    meetingAttrs = AttrUnit.getMeetingAttrs(meeting.getId(), addDto.getPictures(), 1,meetingAttrs, null,meetingAttrService);
+//                    meetingAttrService.insertOrUpdateBatch(meetingAttrs);
+//                }
 
                 Meetingrec meetingrec=null;
             if (ToolUtil.isNotEmpty(addDto.getResc())) {
@@ -157,15 +159,15 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
                         meetingrec.setCreatetime(new DateTime());
                     }
                     meetingrecMapper.insert(meetingrec);
-                    List<MeetingRecAttr> meetingRecAttrs=null;
-                    if(ToolUtil.isNotEmpty(map.getFiles())){
-                        meetingRecAttrs = AttrUnit.getMeetingRecAttrs(meetingrec.getId(), map.getFiles(), 2,meetingRecAttrs,null);
-                        meetingRecAttrService.insertOrUpdateBatch(meetingRecAttrs);
-                    }
-                    if(ToolUtil.isNotEmpty(map.getPictures())){
-                        meetingRecAttrs = AttrUnit.getMeetingRecAttrs(meetingrec.getId(),map.getPictures(), 1,meetingRecAttrs,null);
-                        meetingRecAttrService.insertOrUpdateBatch(meetingRecAttrs);
-                    }
+//                    List<MeetingRecAttr> meetingRecAttrs=null;
+//                    if(ToolUtil.isNotEmpty(map.getFiles())){
+//                        meetingRecAttrs = AttrUnit.getMeetingRecAttrs(meetingrec.getId(), map.getFiles(), 2,meetingRecAttrs,null,meetingRecAttrService);
+//                        meetingRecAttrService.insertOrUpdateBatch(meetingRecAttrs);
+//                    }
+//                    if(ToolUtil.isNotEmpty(map.getPictures())){
+//                        meetingRecAttrs = AttrUnit.getMeetingRecAttrs(meetingrec.getId(),map.getPictures(), 1,meetingRecAttrs,null,meetingRecAttrService);
+//                        meetingRecAttrService.insertOrUpdateBatch(meetingRecAttrs);
+//                    }
                 }
             }
             Map<String,String> map=new HashMap<>();
@@ -198,39 +200,39 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
             Meeting meeting = new Meeting();
             BeanUtils.copyProperties(addDto, meeting);
             updateById(meeting);
-            List<MeetingAttr> meetingAttrs=null;
-            if(ToolUtil.isNotEmpty(addDto.getFiles())){
-                meetingAttrs = AttrUnit.getMeetingAttrs(meeting.getId(), addDto.getFiles(), 2,meetingAttrs,meetingAttrService.selectList(Condition.create().eq("pid", meeting.getId()).eq("type", 2)));
-                meetingAttrService.insertOrUpdateBatch(meetingAttrs);
-            }
-
-            if(ToolUtil.isNotEmpty(addDto.getPictures())){
-                meetingAttrs = AttrUnit.getMeetingAttrs(meeting.getId(), addDto.getPictures(), 1,meetingAttrs, meetingAttrService.selectList(Condition.create().eq("pid", meeting.getId()).eq("type", 1)));
-                meetingAttrService.insertOrUpdateBatch(meetingAttrs);
-            }
+//            List<MeetingAttr> meetingAttrs=null;
+//            if(ToolUtil.isNotEmpty(addDto.getFiles())){
+//                meetingAttrs = AttrUnit.getMeetingAttrs(meeting.getId(), addDto.getFiles(), 2,meetingAttrs,meetingAttrService.selectList(Condition.create().eq("pid", meeting.getId()).eq("type", 2)),meetingAttrService);
+//                meetingAttrService.insertOrUpdateBatch(meetingAttrs);
+//            }
+//
+//            if(ToolUtil.isNotEmpty(addDto.getPictures())){
+//                meetingAttrs = AttrUnit.getMeetingAttrs(meeting.getId(), addDto.getPictures(), 1,meetingAttrs, meetingAttrService.selectList(Condition.create().eq("pid", meeting.getId()).eq("type", 1)),meetingAttrService);
+//                meetingAttrService.insertOrUpdateBatch(meetingAttrs);
+//            }
 
             Meetingrec meetingrec= null;
             if (ToolUtil.isNotEmpty(addDto.getResc())) {
-//                List<Meetingrec> old=meetingrecService.selectList(Condition.create().eq("meetingid", meeting.getId()));
-//                old.removeAll(addDto.getResc());
-//                if(ToolUtil.isNotEmpty(old)){
-//                    meetingrecService.deleteBatchIds(old);
-//                }
+                List<Meetingrec> old=meetingrecService.selectList(Condition.create().eq("meetingid", meeting.getId()));
+                old.removeAll(addDto.getResc());
+                if(ToolUtil.isNotEmpty(old)){
+                    meetingrecService.deleteBatchIds(old);
+                }
 //                循环修改交办单位
                 for (MeetingrecDto map : addDto.getResc()) {
                     meetingrec=new Meetingrec();
                     CopyUtils.copyProperties(map, meetingrec);
                     meetingrec.setCheckvalue("1");
-                    meetingrecMapper.updateById(meetingrec);
-                    List<MeetingRecAttr> meetingRecAttrs=null;
-                    if(ToolUtil.isNotEmpty(map.getFiles())){
-                        meetingRecAttrs = AttrUnit.getMeetingRecAttrs(meetingrec.getId(), map.getFiles(), 2,meetingRecAttrs,meetingRecAttrService.selectList(Condition.create().eq("pid", meetingrec.getId()).eq("type", 2)));
-                        meetingRecAttrService.insertOrUpdateBatch(meetingRecAttrs);
-                    }
-                    if(ToolUtil.isNotEmpty(map.getPictures())){
-                        meetingRecAttrs = AttrUnit.getMeetingRecAttrs(meetingrec.getId(),map.getPictures(), 1,meetingRecAttrs,meetingRecAttrService.selectList(Condition.create().eq("pid", meetingrec.getId()).eq("type", 1)));
-                        meetingRecAttrService.insertOrUpdateBatch(meetingRecAttrs);
-                    }
+                    meetingrecService.insertOrUpdate(meetingrec);
+//                    List<MeetingRecAttr> meetingRecAttrs=null;
+//                    if(ToolUtil.isNotEmpty(map.getFiles())){
+//                        meetingRecAttrs = AttrUnit.getMeetingRecAttrs(meetingrec.getId(), map.getFiles(), 2,meetingRecAttrs,meetingRecAttrService.selectList(Condition.create().eq("pid", meetingrec.getId()).eq("type", 2)),meetingRecAttrService);
+//                        meetingRecAttrService.insertOrUpdateBatch(meetingRecAttrs);
+//                    }
+//                    if(ToolUtil.isNotEmpty(map.getPictures())){
+//                        meetingRecAttrs = AttrUnit.getMeetingRecAttrs(meetingrec.getId(),map.getPictures(), 1,meetingRecAttrs,meetingRecAttrService.selectList(Condition.create().eq("pid", meetingrec.getId()).eq("type", 1)),meetingRecAttrService);
+//                        meetingRecAttrService.insertOrUpdateBatch(meetingRecAttrs);
+//                    }
                 }
             }
             return ResponseData.success();

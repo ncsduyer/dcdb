@@ -1,7 +1,7 @@
 package cn.stylefeng.guns.modular.Docs.service;
 
+import cn.stylefeng.guns.modular.Docs.dto.SreachDocDto;
 import cn.stylefeng.guns.modular.MeetingRec.dto.SreachMeetingRecDto;
-import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
 import cn.stylefeng.guns.modular.system.model.DocRec;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import com.baomidou.mybatisplus.service.IService;
@@ -19,5 +19,5 @@ import java.util.List;
  */
 public interface IDocRecService extends IService<DocRec> {
     ResponseData selectListByDto(SreachMeetingRecDto sreachDto);
-    List<HashMap<String, Object>> export(SreachMeetingDto sreachDocDto);
+    List<HashMap<String, Object>> export(SreachDocDto sreachDocDto);
 }

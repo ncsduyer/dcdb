@@ -10,6 +10,8 @@
         <result column="creatorid" property="creatorid" />
         <result column="status" property="status" />
         <result column="memo" property="memo" />
+        <result column="pictures" property="pictures" />
+        <result column="files" property="files" />
     </resultMap>
     <resultMap id="BaseMoreMap" type="cn.stylefeng.guns.modular.system.model.Infos">
         <id column="mid" property="id" />
@@ -18,6 +20,8 @@
         <result column="mcreatorid" property="creatorid" />
         <result column="mstatus" property="status" />
         <result column="mmemo" property="memo" />
+        <result column="mpictures" property="pictures" />
+        <result column="mfiles" property="files" />
         <result column="mcount" property="count"/>
         <association property="createuser" javaType="cn.stylefeng.guns.modular.system.model.User">
             <id column="uid" property="id"/>
@@ -33,15 +37,15 @@
     </resultMap>
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, mtime, title, creatorid, status, memo
+        id, mtime, title, creatorid, status, memo,pictures,files
     </sql>
     <sql id="AS_Column_List">
-        m.id mid, m.mtime mmtime, m.title mtitle, m.creatorid mcreatorid, m.status mstatus, m.memo mmemo,count(distinct mr.unitid) mcount,u.id uid, u.name uname,es.id esid,es.pid espid,es.status esstatus,es.event_type esevent_type,es.step esstep
+        m.id mid, m.mtime mmtime, m.title mtitle, m.creatorid mcreatorid, m.status mstatus, m.memo mmemo,m.pictures mpictures,m.files mfiles ,count(distinct mr.unitid) mcount,u.id uid, u.name uname,es.id esid,es.pid espid,es.status esstatus,es.event_type esevent_type,es.step esstep,
     </sql>
     <sql id="base_with">
         FROM
         td_infos m LEFT JOIN td_infosrec mr ON mr.infosid = m.id
-        LEFT JOIN t_tb_event_step es ON es.status=m.status and es.event_type=4 LEFT JOIN sys_user u ON u.id = m.creatorid
+        LEFT JOIN t_tb_event_step es ON es.status=m.status and es.event_type=4 LEFT JOIN sys_user u ON u.id = m.creatorid LEFT JOIN td_info_attr ia ON ia.pid=m.id
     </sql>
     <select id="selectWithManyById" resultMap="BaseMoreMap">
         SELECT <include refid="AS_Column_List"/>

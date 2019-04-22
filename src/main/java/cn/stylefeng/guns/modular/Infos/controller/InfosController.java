@@ -4,6 +4,7 @@ import cn.stylefeng.guns.core.common.annotion.Permission;
 import cn.stylefeng.guns.modular.Infos.dto.AddInfoDto;
 import cn.stylefeng.guns.modular.Infos.dto.SreachInfoDto;
 import cn.stylefeng.guns.modular.Infos.service.IInfosService;
+import cn.stylefeng.guns.modular.Infosrec.service.IInfosrecService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import com.baomidou.mybatisplus.mapper.Condition;
@@ -34,6 +35,8 @@ public class InfosController extends BaseController {
 
     @Autowired
     private IInfosService infosService;
+    @Autowired
+    private IInfosrecService infosrecService;
 
     /**
      * 获取区委信息单表列表
@@ -110,17 +113,18 @@ public class InfosController extends BaseController {
     /**
      * 删除信息
      */
-////    @ApiOperation(value = "删除信息")
-////    @ApiImplicitParams({
-////            @ApiImplicitParam(name = "assignWorkId", value = "id", required = true, dataType = "Long"),
-////    })
-////    @RequestMapping(value = "/delete/{assignWorkId}",method = RequestMethod.GET)
-////    @Permission
-////    @ResponseBody
-////    public BigResponseData delete(@PathVariable("assignWorkId") Integer assignWorkId) {
-////        infosService.deleteById(assignWorkId);
-////        return SUCCESS_TIP;
-////    }
+    @ApiOperation(value = "删除信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "assignWorkId", value = "id", required = true, dataType = "Long"),
+    })
+    @RequestMapping(value = "/delete/{assignWorkId}",method = RequestMethod.GET)
+    @Permission
+    @ResponseBody
+    public ResponseData delete(@PathVariable("assignWorkId") Integer assignWorkId) {
+        infosrecService.delete(Condition.create().eq("infosid", assignWorkId));
+        infosService.deleteById(assignWorkId);
+        return SUCCESS_TIP;
+    }
     /**
      * 信息报表图表
      */

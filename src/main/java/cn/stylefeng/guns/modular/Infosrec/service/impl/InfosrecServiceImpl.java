@@ -2,10 +2,10 @@ package cn.stylefeng.guns.modular.Infosrec.service.impl;
 
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.util.Bettime;
+import cn.stylefeng.guns.modular.Infos.dto.SreachInfoDto;
 import cn.stylefeng.guns.modular.Infosrec.service.IInfosrecService;
 import cn.stylefeng.guns.modular.MeetingRec.dto.SreachMeetingRecDto;
 import cn.stylefeng.guns.modular.checkitem.service.ICheckitemService;
-import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
 import cn.stylefeng.guns.modular.system.dao.InfosrecMapper;
 import cn.stylefeng.guns.modular.system.model.Infosrec;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
@@ -59,7 +59,7 @@ public class InfosrecServiceImpl extends ServiceImpl<InfosrecMapper, Infosrec> i
         }
     }
     @Override
-    public List<HashMap<String, Object>> export(SreachMeetingDto sreachDto) {
+    public List<HashMap<String, Object>> export(SreachInfoDto sreachDto) {
         try {
             new Bettime(sreachDto);
         } catch (ParseException e) {
@@ -67,4 +67,6 @@ public class InfosrecServiceImpl extends ServiceImpl<InfosrecMapper, Infosrec> i
         }
         return infosrecMapper.export(sreachDto,checkitemService.selectList(Condition.create().eq("itemclass", 4).eq("status", 1)));
     }
+
+
 }

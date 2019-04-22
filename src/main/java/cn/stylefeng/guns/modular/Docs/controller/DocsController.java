@@ -50,17 +50,6 @@ public class DocsController extends BaseController {
      * 获取公文运转列表
      */
     @ApiOperation(value = "公文运转单位统计列表")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "title", value = "关键词", required = false, dataType = "String"),
-            @ApiImplicitParam(name = "creatorid", value = "创建人id", required = false, dataType = "Long"),
-            @ApiImplicitParam(name = "beforeTime", value = "开始时间", required = false, dataType = "String"),
-            @ApiImplicitParam(name = "afterTime", value = "结束时间", required = false, dataType = "String"),
-            @ApiImplicitParam(name = "status", value = "状态 (0-未归档；1-已归档)", required = false, dataType = "Long"),
-            @ApiImplicitParam(name = "companyIds", value = "相关单位数组", required = false, dataType = "Long"),
-            @ApiImplicitParam(name = "page", value = "页码", required = false, dataType = "Long"),
-            @ApiImplicitParam(name = "limit", value = "每页条数", required = false, dataType = "Long"),
-            @ApiImplicitParam(name = "order", value = "排序条件", required = false, dataType = "Long"),
-    })
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @Permission
     @ResponseBody
@@ -140,17 +129,6 @@ public class DocsController extends BaseController {
      * 公文运转报表列表
      */
     @ApiOperation(value = "公文运转报表列表")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "title", value = "关键词", required = false, dataType = "String"),
-            @ApiImplicitParam(name = "creatorid", value = "创建人id", required = false, dataType = "Long"),
-            @ApiImplicitParam(name = "beforeTime", value = "开始时间", required = false, dataType = "String"),
-            @ApiImplicitParam(name = "afterTime", value = "结束时间", required = false, dataType = "String"),
-            @ApiImplicitParam(name = "status", value = "状态 (0-未归档；1-已归档)", required = false, dataType = "Long"),
-            @ApiImplicitParam(name = "companyIds", value = "相关单位数组", required = false, dataType = "Long"),
-            @ApiImplicitParam(name = "page", value = "页码", required = false, dataType = "Long"),
-            @ApiImplicitParam(name = "limit", value = "每页条数", required = false, dataType = "Long"),
-            @ApiImplicitParam(name = "order", value = "排序条件", required = false, dataType = "Long"),
-    })
     @RequestMapping(value = "/report", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public ResponseData report(@RequestBody SreachDocDto sreachDocDto) {
@@ -162,20 +140,7 @@ public class DocsController extends BaseController {
      * @return
      */
     @ApiOperation(value = "导出报表")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "title", value = "关键词", required = false, dataType = "String"),
-            @ApiImplicitParam(name = "creatorid", value = "创建人id", required = false, dataType = "Long"),
-            @ApiImplicitParam(name = "beforeTime", value = "开始时间", required = false, dataType = "String"),
-            @ApiImplicitParam(name = "afterTime", value = "结束时间", required = false, dataType = "String"),
-            @ApiImplicitParam(name = "status", value = "状态 (0-停用；1-启用)", required = false, dataType = "Long"),
-            @ApiImplicitParam(name = "companyIds", value = "相关单位数组", required = false, dataType = "Long"),
-            @ApiImplicitParam(name = "page", value = "页码", required = false, dataType = "Long"),
-            @ApiImplicitParam(name = "limit", value = "每页条数", required = false, dataType = "Long"),
-            @ApiImplicitParam(name = "order", value = "排序条件", required = false, dataType = "Long"),
-            //上面是sreachDocDto属性
-            @ApiImplicitParam(name = "exportType", value = "导出类型 默认为excel 1：excel，2：doc", required = false, dataType = "Long"),
 
-    })
     @RequestMapping(value = "/export", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public void export(@RequestBody SreachDocDto sreachDocDto, HttpServletRequest request, HttpServletResponse response) {

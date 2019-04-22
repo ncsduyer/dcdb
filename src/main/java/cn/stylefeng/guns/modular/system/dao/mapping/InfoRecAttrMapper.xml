@@ -16,5 +16,7 @@
     <sql id="Base_Column_List">
         id, unitid, infoid, assetid, type, order
     </sql>
-
+    <sql id="Aliases_Column_List">
+        ira.id iraid, ira.pid irapid, ira.assetid iraassetid, ira.type iratype, ira.order iraorder
+    </sql>
 </mapper>

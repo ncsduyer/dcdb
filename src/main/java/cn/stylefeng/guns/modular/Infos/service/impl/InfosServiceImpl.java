@@ -16,8 +16,10 @@ import cn.stylefeng.guns.modular.Infos.dto.AddInfoDto;
 import cn.stylefeng.guns.modular.Infos.dto.SreachInfoDto;
 import cn.stylefeng.guns.modular.Infos.service.IInfosService;
 import cn.stylefeng.guns.modular.Infosrec.service.IInfosrecService;
+import cn.stylefeng.guns.modular.attrs.service.IInfoAttrService;
+import cn.stylefeng.guns.modular.attrs.service.IInfoRecAttrService;
+import cn.stylefeng.guns.modular.attrs.service.IInfoUnitAttrService;
 import cn.stylefeng.guns.modular.checkitem.service.ICheckitemService;
-import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
 import cn.stylefeng.guns.modular.system.dao.InfosMapper;
 import cn.stylefeng.guns.modular.system.dao.InfosrecMapper;
 import cn.stylefeng.guns.modular.system.model.Checkitem;
@@ -60,6 +62,12 @@ public class InfosServiceImpl extends ServiceImpl<InfosMapper, Infos> implements
     private IEventStepService eventStepService;
     @Autowired
     private IInfosrecService infosrecService;
+    @Autowired
+    private IInfoAttrService infoAttrService;
+    @Autowired
+    private IInfoRecAttrService infoRecAttrService;
+    @Autowired
+    private IInfoUnitAttrService infoUnitAttrService;
     @Autowired
     private ICopyRecordNoticeService copyRecordNoticeService;
     @Override
@@ -124,18 +132,30 @@ public class InfosServiceImpl extends ServiceImpl<InfosMapper, Infos> implements
                 meeting.setCreatorid(ShiroKit.getUser().getId());
             }
             insert(meeting);
-
-            Infosrec meetingrec= new Infosrec();
+//            List<InfoAttr> meetingAttrs=null;
+//            if(ToolUtil.isNotEmpty(addDto.getFiles())){
+//                meetingAttrs = AttrUnit.getInfoAttrs(meeting.getId(), addDto.getFiles(), 2,meetingAttrs, null,infoAttrService);
+//                infoAttrService.insertOrUpdateBatch(meetingAttrs);
+//            }
+//            if(ToolUtil.isNotEmpty(addDto.getPictures())){
+//                meetingAttrs = AttrUnit.getInfoAttrs(meeting.getId(), addDto.getPictures(), 1,meetingAttrs, null,infoAttrService);
+//                infoAttrService.insertOrUpdateBatch(meetingAttrs);
+//            }
+            Infosrec meetingrec= null;
             if (ToolUtil.isNotEmpty(addDto.getResc())) {
 //                循环插入交办单位
                 for (Infosrec map : addDto.getResc()) {
+                    meetingrec= new Infosrec();
                     BeanUtils.copyProperties(map, meetingrec);
-            meetingrec.setInfosid(meeting.getId());
+                    meetingrec.setInfosid(meeting.getId());
                     if (ToolUtil.isEmpty(meetingrec.getCreatetime())) {
                         meetingrec.setCreatetime(new DateTime());
                     }
                     infosrecMapper.insert(meetingrec);
                 }
+            }
+            if (ToolUtil.isNotEmpty(addDto.getInfoUnitAttrs())) {
+              infoUnitAttrService.insertOrUpdateBatch(addDto.getInfoUnitAttrs());
             }
 
             Map<String,String> map=new HashMap<>();
@@ -167,13 +187,28 @@ public class InfosServiceImpl extends ServiceImpl<InfosMapper, Infos> implements
             Infos meeting = new Infos();
             BeanUtils.copyProperties(addDto, meeting);
             updateById(meeting);
-            Infosrec meetingrec= new Infosrec();
+//            List<InfoAttr> meetingAttrs=null;
+//            if(ToolUtil.isNotEmpty(addDto.getFiles())){
+//                meetingAttrs = AttrUnit.getInfoAttrs(meeting.getId(), addDto.getFiles(), 2,meetingAttrs, null,infoAttrService);
+//                infoAttrService.insertOrUpdateBatch(meetingAttrs);
+//            }
+//            if(ToolUtil.isNotEmpty(addDto.getPictures())){
+//                meetingAttrs = AttrUnit.getInfoAttrs(meeting.getId(), addDto.getPictures(), 1,meetingAttrs, null,infoAttrService);
+//                infoAttrService.insertOrUpdateBatch(meetingAttrs);
+//            }
+
+
             if (ToolUtil.isNotEmpty(addDto.getResc())) {
+                Infosrec meetingrec=null;
 //                循环修改交办单位
                 for (Infosrec map : addDto.getResc()) {
+                    meetingrec= new Infosrec();
                     CopyUtils.copyProperties(map, meetingrec);
                     infosrecMapper.updateById(meetingrec);
                 }
+            }
+            if (ToolUtil.isNotEmpty(addDto.getInfoUnitAttrs())) {
+                infoUnitAttrService.insertOrUpdateBatch(addDto.getInfoUnitAttrs());
             }
             return ResponseData.success();
 
@@ -183,7 +218,7 @@ public class InfosServiceImpl extends ServiceImpl<InfosMapper, Infos> implements
     }
 
     @Override
-    public void export(SreachMeetingDto sreachInfoDto, HttpServletResponse response) {
+    public void export(SreachInfoDto sreachInfoDto, HttpServletResponse response) {
         //sheet名
         String sheetName = "区委信息数据分析表";
         List<ExportRowVo> exportRowVos = new ArrayList<>();

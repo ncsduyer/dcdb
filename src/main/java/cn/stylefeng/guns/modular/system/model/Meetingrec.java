@@ -49,6 +49,10 @@ public class Meetingrec extends Model<Meetingrec> {
      */
     private Integer unitid;
     private String name;
+    private String pictures;
+    private String files;
+
+
     @TableField(exist = false)
     private List<MeetingRecAttr> meetingRecAttrs;
     public List<MeetingRecAttr> getMeetingRecAttrs() {
@@ -149,5 +153,21 @@ public class Meetingrec extends Model<Meetingrec> {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(String pictures) {
+        this.pictures = pictures;
+    }
+
+    public String getFiles() {
+        return files;
+    }
+
+    public void setFiles(String files) {
+        this.files = files;
     }
 }

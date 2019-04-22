@@ -2,10 +2,10 @@ package cn.stylefeng.guns.modular.Docs.service.impl;
 
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.util.Bettime;
+import cn.stylefeng.guns.modular.Docs.dto.SreachDocDto;
 import cn.stylefeng.guns.modular.Docs.service.IDocRecService;
 import cn.stylefeng.guns.modular.MeetingRec.dto.SreachMeetingRecDto;
 import cn.stylefeng.guns.modular.checkitem.service.ICheckitemService;
-import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
 import cn.stylefeng.guns.modular.system.dao.DocRecMapper;
 import cn.stylefeng.guns.modular.system.model.Doc;
 import cn.stylefeng.guns.modular.system.model.DocRec;
@@ -57,8 +57,9 @@ public class DocRecServiceImpl extends ServiceImpl<DocRecMapper, DocRec> impleme
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
         }
     }
+
     @Override
-    public List<HashMap<String, Object>> export(SreachMeetingDto sreachDto) {
+    public List<HashMap<String, Object>> export(SreachDocDto sreachDto) {
         try {
             new Bettime(sreachDto);
         } catch (ParseException e) {

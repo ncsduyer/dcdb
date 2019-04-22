@@ -1,7 +1,7 @@
 package cn.stylefeng.guns.modular.Docs.service;
 
 import cn.stylefeng.guns.modular.Docs.dto.AddDocDto;
-import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
+import cn.stylefeng.guns.modular.Docs.dto.SreachDocDto;
 import cn.stylefeng.guns.modular.system.model.Doc;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import com.baomidou.mybatisplus.service.IService;
@@ -14,24 +14,24 @@ import javax.servlet.http.HttpServletResponse;
  * </p>
  *
  * @author 三千霜
- * @since 2019-04-12
+ * @since 2019-04-22
  */
 public interface IDocService extends IService<Doc> {
-    ResponseData SreachPage(SreachMeetingDto sreachDto);
+    ResponseData SreachPage(SreachDocDto sreachDto);
 
     ResponseData add(AddDocDto addDto);
 
     ResponseData selectWithManyById(Integer id);
 
-    ResponseData sreachChart(SreachMeetingDto sreachDto);
+    ResponseData sreachChart(SreachDocDto sreachDto);
 
-    ResponseData getReports(SreachMeetingDto sreachDto);
+    ResponseData getReports(SreachDocDto sreachDto);
 
     ResponseData edit(AddDocDto addDto);
 
-    void export(SreachMeetingDto sreachDocDto, HttpServletResponse response);
+    void export(SreachDocDto sreachDocDto, HttpServletResponse response);
 
     Boolean deleteMoreById(Integer id);
 
-    ResponseData selectAsMore(SreachMeetingDto sreachMeetingRecDto);
+    ResponseData selectAsMore(SreachDocDto sreachDocDto);
 }

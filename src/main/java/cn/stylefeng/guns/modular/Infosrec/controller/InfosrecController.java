@@ -7,6 +7,8 @@ import cn.stylefeng.guns.modular.DcCompany.service.ICompanyService;
 import cn.stylefeng.guns.modular.Infosrec.service.IInfosrecService;
 import cn.stylefeng.guns.modular.Infosrec.vo.InfosrecVo;
 import cn.stylefeng.guns.modular.MeetingRec.dto.SreachMeetingRecDto;
+import cn.stylefeng.guns.modular.attrs.service.IInfoUnitAttrService;
+import cn.stylefeng.guns.modular.system.model.InfoUnitAttr;
 import cn.stylefeng.guns.modular.system.model.Infosrec;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
@@ -21,10 +23,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +45,8 @@ public class InfosrecController extends BaseController {
     private IInfosrecService infosrecService;
     @Autowired
     private ICompanyService companyService;
-
+    @Autowired
+    private IInfoUnitAttrService infoUnitAttrService;
     
 
     /**
@@ -153,4 +153,33 @@ public class InfosrecController extends BaseController {
         }
 
     }
+    /**
+     * 修改单位附件
+     */
+    @ApiOperation(value = "修改单位附件")
+    @RequestMapping(value = "/updateAttr",method = {RequestMethod.GET,RequestMethod.POST})
+    @ResponseBody
+    public ResponseData updateAttr(@RequestBody InfoUnitAttr infosrecs) {
+
+        if (infoUnitAttrService.insertOrUpdate(infosrecs)){
+            return SUCCESS_TIP;
+        }
+        return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
+    }
+    /**
+     * 查看单位附件列表
+     */
+    @ApiOperation(value = "查看单位附件列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "infoid", value = "信息事项id", required = true, dataType = "Long"),
+            @ApiImplicitParam(name = "unitid", value = "单位id", required = true, dataType = "Long"),
+    })
+    @RequestMapping(value = "/detail/{infoid}/{unitid}", method = RequestMethod.GET)
+    @Permission
+    @ResponseBody
+    public ResponseData detail(@PathVariable("infoid") Integer infoid,@PathVariable("unitid") Integer unitid) {
+        return ResponseData.success(infoUnitAttrService.selectOne(Condition.create().eq("infoid", infoid).eq("unitid", unitid)));
+    }
+
+
 }

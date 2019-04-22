@@ -16,7 +16,7 @@ import cn.stylefeng.guns.modular.Docs.dto.SreachDocDto;
 import cn.stylefeng.guns.modular.Docs.service.IDocRecService;
 import cn.stylefeng.guns.modular.Docs.service.IDocService;
 import cn.stylefeng.guns.modular.checkitem.service.ICheckitemService;
-import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
+import cn.stylefeng.guns.modular.resources.service.IAssetService;
 import cn.stylefeng.guns.modular.system.dao.DocMapper;
 import cn.stylefeng.guns.modular.system.dao.DocRecMapper;
 import cn.stylefeng.guns.modular.system.model.Checkitem;
@@ -28,9 +28,9 @@ import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.Condition;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -47,7 +48,7 @@ import java.util.*;
  * </p>
  *
  * @author 三千霜
- * @since 2019-04-12
+ * @since 2019-04-22
  */
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -62,44 +63,16 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
     private IDocRecService docRecService;
     @Autowired
     private ICopyRecordNoticeService copyRecordNoticeService;
+    @Autowired
+    private IAssetService assetService;
     @Override
-    public ResponseData SreachPage(SreachMeetingDto sreachDto) {
+    public ResponseData SreachPage(SreachDocDto sreachDto) {
         try {
             if (ToolUtil.isEmpty(sreachDto)) {
                 sreachDto = new SreachDocDto();
             }
             Page<HashMap<String,Object>> page = new Page<>(sreachDto.getPage(), sreachDto.getLimit());
-            new Bettime(sreachDto);
-            EntityWrapper<DocRec> ew = new EntityWrapper<>();
-            ew.setEntity(new DocRec());
-            if (ToolUtil.isNotEmpty(sreachDto.getBeforeTime())){
-                ew.ge("m.assign_time", sreachDto.getBeforeTime());
-            }
-            if (ToolUtil.isNotEmpty(sreachDto.getAfterTime())){
-                ew.le("m.assign_time", sreachDto.getAfterTime());
-            }
-            if (ToolUtil.isNotEmpty(sreachDto.getId())){
-                ew.eq("m.id", sreachDto.getId());
-            }
-            if (ToolUtil.isNotEmpty(sreachDto.getCreatorid())){
-                ew.eq("m.creatorid", sreachDto.getCreatorid());
-            }
-//            拼接查询条件
-            if (ToolUtil.isNotEmpty(sreachDto.getTitle())){
-                ew.like("m.title", sreachDto.getTitle());
-            }
-            if (ToolUtil.isNotEmpty(sreachDto.getStatus())){
-                ew.in("m.status", sreachDto.getStatus());
-            }
-            if (ToolUtil.isNotEmpty(sreachDto.getCompanyIds())){
-                ew.in("mr.unitid", sreachDto.getCompanyIds());
-            }
-            ew.groupBy("mr.unitid");
-            if (ToolUtil.isNotEmpty(sreachDto.getOrder())){
-                ew.orderBy(sreachDto.getOrder());
-            }else{
-                ew.orderBy("m.id",false);
-            }
+            Condition ew = getCondition(sreachDto, "mr.unitid");
 
             ArrayList<HashMap<String,Object>> arrayList = docRecMapper.getInfoByPidPage(page,ew,checkitemService.selectList(Condition.create().eq("itemclass", 3).eq("status", 1)));
             page.setRecords(arrayList);
@@ -108,6 +81,7 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
         }
     }
+
 
     @Override
     public ResponseData add(AddDocDto addDto) {
@@ -122,7 +96,7 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
 
             DocRec meetingrec= null;
             if (ToolUtil.isNotEmpty(addDto.getResc())) {
-            //循环插入交办单位
+                //循环插入交办单位
                 for (DocRec map : addDto.getResc()) {
                     meetingrec= new DocRec();
                     BeanUtils.copyProperties(map, meetingrec);
@@ -180,7 +154,7 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
                     meetingrec= new DocRec();
                     CopyUtils.copyProperties(map, meetingrec);
                     meetingrec.setCheckvalue(1);
-                    docRecMapper.updateById(meetingrec);
+                    docRecService.insertOrUpdate(meetingrec);
                 }
             }
             return ResponseData.success();
@@ -192,7 +166,7 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
     }
 
     @Override
-    public void export(SreachMeetingDto sreachDocDto, HttpServletResponse response) {
+    public void export(SreachDocDto sreachDocDto, HttpServletResponse response) {
 //sheet名
         String sheetName = "区委公文数据分析表";
         List<ExportRowVo> exportRowVos = new ArrayList<>();
@@ -236,7 +210,7 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
     }
 
     @Override
-    public ResponseData selectAsMore(SreachMeetingDto sreachDto) {
+    public ResponseData selectAsMore(SreachDocDto sreachDto) {
         try {
             if (ToolUtil.isEmpty(sreachDto.getCompanyIds())){
                 return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
@@ -245,37 +219,7 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
                 sreachDto = new SreachDocDto();
             }
             Page<Doc> page = new Page<>(sreachDto.getPage(), sreachDto.getLimit());
-            new Bettime(sreachDto);
-            EntityWrapper<Doc> ew = new EntityWrapper<>();
-            ew.setEntity(new Doc());
-            if (ToolUtil.isNotEmpty(sreachDto.getBeforeTime())){
-                ew.ge("m.assign_time", sreachDto.getBeforeTime());
-            }
-            if (ToolUtil.isNotEmpty(sreachDto.getAfterTime())){
-                ew.le("m.assign_time", sreachDto.getAfterTime());
-            }
-            if (ToolUtil.isNotEmpty(sreachDto.getId())){
-                ew.eq("m.id", sreachDto.getId());
-            }
-            if (ToolUtil.isNotEmpty(sreachDto.getCreatorid())){
-                ew.eq("m.creatorid", sreachDto.getCreatorid());
-            }
-//            拼接查询条件
-            if (ToolUtil.isNotEmpty(sreachDto.getTitle())){
-                ew.like("m.title", sreachDto.getTitle());
-            }
-            if (ToolUtil.isNotEmpty(sreachDto.getStatus())){
-                ew.in("m.status", sreachDto.getStatus());
-            }
-            if (ToolUtil.isNotEmpty(sreachDto.getCompanyIds())){
-                ew.in("mr.unitid", sreachDto.getCompanyIds());
-            }
-            ew.groupBy("m.id,mr.id");
-            if (ToolUtil.isNotEmpty(sreachDto.getOrder())){
-                ew.orderBy(sreachDto.getOrder());
-            }else{
-                ew.orderBy("m.id",false);
-            }
+            Condition ew = getCondition(sreachDto, "m.id,mr.id");
 
             List<Doc> arrayList = docsMapper.selectAsMore(ew);
             page.setRecords(arrayList);
@@ -288,108 +232,62 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
     @Override
     public ResponseData selectWithManyById(Integer id) {
         Doc meeting = docsMapper.selectWithManyById(id);
+        meeting.setImgs(assetService.selectList(Condition.create().in("id", meeting.getPictures())));
+        meeting.setFileList(assetService.selectList(Condition.create().in("id", meeting.getFiles())));
         return ResponseData.success(meeting);
     }
 
     @Override
-    public ResponseData getReports(SreachMeetingDto sreachDto) {
+    public ResponseData getReports(SreachDocDto sreachDto) {
         return SreachPage(sreachDto);
     }
 
     @Override
-    public ResponseData sreachChart(SreachMeetingDto sreachDto) {
-
-        //循环获取类型
-//        List<EventStep> eventSteps=eventStepService.selectList(Condition.create().eq("event_type", 1));
-//        List<Series> seriess;
-//        Legend legend=new Legend();
-//
-//        switch (sreachDto.getChartType()){
-//            case ChartUtil.PIE:
-//                legend.setData(new ArrayList<>());
-//
-//                seriess = new LinkedList<>();
-//                try {
-//                    new Bettime(sreachDto);
-//                } catch (ParseException e) {
-//                    e.printStackTrace();
-//                }
-//
-//
-//
-//                for (EventStep et:eventSteps){
-//                    Series<DataBean> series=new Series<>();
-//                    series.setData(new ArrayList<>());
-//                    EntityWrapper<Taskassign> ew = new EntityWrapper<>();
-//                    ew.setEntity(new Taskassign());
-//                    if (ToolUtil.isNotEmpty(sreachDto.getBeforeTime())){
-//                        ew.ge("assigntime", sreachDto.getBeforeTime());
-//                    }
-//                    if (ToolUtil.isNotEmpty(sreachDto.getAfterTime())){
-//                        ew.le("assigntime", sreachDto.getAfterTime());
-//                    }
-//                    ew.eq("status", et.getStatus());
-//                    legend.getData().add(et.getStep());
-//                    series.getData().add(new DataBean(et.getStep(),taskassignService.selectCount(ew)));
-//                    seriess.add(series);
-//                }
-//                //填充数据到map
-//
-//                return BigResponseData.success(new ChartVo(seriess,legend));
-//            default:
-//                //拆分时间
-//                Axis axis=new Axis();
-//                axis.setData(new LinkedHashSet<>());
-//                List<Date> dates=Bettime.getDates(sreachDto.getBeforeTime(), sreachDto.getAfterTime());
-//                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//
-//                legend.setData(new ArrayList<>());
-//                seriess = new LinkedList<>();
-//
-//                try {
-//                    new Bettime(sreachDto);
-//                } catch (ParseException e) {
-//                    e.printStackTrace();
-//                }
-//
-//
-//                for (EventStep et:eventSteps){
-//                    Series<Integer> series=new Series<>();
-//                    series.setData(new ArrayList<>());
-//                    legend.getData().add(et.getStep());
-//                    series.setName(et.getStep());
-//
-//
-//                    EntityWrapper<Taskassign> ew = new EntityWrapper<>();
-//                    ew.setEntity(new Taskassign());
-//                    ew.setSqlSelect("date_format(assigntime, '%Y-%m-%d') time,count(id) size");
-//                    if (ToolUtil.isNotEmpty(sreachDto.getBeforeTime())){
-//                        ew.ge("assigntime", sreachDto.getBeforeTime());
-//                    }
-//                    if (ToolUtil.isNotEmpty(sreachDto.getAfterTime())){
-//                        ew.le("assigntime", sreachDto.getAfterTime());
-//                    }
-//                    ew.eq("status", et.getStatus());
-//                    ew.groupBy("date_format(assigntime, '%Y-%m-%d')");
-//                    List<Map<String, Object>> maps= taskassignService.selectMaps(ew);
-//                    for (Date date :dates) {
-//                        axis.getData().add(sdf.format(date));
-//                        series.getData().add(0);
-//                    }
-//                    for (Map<String, Object> map:maps){
-//                        try {
-//                            series.getData().set(dates.indexOf(sdf.parse((String) map.get("time"))),((Number) map.get("size")).intValue());
-//                        } catch (ParseException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                    seriess.add(series);
-//                }
-//
-//
-//
-//                return BigResponseData.success(new ChartVo(seriess,legend,axis));
+    public ResponseData sreachChart(SreachDocDto sreachDto) {
         return ResponseData.success(null);
 
+    }
+    @NotNull
+    private Condition getCondition(SreachDocDto sreachDto, String s) throws ParseException {
+        new Bettime(sreachDto);
+        Condition ew = Condition.create();
+        if (ToolUtil.isNotEmpty(sreachDto.getBeforeTime())) {
+            ew.ge("m.assign_time", sreachDto.getBeforeTime());
+        }
+        if (ToolUtil.isNotEmpty(sreachDto.getAfterTime())) {
+            ew.le("m.assign_time", sreachDto.getAfterTime());
+        }
+        if (ToolUtil.isNotEmpty(sreachDto.getId())) {
+            ew.eq("m.id", sreachDto.getId());
+        }
+        if (ToolUtil.isNotEmpty(sreachDto.getCreatorids())) {
+            ew.in("m.creatorid", sreachDto.getCreatorids());
+        }
+        if (ToolUtil.isNotEmpty(sreachDto.getDoctypes())) {
+            ew.in("m.doctype", sreachDto.getDoctypes());
+        }
+        if (ToolUtil.isNotEmpty(sreachDto.getSenderIds())) {
+            ew.in("m.sender_id", sreachDto.getSenderIds());
+        }
+        if (ToolUtil.isNotEmpty(sreachDto.getExceed())) {
+            ew.eq("m.exceed", sreachDto.getExceed());
+        }
+//            拼接查询条件
+        if (ToolUtil.isNotEmpty(sreachDto.getTitle())) {
+            ew.like("m.title", sreachDto.getTitle());
+        }
+        if (ToolUtil.isNotEmpty(sreachDto.getStatus())) {
+            ew.in("m.status", sreachDto.getStatus());
+        }
+        if (ToolUtil.isNotEmpty(sreachDto.getCompanyIds())) {
+            ew.in("mr.unitid", sreachDto.getCompanyIds());
+        }
+        ew.groupBy(s);
+        if (ToolUtil.isNotEmpty(sreachDto.getOrder())) {
+            ew.orderBy(sreachDto.getOrder());
+        } else {
+            ew.orderBy("m.id", false);
+        }
+        return ew;
     }
 }

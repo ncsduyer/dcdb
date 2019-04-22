@@ -1,7 +1,7 @@
 package cn.stylefeng.guns.modular.Infosrec.service;
 
+import cn.stylefeng.guns.modular.Infos.dto.SreachInfoDto;
 import cn.stylefeng.guns.modular.MeetingRec.dto.SreachMeetingRecDto;
-import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
 import cn.stylefeng.guns.modular.system.model.Infosrec;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import com.baomidou.mybatisplus.service.IService;
@@ -20,5 +20,5 @@ import java.util.List;
 public interface IInfosrecService extends IService<Infosrec> {
     ResponseData selectListByDto(SreachMeetingRecDto sreachDto);
 
-    List<HashMap<String, Object>> export(SreachMeetingDto sreachInfoDto);
+    List<HashMap<String, Object>> export(SreachInfoDto sreachInfoDto);
 }

@@ -7,12 +7,10 @@ import cn.stylefeng.guns.core.util.CopyUtils;
 import cn.stylefeng.guns.modular.MeetingRec.dto.SreachMeetingRecDto;
 import cn.stylefeng.guns.modular.MeetingRec.service.IMeetingrecService;
 import cn.stylefeng.guns.modular.attrs.service.IMeetingRecAttrService;
-import cn.stylefeng.guns.modular.attrs.unit.AttrUnit;
 import cn.stylefeng.guns.modular.checkitem.service.ICheckitemService;
 import cn.stylefeng.guns.modular.meeting.dto.MeetingrecDto;
 import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
 import cn.stylefeng.guns.modular.system.dao.MeetingrecMapper;
-import cn.stylefeng.guns.modular.system.model.MeetingRecAttr;
 import cn.stylefeng.guns.modular.system.model.Meetingrec;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
@@ -97,15 +95,15 @@ public class MeetingrecServiceImpl extends ServiceImpl<MeetingrecMapper, Meeting
                     meetingrec.setCreatetime(new DateTime());
                 }
                 meetingrecMapper.insert(meetingrec);
-                List<MeetingRecAttr> meetingRecAttrs=null;
-                if(ToolUtil.isNotEmpty(map.getFiles())){
-                    meetingRecAttrs = AttrUnit.getMeetingRecAttrs(meetingrec.getId(), map.getFiles(), 2,meetingRecAttrs,null);
-                    meetingRecAttrService.insertOrUpdateBatch(meetingRecAttrs);
-                }
-                if(ToolUtil.isNotEmpty(map.getPictures())){
-                    meetingRecAttrs = AttrUnit.getMeetingRecAttrs(meetingrec.getId(),map.getPictures(), 1,meetingRecAttrs,null);
-                    meetingRecAttrService.insertOrUpdateBatch(meetingRecAttrs);
-                }
+//                List<MeetingRecAttr> meetingRecAttrs=null;
+//                if(ToolUtil.isNotEmpty(map.getFiles())){
+//                    meetingRecAttrs = AttrUnit.getMeetingRecAttrs(meetingrec.getId(), map.getFiles(), 2,meetingRecAttrs,null,meetingRecAttrService);
+//                    meetingRecAttrService.insertOrUpdateBatch(meetingRecAttrs);
+//                }
+//                if(ToolUtil.isNotEmpty(map.getPictures())){
+//                    meetingRecAttrs = AttrUnit.getMeetingRecAttrs(meetingrec.getId(),map.getPictures(), 1,meetingRecAttrs,null,meetingRecAttrService);
+//                    meetingRecAttrService.insertOrUpdateBatch(meetingRecAttrs);
+//                }
             }
             return true;
         }else{
@@ -119,15 +117,15 @@ public class MeetingrecServiceImpl extends ServiceImpl<MeetingrecMapper, Meeting
         CopyUtils.copyProperties(map, meetingrec);
         meetingrec.setCheckvalue("1");
         meetingrecMapper.updateById(meetingrec);
-        List<MeetingRecAttr> meetingRecAttrs=null;
-        if(ToolUtil.isNotEmpty(map.getFiles())){
-            meetingRecAttrs = AttrUnit.getMeetingRecAttrs(meetingrec.getId(), map.getFiles(), 2,meetingRecAttrs,meetingRecAttrService.selectList(Condition.create().eq("pid", meetingrec.getId()).eq("type", 2)));
-            meetingRecAttrService.insertOrUpdateBatch(meetingRecAttrs);
-        }
-        if(ToolUtil.isNotEmpty(map.getPictures())){
-            meetingRecAttrs = AttrUnit.getMeetingRecAttrs(meetingrec.getId(),map.getPictures(), 1,meetingRecAttrs,meetingRecAttrService.selectList(Condition.create().eq("pid", meetingrec.getId()).eq("type", 1)));
-            meetingRecAttrService.insertOrUpdateBatch(meetingRecAttrs);
-        }
+//        List<MeetingRecAttr> meetingRecAttrs=null;
+//        if(ToolUtil.isNotEmpty(map.getFiles())){
+//            meetingRecAttrs = AttrUnit.getMeetingRecAttrs(meetingrec.getId(), map.getFiles(), 2,meetingRecAttrs,meetingRecAttrService.selectList(Condition.create().eq("pid", meetingrec.getId()).eq("type", 2)),meetingRecAttrService);
+//            meetingRecAttrService.insertOrUpdateBatch(meetingRecAttrs);
+//        }
+//        if(ToolUtil.isNotEmpty(map.getPictures())){
+//            meetingRecAttrs = AttrUnit.getMeetingRecAttrs(meetingrec.getId(),map.getPictures(), 1,meetingRecAttrs,meetingRecAttrService.selectList(Condition.create().eq("pid", meetingrec.getId()).eq("type", 1)),meetingRecAttrService);
+//            meetingRecAttrService.insertOrUpdateBatch(meetingRecAttrs);
+//        }
         return true;
     }
 

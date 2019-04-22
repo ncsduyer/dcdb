@@ -11,6 +11,8 @@
         <result column="status" property="status" />
         <result column="memo" property="memo" />
         <result column="hostid" property="hostid" />
+        <result column="pictures" property="pictures" />
+        <result column="files" property="files" />
     </resultMap>
     <resultMap id="BaseMoreMap" type="cn.stylefeng.guns.modular.system.model.Meeting">
         <id column="mid" property="id" />
@@ -20,6 +22,8 @@
         <result column="mstatus" property="status" />
         <result column="mmemo" property="memo" />
         <result column="mhostid" property="hostid" />
+        <result column="mpictures" property="pictures" />
+        <result column="mfiles" property="files" />
         <result column="mcount" property="count"/>
         <association property="createuser" javaType="cn.stylefeng.guns.modular.system.model.User">
             <id column="uid" property="id"/>
@@ -36,20 +40,13 @@
             <result column="esevent_type" property="eventType"/>
             <result column="esstep" property="step"/>
         </association>
-        <collection property="meetingAttrs" ofType="cn.stylefeng.guns.modular.system.model.MeetingAttr">
-            <id column="maid" property="id" />
-            <result column="mapid" property="pid" />
-            <result column="maassetid" property="assetid" />
-            <result column="matype" property="type" />
-            <result column="maorder" property="order" />
-        </collection>
     </resultMap>
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, mtime, title, creatorid, status, memo,hostid
+        id, mtime, title, creatorid, status, memo,hostid,pictures,files
     </sql>
     <sql id="AS_Column_List">
-        m.id mid, m.mtime mmtime, m.title mtitle, m.creatorid mcreatorid, m.status mstatus, m.memo mmemo,m.hostid mhostid,count(distinct mr.unitid) mcount,u.id uid, u.name uname,es.id esid,es.pid espid,es.status esstatus,es.event_type esevent_type,es.step esstep,(
+        m.id mid, m.mtime mmtime, m.title mtitle, m.creatorid mcreatorid, m.status mstatus, m.memo mmemo,m.hostid mhostid,m.pictures mpictures,m.files mfiles ,count(distinct mr.unitid) mcount,u.id uid, u.name uname,es.id esid,es.pid espid,es.status esstatus,es.event_type esevent_type,es.step esstep,(
 		SELECT
 			hu. NAME huname
 		FROM
@@ -59,7 +56,7 @@
     <sql id="base_with">
         FROM
         td_meeting m LEFT JOIN td_meetingrec mr ON mr.meetingid = m.id
-        LEFT JOIN t_tb_event_step es ON es.status=m.status and es.event_type=2 LEFT JOIN sys_user u ON u.id = m.creatorid LEFT JOIN td_meeting_attr ma ON ma.pid=m.id
+        LEFT JOIN t_tb_event_step es ON es.status=m.status and es.event_type=2 LEFT JOIN sys_user u ON u.id = m.creatorid
     </sql>
     <select id="selectWithManyById" resultMap="BaseMoreMap">
         SELECT <include refid="AS_Column_List"/>

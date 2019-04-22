@@ -1,6 +1,6 @@
 package cn.stylefeng.guns.modular.system.dao;
 
-import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
+import cn.stylefeng.guns.modular.Docs.dto.SreachDocDto;
 import cn.stylefeng.guns.modular.system.model.Checkitem;
 import cn.stylefeng.guns.modular.system.model.Doc;
 import cn.stylefeng.guns.modular.system.model.DocRec;
@@ -24,7 +24,7 @@ import java.util.List;
  */
 public interface DocRecMapper extends BaseMapper<DocRec> {
     List<HashMap<String,Object>> getInfoByPid(@Param(value = "ew") Wrapper<DocRec> ew, @Param(value = "courses") List<Checkitem> courses);
-    List<HashMap<String, Object>> export(@Param(value = "sreachDto") SreachMeetingDto sreachDto, @Param(value = "courses") List<Checkitem> courses);
+    List<HashMap<String, Object>> export(@Param(value = "sreachDto") SreachDocDto sreachDto, @Param(value = "courses") List<Checkitem> courses);
 
     ArrayList<HashMap<String, Object>> getInfoByPidPage(Pagination page, @Param(value = "ew") Wrapper<DocRec> ew, @Param(value = "courses") List<Checkitem> courses);
 

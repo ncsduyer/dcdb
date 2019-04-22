@@ -47,6 +47,8 @@ public class Meeting extends Model<Meeting> {
      */
     private String memo;
     private Integer hostid;
+    private String pictures;
+    private String files;
     @TableField(exist = false)
     private Integer count;
     @TableField(exist = false)
@@ -181,5 +183,22 @@ public class Meeting extends Model<Meeting> {
 
     public void setHostuser(User hostuser) {
         this.hostuser = hostuser;
+    }
+
+
+    public String getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(String pictures) {
+        this.pictures = pictures;
+    }
+
+    public String getFiles() {
+        return files;
+    }
+
+    public void setFiles(String files) {
+        this.files = files;
     }
 }

@@ -16,7 +16,7 @@ import java.util.List;
  * </p>
  *
  * @author 三千霜
- * @since 2019-04-12
+ * @since 2019-04-22
  */
 @TableName("td_doc")
 public class Doc extends Model<Doc> {
@@ -38,10 +38,6 @@ public class Doc extends Model<Doc> {
      */
     private Integer doctype;
     /**
-     * 流转说明
-     */
-    private String assignmemo;
-    /**
      * 当前接收人员ID
      */
     private Integer currecvid;
@@ -50,13 +46,52 @@ public class Doc extends Model<Doc> {
      */
     private String currecv;
     /**
+     * 办件人id（多选）
+     */
+    @TableField("do_person_ids")
+    private String doPersonIds;
+    /**
+     * 主送人id
+     */
+    @TableField("sender_id")
+    private Integer senderId;
+    /**
+     * 分送人id（多选）
+     */
+    @TableField("copy_sender_id")
+    private String copySenderId;
+    /**
      * 创建人id
      */
     private Integer creatorid;
     /**
+     * 图片列表 包含原图，缩略图
+     */
+    private String pictures;
+    /**
+     * 文件列表
+     */
+    private String files;
+    /**
      * 归档关闭说明
      */
     private String closememo;
+    /**
+     * 流转说明
+     */
+    private String assignmemo;
+    /**
+     * 领导批示
+     */
+    private String instructions;
+    /**
+     * 办公室建议
+     */
+    private String suggestion;
+    /**
+     * 拟办意见
+     */
+    private String opinion;
     /**
      * 来文时间
      */
@@ -68,6 +103,10 @@ public class Doc extends Model<Doc> {
     @TableField("end_time")
     private Date endTime;
     /**
+     * 是否超期
+     */
+    private Integer exceed;
+    /**
      * 状态(启动停用)
      */
     private Integer status;
@@ -77,39 +116,27 @@ public class Doc extends Model<Doc> {
     private User createuser;
     @TableField(exist = false)
     private EventStep eventStep;
-
-
     @TableField(exist = false)
     private List<DocRec> docRecs;
-    public Integer getCount() {
-        return count;
+    @TableField(exist = false)
+    private List<Asset> imgs;
+    @TableField(exist = false)
+    private List<Asset> fileList;
+
+    public List<Asset> getImgs() {
+        return imgs;
     }
 
-    public void setCount(Integer count) {
-        this.count = count;
-    }
-    public List<DocRec> getDocRecs() {
-        return docRecs;
+    public void setImgs(List<Asset> imgs) {
+        this.imgs = imgs;
     }
 
-    public void setDocRecs(List<DocRec> docRecs) {
-        this.docRecs = docRecs;
+    public List<Asset> getFileList() {
+        return fileList;
     }
 
-    public User getCreateuser() {
-        return createuser;
-    }
-
-    public void setCreateuser(User createuser) {
-        this.createuser = createuser;
-    }
-
-    public EventStep getEventStep() {
-        return eventStep;
-    }
-
-    public void setEventStep(EventStep eventStep) {
-        this.eventStep = eventStep;
+    public void setFileList(List<Asset> fileList) {
+        this.fileList = fileList;
     }
 
     public Integer getId() {
@@ -144,14 +171,6 @@ public class Doc extends Model<Doc> {
         this.doctype = doctype;
     }
 
-    public String getAssignmemo() {
-        return assignmemo;
-    }
-
-    public void setAssignmemo(String assignmemo) {
-        this.assignmemo = assignmemo;
-    }
-
     public Integer getCurrecvid() {
         return currecvid;
     }
@@ -168,6 +187,30 @@ public class Doc extends Model<Doc> {
         this.currecv = currecv;
     }
 
+    public String getDoPersonIds() {
+        return doPersonIds;
+    }
+
+    public void setDoPersonIds(String doPersonIds) {
+        this.doPersonIds = doPersonIds;
+    }
+
+    public Integer getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(Integer senderId) {
+        this.senderId = senderId;
+    }
+
+    public String getCopySenderId() {
+        return copySenderId;
+    }
+
+    public void setCopySenderId(String copySenderId) {
+        this.copySenderId = copySenderId;
+    }
+
     public Integer getCreatorid() {
         return creatorid;
     }
@@ -176,12 +219,60 @@ public class Doc extends Model<Doc> {
         this.creatorid = creatorid;
     }
 
+    public String getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(String pictures) {
+        this.pictures = pictures;
+    }
+
+    public String getFiles() {
+        return files;
+    }
+
+    public void setFiles(String files) {
+        this.files = files;
+    }
+
     public String getClosememo() {
         return closememo;
     }
 
     public void setClosememo(String closememo) {
         this.closememo = closememo;
+    }
+
+    public String getAssignmemo() {
+        return assignmemo;
+    }
+
+    public void setAssignmemo(String assignmemo) {
+        this.assignmemo = assignmemo;
+    }
+
+    public String getInstructions() {
+        return instructions;
+    }
+
+    public void setInstructions(String instructions) {
+        this.instructions = instructions;
+    }
+
+    public String getSuggestion() {
+        return suggestion;
+    }
+
+    public void setSuggestion(String suggestion) {
+        this.suggestion = suggestion;
+    }
+
+    public String getOpinion() {
+        return opinion;
+    }
+
+    public void setOpinion(String opinion) {
+        this.opinion = opinion;
     }
 
     public Date getAssignTime() {
@@ -200,12 +291,52 @@ public class Doc extends Model<Doc> {
         this.endTime = endTime;
     }
 
+    public Integer getExceed() {
+        return exceed;
+    }
+
+    public void setExceed(Integer exceed) {
+        this.exceed = exceed;
+    }
+
     public Integer getStatus() {
         return status;
     }
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
+    public User getCreateuser() {
+        return createuser;
+    }
+
+    public void setCreateuser(User createuser) {
+        this.createuser = createuser;
+    }
+
+    public EventStep getEventStep() {
+        return eventStep;
+    }
+
+    public void setEventStep(EventStep eventStep) {
+        this.eventStep = eventStep;
+    }
+
+    public List<DocRec> getDocRecs() {
+        return docRecs;
+    }
+
+    public void setDocRecs(List<DocRec> docRecs) {
+        this.docRecs = docRecs;
     }
 
     @Override
@@ -220,13 +351,22 @@ public class Doc extends Model<Doc> {
         ", title=" + title +
         ", unitid=" + unitid +
         ", doctype=" + doctype +
-        ", assignmemo=" + assignmemo +
         ", currecvid=" + currecvid +
         ", currecv=" + currecv +
+        ", doPersonIds=" + doPersonIds +
+        ", senderId=" + senderId +
+        ", copySenderId=" + copySenderId +
         ", creatorid=" + creatorid +
+        ", pictures=" + pictures +
+        ", files=" + files +
         ", closememo=" + closememo +
+        ", assignmemo=" + assignmemo +
+        ", instructions=" + instructions +
+        ", suggestion=" + suggestion +
+        ", opinion=" + opinion +
         ", assignTime=" + assignTime +
         ", endTime=" + endTime +
+        ", exceed=" + exceed +
         ", status=" + status +
         "}";
     }

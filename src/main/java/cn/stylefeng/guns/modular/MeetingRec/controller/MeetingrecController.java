@@ -6,7 +6,6 @@ import cn.stylefeng.guns.modular.DcCompany.service.ICompanyService;
 import cn.stylefeng.guns.modular.MeetingRec.dto.SreachMeetingRecDto;
 import cn.stylefeng.guns.modular.MeetingRec.service.IMeetingrecService;
 import cn.stylefeng.guns.modular.attrs.service.IMeetingRecAttrService;
-import cn.stylefeng.guns.modular.meeting.dto.MeetingrecDto;
 import cn.stylefeng.guns.modular.system.model.Meetingrec;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
@@ -64,8 +63,8 @@ public class MeetingrecController extends BaseController {
      */
     @RequestMapping(value = "/add")
     @ResponseBody
-    public ResponseData add(List<MeetingrecDto> meetingrecs) {
-        if (meetingrecService.add(meetingrecs)){
+    public ResponseData add(List<Meetingrec> meetingrecs) {
+        if (meetingrecService.insertBatch(meetingrecs)){
         return SUCCESS_TIP;
         }
         return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
@@ -119,8 +118,8 @@ public class MeetingrecController extends BaseController {
     })
     @RequestMapping(value = "/update",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public ResponseData update(@RequestBody MeetingrecDto meetingrec) {
-        if (meetingrecService.edit(meetingrec)){
+    public ResponseData update(@RequestBody Meetingrec meetingrec) {
+        if (meetingrecService.updateById(meetingrec)){
             return SUCCESS_TIP;
         }
         return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
@@ -131,8 +130,8 @@ public class MeetingrecController extends BaseController {
     @ApiOperation(value = "批量修改区委会议单位个人记录")
     @RequestMapping(value = "/updateList",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public ResponseData updateList(@RequestBody List<MeetingrecDto> meetingrecs) {
-        if (meetingrecService.editBatch(meetingrecs)){
+    public ResponseData updateList(@RequestBody List<Meetingrec> meetingrecs) {
+        if (meetingrecService.updateBatchById(meetingrecs)){
             return SUCCESS_TIP;
         }
         return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
@@ -170,7 +169,7 @@ public class MeetingrecController extends BaseController {
     @ResponseBody
     public ResponseData detail(@PathVariable("id") Integer id) {
         try {
-            return ResponseData.success(meetingrecService.getInfoById(id));
+            return ResponseData.success(meetingrecService.selectById(id));
         }catch (Exception e){
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
         }

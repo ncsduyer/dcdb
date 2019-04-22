@@ -1,6 +1,7 @@
 package cn.stylefeng.guns.modular.Infos.dto;
 
 import cn.stylefeng.guns.modular.system.model.CopyRecordNotice;
+import cn.stylefeng.guns.modular.system.model.InfoUnitAttr;
 import cn.stylefeng.guns.modular.system.model.Infosrec;
 import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModel;
@@ -31,10 +32,11 @@ public class AddInfoDto  {
     private List<Integer> pictures;
     @ApiModelProperty("文件列表")
     private List<Integer> files;
-//    @ApiModelProperty("单位附件列表")
 //    private List<InfoRecAttr> infoRecAttrs;
     @ApiModelProperty("上报信息数组")
     private List<Infosrec> resc;
+    @ApiModelProperty("单位附件列表")
+    private List<InfoUnitAttr> infoUnitAttrs;
     private List<CopyRecordNotice> copyRecordNotices;
 
     public List<CopyRecordNotice> getCopyRecordNotices() {
@@ -99,4 +101,36 @@ public class AddInfoDto  {
     public void setCreatorid(Integer creatorid) {
         this.creatorid = creatorid;
     }
+
+    public List<Integer> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(List<Integer> pictures) {
+        this.pictures = pictures;
+    }
+
+    public List<Integer> getFiles() {
+        return files;
+    }
+
+    public void setFiles(List<Integer> files) {
+        this.files = files;
+    }
+
+    public List<InfoUnitAttr> getInfoUnitAttrs() {
+        return infoUnitAttrs;
+    }
+
+    public void setInfoUnitAttrs(List<InfoUnitAttr> infoUnitAttrs) {
+        this.infoUnitAttrs = infoUnitAttrs;
+    }
+
+//    public List<InfoRecAttr> getInfoRecAttrs() {
+//        return infoRecAttrs;
+//    }
+//
+//    public void setInfoRecAttrs(List<InfoRecAttr> infoRecAttrs) {
+//        this.infoRecAttrs = infoRecAttrs;
+//    }
 }

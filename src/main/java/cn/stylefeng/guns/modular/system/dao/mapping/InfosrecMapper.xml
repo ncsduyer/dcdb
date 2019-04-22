@@ -17,7 +17,7 @@
         id, infosid, checkitemid, checkvalue, createtime, unitid
     </sql>
     <select id="getInfoByPid" resultType="java.util.HashMap">
-        SELECT c.title ctitle ,rec.unitid unitid,
+        SELECT c.title ctitle ,rec.unitid unitid,rec.id id
         <if test="courses != null">
             <foreach collection="courses" item="item" separator=",">
                 MAX(CASE rec.checkitemid WHEN ${item.id} THEN rec.checkvalue ElSE 0 END)  "${item.id}"

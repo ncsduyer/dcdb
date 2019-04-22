@@ -3,9 +3,9 @@ package cn.stylefeng.guns.modular.DocAssignRec.controller;
 import cn.hutool.core.date.DateTime;
 import cn.stylefeng.guns.core.common.annotion.Permission;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
+import cn.stylefeng.guns.modular.Docs.dto.SreachDocDto;
 import cn.stylefeng.guns.modular.Docs.service.IDocRecService;
 import cn.stylefeng.guns.modular.Docs.service.IDocService;
-import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
 import cn.stylefeng.guns.modular.system.model.DocRec;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
@@ -60,7 +60,7 @@ public class DocassignrecController extends BaseController {
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @Permission
     @ResponseBody
-    public ResponseData list(@Validated @RequestBody SreachMeetingDto sreachMeetingRecDto) {
+    public ResponseData list(@Validated @RequestBody SreachDocDto sreachMeetingRecDto) {
         return docService.selectAsMore(sreachMeetingRecDto);
     }
 

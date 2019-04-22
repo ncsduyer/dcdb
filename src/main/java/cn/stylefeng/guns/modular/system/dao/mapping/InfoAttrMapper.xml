@@ -15,5 +15,8 @@
     <sql id="Base_Column_List">
         id, pid, assetid, type, order
     </sql>
+    <sql id="Aliases_Column_List">
+        ia.id iaid, ia.pid iapid, ia.assetid iaassetid, ia.type iatype, ia.order iaorder
+    </sql>
 
 </mapper>
