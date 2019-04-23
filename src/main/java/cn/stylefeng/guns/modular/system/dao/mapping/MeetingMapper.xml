@@ -51,7 +51,7 @@
 			hu. NAME huname
 		FROM
 			sys_user hu where hu.id = m.hostid
-	) huname,ma.id maid, ma.pid mapid, ma.assetid maassetid, ma.type matype, ma.order maorder
+	) huname
     </sql>
     <sql id="base_with">
         FROM

@@ -40,12 +40,12 @@
         id, mtime, title, creatorid, status, memo,pictures,files
     </sql>
     <sql id="AS_Column_List">
-        m.id mid, m.mtime mmtime, m.title mtitle, m.creatorid mcreatorid, m.status mstatus, m.memo mmemo,m.pictures mpictures,m.files mfiles ,count(distinct mr.unitid) mcount,u.id uid, u.name uname,es.id esid,es.pid espid,es.status esstatus,es.event_type esevent_type,es.step esstep,
+        m.id mid, m.mtime mmtime, m.title mtitle, m.creatorid mcreatorid, m.status mstatus, m.memo mmemo,m.pictures mpictures,m.files mfiles ,count(distinct mr.unitid) mcount,u.id uid, u.name uname,es.id esid,es.pid espid,es.status esstatus,es.event_type esevent_type,es.step esstep
     </sql>
     <sql id="base_with">
         FROM
         td_infos m LEFT JOIN td_infosrec mr ON mr.infosid = m.id
-        LEFT JOIN t_tb_event_step es ON es.status=m.status and es.event_type=4 LEFT JOIN sys_user u ON u.id = m.creatorid LEFT JOIN td_info_attr ia ON ia.pid=m.id
+        LEFT JOIN t_tb_event_step es ON es.status=m.status and es.event_type=4 LEFT JOIN sys_user u ON u.id = m.creatorid
     </sql>
     <select id="selectWithManyById" resultMap="BaseMoreMap">
         SELECT <include refid="AS_Column_List"/>
