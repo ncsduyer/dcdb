@@ -22,10 +22,7 @@ import cn.stylefeng.guns.modular.attrs.service.IInfoUnitAttrService;
 import cn.stylefeng.guns.modular.checkitem.service.ICheckitemService;
 import cn.stylefeng.guns.modular.system.dao.InfosMapper;
 import cn.stylefeng.guns.modular.system.dao.InfosrecMapper;
-import cn.stylefeng.guns.modular.system.model.Checkitem;
-import cn.stylefeng.guns.modular.system.model.CopyRecordNotice;
-import cn.stylefeng.guns.modular.system.model.Infos;
-import cn.stylefeng.guns.modular.system.model.Infosrec;
+import cn.stylefeng.guns.modular.system.model.*;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
@@ -155,6 +152,10 @@ public class InfosServiceImpl extends ServiceImpl<InfosMapper, Infos> implements
                 }
             }
             if (ToolUtil.isNotEmpty(addDto.getInfoUnitAttrs())) {
+                for (InfoUnitAttr infoUnitAttr:addDto.getInfoUnitAttrs()
+                     ) {
+                    infoUnitAttr.setInfoid(meeting.getId());
+                }
               infoUnitAttrService.insertOrUpdateBatch(addDto.getInfoUnitAttrs());
             }
 
@@ -208,6 +209,12 @@ public class InfosServiceImpl extends ServiceImpl<InfosMapper, Infos> implements
                 }
             }
             if (ToolUtil.isNotEmpty(addDto.getInfoUnitAttrs())) {
+                for (InfoUnitAttr infoUnitAttr:addDto.getInfoUnitAttrs()
+                ) {
+                    if (ToolUtil.isEmpty(infoUnitAttr.getInfoid())){
+                        infoUnitAttr.setInfoid(meeting.getId());
+                    }
+                }
                 infoUnitAttrService.insertOrUpdateBatch(addDto.getInfoUnitAttrs());
             }
             return ResponseData.success();

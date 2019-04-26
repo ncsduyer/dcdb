@@ -1,14 +1,12 @@
 package cn.stylefeng.guns.modular.system.model;
 
 import com.baomidou.mybatisplus.activerecord.Model;
-import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
  * <p>
@@ -53,15 +51,15 @@ public class Meetingrec extends Model<Meetingrec> {
     private String files;
 
 
-    @TableField(exist = false)
-    private List<MeetingRecAttr> meetingRecAttrs;
-    public List<MeetingRecAttr> getMeetingRecAttrs() {
-        return meetingRecAttrs;
-    }
-
-    public void setMeetingRecAttrs(List<MeetingRecAttr> meetingRecAttrs) {
-        this.meetingRecAttrs = meetingRecAttrs;
-    }
+//    @TableField(exist = false)
+//    private List<MeetingRecAttr> meetingRecAttrs;
+//    public List<MeetingRecAttr> getMeetingRecAttrs() {
+//        return meetingRecAttrs;
+//    }
+//
+//    public void setMeetingRecAttrs(List<MeetingRecAttr> meetingRecAttrs) {
+//        this.meetingRecAttrs = meetingRecAttrs;
+//    }
 
     public Integer getId() {
         return id;

@@ -6,6 +6,8 @@ import cn.stylefeng.guns.core.util.ExportUtil;
 import cn.stylefeng.guns.core.util.vo.ExportColSubVo;
 import cn.stylefeng.guns.core.util.vo.ExportColVo;
 import cn.stylefeng.guns.core.util.vo.ExportRowVo;
+import cn.stylefeng.guns.modular.Docs.dto.SreachDocDto;
+import cn.stylefeng.guns.modular.Docs.service.IDocRecService;
 import cn.stylefeng.guns.modular.system.dao.EventTypeMapper;
 import cn.stylefeng.guns.modular.system.dao.ReportMapper;
 import cn.stylefeng.guns.modular.system.model.EventType;
@@ -46,6 +48,8 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
     private EventTypeMapper eventTypeMapper;
     @Autowired
     private ITaskService taskService;
+    @Autowired
+    private IDocRecService docRecService;
     @Override
     public ResponseData getReport(SreachReportDto sreachReportDto) {
         try {
@@ -174,7 +178,33 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
         if (ToolUtil.isNotEmpty(sreachReportDto.getAfterTime())){
             ew.le("taskunit.createtime", sreachReportDto.getAfterTime());
         }
-        return ResponseData.success(reportMapper.selectByUnitCount(ew,sreachReportDto.getAfterTime(),sreachReportDto.getBeforeTime()));
+       ArrayList<HashMap<String,Object>> reportMaps= (ArrayList<HashMap<String, Object>>) reportMapper.selectByUnitCount(ew,sreachReportDto.getAfterTime(),sreachReportDto.getBeforeTime());
+        SreachDocDto sreachDocDto=new SreachDocDto();
+        sreachDocDto.setAfterTime(sreachReportDto.getAfterTime());
+        sreachDocDto.setBeforeTime(sreachReportDto.getBeforeTime());
+        ArrayList<HashMap<String,Object>> arrayList = (ArrayList<HashMap<String, Object>>) docRecService.export(sreachDocDto);
+        for (HashMap<String, Object> map :reportMaps) {
+//            for (HashMap<String, Object> arr :arrayList) {
+//                if (arr.get("unitid").equals(map.get("unitid"))){
+//                    map.put("$3总数",arr.get("total"));
+//                    map.put("$3平均运转时长",arr.get("pjsj"));
+//                    arrayList.remove(arr);
+//                }
+//            }
+            Iterator<HashMap<String,Object>> lt=arrayList.iterator();
+            while(lt.hasNext()){
+                HashMap<String,Object> arr = lt.next();
+                if(arr.get("unitid").equals(map.get("unitid"))){
+                    map.put("$3总数",arr.get("total"));
+                    map.put("$3平均运转时长",arr.get("pjsj"));
+                    lt.remove();
+                }
+            }
+        }
+
+
+
+        return ResponseData.success(reportMaps);
     }
 
     @Override
@@ -234,9 +264,18 @@ public class ReportServiceImpl extends ServiceImpl<ReportMapper, Report> impleme
         title.getColVos().add(new ExportColVo(new ExportColSubVo(1,"")));
         title1.getColVos().add(new ExportColVo(new ExportColSubVo(1,"单位名称")));
         for (int i = 0; i <eventTypes.size(); i++) {
-            title.getColVos().add(new ExportColVo(new ExportColSubVo(1,eventTypes.get(i).getCheckitems().size(),eventTypes.get(i).getReportAlias())));
+            if (eventTypes.get(i).getId().equals(3)){
+            title.getColVos().add(new ExportColVo(new ExportColSubVo(1,eventTypes.get(i).getCheckitems().size()+2,eventTypes.get(i).getReportAlias())));
             for (int j = 0; j <eventTypes.get(i).getCheckitems().size(); j++){
                 title1.getColVos().add(new ExportColVo(new ExportColSubVo(1,eventTypes.get(i).getCheckitems().get(j).getItemdesc())));
+            }
+                title1.getColVos().add(new ExportColVo(new ExportColSubVo(1,"平均运转时间")));
+                title1.getColVos().add(new ExportColVo(new ExportColSubVo(1,"总数")));
+            }else{
+                title.getColVos().add(new ExportColVo(new ExportColSubVo(1,eventTypes.get(i).getCheckitems().size(),eventTypes.get(i).getReportAlias())));
+                for (int j = 0; j <eventTypes.get(i).getCheckitems().size(); j++){
+                    title1.getColVos().add(new ExportColVo(new ExportColSubVo(1,eventTypes.get(i).getCheckitems().get(j).getItemdesc())));
+                }
             }
         }
         titles.add(title);

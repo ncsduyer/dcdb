@@ -29,9 +29,9 @@ public class AddInfoDto  {
     @ApiModelProperty("信息状态(0-停用；1-启用)")
     private Integer status;
     @ApiModelProperty("图片列表")
-    private List<Integer> pictures;
+    private String pictures;
     @ApiModelProperty("文件列表")
-    private List<Integer> files;
+    private String files;
 //    private List<InfoRecAttr> infoRecAttrs;
     @ApiModelProperty("上报信息数组")
     private List<Infosrec> resc;
@@ -102,19 +102,16 @@ public class AddInfoDto  {
         this.creatorid = creatorid;
     }
 
-    public List<Integer> getPictures() {
-        return pictures;
-    }
 
-    public void setPictures(List<Integer> pictures) {
+    public void setPictures(String pictures) {
         this.pictures = pictures;
     }
 
-    public List<Integer> getFiles() {
+    public String getFiles() {
         return files;
     }
 
-    public void setFiles(List<Integer> files) {
+    public void setFiles(String files) {
         this.files = files;
     }
 

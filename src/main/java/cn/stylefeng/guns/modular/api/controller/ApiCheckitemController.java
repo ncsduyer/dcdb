@@ -35,6 +35,7 @@ public class ApiCheckitemController extends BaseController {
             @ApiImplicitParam(name = "itemclass", value = "督查项类别（1-事项；2-会议；3-公文；4-信息）", required = true, dataType = "Long")
     })
     @RequestMapping(value = "/list",method = {RequestMethod.GET,RequestMethod.POST})
+//    @Cacheable(value = "bigdata",key = "#root.targetClass+'#'+#root.method")
     @ResponseBody
     public ResponseData list(@RequestParam(value = "itemclass") Integer itemclass) {
         return ResponseData.success(checkitemService.selectList(Condition.create().eq("itemclass", itemclass).eq("status", 1)));

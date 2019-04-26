@@ -159,13 +159,13 @@ public class MeetingrecController extends BaseController {
 
     }
     /**
-     * 区委信息单个单位人员详情
+     * 区委信息单位单个人员详情
      */
-    @ApiOperation(value = "区委信息单个单位人员详情")
+    @ApiOperation(value = "区委信息单位单个人员详情")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "id", required = true, dataType = "Long"),
     })
-    @RequestMapping(value = "/delete/{id}",method = RequestMethod.GET)
+    @RequestMapping(value = "/detail/{id}",method = RequestMethod.GET)
     @ResponseBody
     public ResponseData detail(@PathVariable("id") Integer id) {
         try {

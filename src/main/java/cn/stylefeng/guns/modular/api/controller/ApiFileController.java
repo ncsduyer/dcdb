@@ -7,6 +7,7 @@ import cn.stylefeng.guns.modular.system.model.Asset;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.FileUtil;
+import com.baomidou.mybatisplus.mapper.Condition;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -34,7 +35,7 @@ public class ApiFileController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "文件id", required = true, dataType = "Long"),
     })
-    @RequestMapping("/download/{id}")
+    @RequestMapping(value = "/download/{id}",method = {RequestMethod.GET})
     public void download(@PathVariable("id") Integer id,HttpServletResponse response){
         Asset asset=assetService.selectById(id);
         String filename=asset.getFilePath();
@@ -92,7 +93,7 @@ public class ApiFileController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "文件id", required = true, dataType = "Long"),
     })
-    @RequestMapping("/renderPicture/{id}")
+    @RequestMapping(value = "/renderPicture/{id}",method = RequestMethod.GET)
     public void renderPicture(@PathVariable("id") Integer id, HttpServletResponse response) {
         String filename=assetService.selectById(id).getFilePath();
         String path = gunsProperties.getFileUploadPath()+"/../"+ filename;
@@ -104,8 +105,23 @@ public class ApiFileController extends BaseController {
         }
     }
     /**
+     * 返回图片
+     *
+     * @author stylefeng
+     * @Date 2017/5/24 23:00
+     */
+    @ApiOperation(value = "返回文件资源列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "ids", value = "文件id数组", required = true, dataType = "Long"),
+    })
+    @RequestMapping(value = "/getFiles/{ids}",method = RequestMethod.GET)
+    public ResponseData getFiles(@PathVariable("ids") String ids) {
+        return ResponseData.success(assetService.selectList(Condition.create().in("id", ids)));
+    }
+    /**
      * 上传文件
      */
+    @ApiOperation(value = "上传文件")
     @RequestMapping(value = "/upload", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData upload(@RequestPart(value="files") List<MultipartFile> files) {

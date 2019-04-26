@@ -4,13 +4,12 @@ import cn.stylefeng.guns.core.log.LogObjectHolder;
 import cn.stylefeng.guns.modular.attrs.service.IInfoUnitAttrService;
 import cn.stylefeng.guns.modular.system.model.InfoUnitAttr;
 import cn.stylefeng.roses.core.base.controller.BaseController;
+import cn.stylefeng.roses.core.reqres.response.ResponseData;
+import com.baomidou.mybatisplus.mapper.Condition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * attrs控制器
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @Date 2019-04-22 16:42:45
  */
 @Controller
-@RequestMapping("/infoUnitAttr")
+@RequestMapping("/api/infoUnitAttr")
 public class InfoUnitAttrController extends BaseController {
 
     private String PREFIX = "/attrs/infoUnitAttr/";
@@ -96,9 +95,9 @@ public class InfoUnitAttrController extends BaseController {
     /**
      * attrs详情
      */
-    @RequestMapping(value = "/detail/{infoUnitAttrId}")
+    @RequestMapping(value = "/detail")
     @ResponseBody
-    public Object detail(@PathVariable("infoUnitAttrId") Integer infoUnitAttrId) {
-        return infoUnitAttrService.selectById(infoUnitAttrId);
+    public ResponseData detail(@RequestBody InfoUnitAttr infoUnitAttr) {
+        return ResponseData.success(infoUnitAttrService.selectOne(Condition.create().eq("infoid", infoUnitAttr.getInfoid()).eq("unitid",infoUnitAttr.getUnitid())));
     }
 }

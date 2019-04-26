@@ -20,7 +20,7 @@
         id, meetingid, checkitemid, checkvalue, createtime, unitid,`name`,pictures,files
     </sql>
     <select id="getInfoByPid" resultType="java.util.HashMap">
-        SELECT c.title ctitle ,rec.unitid unitid
+        SELECT c.title ctitle ,rec.unitid unitid,
         <if test="courses != null">
             <foreach collection="courses" item="item" separator=",">
                 SUM(CASE rec.checkitemid WHEN ${item.id} THEN 1 ElSE 0 END)  "${item.id}"
@@ -35,7 +35,7 @@
         GROUP BY rec.unitid
     </select>
     <select id="getInfoByUnitid" resultType="java.util.HashMap">
-        SELECT rec.id id,rec.meetingid meetingid , rec.checkitemid checkitemid, rec.checkvalue checkvalue, rec.createtime createtime, rec.unitid  unitid,rec.`name` `name`,c.title ctitle,ch.itemdesc itemdesc
+        SELECT rec.id id,rec.meetingid meetingid , rec.checkitemid checkitemid, rec.checkvalue checkvalue, rec.createtime createtime, rec.unitid  unitid,rec.`name` `name`,c.title ctitle,ch.itemdesc itemdesc,rec.pictures pictures,rec.files files
         from (select
         <include refid="Base_Column_List"/> from td_meetingrec
         <where>

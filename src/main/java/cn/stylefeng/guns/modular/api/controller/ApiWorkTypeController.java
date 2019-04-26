@@ -85,6 +85,7 @@ public class ApiWorkTypeController extends BaseController {
      */
     @ApiOperation(value = "获取交办事项类型管理列表")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
+//    @Cacheable(value = "bigdata",key = "#root.targetClass+'#'+#root.method")
     @ResponseBody
     public ResponseData list() {
         return ResponseData.success(workTypeService.selectList(null));
@@ -95,6 +96,7 @@ public class ApiWorkTypeController extends BaseController {
      */
     @ApiOperation(value = "获取督办人列表")
     @RequestMapping(value = "/userlist", method = RequestMethod.GET)
+//    @Cacheable(value = "bigdata",key = "#root.targetClass+'#'+#root.method")
     @ResponseBody
     public ResponseData Userlist() {
 
@@ -118,6 +120,7 @@ public class ApiWorkTypeController extends BaseController {
             @ApiImplicitParam(name = "event_type", value = "事项类型", required = true, dataType = "Long")
     })
     @RequestMapping(value = "/eventtpyelist", method = RequestMethod.GET)
+//    @Cacheable(value = "bigdata",key = "#root.targetClass+'#'+#root.method")
     @ResponseBody
     public ResponseData eventTpyelist(@RequestParam(value = "event_type", defaultValue = "1") Integer event_type) {
         return ResponseData.success(eventStepService.selectList(Condition.create().eq("event_type", event_type).orderBy("id", true)));
@@ -128,6 +131,7 @@ public class ApiWorkTypeController extends BaseController {
      */
     @ApiOperation(value = "获取交办事项单位列表")
     @RequestMapping(value = "/companylist", method = RequestMethod.GET)
+//    @Cacheable(value = "bigdata",key = "#root.targetClass+'#'+#root.method")
     @ResponseBody
     public ResponseData Companylist() {
 

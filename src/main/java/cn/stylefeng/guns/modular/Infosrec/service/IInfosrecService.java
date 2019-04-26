@@ -2,6 +2,7 @@ package cn.stylefeng.guns.modular.Infosrec.service;
 
 import cn.stylefeng.guns.modular.Infos.dto.SreachInfoDto;
 import cn.stylefeng.guns.modular.MeetingRec.dto.SreachMeetingRecDto;
+import cn.stylefeng.guns.modular.system.model.Checkitem;
 import cn.stylefeng.guns.modular.system.model.Infosrec;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import com.baomidou.mybatisplus.service.IService;
@@ -21,4 +22,6 @@ public interface IInfosrecService extends IService<Infosrec> {
     ResponseData selectListByDto(SreachMeetingRecDto sreachDto);
 
     List<HashMap<String, Object>> export(SreachInfoDto sreachInfoDto);
+
+    HashMap<String, Object> selectSumCheckItem(List<Checkitem> checkitems);
 }

@@ -3,6 +3,7 @@ package cn.stylefeng.guns.modular.bigDataStatistics.controller;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.util.Bettime;
 import cn.stylefeng.guns.core.util.CopyUtils;
+import cn.stylefeng.guns.core.util.TypeCastUtil;
 import cn.stylefeng.guns.modular.Docs.service.IDocRecService;
 import cn.stylefeng.guns.modular.Docs.service.IDocService;
 import cn.stylefeng.guns.modular.EventStep.service.IEventStepService;
@@ -78,7 +79,7 @@ public class ApiBigDataController extends BaseController implements Serializable
     @RequestMapping(value = "/count", method = {RequestMethod.GET})
     @ResponseBody
     @Cacheable(value = "bigdata",key = "#root.targetClass+'#'+#root.method")
-    public ResponseData count() {
+    public BigResponseData count() {
         HashMap<String,Integer> map=new HashMap<>(5);
         Integer dcdb=taskassignService.selectCount(Condition.create().gt("id", 0));
         Integer meet=meetingrecService.selectCount(Condition.create().gt("id", 0));
@@ -98,7 +99,7 @@ public class ApiBigDataController extends BaseController implements Serializable
     @RequestMapping(value = "/countUnit", method = {RequestMethod.GET})
     @ResponseBody
     @Cacheable(value = "bigdata",key = "#root.targetClass+'#'+#root.method")
-    public ResponseData countUnit() {
+    public BigResponseData countUnit() {
         List<EventStep> eventSteps=eventStepService.selectList(Condition.create().eq("event_type", 1));
         HashMap<String,Integer> map=new HashMap<>();
         for (EventStep et:eventSteps){
@@ -117,7 +118,7 @@ public class ApiBigDataController extends BaseController implements Serializable
     @RequestMapping(value = "/countUnitStar", method = {RequestMethod.GET})
     @ResponseBody
     @Cacheable(value = "bigdata",key = "#root.targetClass+'#'+#root.method")
-    public ResponseData countUnitStar() {
+    public BigResponseData countUnitStar() {
         return new BigResponseData(true, DEFAULT_SUCCESS_CODE, "请求成功", bigDataService.countUnitStar());
 
     }
@@ -128,7 +129,7 @@ public class ApiBigDataController extends BaseController implements Serializable
     @RequestMapping(value = "/countAssignStatus", method = {RequestMethod.GET})
     @ResponseBody
     @Cacheable(value = "bigdata",key = "#root.targetClass+'#'+#root.method")
-    public ResponseData countAssignStatus() {
+    public BigResponseData countAssignStatus() {
 
         return new BigResponseData(true, DEFAULT_SUCCESS_CODE, "请求成功",bigDataService.countAssignStatus());
 
@@ -140,7 +141,7 @@ public class ApiBigDataController extends BaseController implements Serializable
     @RequestMapping(value = "/countManagementServicesStatistics", method = {RequestMethod.GET})
     @ResponseBody
     @Cacheable(value = "bigdata",key = "#root.targetClass+'#'+#root.method")
-    public ResponseData countManagementServicesStatistics() {
+    public BigResponseData countManagementServicesStatistics() {
         Calendar cale = null;
 //        ArrayList<HashMap<String,HashMap<String,Integer>>> maps=new ArrayList<>();
         HashMap<String,HashMap<String,Integer>> mapHashMap=new HashMap<>(12);
@@ -167,7 +168,7 @@ public class ApiBigDataController extends BaseController implements Serializable
     @RequestMapping(value = "/countMeeting", method = {RequestMethod.GET})
     @ResponseBody
     @Cacheable(value = "bigdata",key = "#root.targetClass+'#'+#root.method")
-    public ResponseData countMeeting() {
+    public BigResponseData countMeeting() {
         List<Checkitem> checkitems=checkitemService.selectList(Condition.create().eq("itemclass", 2).eq("status", 1));
         List<CheckItemVo> checkItemVos=new ArrayList<>();
         CheckItemVo checkItemVo=null;
@@ -187,7 +188,7 @@ public class ApiBigDataController extends BaseController implements Serializable
     @RequestMapping(value = "/countDocs", method = {RequestMethod.GET})
     @ResponseBody
     @Cacheable(value = "bigdata",key = "#root.targetClass+'#'+#root.method")
-    public ResponseData countDocs() {
+    public BigResponseData countDocs() {
         List<Checkitem> checkitems=checkitemService.selectList(Condition.create().eq("itemclass", 3).eq("status", 1));
         List<CheckItemVo> checkItemVos=new ArrayList<>();
         CheckItemVo checkItemVo=null;
@@ -207,14 +208,15 @@ public class ApiBigDataController extends BaseController implements Serializable
     @RequestMapping(value = "/countInfos", method = {RequestMethod.GET})
     @ResponseBody
     @Cacheable(value = "bigdata",key = "#root.targetClass+'#'+#root.method")
-    public ResponseData countInfos() {
+    public BigResponseData countInfos() {
         List<Checkitem> checkitems=checkitemService.selectList(Condition.create().eq("itemclass", 4).eq("status", 1));
+        HashMap<String, Object> sums=   iInfosrecService.selectSumCheckItem(checkitems);
         List<CheckItemVo> checkItemVos=new ArrayList<>();
         CheckItemVo checkItemVo=null;
         for (Checkitem checkitem : checkitems){
             checkItemVo=new CheckItemVo();
             CopyUtils.copyProperties(checkitem, checkItemVo);
-            checkItemVo.setCount(iInfosrecService.selectCount(Condition.create().eq("checkitemid", checkitem.getId())));
+            checkItemVo.setCount(TypeCastUtil.toInt(TypeCastUtil.toDouble(sums.get(checkitem.getId().toString()))));
             checkItemVos.add(checkItemVo);
         }
         return new BigResponseData(true, DEFAULT_SUCCESS_CODE, "请求成功", checkItemVos);

@@ -23,6 +23,7 @@ import cn.stylefeng.guns.modular.system.model.Checkitem;
 import cn.stylefeng.guns.modular.system.model.CopyRecordNotice;
 import cn.stylefeng.guns.modular.system.model.Doc;
 import cn.stylefeng.guns.modular.system.model.DocRec;
+import cn.stylefeng.guns.modular.system.service.IUserService;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
@@ -41,6 +42,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -65,6 +67,8 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
     private ICopyRecordNoticeService copyRecordNoticeService;
     @Autowired
     private IAssetService assetService;
+    @Autowired
+    private IUserService userService;
     @Override
     public ResponseData SreachPage(SreachDocDto sreachDto) {
         try {
@@ -72,7 +76,7 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
                 sreachDto = new SreachDocDto();
             }
             Page<HashMap<String,Object>> page = new Page<>(sreachDto.getPage(), sreachDto.getLimit());
-            Condition ew = getCondition(sreachDto, "mr.unitid");
+            Condition ew = getCondition(sreachDto, "m.unitid");
 
             ArrayList<HashMap<String,Object>> arrayList = docRecMapper.getInfoByPidPage(page,ew,checkitemService.selectList(Condition.create().eq("itemclass", 3).eq("status", 1)));
             page.setRecords(arrayList);
@@ -85,6 +89,9 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
 
     @Override
     public ResponseData add(AddDocDto addDto) {
+        if (addDto.getAssignTime().after(addDto.getEndTime())){
+            return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(),"归档时间不能早于来文时间");
+        }
         try{
             addDto.setId(null);
             Doc docs = new Doc();
@@ -135,8 +142,13 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
 
     @Override
     public ResponseData edit(AddDocDto addDto) {
+        if (ToolUtil.isNotEmpty(addDto.getEndTime())){
+            if (addDto.getAssignTime().after(addDto.getEndTime())){
+                return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(),"归档时间不能早于来文时间");
+            }
+        }
         if(ToolUtil.isEmpty(addDto.getId())){
-            return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
+            return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), "id不能为空");
         }
         try{
             Doc meeting = new Doc();
@@ -144,16 +156,19 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
             updateById(meeting);
             DocRec meetingrec= null;
             if (ToolUtil.isNotEmpty(addDto.getResc())) {
-//                List<DocRec> old=docRecService.selectList(Condition.create().eq("docassignid", meeting.getId()));
-//                old.removeAll(addDto.getResc());
-//                if(ToolUtil.isNotEmpty(old)){
-//                    docRecService.deleteBatchIds(old);
-//                }
+                List<DocRec> old=docRecService.selectList(Condition.create().eq("docassignid", meeting.getId()));
+                old.removeAll(addDto.getResc());
+                if(ToolUtil.isNotEmpty(old)){
+                    docRecService.deleteBatchIds(old.stream().map(DocRec::getId).collect(Collectors.toList()));
+                }
 //                循环修改交办单位
                 for (DocRec map : addDto.getResc()) {
                     meetingrec= new DocRec();
                     CopyUtils.copyProperties(map, meetingrec);
                     meetingrec.setCheckvalue(1);
+                    if (ToolUtil.isEmpty(meetingrec.getCreatetime())) {
+                        meetingrec.setCreatetime(new DateTime());
+                    }
                     docRecService.insertOrUpdate(meetingrec);
                 }
             }
@@ -222,6 +237,12 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
             Condition ew = getCondition(sreachDto, "m.id,mr.id");
 
             List<Doc> arrayList = docsMapper.selectAsMore(ew);
+            if (ToolUtil.isNotEmpty(arrayList)){
+                for (Doc doc:arrayList){
+                    setUserList(doc);
+                }
+            }
+
             page.setRecords(arrayList);
             return ResponseData.success(page);
         }catch (Exception e){
@@ -232,9 +253,18 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
     @Override
     public ResponseData selectWithManyById(Integer id) {
         Doc meeting = docsMapper.selectWithManyById(id);
+        if (ToolUtil.isNotEmpty(meeting)){
+
         meeting.setImgs(assetService.selectList(Condition.create().in("id", meeting.getPictures())));
         meeting.setFileList(assetService.selectList(Condition.create().in("id", meeting.getFiles())));
+        setUserList(meeting);
+        }
         return ResponseData.success(meeting);
+    }
+
+    private void setUserList(Doc meeting) {
+        meeting.setCopySender(userService.selectList(Condition.create().setSqlSelect("id,name").in("id",meeting.getCopySenderId())));
+        meeting.setDoPersonuser(userService.selectList(Condition.create().setSqlSelect("id,name").in("id",meeting.getDoPersonIds())));
     }
 
     @Override
@@ -280,7 +310,7 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
             ew.in("m.status", sreachDto.getStatus());
         }
         if (ToolUtil.isNotEmpty(sreachDto.getCompanyIds())) {
-            ew.in("mr.unitid", sreachDto.getCompanyIds());
+            ew.in("m.unitid", sreachDto.getCompanyIds());
         }
         ew.groupBy(s);
         if (ToolUtil.isNotEmpty(sreachDto.getOrder())) {

@@ -53,6 +53,10 @@
             <id column="uid" property="id"/>
             <result column="uname" property="name"/>
         </association>
+        <association property="sender" javaType="cn.stylefeng.guns.modular.system.model.User">
+            <id column="sdid" property="id"/>
+            <result column="sdname" property="name"/>
+        </association>
         <association property="eventStep" javaType="cn.stylefeng.guns.modular.system.model.EventStep">
             <id column="esid" property="id"/>
             <result column="espid" property="pid"/>
@@ -71,6 +75,14 @@
                 <result column="chitemdesc" property="itemdesc" />
             </association>
         </collection>
+        <!--<collection property="doPersonuser" ofType="cn.stylefeng.guns.modular.system.model.User">-->
+            <!--<id column="dpid" property="id"/>-->
+            <!--<result column="dpname" property="name"/>-->
+        <!--</collection>-->
+        <!--<collection property="copySender" ofType="cn.stylefeng.guns.modular.system.model.User">-->
+            <!--<id column="csid" property="id"/>-->
+            <!--<result column="csname" property="name"/>-->
+        <!--</collection>-->
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -78,32 +90,32 @@
         id, title, unitid, doctype, currecvid, currecv, do_person_ids, sender_id, copy_sender_id, creatorid, pictures, files, closememo, assignmemo, instructions, suggestion, opinion, assign_time, end_time, exceed, status
     </sql>
     <sql id="Alias_Column_List">
-        m.id mid, m.title mtitle, m.unitid munitid, m.doctype mdoctype, m.currecvid mcurrecvid, m.currecv mcurrecv, m.do_person_ids, mdo_person_ids, m.sender_id msender_id, m.copy_sender_id mcopy_sender_id, m.creatorid mcreatorid, m.pictures mpictures, m.files mfiles, m.closememo mclosememo, m.assignmemo massignmemo, m.instructions minstructions, m.suggestion msuggestion, m.opinion mopinion, m.assign_time massign_time, m.end_time mend_time, m.exceed mexceed, m.status mstatus
+        m.id mid, m.title mtitle, m.unitid munitid, m.doctype mdoctype, m.currecvid mcurrecvid, m.currecv mcurrecv, m.do_person_ids mdo_person_ids, m.sender_id msender_id, m.copy_sender_id mcopy_sender_id, m.creatorid mcreatorid, m.pictures mpictures, m.files mfiles, m.closememo mclosememo, m.assignmemo massignmemo, m.instructions minstructions, m.suggestion msuggestion, m.opinion mopinion, m.assign_time massign_time, m.end_time mend_time, m.exceed mexceed, m.status mstatus
     </sql>
 
     <sql id="AS_Column_List">
-        <include refid="Alias_Column_List"/> ,u.id uid, u.name uname,es.id esid,es.pid espid,es.status esstatus,es.event_type esevent_type,es.step esstep ,mr.id mrid, mr.docassignid mrdocassignid, mr.checkitemid mrcheckitemid, mr.checkvalue mrcheckvalue, mr.createtime mrcreatetime, mr.unitid mrunitid
+        <include refid="Alias_Column_List"/> ,u.id uid, u.name uname,es.id esid,es.pid espid,es.status esstatus,es.event_type esevent_type,es.step esstep ,mr.id mrid, mr.docassignid mrdocassignid, mr.checkitemid mrcheckitemid, mr.checkvalue mrcheckvalue, mr.createtime mrcreatetime, mr.unitid mrunitid,sd.id sdid, sd.name sdname
     </sql>
     <sql id="base_with">
         FROM
         td_doc m LEFT JOIN td_doc_rec mr ON mr.docassignid = m.id
-        LEFT JOIN t_tb_event_step es ON es.status=m.status and es.event_type=3 LEFT JOIN sys_user u ON u.id = m.creatorid
+        LEFT JOIN t_tb_event_step es ON es.status=m.status and es.event_type=3 LEFT JOIN sys_user u ON u.id = m.creatorid LEFT JOIN td_checkitem ch ON ch.id=mr.checkitemid LEFT JOIN sys_user sd ON sd.id = m.sender_id
     </sql>
     <select id="selectWithManyById" resultMap="BaseMoreMap">
         SELECT <include refid="AS_Column_List"/>,ch.itemdesc chitemdesc
-        <include refid="base_with"/> LEFT JOIN td_checkitem ch ON ch.id=mr.checkitemid
+        <include refid="base_with"/>
         WHERE m.id=#{id} group By m.id,mr.id
     </select>
     <select id="selectAsPage" resultMap="BaseMoreMap">
         SELECT <include refid="AS_Column_List"/>,ch.itemdesc chitemdesc
-        <include refid="base_with"/> LEFT JOIN td_checkitem ch ON ch.id=mr.checkitemid
+        <include refid="base_with"/>
         <where>
             ${ew.sqlSegment}
         </where>
     </select>
     <select id="selectAsMore" resultMap="BaseMoreMap">
         SELECT <include refid="AS_Column_List"/> ,ch.itemdesc chitemdesc
-        <include refid="base_with"/> LEFT JOIN td_checkitem ch ON ch.id=mr.checkitemid
+        <include refid="base_with"/>
         <where>
             ${ew.sqlSegment}
         </where>

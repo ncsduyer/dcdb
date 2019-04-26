@@ -17,7 +17,7 @@
         id, infosid, checkitemid, checkvalue, createtime, unitid
     </sql>
     <select id="getInfoByPid" resultType="java.util.HashMap">
-        SELECT c.title ctitle ,rec.unitid unitid,rec.id id
+        SELECT c.title ctitle ,rec.unitid unitid,rec.id id,
         <if test="courses != null">
             <foreach collection="courses" item="item" separator=",">
                 MAX(CASE rec.checkitemid WHEN ${item.id} THEN rec.checkvalue ElSE 0 END)  "${item.id}"
@@ -45,5 +45,14 @@
         <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(sreachDto.title)">and <![CDATA[ m.title like CONCAT('%',#{sreachDto.title},'%') ]]></if>
         <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(sreachDto.status)">and <![CDATA[ m.status = #{sreachDto.status}]]></if>
         GROUP BY c.id ORDER BY c.id asc, rec.createtime
+    </select>
+    <select id="selectSumCheckItem" resultType="java.util.HashMap">
+        SELECT
+        <if test="courses != null">
+            <foreach collection="courses" item="item" separator=",">
+                sum(CASE checkitemid WHEN ${item.id} THEN checkvalue ElSE 0 END)  "${item.id}"
+            </foreach>
+        </if>
+        from  td_infosrec
     </select>
 </mapper>

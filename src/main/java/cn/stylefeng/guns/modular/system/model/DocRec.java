@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * <p>
@@ -126,5 +127,18 @@ public class DocRec extends Model<DocRec> {
         ", createtime=" + createtime +
         ", unitid=" + unitid +
         "}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DocRec)) return false;
+        DocRec rec = (DocRec) o;
+        return id.equals(rec.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

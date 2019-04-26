@@ -7,6 +7,7 @@ import cn.stylefeng.guns.modular.Infosrec.service.IInfosrecService;
 import cn.stylefeng.guns.modular.MeetingRec.dto.SreachMeetingRecDto;
 import cn.stylefeng.guns.modular.checkitem.service.ICheckitemService;
 import cn.stylefeng.guns.modular.system.dao.InfosrecMapper;
+import cn.stylefeng.guns.modular.system.model.Checkitem;
 import cn.stylefeng.guns.modular.system.model.Infosrec;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
@@ -66,6 +67,11 @@ public class InfosrecServiceImpl extends ServiceImpl<InfosrecMapper, Infosrec> i
             e.printStackTrace();
         }
         return infosrecMapper.export(sreachDto,checkitemService.selectList(Condition.create().eq("itemclass", 4).eq("status", 1)));
+    }
+
+    @Override
+    public HashMap<String, Object> selectSumCheckItem(List<Checkitem> checkitems) {
+        return infosrecMapper.selectSumCheckItem(checkitems);
     }
 
 

@@ -115,6 +115,12 @@ public class Doc extends Model<Doc> {
     @TableField(exist = false)
     private User createuser;
     @TableField(exist = false)
+    private List<User> doPersonuser;
+    @TableField(exist = false)
+    private User sender;
+    @TableField(exist = false)
+    private List<User> copySender;
+    @TableField(exist = false)
     private EventStep eventStep;
     @TableField(exist = false)
     private List<DocRec> docRecs;
@@ -337,6 +343,30 @@ public class Doc extends Model<Doc> {
 
     public void setDocRecs(List<DocRec> docRecs) {
         this.docRecs = docRecs;
+    }
+
+    public List<User> getDoPersonuser() {
+        return doPersonuser;
+    }
+
+    public void setDoPersonuser(List<User> doPersonuser) {
+        this.doPersonuser = doPersonuser;
+    }
+
+    public User getSender() {
+        return sender;
+    }
+
+    public void setSender(User sender) {
+        this.sender = sender;
+    }
+
+    public List<User> getCopySender() {
+        return copySender;
+    }
+
+    public void setCopySender(List<User> copySender) {
+        this.copySender = copySender;
     }
 
     @Override

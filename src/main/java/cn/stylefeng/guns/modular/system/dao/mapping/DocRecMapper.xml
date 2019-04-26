@@ -57,7 +57,13 @@
         from t_tb_company c left join td_doc_rec mr on c.id=mr.unitid LEFT JOIN td_doc m  ON mr.docassignid = m.id
         <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(sreachDto.beforeTime)">and <![CDATA[ m.assign_time >= #{sreachDto.beforeTime,jdbcType=TIMESTAMP}]]></if>
         <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(sreachDto.afterTime)">and <![CDATA[ m.assign_time <= #{sreachDto.afterTime,jdbcType=TIMESTAMP}]]></if>
-        <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(sreachDto.creatorid)">and <![CDATA[ m.creatorid = #{sreachDto.creatorid}]]></if>
+        <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(sreachDto.creatorids)">and
+            m.creatorid in
+            <foreach item="item" collection="sreachDto.creatorids" separator="," open="(" close=")" index="">
+                #{item, jdbcType=NUMERIC}
+            </foreach>
+
+        </if>
         <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(sreachDto.title)">and <![CDATA[ m.title like CONCAT('%',#{sreachDto.title},'%') ]]></if>
         <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(sreachDto.status)">and <![CDATA[ m.status = #{sreachDto.status}]]></if>
         GROUP BY c.id ORDER BY c.id asc, mr.createtime
