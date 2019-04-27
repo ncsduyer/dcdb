@@ -6,6 +6,7 @@ import cn.stylefeng.guns.modular.DcCompany.service.ICompanyService;
 import cn.stylefeng.guns.modular.MeetingRec.dto.SreachMeetingRecDto;
 import cn.stylefeng.guns.modular.MeetingRec.service.IMeetingrecService;
 import cn.stylefeng.guns.modular.attrs.service.IMeetingRecAttrService;
+import cn.stylefeng.guns.modular.meeting.dto.SreachMeetingDto;
 import cn.stylefeng.guns.modular.system.model.Meetingrec;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
@@ -56,6 +57,16 @@ public class MeetingrecController extends BaseController {
     @ResponseBody
     public ResponseData list(@Validated @RequestBody SreachMeetingRecDto sreachMeetingRecDto) {
         return meetingrecService.selectListByDto(sreachMeetingRecDto);
+    }
+    /**
+     * 获取会议督查记录管理列表
+     */
+    @ApiOperation(value = "会议督查单位统计记录列表")
+    @RequestMapping(value = "/report", method = RequestMethod.POST)
+//    @Permission
+    @ResponseBody
+    public ResponseData report(@RequestBody(required = false) SreachMeetingDto sreachMeetingDto) {
+        return ResponseData.success(meetingrecService.export(sreachMeetingDto));
     }
 
     /**

@@ -69,6 +69,9 @@ public class MeetingrecServiceImpl extends ServiceImpl<MeetingrecMapper, Meeting
 
     @Override
     public List<HashMap<String, Object>> export(SreachMeetingDto sreachDto) {
+        if (ToolUtil.isEmpty(sreachDto)){
+            sreachDto=new SreachMeetingDto();
+        }
         try {
             new Bettime(sreachDto);
         } catch (ParseException e) {
