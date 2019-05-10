@@ -102,6 +102,9 @@ public class AddInfoDto  {
         this.creatorid = creatorid;
     }
 
+    public String getPictures() {
+        return pictures;
+    }
 
     public void setPictures(String pictures) {
         this.pictures = pictures;

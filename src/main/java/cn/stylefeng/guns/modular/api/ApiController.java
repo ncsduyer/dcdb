@@ -120,6 +120,8 @@ public class ApiController extends BaseController {
                 }
             }
             //封装请求账号密码为shiro可验证的token
+            username = username.trim();
+            password = password.trim();
             UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username, password.toCharArray());
 
             //获取数据库中的账号密码，准备比对

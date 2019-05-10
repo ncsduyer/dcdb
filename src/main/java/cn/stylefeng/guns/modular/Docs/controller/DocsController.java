@@ -1,11 +1,13 @@
 package cn.stylefeng.guns.modular.Docs.controller;
 
 import cn.stylefeng.guns.core.common.annotion.Permission;
+import cn.stylefeng.guns.core.util.Bettime;
 import cn.stylefeng.guns.modular.Docs.dto.AddDocDto;
 import cn.stylefeng.guns.modular.Docs.dto.SreachDocDto;
 import cn.stylefeng.guns.modular.Docs.service.IDocService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
+import cn.stylefeng.roses.core.util.ToolUtil;
 import com.baomidou.mybatisplus.mapper.Condition;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
 
 /**
  * 公文运转控制器
@@ -43,8 +46,54 @@ public class DocsController extends BaseController {
     @ApiOperation(value = "公文运转单表列表")
     @RequestMapping(value = "/getList", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseData getList() {
-        return ResponseData.success(docsService.selectList(Condition.create().orderBy("id", false)));
+    public ResponseData getList(@RequestBody(required = false) SreachDocDto sreachDto) {
+        if (ToolUtil.isEmpty(sreachDto)) {
+            sreachDto = new SreachDocDto();
+        }
+        try {
+            new Bettime(sreachDto);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Condition ew = Condition.create();
+        if (ToolUtil.isNotEmpty(sreachDto.getBeforeTime())) {
+            ew.ge("assign_time", sreachDto.getBeforeTime());
+        }
+        if (ToolUtil.isNotEmpty(sreachDto.getAfterTime())) {
+            ew.le("assign_time", sreachDto.getAfterTime());
+        }
+        if (ToolUtil.isNotEmpty(sreachDto.getId())) {
+            ew.eq("id", sreachDto.getId());
+        }
+        if (ToolUtil.isNotEmpty(sreachDto.getCreatorids())) {
+            ew.in("creatorid", sreachDto.getCreatorids());
+        }
+        if (ToolUtil.isNotEmpty(sreachDto.getDoctypes())) {
+            ew.in("doctype", sreachDto.getDoctypes());
+        }
+        if (ToolUtil.isNotEmpty(sreachDto.getSenderIds())) {
+            ew.in("sender_id", sreachDto.getSenderIds());
+        }
+        if (ToolUtil.isNotEmpty(sreachDto.getExceed())) {
+            ew.eq("exceed", sreachDto.getExceed());
+        }
+//            拼接查询条件
+        if (ToolUtil.isNotEmpty(sreachDto.getTitle())) {
+            ew.like("title", sreachDto.getTitle());
+        }
+        if (ToolUtil.isNotEmpty(sreachDto.getStatus())) {
+            ew.in("status", sreachDto.getStatus());
+        }
+        if (ToolUtil.isNotEmpty(sreachDto.getCompanyIds())) {
+            ew.in("unitid", sreachDto.getCompanyIds());
+        }
+        ew.groupBy("id");
+        if (ToolUtil.isNotEmpty(sreachDto.getOrder())) {
+            ew.orderBy(sreachDto.getOrder());
+        } else {
+            ew.orderBy("id", false);
+        }
+        return ResponseData.success(docsService.selectList(ew));
     }
     /**
      * 获取公文运转列表

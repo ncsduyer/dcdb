@@ -54,7 +54,7 @@
                 SUM(CASE mr.checkitemid WHEN ${item.id} THEN 1 ElSE 0 END)  "${item.id}"
             </foreach>
         </if>
-        from t_tb_company c left join td_doc_rec mr on c.id=mr.unitid LEFT JOIN td_doc m  ON mr.docassignid = m.id
+        from t_tb_company c  LEFT JOIN td_doc m  <trim prefix="ON" prefixOverrides="AND |OR ">
         <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(sreachDto.beforeTime)">and <![CDATA[ m.assign_time >= #{sreachDto.beforeTime,jdbcType=TIMESTAMP}]]></if>
         <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(sreachDto.afterTime)">and <![CDATA[ m.assign_time <= #{sreachDto.afterTime,jdbcType=TIMESTAMP}]]></if>
         <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(sreachDto.creatorids)">and
@@ -66,6 +66,8 @@
         </if>
         <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(sreachDto.title)">and <![CDATA[ m.title like CONCAT('%',#{sreachDto.title},'%') ]]></if>
         <if test="@cn.stylefeng.roses.core.util.ToolUtil@isNotEmpty(sreachDto.status)">and <![CDATA[ m.status = #{sreachDto.status}]]></if>
+    </trim>
+        left join td_doc_rec mr on c.id=mr.unitid AND mr.docassignid = m.id
         GROUP BY c.id ORDER BY c.id asc, mr.createtime
     </select>
 </mapper>

@@ -114,7 +114,6 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
                 }
 
                 taskassign=taskassignService.selectByManyId(taskassign.getId());
-
                 StringBuilder st=new StringBuilder();
                 st.append(ShiroKit.getUser().getName());
                 st.append(",新建了交办事项:交办时间:");

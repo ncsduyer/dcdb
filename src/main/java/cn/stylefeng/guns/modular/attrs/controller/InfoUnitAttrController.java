@@ -67,7 +67,7 @@ public class InfoUnitAttrController extends BaseController {
      */
     @RequestMapping(value = "/add")
     @ResponseBody
-    public Object add(InfoUnitAttr infoUnitAttr) {
+    public ResponseData add(@RequestBody InfoUnitAttr infoUnitAttr) {
         infoUnitAttrService.insert(infoUnitAttr);
         return SUCCESS_TIP;
     }
@@ -77,7 +77,7 @@ public class InfoUnitAttrController extends BaseController {
      */
     @RequestMapping(value = "/delete")
     @ResponseBody
-    public Object delete(@RequestParam Integer infoUnitAttrId) {
+    public ResponseData delete(@RequestParam Integer infoUnitAttrId) {
         infoUnitAttrService.deleteById(infoUnitAttrId);
         return SUCCESS_TIP;
     }
@@ -87,7 +87,7 @@ public class InfoUnitAttrController extends BaseController {
      */
     @RequestMapping(value = "/update")
     @ResponseBody
-    public Object update(InfoUnitAttr infoUnitAttr) {
+    public ResponseData update(@RequestBody InfoUnitAttr infoUnitAttr) {
         infoUnitAttrService.updateById(infoUnitAttr);
         return SUCCESS_TIP;
     }

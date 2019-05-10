@@ -89,7 +89,7 @@ public class DocServiceImpl extends ServiceImpl<DocMapper, Doc> implements IDocS
 
     @Override
     public ResponseData add(AddDocDto addDto) {
-        if (addDto.getAssignTime().after(addDto.getEndTime())){
+        if (ToolUtil.isNotEmpty(addDto.getEndTime())&&addDto.getAssignTime().after(addDto.getEndTime())){
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(),"归档时间不能早于来文时间");
         }
         try{

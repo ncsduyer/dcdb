@@ -157,7 +157,7 @@ public class InfosController extends BaseController {
     @RequestMapping(value = "/report", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public ResponseData report(@RequestBody SreachInfoDto sreachInfoDto) {
-        return infosService.getReports(sreachInfoDto);
+        return ResponseData.success(infosrecService.export(sreachInfoDto));
     }
     /**
      * 导出报表

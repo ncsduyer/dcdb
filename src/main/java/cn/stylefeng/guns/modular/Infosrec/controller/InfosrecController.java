@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateTime;
 import cn.stylefeng.guns.core.common.annotion.Permission;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.modular.DcCompany.service.ICompanyService;
+import cn.stylefeng.guns.modular.Infos.dto.SreachInfoDto;
 import cn.stylefeng.guns.modular.Infosrec.service.IInfosrecService;
 import cn.stylefeng.guns.modular.Infosrec.vo.InfosrecVo;
 import cn.stylefeng.guns.modular.MeetingRec.dto.SreachMeetingRecDto;
@@ -175,10 +176,36 @@ public class InfosrecController extends BaseController {
             @ApiImplicitParam(name = "unitid", value = "单位id", required = true, dataType = "Long"),
     })
     @RequestMapping(value = "/detail/{infoid}/{unitid}", method = RequestMethod.GET)
-    @Permission
     @ResponseBody
     public ResponseData detail(@PathVariable("infoid") Integer infoid,@PathVariable("unitid") Integer unitid) {
         return ResponseData.success(infoUnitAttrService.selectOne(Condition.create().eq("infoid", infoid).eq("unitid", unitid)));
+    }
+
+
+    /**
+     * 导出报表
+     *
+     * @return
+     */
+    @ApiOperation(value = "导出报表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "title", value = "关键词", required = false, dataType = "String"),
+            @ApiImplicitParam(name = "creatorid", value = "创建人id", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "beforeTime", value = "开始时间", required = false, dataType = "String"),
+            @ApiImplicitParam(name = "afterTime", value = "结束时间", required = false, dataType = "String"),
+            @ApiImplicitParam(name = "status", value = "状态 (0-停用；1-启用)", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "companyIds", value = "相关单位数组", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "page", value = "页码", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "limit", value = "每页条数", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "order", value = "排序条件", required = false, dataType = "Long"),
+            //上面是sreachInfoDto属性
+            @ApiImplicitParam(name = "exportType", value = "导出类型 默认为excel 1：excel，2：doc", required = false, dataType = "Long"),
+
+    })
+    @RequestMapping(value = "/export", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public ResponseData export(@RequestBody SreachInfoDto sreachInfoDto) {
+      return ResponseData.success(infosrecService.export(sreachInfoDto));
     }
 
 

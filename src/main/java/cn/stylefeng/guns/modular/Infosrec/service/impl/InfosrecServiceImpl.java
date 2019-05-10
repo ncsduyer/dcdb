@@ -2,6 +2,7 @@ package cn.stylefeng.guns.modular.Infosrec.service.impl;
 
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.util.Bettime;
+import cn.stylefeng.guns.core.util.TypeCastUtil;
 import cn.stylefeng.guns.modular.Infos.dto.SreachInfoDto;
 import cn.stylefeng.guns.modular.Infosrec.service.IInfosrecService;
 import cn.stylefeng.guns.modular.MeetingRec.dto.SreachMeetingRecDto;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
@@ -66,7 +68,26 @@ public class InfosrecServiceImpl extends ServiceImpl<InfosrecMapper, Infosrec> i
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return infosrecMapper.export(sreachDto,checkitemService.selectList(Condition.create().eq("itemclass", 4).eq("status", 1)));
+        List<HashMap<String, Object>> maps = infosrecMapper.export(sreachDto, checkitemService.selectList(Condition.create().eq("itemclass", 4).eq("status", 1)));
+
+        for (HashMap<String, Object> map:maps
+             ) {
+            if (TypeCastUtil.toDouble(map.get("20"))==0){
+                map.put("21",0);
+            }else{
+                NumberFormat numberFormat = NumberFormat.getInstance();
+
+                // 设置精确到小数点后2位
+
+                numberFormat.setMaximumFractionDigits(2);
+
+                map.put("21", numberFormat.format(TypeCastUtil.toDouble(map.get("20"))/TypeCastUtil.toDouble(map.get("19"))*100));
+            }
+
+        }
+
+
+        return maps;
     }
 
     @Override
