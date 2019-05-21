@@ -73,7 +73,68 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
     private IUserService userService;
     @Override
     public ResponseData SreachPage(SreachTaskDto sreachTaskDto) {
-       return taskassignUnitService.selectAsPage(sreachTaskDto);
+        try {
+            if (ToolUtil.isEmpty(sreachTaskDto)) {
+                sreachTaskDto = new SreachTaskDto();
+            }
+            Page<Task> page = new Page<>(sreachTaskDto.getPage(), sreachTaskDto.getLimit());
+            new Bettime(sreachTaskDto);
+            EntityWrapper<Task> ew = new EntityWrapper<>();
+            ew.setEntity(new Task());
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getCreatorid())) {
+                ew.eq("ta.creatorid", sreachTaskDto.getCreatorid());
+            }
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getAgent())){
+                ew.in("tu.personid", sreachTaskDto.getAgent());
+            }
+
+//          拼接查询条件
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getTitle())){
+                ew.like("t.title", sreachTaskDto.getTitle());
+            }
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getWorkType())){
+                ew.in("ta.worktype", sreachTaskDto.getWorkType());
+            }
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getCompanyIds())){
+                ew.in("tu.unitid", sreachTaskDto.getCompanyIds());
+            }
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getIsExceed())&&sreachTaskDto.getIsExceed()==1){
+                //    ew.le("tu.endtime",new Date()).isNull("ta.endtime");
+                ew.eq("tu.status", 3);
+                //    ew.eq("ta.status",3);
+            }else{
+                if (ToolUtil.isNotEmpty(sreachTaskDto.getStatus())){
+                    ew.in("ta.status", sreachTaskDto.getStatus());
+                }
+                if (ToolUtil.isNotEmpty(sreachTaskDto.getStatus())){
+                    if(VoUtil.getMaxNum(sreachTaskDto.getStatus())<5){
+                        ew.in("tu.status", sreachTaskDto.getStatus());
+                    }
+                }
+            }
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getBeforeTime())){
+                ew.ge("ta.assigntime", sreachTaskDto.getBeforeTime());
+            }
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getAfterTime())){
+                ew.le("ta.assigntime", sreachTaskDto.getAfterTime());
+            }
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getOrder())){
+                ew.orderBy(sreachTaskDto.getOrder());
+            }else{
+                ew.orderBy("tu.id",false);
+            }
+
+            ArrayList<Task> arrayList = taskMapper.selectAsPage(page,ew.groupBy("tu.id"));
+            for (Task task : arrayList) {
+                for (Taskassign taskassign:task.getTaskassigns()){
+                    taskassign.setUseTime(VoUtil.getUseTime(taskassign.getAssigntime(), taskassign.getEndtime()));
+                }
+            }
+            page.setRecords(arrayList);
+            return ResponseData.success(page);
+        }catch (Exception e){
+            return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
+        }
     }
 
     @Override

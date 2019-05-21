@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateTime;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.util.Bettime;
+import cn.stylefeng.guns.core.util.CopyUtils;
 import cn.stylefeng.guns.core.util.LogUtil;
 import cn.stylefeng.guns.core.util.VoUtil;
 import cn.stylefeng.guns.modular.DcCompany.service.ICompanyService;
@@ -141,6 +142,7 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
 
         count=selectCount(Condition.create().eq("tassignid", taskassignId));
         }
+        CopyUtils.copyProperties(taskassignUnit, ts);
         if (ts.getStatus()<2){
             if (ToolUtil.isNotEmpty(taskassignUnit.getEndtime())){
                 ts.setEndtime(taskassignUnit.getEndtime());

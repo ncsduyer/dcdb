@@ -12,7 +12,6 @@ import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 @Component
 public class TaskVo implements Serializable {
@@ -57,7 +56,8 @@ public class TaskVo implements Serializable {
             if (ToolUtil.isNotEmpty(tu.getEndtime())){
                 taskUntiVo.setEndTime(sdf.format(tu.getEndtime()));
             }else{
-                taskUntiVo.setEndTime(sdf.format(new Date()));
+//                taskUntiVo.setEndTime(sdf.format(new Date()));
+                taskUntiVo.setEndTime(null);
             }
             taskUntiVo.setTaskassignUnitdeals(tu.getTaskassignUnitdeals());
             this.taskUntiVo.add(taskUntiVo);

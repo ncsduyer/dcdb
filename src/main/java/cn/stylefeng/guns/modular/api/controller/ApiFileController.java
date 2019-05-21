@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
@@ -127,6 +128,18 @@ public class ApiFileController extends BaseController {
     public ResponseData upload(@RequestPart(value="files") List<MultipartFile> files) {
         return FileService.upload(files, gunsProperties, assetService);
     }
-
+    /**
+     * 下载文件
+     */
+    @ApiOperation(value = "下载文件")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "文件id", required = true, dataType = "Long"),
+    })
+    @RequestMapping(value = {"/downloadfile/{id}"}, method = RequestMethod.GET)
+    @ResponseBody
+    public void downloadfile(@PathVariable("id") Integer id, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String newUrl=request.getScheme() +"://" + request.getServerName() + ":" +request.getServerPort() + "/static/admin/"+assetService.selectById(id).getFilePath();
+        response.sendRedirect(newUrl);
+    }
 
 }

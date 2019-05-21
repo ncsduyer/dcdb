@@ -49,27 +49,27 @@ public class TaskassignUnitController extends BaseController {
         return ResponseData.success(taskassignUnitService.selectList1(id,personid));
     }
 
-//    /**
-//     * 新增单位督办记录
-//     */
-//    @ApiOperation(value = "新增单位督办记录")
-//    @Permission
-//    @RequestMapping(value = "/add")
-//    @ResponseBody
-//    public BigResponseData add(TaskassignUnit taskassignUnit) {
-//        taskassignUnitService.insert(taskassignUnit);
-//        return SUCCESS_TIP;
-//    }
+    /**
+     * 新增单位督办记录
+     */
+    @ApiOperation(value = "新增单位督办记录")
+    @Permission
+    @RequestMapping(value = "/add")
+    @ResponseBody
+    public ResponseData add(TaskassignUnit taskassignUnit) {
+        taskassignUnitService.insert(taskassignUnit);
+        return SUCCESS_TIP;
+    }
 
-//    /**
-//     * 删除单位督办记录
-//     */
-//    @RequestMapping(value = "/delete")
-//    @ResponseBody
-//    public BigResponseData delete(@RequestParam Integer taskassignUnitId) {
-//        taskassignUnitService.deleteById(taskassignUnitId);
-//        return SUCCESS_TIP;
-//    }
+    /**
+     * 删除单位督办记录
+     */
+    @RequestMapping(value = "/delete/{id}")
+    @ResponseBody
+    public ResponseData delete(@PathVariable("id") Integer id) {
+        taskassignUnitService.deleteById(id);
+        return SUCCESS_TIP;
+    }
 
     /**
      * 修改单位督办记录
@@ -84,8 +84,9 @@ public class TaskassignUnitController extends BaseController {
     public ResponseData update(@RequestBody List<TaskassignUnit> taskassignUnit) {
        return taskassignUnitService.updateByTaskassignUnit(taskassignUnit);
     }
+
      /**
-     * 修改单位督办记录
+     * 标记单位延期
      */
     @ApiOperation(value = "标记单位延期")
     @ApiImplicitParams({

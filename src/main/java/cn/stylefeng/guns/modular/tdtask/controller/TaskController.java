@@ -3,13 +3,13 @@ package cn.stylefeng.guns.modular.tdtask.controller;
 import cn.stylefeng.guns.core.common.annotion.Permission;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.util.VoUtil;
-import cn.stylefeng.guns.modular.EventStep.service.IEventStepService;
 import cn.stylefeng.guns.modular.system.model.Task;
 import cn.stylefeng.guns.modular.system.model.Taskassign;
 import cn.stylefeng.guns.modular.tdtask.dto.AddTaskDto;
 import cn.stylefeng.guns.modular.tdtask.dto.SreachTaskDto;
 import cn.stylefeng.guns.modular.tdtask.service.ITaskService;
 import cn.stylefeng.guns.modular.tdtaskassign.service.ITaskassignService;
+import cn.stylefeng.guns.modular.tdtaskassignUnit.service.ITaskassignUnitService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
@@ -46,7 +46,7 @@ public class TaskController extends BaseController {
     @Autowired
     private ITaskassignService taskassignService;
     @Autowired
-    private IEventStepService eventStepService;
+    private ITaskassignUnitService taskassignUnitService;
 
 
     /**
@@ -105,7 +105,31 @@ public class TaskController extends BaseController {
     @Permission
     @ResponseBody
     public ResponseData getTaskList(@RequestBody(required = false) SreachTaskDto sreachTaskDto) {
-        ResponseData responseData = taskService.SreachPage(sreachTaskDto);
+        ResponseData responseData =taskassignUnitService.selectAsPage(sreachTaskDto);
+        return responseData;
+
+    }
+
+    /**
+     * 获取交办事项列表
+     */
+    @ApiOperation(value = "交办事项列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "title", value = "可选参数，事项名称", required = false, dataType = "String"),
+            @ApiImplicitParam(name = "agent", value = "可选参数，督办责任人id数组", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "creatorid", value = "可选参数，创建人id", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "beforeTime", value = "可选参数，开始时间", required = false, dataType = "String"),
+            @ApiImplicitParam(name = "afterTime", value = "可选参数，结束时间", required = false, dataType = "String"),
+            @ApiImplicitParam(name = "status", value = "可选参数，事项状态 1-未反馈；2-已反馈办理中；3-部分完成；4-全部完成;5-事项归档；6-人为关闭", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "companyIds", value = "可选参数，责任单位数组", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "isExceed", value = "可选参数，查询延期 1:延期 ", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "page", value = "可选参数，页码", required = false, dataType = "Long"),
+            @ApiImplicitParam(name = "limit", value = "可选参数，每页条数", required = false, dataType = "Long"),
+    })
+    @RequestMapping(value = "/getTaskListByTask", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseData getTaskListByTask(@RequestBody(required = false) SreachTaskDto sreachTaskDto) {
+        ResponseData responseData =taskassignService.SreachPage(sreachTaskDto);
         return responseData;
 
     }
