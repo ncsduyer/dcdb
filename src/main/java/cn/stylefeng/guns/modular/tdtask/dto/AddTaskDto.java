@@ -17,6 +17,7 @@ public class AddTaskDto{
      */
     @ApiModelProperty("督办事项id")
     private Integer id;
+    private Integer taid;
     @ApiModelProperty("督办事项名称")
     @NotNull(message = "督办事项名称不能为空")
     private String title;
@@ -82,6 +83,8 @@ public class AddTaskDto{
     @JSONField(format = "yyyy-MM-dd HH:mm")
     @ApiModelProperty("归档时间")
     private Date endtime;
+    @ApiModelProperty("归档说明")
+    private String closememo;
     /**
      * 办理要求
      */
@@ -141,5 +144,21 @@ public class AddTaskDto{
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getClosememo() {
+        return closememo;
+    }
+
+    public void setClosememo(String closememo) {
+        this.closememo = closememo;
+    }
+
+    public Integer getTaid() {
+        return taid;
+    }
+
+    public void setTaid(Integer taid) {
+        this.taid = taid;
     }
 }

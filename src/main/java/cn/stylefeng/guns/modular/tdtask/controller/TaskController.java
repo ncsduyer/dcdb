@@ -3,7 +3,6 @@ package cn.stylefeng.guns.modular.tdtask.controller;
 import cn.stylefeng.guns.core.common.annotion.Permission;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.util.VoUtil;
-import cn.stylefeng.guns.modular.system.model.Task;
 import cn.stylefeng.guns.modular.system.model.Taskassign;
 import cn.stylefeng.guns.modular.tdtask.dto.AddTaskDto;
 import cn.stylefeng.guns.modular.tdtask.dto.SreachTaskDto;
@@ -162,8 +161,8 @@ public class TaskController extends BaseController {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @Permission
     @ResponseBody
-    public ResponseData update(@RequestBody Task task) {
-        return ResponseData.success(taskService.updateById(task));
+    public ResponseData update(@RequestBody AddTaskDto addTaskDto) {
+        return taskService.edit(addTaskDto);
     }
 
 

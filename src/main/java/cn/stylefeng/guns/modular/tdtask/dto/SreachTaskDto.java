@@ -1,8 +1,11 @@
 package cn.stylefeng.guns.modular.tdtask.dto;
 
 import cn.stylefeng.guns.modular.api.dto.SreachDto;
+import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.Date;
 
 @ApiModel("SreachReportDto")
 public class SreachTaskDto extends SreachDto {
@@ -20,7 +23,12 @@ public class SreachTaskDto extends SreachDto {
     @ApiModelProperty("order")
     private String order;
 
-
+    @ApiModelProperty("限期完结时间开始时间")
+    @JSONField(format = "yyyy-MM-dd")
+    private Date beforeTuEndTime;
+    @JSONField(format = "yyyy-MM-dd")
+    @ApiModelProperty("限期完结时间结束时间")
+    private Date afterTuEndTime;
 
     /**
      * 督办人
@@ -105,5 +113,21 @@ public class SreachTaskDto extends SreachDto {
 
     public void setCreatorid(Integer creatorid) {
         this.creatorid = creatorid;
+    }
+
+    public Date getBeforeTuEndTime() {
+        return beforeTuEndTime;
+    }
+
+    public void setBeforeTuEndTime(Date beforeTuEndTime) {
+        this.beforeTuEndTime = beforeTuEndTime;
+    }
+
+    public Date getAfterTuEndTime() {
+        return afterTuEndTime;
+    }
+
+    public void setAfterTuEndTime(Date afterTuEndTime) {
+        this.afterTuEndTime = afterTuEndTime;
     }
 }

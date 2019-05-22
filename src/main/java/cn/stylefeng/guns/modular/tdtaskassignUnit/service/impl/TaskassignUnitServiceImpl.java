@@ -215,6 +215,13 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
             if (ToolUtil.isNotEmpty(sreachTaskDto.getAfterTime())){
                 ew.le("ta.assigntime", sreachTaskDto.getAfterTime());
             }
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getBeforeTuEndTime())){
+                ew.ge("tu.endtime", sreachTaskDto.getBeforeTuEndTime());
+            }
+            if (ToolUtil.isNotEmpty(sreachTaskDto.getAfterTuEndTime())){
+                ew.le("tu.endtime", sreachTaskDto.getAfterTuEndTime());
+            }
+
             if (ToolUtil.isNotEmpty(sreachTaskDto.getOrder())){
                 ew.orderBy(sreachTaskDto.getOrder());
             }else{

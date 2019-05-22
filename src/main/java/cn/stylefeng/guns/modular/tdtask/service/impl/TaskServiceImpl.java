@@ -3,10 +3,7 @@ package cn.stylefeng.guns.modular.tdtask.service.impl;
 import cn.hutool.core.date.DateTime;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
-import cn.stylefeng.guns.core.util.Bettime;
-import cn.stylefeng.guns.core.util.ChartUtil;
-import cn.stylefeng.guns.core.util.ExportUtil;
-import cn.stylefeng.guns.core.util.VoUtil;
+import cn.stylefeng.guns.core.util.*;
 import cn.stylefeng.guns.core.util.vo.ExportColSubVo;
 import cn.stylefeng.guns.core.util.vo.ExportColVo;
 import cn.stylefeng.guns.core.util.vo.ExportRowVo;
@@ -231,7 +228,113 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
         }
 
     }
+    @Override
+    public ResponseData edit(AddTaskDto addTaskDto) {
+        try{
+            if (ToolUtil.isNotEmpty(addTaskDto.getCompanyIds())) {
 
+                Task task = new Task();
+                BeanUtils.copyProperties(addTaskDto, task);
+                if (ToolUtil.isNotEmpty(task.getId())){
+                    updateById(task);
+                }
+                Taskassign taskassign = new Taskassign();
+                taskassign.setId(addTaskDto.getTaid());
+                taskassign.setTaskid(task.getId());
+                taskassign.setWorktype(addTaskDto.getWorktype());
+                taskassign.setAssigntime(addTaskDto.getAssigntime());
+                taskassign.setAssignmemo(addTaskDto.getAssignmemo());
+                taskassign.setClosememo(addTaskDto.getClosememo());
+                taskassign.setCharge(addTaskDto.getCharge());
+                taskassign.setPhone(addTaskDto.getPhone());
+//                taskassign.setCreatetime(new DateTime());
+//                taskassign.setCreatorid(ShiroKit.getUser().getId());
+//                taskassign.setStatus(1);
+                taskassignService.updateById(taskassign);
+                TaskassignUnit taskassignUnit = null;
+                ArrayList<TaskassignUnit> oldtus= (ArrayList<TaskassignUnit>) taskassignUnitService.selectList(Condition.create().eq("tassignid", taskassign.getId()));
+               List<Integer> oldids = oldtus.stream().map(TaskassignUnit::getId).collect(Collectors.toList());
+               List<Integer> removeids =new ArrayList();
+
+//                循环插入交办单位
+                for (TaskassignUnit map : addTaskDto.getCompanyIds()) {
+                    taskassignUnit= new TaskassignUnit();
+//                    taskassignUnit.setPersonid(map.getPersonid());
+//                    taskassignUnit.setUnitid(map.getUnitid());
+                    CopyUtils.copyProperties(map, taskassignUnit);
+                    if (ToolUtil.isEmpty(taskassignUnit.getTassignid())){
+                        taskassignUnit.setTassignid(taskassign.getId());
+                    }
+                    if (ToolUtil.isNotEmpty(taskassignUnit.getId())&&Arrays.asList(oldids).contains(taskassignUnit.getId())){
+                       removeids.add(taskassignUnit.getId());
+                    }
+                    if (ToolUtil.isEmpty(taskassignUnit.getCreatetime())){
+                        taskassignUnit.setCreatetime(new DateTime());
+                    }
+                    taskassignUnitService.insertOrUpdate(taskassignUnit);
+
+                }
+                for (Integer item:removeids
+                     ) {
+                    oldids.remove(item);
+                }
+                taskassignUnitService.deleteBatchIds(oldids);
+//                taskassign=taskassignService.selectByManyId(taskassign.getId());
+//                StringBuilder st=new StringBuilder();
+//                st.append(ShiroKit.getUser().getName());
+//                st.append(",新建了交办事项:交办时间:");
+//                st.append(VoUtil.getDate(taskassign.getAssigntime()));
+//                st.append("; 名称:");
+//                st.append(taskassign.getTask().getTitle());
+//                st.append(": 责任单位/责任人:");
+//                for (TaskassignUnit tu:taskassign.getTaskassignUnits()){
+//                    st.append(tu.getCompany().getTitle());
+//                    st.append("/");
+//                    st.append(tu.getPerson().getName());
+//                    st.append(" ");
+//                }
+//                st.append("; 交办要求:（");
+//                st.append(taskassign.getAssignmemo());
+//                st.append("）");
+//
+//                TaskassignLog taskassignLog = new TaskassignLog();
+//                taskassignLog.setTaskid(taskassign.getTaskid());
+//                taskassignLog.setTassignid(taskassign.getId());
+//                taskassignLog.setCreatetime(new DateTime());
+//                taskassignLog.setLogcontent(st.toString());
+//                taskassignLog.setStatus(taskassign.getStatus());
+//                taskassignLogService.insert(taskassignLog);
+//
+////        List<TaskassignUnit> taskassignUnits=taskassignUnitService.selectList(Condition.create().eq("tassignid", taskassign.getId()));
+//                for (TaskassignUnit t :
+//                        taskassign.getTaskassignUnits()) {
+//                    //获取手机号
+//                    User user = userService.selectById(t.getPersonid());
+//                    AppNotice appNotice = new AppNotice();
+//                    appNotice.setTitle(taskassign.getTask().getTitle());
+////                    appNotice.setContent(taskassignLog.getLogcontent());
+//                    appNotice.setContent(taskassign.getAssignmemo());
+//                    appNotice.setCreatetime(new DateTime());
+//                    appNotice.setType(1);
+//                    appNotice.setSendee(user.getName());
+//                    appNotice.setTel(user.getPhone());
+//                    appNotice.setSender_id(user.getId());
+//                    appNotice.setNow_status(taskassign.getStatus());
+//                    appNotice.setStep(taskassign.getEventStep().getStep());
+//                    appNoticeService.insert(appNotice);
+//                }
+
+
+
+                return ResponseData.success();
+            } else {
+                return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
+            }
+        }catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
+        }
+    }
     @Override
     public ResponseData selectWithManyById(Integer id) {
         Task task = taskMapper.selectWithManyById(id);
@@ -620,4 +723,6 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
 
         ExportUtil.outExport(sreachTaskDto, response, titles, sheetName, exportRowVos);
     }
+
+
 }
