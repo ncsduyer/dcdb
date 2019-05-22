@@ -265,7 +265,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
                     if (ToolUtil.isEmpty(taskassignUnit.getTassignid())){
                         taskassignUnit.setTassignid(taskassign.getId());
                     }
-                    if (ToolUtil.isNotEmpty(taskassignUnit.getId())&&Arrays.asList(oldids).contains(taskassignUnit.getId())){
+                    if (ToolUtil.isNotEmpty(taskassignUnit.getId())&&oldids.contains(taskassignUnit.getId())){
                        removeids.add(taskassignUnit.getId());
                     }
                     if (ToolUtil.isEmpty(taskassignUnit.getCreatetime())){
@@ -278,7 +278,9 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
                      ) {
                     oldids.remove(item);
                 }
-                taskassignUnitService.deleteBatchIds(oldids);
+                if (ToolUtil.isNotEmpty(oldids)){
+                    taskassignUnitService.deleteBatchIds(oldids);
+                }
 //                taskassign=taskassignService.selectByManyId(taskassign.getId());
 //                StringBuilder st=new StringBuilder();
 //                st.append(ShiroKit.getUser().getName());
