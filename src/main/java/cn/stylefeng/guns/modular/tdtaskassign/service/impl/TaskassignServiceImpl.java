@@ -95,7 +95,7 @@ public class TaskassignServiceImpl extends ServiceImpl<TaskassignMapper, Taskass
                 ew.orderBy("tu.id",false);
             }
 
-            ArrayList<Taskassign> arrayList = taskassignMapper.selectAsPage(page,ew.groupBy("ta.id"));
+            ArrayList<Taskassign> arrayList = taskassignMapper.selectAsPage(page,ew.groupBy("ta.id,tu.id"));
             for (Taskassign taskassign : arrayList) {
                 taskassign.setUseTime(VoUtil.getUseTime(taskassign.getAssigntime(), taskassign.getEndtime()));
             }

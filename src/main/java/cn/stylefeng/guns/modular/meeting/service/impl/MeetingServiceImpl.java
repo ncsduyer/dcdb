@@ -223,6 +223,9 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
                     meetingrec=new Meetingrec();
                     CopyUtils.copyProperties(map, meetingrec);
                     meetingrec.setCheckvalue("1");
+                    if (ToolUtil.isEmpty(meetingrec.getMeetingid())){
+                        meetingrec.setMeetingid(meeting.getId());
+                    }
                     meetingrecService.insertOrUpdate(meetingrec);
 //                    List<MeetingRecAttr> meetingRecAttrs=null;
 //                    if(ToolUtil.isNotEmpty(map.getFiles())){
@@ -278,6 +281,7 @@ public class MeetingServiceImpl extends ServiceImpl<MeetingMapper, Meeting> impl
     @Override
     public ResponseData selectWithManyById(Integer id) {
         Meeting meeting = meetingMapper.selectWithManyById(id);
+        meeting.setResc(meetingrecService.selectList(Condition.create().eq("meetingid", meeting.getId()).orderBy("unitid", true)));
         meeting.setCompanys(meetingrecMapper.getInfoByPid(Condition.create().eq("meetingid",  id),checkitemService.selectList(Condition.create().eq("itemclass", 2).eq("status", 1))));
         return ResponseData.success(meeting);
     }

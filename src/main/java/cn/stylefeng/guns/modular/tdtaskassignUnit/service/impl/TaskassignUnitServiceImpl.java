@@ -244,4 +244,9 @@ public class TaskassignUnitServiceImpl extends ServiceImpl<TaskassignUnitMapper,
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
         }
     }
+
+    @Override
+    public TaskassignUnit selectMoreById(Integer id) {
+        return taskassignUnitMapper.selectMoreById(id);
+    }
 }

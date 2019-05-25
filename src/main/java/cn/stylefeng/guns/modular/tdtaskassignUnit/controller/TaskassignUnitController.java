@@ -116,7 +116,7 @@ public class TaskassignUnitController extends BaseController {
     @Permission
     @RequestMapping(value = "/detail/{id}",method = {RequestMethod.GET,RequestMethod.POST})
     @ResponseBody
-    public ResponseData detail(@PathVariable("id") Integer taskassignUnitId) {
-        return ResponseData.success(taskassignUnitService.selectById(taskassignUnitId));
+    public ResponseData detail(@PathVariable("id") Integer id) {
+        return ResponseData.success(taskassignUnitService.selectMoreById(id));
     }
 }

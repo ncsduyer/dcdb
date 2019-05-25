@@ -61,6 +61,8 @@ public class Meeting extends Model<Meeting> {
     @TableField(exist = false)
     private List<MeetingAttr> meetingAttrs;
     @TableField(exist = false)
+    private List<Meetingrec> resc;
+    @TableField(exist = false)
     private   List<HashMap<String,Object>> companys;
     public List<HashMap<String, Object>> getCompanys() {
         return companys;
@@ -200,5 +202,13 @@ public class Meeting extends Model<Meeting> {
 
     public void setFiles(String files) {
         this.files = files;
+    }
+
+    public List<Meetingrec> getResc() {
+        return resc;
+    }
+
+    public void setResc(List<Meetingrec> resc) {
+        this.resc = resc;
     }
 }

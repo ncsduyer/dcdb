@@ -64,6 +64,9 @@ public class TaskassignUnitdealServiceImpl extends ServiceImpl<TaskassignUnitdea
                 }
 
                 Taskassign taskassign=taskassignService.selectByManyId(taskassignUnit.getTassignid());
+                if (ToolUtil.isEmpty(taskassignUnitdeal.getCreatorid())){
+                    taskassignUnitdeal.setCreatorid(ShiroKit.getUser().getId());
+                }
             if (taskassignUnitdeal.getStatus()==1){
                 if (ToolUtil.isEmpty(taskassignUnitdeal.getFinishtime())){
                   taskassignUnitdeal.setFinishtime(new DateTime());

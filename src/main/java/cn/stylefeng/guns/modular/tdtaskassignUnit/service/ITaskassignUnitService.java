@@ -22,4 +22,6 @@ public interface ITaskassignUnitService extends IService<TaskassignUnit> {
     List<TaskassignUnit> selectList1(int id, Integer personid);
 
     ResponseData selectAsPage(SreachTaskDto sreachTaskDto);
+
+    TaskassignUnit selectMoreById(Integer id);
 }

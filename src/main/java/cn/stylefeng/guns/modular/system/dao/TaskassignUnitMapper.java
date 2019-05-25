@@ -22,4 +22,6 @@ public interface TaskassignUnitMapper extends BaseMapper<TaskassignUnit> {
     List<TaskassignUnit> selectList1(@Param("id") int id,@Param("personid") Integer personid);
     ArrayList<TaskassignUnit> selectAsPage(Pagination page, @Param("ew") Wrapper<TaskassignUnit> wrapper);
     long selectAsCount(@Param("ew") Wrapper<TaskassignUnit> wrapper);
+
+    TaskassignUnit selectMoreById(Integer id);
 }

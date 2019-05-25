@@ -250,7 +250,6 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
 //                taskassign.setCreatetime(new DateTime());
 //                taskassign.setCreatorid(ShiroKit.getUser().getId());
 //                taskassign.setStatus(1);
-                taskassignService.updateById(taskassign);
                 TaskassignUnit taskassignUnit = null;
                 ArrayList<TaskassignUnit> oldtus= (ArrayList<TaskassignUnit>) taskassignUnitService.selectList(Condition.create().eq("tassignid", taskassign.getId()));
                List<Integer> oldids = oldtus.stream().map(TaskassignUnit::getId).collect(Collectors.toList());
@@ -272,7 +271,6 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
                         taskassignUnit.setCreatetime(new DateTime());
                     }
                     taskassignUnitService.insertOrUpdate(taskassignUnit);
-
                 }
                 for (Integer item:removeids
                      ) {
@@ -281,6 +279,10 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
                 if (ToolUtil.isNotEmpty(oldids)){
                     taskassignUnitService.deleteBatchIds(oldids);
                 }
+                if (taskassignUnitService.selectCount(Condition.create().eq("tassignid", taskassign.getId()).eq("status", 1))>0){
+                    taskassign.setStatus(1);
+                }
+                taskassignService.updateById(taskassign);
 //                taskassign=taskassignService.selectByManyId(taskassign.getId());
 //                StringBuilder st=new StringBuilder();
 //                st.append(ShiroKit.getUser().getName());
