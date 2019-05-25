@@ -43,6 +43,8 @@ public class SreachTaskDto extends SreachDto {
      */
     @ApiModelProperty("当前状态数组")
     private Integer[] status;
+    @ApiModelProperty("督办状态数组")
+    private Integer[] tustatus;
     @ApiModelProperty("责任单位数组")
     private Integer[] companyIds;
 
@@ -129,5 +131,13 @@ public class SreachTaskDto extends SreachDto {
 
     public void setAfterTuEndTime(Date afterTuEndTime) {
         this.afterTuEndTime = afterTuEndTime;
+    }
+
+    public Integer[] getTustatus() {
+        return tustatus;
+    }
+
+    public void setTustatus(Integer[] tustatus) {
+        this.tustatus = tustatus;
     }
 }

@@ -20,6 +20,7 @@ public class TaskAssignUnitVo implements Serializable {
     private String step;
     private String unitStep;
     private Integer status;
+    private Integer tustatus;
     private Integer createrId;
     private String endtime;
     private String usetime;
@@ -44,6 +45,7 @@ public class TaskAssignUnitVo implements Serializable {
          assignmemo=tu.getTaskassign().getAssignmemo();
          step=tu.getTaskassign().getEventStep().getStep();
          status=tu.getTaskassign().getStatus();
+         tustatus=tu.getStatus();
          usetime=tu.getTaskassign().getUseTime();
          is_exceed=tu.getTaskassign().getIs_exceed();
          switch (tu.getStatus()){
@@ -207,5 +209,13 @@ public class TaskAssignUnitVo implements Serializable {
 
     public void setUnitStep(String unitStep) {
         this.unitStep = unitStep;
+    }
+
+    public Integer getTustatus() {
+        return tustatus;
+    }
+
+    public void setTustatus(Integer tustatus) {
+        this.tustatus = tustatus;
     }
 }
