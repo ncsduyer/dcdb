@@ -128,7 +128,7 @@
     <select id="selectMoreById" resultMap="ResultMoreMap">
         SELECT
         <include refid="AS_Column_List1"/> FROM
-        (SELECT <include refid="Base_Column_List"/> FROM td_taskassign_unit WHERE id=54) tu LEFT JOIN td_taskassign ta ON tu.tassignid =  ta.id  LEFT JOIN td_task t ON t.id = ta.taskid   LEFT JOIN t_tb_work_type wt ON wt.id = ta.worktype LEFT JOIN t_tb_event_step e ON e.status=ta.status and e.event_type=1 LEFT JOIN sys_user u ON u.id = ta.creatorid LEFT JOIN t_tb_company c ON c.id=tu.unitid  LEFT JOIN sys_user p ON p.id = tu.personid LEFT JOIN td_taskassign_unitdeal tud ON tud.taunitid=tu.id
+        (SELECT <include refid="Base_Column_List"/> FROM td_taskassign_unit WHERE id=#{id}) tu LEFT JOIN td_taskassign ta ON tu.tassignid =  ta.id  LEFT JOIN td_task t ON t.id = ta.taskid   LEFT JOIN t_tb_work_type wt ON wt.id = ta.worktype LEFT JOIN t_tb_event_step e ON e.status=ta.status and e.event_type=1 LEFT JOIN sys_user u ON u.id = ta.creatorid LEFT JOIN t_tb_company c ON c.id=tu.unitid  LEFT JOIN sys_user p ON p.id = tu.personid LEFT JOIN td_taskassign_unitdeal tud ON tud.taunitid=tu.id
     </select>
 
 </mapper>
