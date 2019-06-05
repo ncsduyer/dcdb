@@ -34,4 +34,6 @@ public interface ITaskService extends IService<Task> {
     void export(SreachTaskDto sreachTaskDto, HttpServletResponse response) throws Exception;
 
     ResponseData edit(AddTaskDto addTaskDto);
+
+    ResponseData deleteMoreById(Integer id);
 }

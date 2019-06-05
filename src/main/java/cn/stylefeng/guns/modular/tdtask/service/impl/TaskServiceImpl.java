@@ -21,6 +21,7 @@ import cn.stylefeng.guns.modular.tdtask.vo.chart.*;
 import cn.stylefeng.guns.modular.tdtaskassign.service.ITaskassignService;
 import cn.stylefeng.guns.modular.tdtaskassignLog.service.ITaskassignLogService;
 import cn.stylefeng.guns.modular.tdtaskassignUnit.service.ITaskassignUnitService;
+import cn.stylefeng.guns.modular.tdtaskassignUnitDeal.service.ITaskassignUnitdealService;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.core.util.ToolUtil;
@@ -64,6 +65,8 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
     private ITaskService taskService;
     @Autowired
     private ITaskassignLogService taskassignLogService;
+    @Autowired
+    private ITaskassignUnitdealService taskassignUnitdealService;
     @Autowired
     private IAppNoticeService appNoticeService;
     @Autowired
@@ -337,6 +340,30 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements IT
             return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
         }
     }
+
+    @Override
+    public ResponseData deleteMoreById(Integer id) {
+        boolean issucess=false;
+        try {
+            List<Taskassign> taskassignsDels=taskassignService.selectList(Condition.create().eq("taskid", id));
+            List<TaskassignUnit> delunits=new ArrayList<>();
+            for (Taskassign ta:taskassignsDels) {
+                List<TaskassignUnit>  taskassignUnits =taskassignUnitService.selectList(Condition.create().eq("tassignid", ta.getId()));
+                delunits.addAll(taskassignUnits);
+            }
+            List<Integer> tuids = delunits.stream().map(TaskassignUnit::getId).collect(Collectors.toList());
+//            List<Integer> taids = taskassignsDels.stream().map(Taskassign::getId).collect(Collectors.toList());
+            taskassignUnitdealService.delete(Condition.create().in("taunitid", tuids));
+            taskassignUnitService.deleteBatchIds(tuids);
+            taskassignService.delete(Condition.create().eq( "taskid", id));
+            deleteById(id);
+            return ResponseData.success();
+        } catch (Exception e){
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return new ErrorResponseData(BizExceptionEnum.REQUEST_INVALIDATE.getCode(), BizExceptionEnum.REQUEST_INVALIDATE.getMessage());
+        }
+    }
+
     @Override
     public ResponseData selectWithManyById(Integer id) {
         Task task = taskMapper.selectWithManyById(id);

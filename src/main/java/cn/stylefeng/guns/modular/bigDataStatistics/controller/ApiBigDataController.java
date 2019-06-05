@@ -123,18 +123,6 @@ public class ApiBigDataController extends BaseController implements Serializable
 
     }
     /**
-     * 获取督办事项相关统计
-     */
-    @ApiOperation(value = "获取督办事项相关统计")
-    @RequestMapping(value = "/countAssignStatus", method = {RequestMethod.GET})
-    @ResponseBody
-    @Cacheable(value = "bigdata",key = "#root.targetClass+'#'+#root.method")
-    public BigResponseData countAssignStatus() {
-
-        return new BigResponseData(true, DEFAULT_SUCCESS_CODE, "请求成功",bigDataService.countAssignStatus());
-
-    }
-    /**
      * 获取区委办管理事务统计
      */
     @ApiOperation(value = "获取区委办管理事务统计")
@@ -159,6 +147,16 @@ public class ApiBigDataController extends BaseController implements Serializable
         }
         return new BigResponseData(true, DEFAULT_SUCCESS_CODE, "请求成功",mapHashMap);
 
+    }
+    /**
+     * 获取督办事项相关统计(分状态)
+     */
+    @ApiOperation(value = "获取督办事项相关统计(分状态)")
+    @RequestMapping(value = "/countAssignStatus", method = {RequestMethod.GET})
+    @ResponseBody
+    @Cacheable(value = "bigdata",key = "#root.targetClass+'#'+#root.method")
+    public BigResponseData countAssignStatus() {
+        return new BigResponseData(true, DEFAULT_SUCCESS_CODE, "请求成功",bigDataService.countAssignStatus());
     }
 
     /**

@@ -183,17 +183,16 @@ public class TaskController extends BaseController {
     /**
      * 删除交办事项
     */
-////    @ApiOperation(value = "删除交办事项")
-////    @ApiImplicitParams({
-////            @ApiImplicitParam(name = "assignWorkId", value = "id", required = true, dataType = "Long"),
-////    })
-////    @RequestMapping(value = "/delete/{assignWorkId}",method = RequestMethod.GET)
-////    @Permission
-////    @ResponseBody
-////    public BigResponseData delete(@PathVariable("assignWorkId") Integer assignWorkId) {
-////        taskService.deleteById(assignWorkId);
-////        return SUCCESS_TIP;
-////    }
+    @ApiOperation(value = "删除交办事项")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "id", required = true, dataType = "Long"),
+    })
+    @RequestMapping(value = "/delete/{id}",method = RequestMethod.GET)
+    @Permission
+    @ResponseBody
+    public ResponseData delete(@PathVariable("id") Integer id) {
+        return taskService.deleteMoreById(id);
+    }
     /**
      * 交办事项报表图表
      */
