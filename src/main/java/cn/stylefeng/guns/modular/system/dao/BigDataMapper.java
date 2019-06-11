@@ -1,8 +1,10 @@
 package cn.stylefeng.guns.modular.system.dao;
 
 import cn.stylefeng.guns.modular.system.model.BigData;
+import cn.stylefeng.guns.modular.system.model.Taskassign;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.mapper.Condition;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,4 +25,6 @@ public interface BigDataMapper extends BaseMapper<BigData> {
     ArrayList<HashMap<String, Object>> selectDocInfos(Pagination page, @Param("ew") Condition ew);
 
     ArrayList<HashMap<String, Object>> selectInfoInfos(Pagination page, @Param("ew") Condition ew);
+
+    Integer countAssignStatus1(@Param("ew") Wrapper<Taskassign> ew);
 }

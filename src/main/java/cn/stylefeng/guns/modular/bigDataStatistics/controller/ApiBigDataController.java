@@ -59,7 +59,7 @@ public class ApiBigDataController extends BaseController implements Serializable
     private IDocService docsService;
 
     @Autowired
-    private IInfosService iInfosService;
+    private IInfosService infosService;
     @Autowired
     private IMeetingrecService meetingrecService;
 
@@ -82,9 +82,9 @@ public class ApiBigDataController extends BaseController implements Serializable
     public BigResponseData count() {
         HashMap<String,Integer> map=new HashMap<>(5);
         Integer dcdb=taskassignService.selectCount(Condition.create().gt("id", 0));
-        Integer meet=meetingrecService.selectCount(Condition.create().gt("id", 0));
-        Integer doc=docassignrecService.selectCount(Condition.create().gt("id", 0));
-        Integer info= iInfosrecService.selectCount(Condition.create().gt("id", 0));
+        Integer meet=meetingService.selectCount(Condition.create().gt("id", 0));
+        Integer doc=docsService.selectCount(Condition.create().gt("id", 0));
+        Integer info= infosService.selectCount(Condition.create().gt("id", 0));
         map.put("total", dcdb+meet+doc+info);
         map.put("dcdb", dcdb);
         map.put("meet",meet );
@@ -100,16 +100,7 @@ public class ApiBigDataController extends BaseController implements Serializable
     @ResponseBody
     @Cacheable(value = "bigdata",key = "#root.targetClass+'#'+#root.method")
     public BigResponseData countUnit() {
-        List<EventStep> eventSteps=eventStepService.selectList(Condition.create().eq("event_type", 1));
-        HashMap<String,Integer> map=new HashMap<>();
-        for (EventStep et:eventSteps){
-            EntityWrapper<Taskassign> ew = new EntityWrapper<>();
-            ew.setEntity(new Taskassign());
-            ew.eq("status", et.getStatus());
-            map.put(et.getStep(),taskassignService.selectCount(ew));
-        }
-        return new BigResponseData(true, DEFAULT_SUCCESS_CODE, "请求成功", map);
-
+        return new BigResponseData(true, DEFAULT_SUCCESS_CODE, "请求成功",bigDataService.countAssignStatus());
     }
     /**
      * 获取督办事项部门问题统计
@@ -156,7 +147,40 @@ public class ApiBigDataController extends BaseController implements Serializable
     @ResponseBody
     @Cacheable(value = "bigdata",key = "#root.targetClass+'#'+#root.method")
     public BigResponseData countAssignStatus() {
-        return new BigResponseData(true, DEFAULT_SUCCESS_CODE, "请求成功",bigDataService.countAssignStatus());
+        List<EventStep> eventSteps=eventStepService.selectList(Condition.create().eq("event_type", 1));
+        HashMap<String,Integer> map=new HashMap<>();
+        for (EventStep et:eventSteps){
+            EntityWrapper<Taskassign> ew = new EntityWrapper<>();
+            ew.setEntity(new Taskassign());
+            ew.eq("status", et.getStatus());
+            map.put(et.getStep(),taskassignService.selectCount(ew));
+        }
+        return new BigResponseData(true, DEFAULT_SUCCESS_CODE, "请求成功", map);
+    }
+    /**
+     * 获取督办事项相关统计(分状态)
+     */
+    @ApiOperation(value = "获取督办事项相关统计(分状态)")
+    @RequestMapping(value = "/countAssignStatus1", method = {RequestMethod.GET})
+    @ResponseBody
+    @Cacheable(value = "bigdata",key = "#root.targetClass+'#'+#root.method")
+    public BigResponseData countAssignStatus1() {
+        SreachBigDateDto cq=new SreachBigDateDto();
+        cq.setIsExceed(1);
+        cq.setStatus(new Integer[]{1,2,3});
+        SreachBigDateDto cqwc=new SreachBigDateDto();
+        cqwc.setIsExceed(1);
+        cqwc.setStatus(new Integer[]{4,5,6});
+        SreachBigDateDto zcbl=new SreachBigDateDto();
+        zcbl.setStatus(new Integer[]{1,2,3});
+        SreachBigDateDto zcwc=new SreachBigDateDto();
+        zcwc.setStatus(new Integer[]{4,5,6});
+        HashMap<String,Integer> map=new HashMap<>();
+        map.put("超期办理中",bigDataService.countAssignStatus1(cq));
+        map.put("超期完成",bigDataService.countAssignStatus1(cqwc));
+        map.put("正常办理中",bigDataService.countAssignStatus1(zcbl));
+        map.put("正常已完成",bigDataService.countAssignStatus1(zcwc));
+        return new BigResponseData(true, DEFAULT_SUCCESS_CODE, "请求成功", map);
     }
 
     /**

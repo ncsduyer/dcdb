@@ -106,11 +106,12 @@ FROM
 		'未超期' end as is_exceed ,u.id uid,u.name uname,p.id pid,p.name pname,wt.title wtitle,e.step esstep
 		,tu.id tuid, tu.tassignid tutassignid, tu.unitid tuunitid,tu.personid tupersonid, tu.endtime tuendtime, tu.requirements turequirements, tu.status tustatus, tu.updatetime tuupdatetime, tu.createtime tucreatetime,tu.istimely tuistimely,c.id cid,c.title ctitle , tud.id tudid, tud.taunitid tudtaunitid, tud.dealdesc tuddealdesc, tud.status tudstatus, tud.isdelay tudisdelay, tud.pretime tudpretime,tud.pictures tudpictures,tud.files tudfiles, tud.creatorid tudcreatorid,  tud.delaytime tuddelaytime, tud.creatorid tudcreatorid, tud.createtime tudcreatetime, tud.finishtime tudfinishtime
 		FROM
-		(select  id, taskid, worktype, assigntime, assignmemo, status, creatorid, createtime, closememo,endtime,charge,phone from td_taskassign <where>
-		${ew.sqlSegment}
-	</where>) ta INNER JOIN td_task t  ON ta.taskid = t.id INNER JOIN t_tb_work_type wt ON wt.id =
+		 td_taskassign ta Left JOIN td_task t  ON ta.taskid = t.id Left JOIN t_tb_work_type wt ON wt.id =
 		ta.worktype
-		INNER JOIN t_tb_event_step e ON e.status=ta.status and e.event_type=1 INNER JOIN sys_user u ON u.id = ta.creatorid INNER JOIN td_taskassign_unit tu ON tu.tassignid =  ta.id  INNER JOIN t_tb_company c ON c.id=tu.unitid LEFT JOIN td_taskassign_unitdeal tud ON tud.taunitid=tu.id INNER JOIN sys_user p ON p.id = tu.personid
+		Left JOIN t_tb_event_step e ON e.status=ta.status and e.event_type=1 Left JOIN sys_user u ON u.id = ta.creatorid Left JOIN td_taskassign_unit tu ON tu.tassignid =  ta.id  Left JOIN t_tb_company c ON c.id=tu.unitid LEFT JOIN td_taskassign_unitdeal tud ON tud.taunitid=tu.id Left JOIN sys_user p ON p.id = tu.personid
+		<where>
+			${ew.sqlSegment}
+		</where>
 	</select>
 	<select id="selectMeetInfos" resultType="java.util.HashMap">
 		SELECT  rec.unitid  unitid,c.title ctitle,ch.itemdesc chitemdesc,count(rec.id) total
@@ -144,6 +145,15 @@ FROM
 		left join t_tb_company c on c.id=rec.unitid
 		left join td_checkitem ch on ch.id=rec.checkitemid
 		group by c.id
+	</select>
+	<select id="countAssignStatus1" resultType="int" parameterType="com.baomidou.mybatisplus.mapper.Wrapper">
+		select count(DISTINCT ta.id)
+		FROM
+		td_taskassign ta Left JOIN t_tb_work_type wt ON wt.id = ta.worktype
+		 Left JOIN td_taskassign_unit tu ON tu.tassignid =  ta.id
+		<where>
+			${ew.sqlSegment}
+		</where>
 	</select>
 
 </mapper>

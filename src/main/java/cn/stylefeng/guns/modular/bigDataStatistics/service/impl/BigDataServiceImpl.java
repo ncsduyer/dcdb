@@ -10,6 +10,7 @@ import cn.stylefeng.guns.modular.bigDataStatistics.vo.TitleVo;
 import cn.stylefeng.guns.modular.system.dao.BigDataMapper;
 import cn.stylefeng.guns.modular.system.dao.TaskassignUnitMapper;
 import cn.stylefeng.guns.modular.system.model.BigData;
+import cn.stylefeng.guns.modular.system.model.Taskassign;
 import cn.stylefeng.guns.modular.system.model.TaskassignUnit;
 import cn.stylefeng.guns.modular.tdtaskassignUnit.vo.TaskAssignUnitVo;
 import cn.stylefeng.roses.core.util.ToolUtil;
@@ -87,48 +88,56 @@ public class BigDataServiceImpl extends ServiceImpl<BigDataMapper, BigData> impl
         Page<TaskAssignUnitVo> page = new Page<>(sreachBigDateDto.getPage(), sreachBigDateDto.getLimit());
         EntityWrapper<TaskassignUnit> ew = new EntityWrapper<>();
         ew.setEntity(new TaskassignUnit());
-//        if (ToolUtil.isNotEmpty(sreachTaskDto.getCreatorid())) {
-//            ew.eq("ta.creatorid", sreachTaskDto.getCreatorid());
-//        }
-//        if (ToolUtil.isNotEmpty(sreachTaskDto.getAgent())){
-//            ew.in("tu.personid", sreachTaskDto.getAgent());
-//        }
+
+        if (ToolUtil.isNotEmpty(sreachBigDateDto.getCreatorid())) {
+            ew.eq("ta.creatorid", sreachBigDateDto.getCreatorid());
+        }
+        if (ToolUtil.isNotEmpty(sreachBigDateDto.getAgent())){
+            ew.in("tu.personid", sreachBigDateDto.getAgent());
+        }
 
 //          拼接查询条件
-//        if (ToolUtil.isNotEmpty(sreachTaskDto.getTitle())){
-//            ew.like("t.title", sreachTaskDto.getTitle());
-//        }
-//        if (ToolUtil.isNotEmpty(sreachTaskDto.getWorkType())){
-//            ew.in("ta.worktype", sreachTaskDto.getWorkType());
-//        }
-//        if (ToolUtil.isNotEmpty(sreachTaskDto.getCompanyIds())){
-//            ew.in("tu.unitid", sreachTaskDto.getCompanyIds());
-//        }
-//        if (ToolUtil.isNotEmpty(sreachTaskDto.getIsExceed())&&sreachTaskDto.getIsExceed()==1){
-//            //    ew.le("tu.endtime",new Date()).isNull("ta.endtime");
-//            ew.eq("tu.status", 3);
-//            //    ew.eq("ta.status",3);
-//        }else{
-            if (ToolUtil.isNotEmpty(sreachBigDateDto.getCheckItemId())){
-                ew.eq("ta.status", sreachBigDateDto.getCheckItemId());
+        if (ToolUtil.isNotEmpty(sreachBigDateDto.getTitle())){
+            ew.like("t.title", sreachBigDateDto.getTitle());
+        }
+        if (ToolUtil.isNotEmpty(sreachBigDateDto.getWorkType())){
+            ew.in("ta.worktype", sreachBigDateDto.getWorkType());
+        }
+        if (ToolUtil.isNotEmpty(sreachBigDateDto.getCompanyIds())){
+            ew.in("tu.unitid", sreachBigDateDto.getCompanyIds());
+        }
+
+            if (ToolUtil.isNotEmpty(sreachBigDateDto.getStatus())){
+                ew.in("ta.status", sreachBigDateDto.getStatus());
             }
-//            if (ToolUtil.isNotEmpty(sreachTaskDto.getStatus())){
-//                if(VoUtil.getMaxNum(sreachTaskDto.getStatus())<5){
-//                    ew.in("tu.status", sreachTaskDto.getStatus());
-//                }
-//            }
-//        }
+        if (ToolUtil.isNotEmpty(sreachBigDateDto.getIsExceed())&&sreachBigDateDto.getIsExceed()==1){
+            //    ew.le("tu.endtime",new Date()).isNull("ta.endtime");
+            ew.eq("tu.status", 3);
+            //    ew.eq("ta.status",3);
+        }else if(ToolUtil.isNotEmpty(sreachBigDateDto.getTustatus())){
+                ew.in("tu.status", sreachBigDateDto.getTustatus());
+            }
+
         if (ToolUtil.isNotEmpty(sreachBigDateDto.getBeforeTime())){
             ew.ge("ta.assigntime", sreachBigDateDto.getBeforeTime());
         }
         if (ToolUtil.isNotEmpty(sreachBigDateDto.getAfterTime())){
             ew.le("ta.assigntime", sreachBigDateDto.getAfterTime());
         }
+        if (ToolUtil.isNotEmpty(sreachBigDateDto.getBeforeTuEndTime())){
+            ew.ge("tu.endtime", sreachBigDateDto.getBeforeTuEndTime());
+        }
+        if (ToolUtil.isNotEmpty(sreachBigDateDto.getAfterTuEndTime())){
+            ew.le("tu.endtime", sreachBigDateDto.getAfterTuEndTime());
+        }
+
         if (ToolUtil.isNotEmpty(sreachBigDateDto.getOrder())){
             ew.orderBy(sreachBigDateDto.getOrder());
         }else{
             ew.orderBy("tu.id",false);
         }
+
+
 
         ArrayList<TaskassignUnit> arrayList = taskassignUnitMapper.selectAsPage(page,ew.groupBy("tu.id"));
         ArrayList<TaskAssignUnitVo> taskVos=new ArrayList<>();
@@ -143,6 +152,50 @@ public class BigDataServiceImpl extends ServiceImpl<BigDataMapper, BigData> impl
         infoVo.setContent(page);
         return infoVo;
 
+    }
+    @Override
+    public Integer countAssignStatus1(SreachBigDateDto sreachBigDateDto) {
+        fomartSreachDto(sreachBigDateDto);
+        EntityWrapper<Taskassign> ew = new EntityWrapper<>();
+        ew.setEntity(new Taskassign());
+
+
+//          拼接查询条件
+        if (ToolUtil.isNotEmpty(sreachBigDateDto.getWorkType())){
+            ew.in("ta.worktype", sreachBigDateDto.getWorkType());
+        }
+        if (ToolUtil.isNotEmpty(sreachBigDateDto.getCompanyIds())){
+            ew.in("tu.unitid", sreachBigDateDto.getCompanyIds());
+        }
+
+        if (ToolUtil.isNotEmpty(sreachBigDateDto.getStatus())){
+            ew.in("ta.status", sreachBigDateDto.getStatus());
+        }
+        if (ToolUtil.isNotEmpty(sreachBigDateDto.getIsExceed())&&sreachBigDateDto.getIsExceed()==1){
+            ew.eq("tu.status", 3);
+        }else if(ToolUtil.isNotEmpty(sreachBigDateDto.getTustatus())){
+            ew.in("tu.status", sreachBigDateDto.getTustatus());
+        }
+        if (ToolUtil.isNotEmpty(sreachBigDateDto.getBeforeTime())){
+            ew.ge("ta.assigntime", sreachBigDateDto.getBeforeTime());
+        }
+        if (ToolUtil.isNotEmpty(sreachBigDateDto.getAfterTime())){
+            ew.le("ta.assigntime", sreachBigDateDto.getAfterTime());
+        }
+        if (ToolUtil.isNotEmpty(sreachBigDateDto.getBeforeTuEndTime())){
+            ew.ge("tu.endtime", sreachBigDateDto.getBeforeTuEndTime());
+        }
+        if (ToolUtil.isNotEmpty(sreachBigDateDto.getAfterTuEndTime())){
+            ew.le("tu.endtime", sreachBigDateDto.getAfterTuEndTime());
+        }
+
+        if (ToolUtil.isNotEmpty(sreachBigDateDto.getOrder())){
+            ew.orderBy(sreachBigDateDto.getOrder());
+        }else{
+            ew.orderBy("tu.id",false);
+        }
+
+        return bigDataMapper.countAssignStatus1(ew);
     }
     @Override
     public InfoVo selectMeetInfos(SreachBigDateDto sreachBigDateDto) {
@@ -224,6 +277,9 @@ public class BigDataServiceImpl extends ServiceImpl<BigDataMapper, BigData> impl
         return infoVo;
 
     }
+
+
+
     private void fomartSreachDto(SreachBigDateDto sreachBigDateDto) {
         if (ToolUtil.isEmpty(sreachBigDateDto)) {
             sreachBigDateDto = new SreachBigDateDto();

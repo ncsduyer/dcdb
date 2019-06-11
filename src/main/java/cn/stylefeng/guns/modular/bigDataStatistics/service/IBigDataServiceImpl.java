@@ -17,4 +17,6 @@ public interface IBigDataServiceImpl extends IService<BigData> {
    InfoVo selectMeetInfos(SreachBigDateDto sreachBigDateDto);
    InfoVo selectDocInfos(SreachBigDateDto sreachBigDateDto);
    InfoVo selectInfoInfos(SreachBigDateDto sreachBigDateDto);
+
+   Integer countAssignStatus1(SreachBigDateDto cq);
 }
