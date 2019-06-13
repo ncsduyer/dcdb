@@ -210,6 +210,9 @@ public class InfosServiceImpl extends ServiceImpl<InfosMapper, Infos> implements
                     if (ToolUtil.isEmpty(meetingrec.getInfosid())){
                         meetingrec.setInfosid(meeting.getId());
                     }
+                    if (ToolUtil.isEmpty(meetingrec.getCreatetime())) {
+                        meetingrec.setCreatetime(new DateTime());
+                    }
                     infosrecMapper.insert(meetingrec);
                 }
             }

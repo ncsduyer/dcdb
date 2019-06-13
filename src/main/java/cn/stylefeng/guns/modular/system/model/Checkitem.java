@@ -31,9 +31,10 @@ public class Checkitem extends Model<Checkitem> {
      */
     private String itemdesc;
     /**
-     * 状态（0-停用；1-启用）
+     * 是否图表展示（0-停用；1-启用）
      */
     private Integer status;
+    private Integer ischart;
 
 
     public Integer getId() {
@@ -81,5 +82,13 @@ public class Checkitem extends Model<Checkitem> {
         ", itemdesc=" + itemdesc +
         ", status=" + status +
         "}";
+    }
+
+    public Integer getIschart() {
+        return ischart;
+    }
+
+    public void setIschart(Integer ischart) {
+        this.ischart = ischart;
     }
 }

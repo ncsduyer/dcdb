@@ -231,7 +231,7 @@ public class ApiBigDataController extends BaseController implements Serializable
     @ResponseBody
     @Cacheable(value = "bigdata",key = "#root.targetClass+'#'+#root.method")
     public BigResponseData countInfos() {
-        List<Checkitem> checkitems=checkitemService.selectList(Condition.create().eq("itemclass", 4).eq("status", 1));
+        List<Checkitem> checkitems=checkitemService.selectList(Condition.create().eq("itemclass", 4).eq("status", 1).eq("ischart", 1));
         HashMap<String, Object> sums=   iInfosrecService.selectSumCheckItem(checkitems);
         List<CheckItemVo> checkItemVos=new ArrayList<>();
         CheckItemVo checkItemVo=null;
