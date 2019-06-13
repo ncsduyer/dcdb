@@ -122,7 +122,7 @@ FROM
 		</where>) rec
 		left join t_tb_company c on c.id=rec.unitid
 		left join td_checkitem ch on ch.id=rec.checkitemid
-		group by c.id
+		group by c.id ORDER BY total DESC
 	</select>
 	<select id="selectDocInfos" resultType="java.util.HashMap">
 		SELECT  rec.unitid  unitid,c.title ctitle,ch.itemdesc chitemdesc,count(rec.id) total
@@ -133,10 +133,10 @@ FROM
 		</where>) rec
 		left join t_tb_company c on c.id=rec.unitid
 		left join td_checkitem ch on ch.id=rec.checkitemid
-		group by c.id
+		group by c.id ORDER BY total DESC
 	</select>
 	<select id="selectInfoInfos" resultType="java.util.HashMap">
-		SELECT  rec.unitid  unitid,c.title ctitle,ch.itemdesc chitemdesc,count(rec.id) total
+		SELECT  rec.unitid  unitid,c.title ctitle,ch.itemdesc chitemdesc,sum(rec.checkvalue) total
 		from (select
 		id, infosid, checkitemid, checkvalue, createtime, unitid from td_infosrec
 		<where>
@@ -144,7 +144,7 @@ FROM
 		</where>) rec
 		left join t_tb_company c on c.id=rec.unitid
 		left join td_checkitem ch on ch.id=rec.checkitemid
-		group by c.id
+		group by c.id ORDER BY total DESC
 	</select>
 	<select id="countAssignStatus1" resultType="int" parameterType="com.baomidou.mybatisplus.mapper.Wrapper">
 		select count(DISTINCT ta.id)

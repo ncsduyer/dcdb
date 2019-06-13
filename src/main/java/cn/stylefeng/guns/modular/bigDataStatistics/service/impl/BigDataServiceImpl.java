@@ -204,7 +204,7 @@ public class BigDataServiceImpl extends ServiceImpl<BigDataMapper, BigData> impl
         infoVo.setTitles(new ArrayList<>());
             infoVo.getTitles().add(new TitleVo("部门","ctitle"));
             infoVo.getTitles().add(new TitleVo("督查类型","chitemdesc"));
-            infoVo.getTitles().add(new TitleVo("总数","total",true));
+            infoVo.getTitles().add(new TitleVo("统计数据","total",true));
             Condition ew=Condition.create();
         if (ToolUtil.isNotEmpty(sreachBigDateDto.getBeforeTime())){
             ew.ge("createtime", sreachBigDateDto.getBeforeTime());
@@ -232,7 +232,7 @@ public class BigDataServiceImpl extends ServiceImpl<BigDataMapper, BigData> impl
         infoVo.setTitles(new ArrayList<>());
             infoVo.getTitles().add(new TitleVo("部门","ctitle"));
             infoVo.getTitles().add(new TitleVo("督查类型","chitemdesc"));
-            infoVo.getTitles().add(new TitleVo("总数","total"));
+            infoVo.getTitles().add(new TitleVo("统计数据","total"));
             Condition ew=Condition.create();
         if (ToolUtil.isNotEmpty(sreachBigDateDto.getBeforeTime())){
             ew.ge("createtime", sreachBigDateDto.getBeforeTime());
@@ -258,7 +258,7 @@ public class BigDataServiceImpl extends ServiceImpl<BigDataMapper, BigData> impl
         infoVo.setTitles(new ArrayList<>());
         infoVo.getTitles().add(new TitleVo("部门","ctitle"));
         infoVo.getTitles().add(new TitleVo("督查类型","chitemdesc"));
-        infoVo.getTitles().add(new TitleVo("总数","total",true));
+        infoVo.getTitles().add(new TitleVo("统计数据","total",true));
         Condition ew=Condition.create();
         if (ToolUtil.isNotEmpty(sreachBigDateDto.getBeforeTime())){
             ew.ge("createtime", sreachBigDateDto.getBeforeTime());
@@ -269,6 +269,8 @@ public class BigDataServiceImpl extends ServiceImpl<BigDataMapper, BigData> impl
         if (ToolUtil.isNotEmpty(sreachBigDateDto.getCheckItemId())){
             ew.eq("checkitemid", sreachBigDateDto.getCheckItemId());
         }
+            ew.gt("checkvalue", 0);
+
 
 
         Page<HashMap<String, Object>> page = new Page<>(sreachBigDateDto.getPage(), sreachBigDateDto.getLimit());
