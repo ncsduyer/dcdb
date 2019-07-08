@@ -2,43 +2,43 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.stylefeng.guns.modular.system.dao.BigDataMapper">
     <select id="countUnitStar" resultType="java.util.HashMap">
-        SELECT
-	c.title ctitle,
-	c.id id,
-	count(DISTINCT ta.id) dcdb,
-	(
 		SELECT
-			count(DISTINCT mrec.id)
+		c.title ctitle,
+		c.id id,
+		count(DISTINCT ta.id) dcdb,
+		COALESCE (sum(distinct mrec.checkvalue), 0) AS qwhy,
+		COALESCE (sum(distinct irec.checkvalue), 0) AS qwxx,
+		COALESCE (sum(distinct drec.checkvalue), 0) AS qwgw,
+		(CONVERT (COALESCE (sum(distinct mrec.checkvalue), 0), SIGNED) + CONVERT (COALESCE (sum(distinct drec.checkvalue), 0), SIGNED) + CONVERT (COALESCE (sum(distinct irec.checkvalue), 0), SIGNED))
+		AS countStar,
+		CASE
+		WHEN (
+		CONVERT (COALESCE (sum(distinct mrec.checkvalue), 0), SIGNED) + CONVERT (COALESCE (sum(distinct drec.checkvalue), 0), SIGNED) + CONVERT (COALESCE (sum(distinct irec.checkvalue), 0), SIGNED)
+		) &lt; 3 THEN
+		1
+		WHEN (
+		CONVERT (COALESCE (sum(distinct mrec.checkvalue), 0), SIGNED) + CONVERT (COALESCE (sum(distinct drec.checkvalue), 0), SIGNED) + CONVERT (COALESCE (sum(distinct irec.checkvalue), 0), SIGNED)
+		) BETWEEN 3
+		AND 5 THEN
+		2
+		WHEN (
+		CONVERT (COALESCE (sum(distinct mrec.checkvalue), 0), SIGNED) + CONVERT (COALESCE (sum(distinct drec.checkvalue), 0), SIGNED) + CONVERT (COALESCE (sum(distinct irec.checkvalue), 0), SIGNED)
+		) &gt; 5 THEN
+		3
+		END AS levelStar
 		FROM
-			td_meetingrec mrec
-		WHERE
-			c.id = mrec.unitid
-	) AS qwhy,
-	(
-		SELECT
-	count(DISTINCT irec.id)
-FROM
-	 td_infosrec irec WHERE c.id = irec.unitid
-	) AS qwxx,
-	(
-		SELECT
-	count(DISTINCT drec.id)
-FROM
-	td_doc_rec drec WHERE c.id = drec.unitid
-	) AS qwgw
-FROM
-	t_tb_company c
-LEFT JOIN td_taskassign_unit tu ON c.id = tu.unitid
-AND c. STATUS = 1
-LEFT JOIN td_taskassign ta ON tu.tassignid = ta.id
-GROUP BY
-	c.title,
-	c.id
-ORDER BY
-	dcdb DESC,
-	qwhy DESC,
-	qwgw DESC,
-	qwxx DESC
+		t_tb_company c
+		LEFT JOIN td_taskassign_unit tu ON c.id = tu.unitid
+		AND c.`status` = 1
+		LEFT JOIN td_taskassign ta ON tu.tassignid = ta.id
+		LEFT JOIN td_meetingrec mrec ON	c.id = mrec.unitid
+		LEFT JOIN td_infosrec irec	ON	c.id = irec.unitid AND irec.checkitemid BETWEEN 22 AND 23
+		LEFT JOIN td_doc_rec drec	ON	c.id = drec.unitid
+		GROUP BY
+		c.id
+		ORDER BY
+		countStar DESC,
+		dcdb DESC
     </select>
     <select id="countAssignStatus" resultType="java.util.HashMap">
         SELECT
